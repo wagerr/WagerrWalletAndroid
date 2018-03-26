@@ -61,10 +61,6 @@ add_library( # The name of the library.
              src/main/jni/breadwallet-core/BRWallet.c
              src/main/jni/breadwallet-core/BRWallet.h
 
-             # BCash files
-             src/main/jni/breadwallet-core/bcash/BRBCashAddr.c
-             src/main/jni/breadwallet-core/bcash/BRBCashAddr.h
-             src/main/jni/breadwallet-core/bcash/BRBCashParams.h
 
              # Core JNI files
              src/main/jni/breadwallet-core/Java/BRCoreJni.h
@@ -96,6 +92,11 @@ add_library( # The name of the library.
              src/main/jni/breadwallet-core/Java/com_breadwallet_core_BRCoreWallet.c
              src/main/jni/breadwallet-core/Java/com_breadwallet_core_BRCoreWallet.h
 
+            # Biblepay files
+             src/main/jni/breadwallet-core/biblepay/BRBiblepayAddr.c
+             src/main/jni/breadwallet-core/biblepay/BRBiblepayAddr.h
+             src/main/jni/breadwallet-core/biblepay/BRBiblepayParams.h
+
              # BCash files
              src/main/jni/breadwallet-core/bcash/BRBCashAddr.c
              src/main/jni/breadwallet-core/bcash/BRBCashAddr.h
@@ -108,6 +109,7 @@ add_library( # The name of the library.
              )
 
 include_directories(src/main/jni/breadwallet-core/bcash)
+include_directories(src/main/jni/breadwallet-core/biblepay)
 include_directories(src/main/jni/breadwallet-core/Java)
 include_directories(src/main/jni/breadwallet-core/)
 include_directories(src/main/jni/breadwallet-core/secp256k1/include)

@@ -24,6 +24,7 @@ import com.breadwallet.tools.util.Bip39Reader;
 import com.breadwallet.tools.util.TrustedNode;
 import com.breadwallet.tools.util.Utils;
 import com.breadwallet.wallet.abstracts.BaseWalletManager;
+import com.breadwallet.wallet.wallets.biblepay.WalletBiblepayManager;
 import com.breadwallet.wallet.wallets.bitcoin.WalletBitcoinManager;
 import com.breadwallet.wallet.wallets.bitcoincash.WalletBchManager;
 import com.platform.entities.WalletInfo;
@@ -88,7 +89,10 @@ public class WalletsMaster {
             throw new RuntimeException("getWalletByIso with iso = null, Cannot happen!");
         if (iso.equalsIgnoreCase("BTC"))
             return WalletBitcoinManager.getInstance(app);
-        if (iso.equalsIgnoreCase("BCH")) return WalletBchManager.getInstance(app);
+        if (iso.equalsIgnoreCase("BCH"))
+            return WalletBchManager.getInstance(app);
+        if (iso.equalsIgnoreCase("BBP"))
+            return WalletBiblepayManager.getInstance(app);
         return null;
     }
 
@@ -257,6 +261,8 @@ public class WalletsMaster {
             mWallets.add(WalletBitcoinManager.getInstance(app));
         if (!mWallets.contains(WalletBchManager.getInstance(app)))
             mWallets.add(WalletBchManager.getInstance(app));
+        if (!mWallets.contains(WalletBiblepayManager.getInstance(app)))
+            mWallets.add(WalletBiblepayManager.getInstance(app));
     }
 
     public void initLastWallet(Context app) {

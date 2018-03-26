@@ -14,6 +14,7 @@ import com.breadwallet.tools.manager.BRSharedPrefs;
 import com.breadwallet.tools.security.BRKeyStore;
 import com.breadwallet.tools.sqlite.CurrencyDataSource;
 import com.breadwallet.wallet.abstracts.BaseWalletManager;
+import com.breadwallet.wallet.wallets.biblepay.WalletBiblepayManager;
 import com.breadwallet.wallet.wallets.bitcoincash.WalletBchManager;
 import com.breadwallet.wallet.wallets.util.CryptoUriParser;
 import com.breadwallet.tools.util.BRConstants;
@@ -72,6 +73,7 @@ public class WalletTests {
     // Test Wallets
     BaseWalletManager mBtcWallet;
     BaseWalletManager mBchWallet;
+    BaseWalletManager mBbpWallet;
 
     @Before
     public void setUp() {
@@ -80,6 +82,7 @@ public class WalletTests {
         BRKeyStore.putMasterPublicKey(pubKey.serialize(), mActivityRule.getActivity());
         mBtcWallet = WalletBitcoinManager.getInstance(mActivityRule.getActivity());
         mBchWallet = WalletBchManager.getInstance(mActivityRule.getActivity());
+        mBbpWallet = WalletBiblepayManager.getInstance(mActivityRule.getActivity());
     }
 
     @After
