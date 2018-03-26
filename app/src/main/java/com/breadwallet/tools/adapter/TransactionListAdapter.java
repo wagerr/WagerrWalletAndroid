@@ -175,17 +175,17 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         else
             convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.total_assets_usd_color, null));
 
-
         // If this transaction failed, show the "FAILED" indicator in the cell
         if (!item.isValid())
             showTransactionFailed(convertView, item, received);
 
-
-        BigDecimal cryptoAmount = received ? new BigDecimal(item.getReceived()).abs() : new BigDecimal(item.getSent() - item.getReceived()).abs().negate();
+        BigDecimal cryptoAmount = new BigDecimal(item.getAmount());
+        Log.e(TAG, "setTexts: crypto:" + cryptoAmount);
         boolean isCryptoPreferred = BRSharedPrefs.isCryptoPreferred(mContext);
         String preferredIso = isCryptoPreferred ? wallet.getIso(mContext) : BRSharedPrefs.getPreferredFiatIso(mContext);
 
         BigDecimal amount = isCryptoPreferred ? cryptoAmount : wallet.getFiatForSmallestCrypto(mContext, cryptoAmount, null);
+        Log.e(TAG, "setTexts: amount:" + amount);
 
         convertView.transactionAmount.setText(CurrencyUtils.getFormattedAmount(mContext, preferredIso, amount));
 
@@ -239,10 +239,10 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         Log.d(TAG, "Level -> " + level);
 
-        if(level > 4) {
-            convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + item.getTo()[0]);
-        }else{
-            convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received? "sending to " : "receiving via ") + item.getTo()[0]);
+        if (level > 4) {
+            convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getTo()[0]));
+        } else {
+            convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, item.getTo()[0]));
 
         }
 
@@ -279,7 +279,6 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             holder.setIsRecyclable(true);
         }
     }
-
 
     private void showTransactionFailed(TxHolder holder, TxUiHolder tx, boolean received) {
 
@@ -326,11 +325,11 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 } else {
                     boolean willAdd = true;
                     //filter by sent and this is received
-                    if (switches[0] && (item.getSent() - item.getReceived() <= 0)) {
+                    if (switches[0] && (item.getAmount() <= 0)) {
                         willAdd = false;
                     }
                     //filter by received and this is sent
-                    if (switches[1] && (item.getSent() - item.getReceived() > 0)) {
+                    if (switches[1] && (item.getAmount() > 0)) {
                         willAdd = false;
                     }
                     BaseWalletManager wallet = WalletsMaster.getInstance(mContext).getCurrentWallet(mContext);

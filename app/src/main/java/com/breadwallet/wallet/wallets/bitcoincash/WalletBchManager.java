@@ -47,15 +47,15 @@ import com.breadwallet.tools.sqlite.TransactionStorageManager;
 import com.breadwallet.tools.threads.executor.BRExecutor;
 import com.breadwallet.tools.util.BRConstants;
 import com.breadwallet.tools.util.CurrencyUtils;
+import com.breadwallet.tools.util.SymbolUtils;
 import com.breadwallet.tools.util.TypesConverter;
 import com.breadwallet.tools.util.Utils;
 import com.breadwallet.wallet.WalletsMaster;
 import com.breadwallet.wallet.abstracts.BaseWalletManager;
-import com.breadwallet.wallet.abstracts.SyncListener;
 import com.breadwallet.wallet.abstracts.OnBalanceChangedListener;
 import com.breadwallet.wallet.abstracts.OnTxListModified;
 import com.breadwallet.wallet.abstracts.OnTxStatusUpdatedListener;
-import com.breadwallet.wallet.wallets.bitcoin.WalletBitcoinManager;
+import com.breadwallet.wallet.abstracts.SyncListener;
 import com.breadwallet.wallet.wallets.configs.WalletUiConfiguration;
 import com.google.firebase.crash.FirebaseCrash;
 import com.platform.entities.TxMetaData;
@@ -65,7 +65,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -201,6 +200,13 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
 
     @Override
     public void updateFee(Context app) {
+        if (app == null) {
+            app = BreadApp.getBreadContext();
+            if (app == null) {
+                Log.e(TAG, "updateFee: FAILED, app is null");
+                return;
+            }
+        }
         String jsonString = BRApiManager.urlGET(app, "https://" + BreadApp.HOST + "/fee-per-kb?currency=" + getIso(app));
         if (jsonString == null || jsonString.isEmpty()) {
             Log.e(TAG, "updateFeePerKb: failed to update fee, response string: " + jsonString);
@@ -273,6 +279,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     @Override
     public String getSymbol(Context app) {
 
+        SymbolUtils symbolUtils = new SymbolUtils();
         String currencySymbolString = BRConstants.symbolBits;
         if (app != null) {
             int unit = BRSharedPrefs.getCryptoDenomination(app, getIso(app));
@@ -281,10 +288,22 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
                     currencySymbolString = BRConstants.symbolBits + "c";
                     break;
                 case BRConstants.CURRENT_UNIT_MBITS:
-                    currencySymbolString = "m" + BRConstants.symbolBitcoin + "C";
+                    if (symbolUtils.doesDeviceSupportSymbol(BRConstants.symbolBitcoinPrimary)) {
+                        currencySymbolString = "m" + BRConstants.symbolBitcoinPrimary + "C";
+
+                    } else {
+                        currencySymbolString = "m" + BRConstants.symbolBitcoinSecondary + "C";
+
+                    }
                     break;
                 case BRConstants.CURRENT_UNIT_BITCOINS:
-                    currencySymbolString = BRConstants.symbolBitcoin + "C";
+                    if (symbolUtils.doesDeviceSupportSymbol(BRConstants.symbolBitcoinPrimary)) {
+                        currencySymbolString = BRConstants.symbolBitcoinPrimary + "C";
+
+                    } else {
+                        currencySymbolString = BRConstants.symbolBitcoinSecondary + "C";
+
+                    }
                     break;
             }
         }
@@ -402,6 +421,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
 
     @Override
     public BigDecimal getFiatBalance(Context app) {
+        if (app == null) return null;
         BigDecimal bal = getFiatForSmallestCrypto(app, new BigDecimal(getCachedBalance(app)), null);
         return new BigDecimal(bal == null ? 0 : bal.doubleValue());
     }
@@ -746,8 +766,10 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
                                     }
                                 }
 
-                                if (BRSharedPrefs.getShowNotification(ctx))
+                                if (ctx instanceof Activity && BRSharedPrefs.getShowNotification(ctx))
                                     BRNotificationManager.sendNotification((Activity) ctx, R.drawable.notification_icon, ctx.getString(R.string.app_name), strToShow, 1);
+                                else
+                                    Log.e(TAG, "onTxAdded: ctx is not activity");
                             }
                         }
                     }, 1000);

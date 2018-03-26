@@ -7,6 +7,8 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -17,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.transition.TransitionManager;
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
@@ -154,7 +157,7 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
             public void onClick(View view) {
 //                Activity app = WalletActivity.this;
 //                BaseWalletManager wm = WalletsMaster.getInstance(app).getCurrentWallet(app);
-//                CryptoUriParser.processRequest(WalletActivity.this, "5JYjhD8SkgMQEkRALEUrfdVKiqezxNZ1D1SWukw2TyzFT6ogZ8J", wm);
+//                CryptoUriParser.processRequest(WalletActivity.this, "bitcoin:?r=https://bitpay.com/i/HUsFqTFirmVtgE4PhLzcRx", wm);
                 BRAnimator.showSendFragment(WalletActivity.this, null);
 
             }
@@ -169,8 +172,8 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
             }
         });
 
-        BaseWalletManager wm = WalletsMaster.getInstance(this).getCurrentWallet(this);
-        Log.d(TAG, "Current wallet ISO -> " + wm.getIso(this));
+//        BaseWalletManager wm = WalletsMaster.getInstance(this).getCurrentWallet(this);
+//        Log.d(TAG, "Current wallet ISO -> " + wm.getIso(this));
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,6 +225,8 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
 
 
         }
+
+
 
     }
 
@@ -327,6 +332,7 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
                 @Override
                 public void onClick(BRDialogView brDialogView) {
                     Log.d(TAG, "help clicked!");
+
                     brDialogView.dismiss();
                     BRAnimator.showSupportFragment(WalletActivity.this, BRConstants.bchFaq);
 
@@ -441,7 +447,7 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
             set.connect(R.id.balance_primary, ConstraintSet.END, R.id.swap, ConstraintSet.START, px8);
 
             mBalancePrimary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 6));
-            mBalanceSecondary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 14));
+            mBalanceSecondary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 4));
             mSwap.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 2));
 
             Log.d(TAG, "CryptoPreferred " + cryptoPreferred);
@@ -467,7 +473,7 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
             set.connect(R.id.balance_secondary, ConstraintSet.END, R.id.swap, ConstraintSet.START, px8);
 
             mBalancePrimary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 2));
-            mBalanceSecondary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 18));
+            mBalanceSecondary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 4));
             mSwap.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 2));
 
             //mBalancePrimary.setPadding(0,0, 0, Utils.getPixelsFromDps(this, -4));

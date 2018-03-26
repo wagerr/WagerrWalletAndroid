@@ -20,8 +20,6 @@ import com.breadwallet.core.BRCoreKey;
 import com.breadwallet.core.BRCoreTransaction;
 import com.breadwallet.core.BRCoreTransactionInput;
 import com.breadwallet.core.BRCoreTransactionOutput;
-import com.breadwallet.presenter.activities.WalletActivity;
-import com.breadwallet.presenter.activities.util.BRActivity;
 import com.breadwallet.presenter.customviews.BRDialogView;
 import com.breadwallet.presenter.customviews.BRToast;
 import com.breadwallet.tools.animation.BRDialog;
@@ -213,9 +211,15 @@ public class ImportPrivKeyTask extends AsyncTask<String, String, String> {
         BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
             @Override
             public void run() {
-                BRToast.showCustomToast(app, app.getString(R.string.Import_checking), BRActivity.screenParametersPoint.y / 2, Toast.LENGTH_LONG, 0);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(app, app.getString(R.string.Import_checking), Toast.LENGTH_LONG).show();
+                    }
+                }, 1000);
             }
         });
+
         String jsonString = BRApiManager.urlGET(app, url);
         if (jsonString == null || jsonString.isEmpty()) return null;
         BaseWalletManager walletManager = WalletsMaster.getInstance(app).getWalletByIso(app, iso);
@@ -235,7 +239,7 @@ public class ImportPrivKeyTask extends AsyncTask<String, String, String> {
 
             for (int i = 0; i < length; i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                byte[] txid = TypesConverter.hexToBytes(obj.getString("txid"));
+                byte[] txid = TypesConverter.hexToBytesReverse(obj.getString("txid"));
                 int vout = obj.getInt("vout");
                 byte[] scriptPubKey = TypesConverter.hexToBytes(obj.getString("scriptPubKey"));
                 long amount = obj.getLong("satoshis");
