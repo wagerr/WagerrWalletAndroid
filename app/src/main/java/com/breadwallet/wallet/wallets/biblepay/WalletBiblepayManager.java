@@ -140,7 +140,7 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
             //long time = 1519190488;
 //            long time = (System.currentTimeMillis() / 1000) - 3 * 7 * 24 * 60 * 60; // 3 * 7
 
-            instance = new WalletBiblepayManager(app, pubKey, BuildConfig.BITCOIN_TESTNET ? BRCoreChainParams.testnetChainParams : BRCoreChainParams.mainnetChainParams, time);
+            instance = new WalletBiblepayManager(app, pubKey, BuildConfig.BITCOIN_TESTNET ? BRCoreChainParams.testnetBiblepayChainParams : BRCoreChainParams.mainnetBiblepayChainParams, time);
         }
         return instance;
     }
@@ -157,7 +157,9 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
                 Log.e(TAG, "connectWallet: app is null");
                 return;
             }
-            String firstAddress = masterPubKey.getPubKeyAsCoreKey().address();
+            BRCoreKey BRCKey = masterPubKey.getPubKeyAsCoreKey();
+            String firstAddress = BRCKey.address();
+            Log.e(TAG, "*firstAddress*: "+firstAddress);
             BRSharedPrefs.putFirstAddress(app, firstAddress);
             long fee = BRSharedPrefs.getFeePerKb(app, getIso(app));
             long economyFee = BRSharedPrefs.getEconomyFeePerKb(app, getIso(app));
@@ -177,7 +179,7 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
             WalletsMaster.getInstance(app).updateFixedPeer(app, this);
 //        balanceListeners = new ArrayList<>();
 
-            uiConfig = new WalletUiConfiguration("#971b20" /* biblepay.org red*/, true, true, true);
+            uiConfig = new WalletUiConfiguration("#971b20" /* biblepay.org red*/, true, true, false);
 
         } finally {
             isInitiatingWallet = false;
@@ -286,10 +288,10 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
                     currencySymbolString = BRConstants.symbolBits;
                     break;
                 case BRConstants.CURRENT_UNIT_MBITS:
-                    currencySymbolString = "m" + BRConstants.symbolBitcoin;
+                    currencySymbolString = "m" + BRConstants.symbolBitcoinSecondary;
                     break;
                 case BRConstants.CURRENT_UNIT_BITCOINS:
-                    currencySymbolString = BRConstants.symbolBitcoin;
+                    currencySymbolString = BRConstants.symbolBitcoinPrimary;
                     break;
             }
         }
