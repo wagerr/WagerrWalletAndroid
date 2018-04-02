@@ -375,7 +375,7 @@
   <!-- Alert message title -->
   <string name="ReScan.alertTitle">与区块链同步？</string>
   <!-- extimated time -->
-  <string name="ReScan.body1">20-45 分钟</string>
+  <string name="ReScan.body1">3-5 分钟</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body2">如果某次交易在比特币网络上显示为已完成，却不在您的 BRD 里。</string>
   <!-- Syncing explanation -->

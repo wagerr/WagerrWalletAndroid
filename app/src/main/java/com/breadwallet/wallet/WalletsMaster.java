@@ -85,13 +85,15 @@ public class WalletsMaster {
 
     //return the needed wallet for the iso
     public BaseWalletManager getWalletByIso(Context app, String iso) {
-//        Log.d(TAG, "getWalletByIso() Getting wallet by ISO -> " + iso);
+        //Log.d(TAG, "getWalletByIso() Getting wallet by ISO -> " + iso);
         if (Utils.isNullOrEmpty(iso))
             throw new RuntimeException("getWalletByIso with iso = null, Cannot happen!");
+        /*
         if (iso.equalsIgnoreCase("BTC"))
             return WalletBitcoinManager.getInstance(app);
         if (iso.equalsIgnoreCase("BCH"))
             return WalletBchManager.getInstance(app);
+        */
         if (iso.equalsIgnoreCase("BBP"))
             return WalletBiblepayManager.getInstance(app);
         return null;
@@ -277,7 +279,7 @@ public class WalletsMaster {
             }
         }
         BaseWalletManager wallet = getWalletByIso(app, BRSharedPrefs.getCurrentWalletIso(app));
-        if (wallet == null) wallet = getWalletByIso(app, "BTC");
+        if (wallet == null) wallet = getWalletByIso(app, "BBP");
         wallet.connectWallet(app);
     }
 

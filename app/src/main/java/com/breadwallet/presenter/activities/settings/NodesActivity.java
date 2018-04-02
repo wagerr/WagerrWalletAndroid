@@ -27,6 +27,7 @@ import com.breadwallet.tools.util.TrustedNode;
 import com.breadwallet.tools.util.Utils;
 import com.breadwallet.wallet.WalletsMaster;
 import com.breadwallet.wallet.abstracts.BaseWalletManager;
+import com.breadwallet.wallet.wallets.biblepay.WalletBiblepayManager;
 import com.breadwallet.wallet.wallets.bitcoin.WalletBitcoinManager;
 import com.breadwallet.wallet.wallets.bitcoincash.WalletBchManager;
 
@@ -74,7 +75,7 @@ public class NodesActivity extends BRActivity {
         ImageButton faq = findViewById(R.id.faq_button);
         faq.setVisibility(View.GONE);
 
-        BRSharedPrefs.putCurrentWalletIso(this, "BTC");
+        BRSharedPrefs.putCurrentWalletIso(this, "BBP");
 
         nodeStatus = findViewById(R.id.node_status);
         trustNode = findViewById(R.id.node_text);
@@ -85,7 +86,7 @@ public class NodesActivity extends BRActivity {
             public void onClick(View v) {
                 if (!BRAnimator.isClickAllowed()) return;
                 final Activity app = NodesActivity.this;
-                final WalletBitcoinManager wm = WalletBitcoinManager.getInstance(NodesActivity.this);
+                final WalletBiblepayManager wm = WalletBiblepayManager.getInstance(NodesActivity.this);
 
                 if (BRSharedPrefs.getTrustNode(app, wm.getIso(app)).isEmpty()) {
                     createDialog();
@@ -119,7 +120,7 @@ public class NodesActivity extends BRActivity {
     }
 
     private void updateButtonText() {
-        WalletBitcoinManager wm = WalletBitcoinManager.getInstance(this);
+        WalletBiblepayManager wm = WalletBiblepayManager.getInstance(this);
         if (BRSharedPrefs.getTrustNode(this, wm.getIso(this)).isEmpty()) {
             switchButton.setText(getString(R.string.NodeSelector_manualButton));
         } else {
@@ -177,7 +178,7 @@ public class NodesActivity extends BRActivity {
             @Override
             public void onClick(View v) {
                 String str = input.getText().toString();
-                final WalletBitcoinManager wm = WalletBitcoinManager.getInstance(app);
+                final WalletBiblepayManager wm = WalletBiblepayManager.getInstance(app);
                 if (TrustedNode.isValid(str)) {
                     mDialog.setMessage("");
                     BRSharedPrefs.putTrustNode(app, wm.getIso(app), str);

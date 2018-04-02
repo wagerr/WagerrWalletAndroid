@@ -95,7 +95,7 @@ public class DisplayCurrencyActivity extends BRActivity {
             }
         });
 
-        int unit = BRSharedPrefs.getCryptoDenomination(this, "BTC"); // any iso, using one for all for now
+        int unit = BRSharedPrefs.getCryptoDenomination(this, "BBP"); // any iso, using one for all for now
         if (unit == BRConstants.CURRENT_UNIT_BITS) {
             setButton(true);
         } else {

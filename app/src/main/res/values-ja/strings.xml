@@ -375,7 +375,7 @@
   <!-- Alert message title -->
   <string name="ReScan.alertTitle">ブロックチェーンで同期しますか?</string>
   <!-- extimated time -->
-  <string name="ReScan.body1">20〜45分</string>
+  <string name="ReScan.body1">3〜5分</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body2">ビットコインネットワークでトランザクションが完了したと表示されているが、BRD上では完了と表示されない場合。</string>
   <!-- Syncing explanation -->

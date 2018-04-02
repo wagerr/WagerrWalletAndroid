@@ -375,7 +375,7 @@
   <!-- Alert message title -->
   <string name="ReScan.alertTitle">要與區塊鏈同步嗎？</string>
   <!-- extimated time -->
-  <string name="ReScan.body1">20-45 分鐘</string>
+  <string name="ReScan.body1">3-5 分鐘</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body2">如果交易在比特幣網上已經顯示為完成，但沒有出現在您的 BRD 上。</string>
   <!-- Syncing explanation -->

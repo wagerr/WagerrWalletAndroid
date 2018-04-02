@@ -137,7 +137,7 @@
   <!-- Word label eg. Word #1, Word #2 -->
   <string name="ConfirmPaperPhrase.word">Mot no.%1$s</string>
   <!-- Bitcoin denomination picker label -->
-  <string name="DefaultCurrency.bitcoinLabel">Bitcoin Display Unit</string>
+  <string name="DefaultCurrency.bitcoinLabel">BiblePay Display Unit</string>
   <!-- Exchange rate label -->
   <string name="DefaultCurrency.rateLabel">Taux de change</string>
   <!-- Email unavailable alert title -->
@@ -265,7 +265,7 @@
   <!-- Node status label -->
   <string name="NodeSelector.statusLabel">Statut de connexion du nœud</string>
   <!-- Node Selector view title -->
-  <string name="NodeSelector.title">Nœuds Bitcoin</string>
+  <string name="NodeSelector.title">Nœuds BiblePay</string>
   <!-- Bad Payment request alert title -->
   <string name="PaymentProtocol.Errors.badPaymentRequest">Mauvaise demande de paiement</string>
   <!-- Error opening payment protocol file message -->
@@ -277,9 +277,9 @@
   <!-- Payment too small alert title -->
   <string name="PaymentProtocol.Errors.smallOutputError">Impossible de faire un paiement</string>
   <!-- Amount too small error message -->
-  <string name="PaymentProtocol.Errors.smallPayment">Les paiements par Bitcoin ne peuvent être inférieurs à %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallPayment">Les paiements par BiblePay ne peuvent être inférieurs à %1$s.</string>
   <!-- Output too small error message. -->
-  <string name="PaymentProtocol.Errors.smallTransaction">Les résultats des transactions de Bitcoin ne peuvent pas être inférieurs à %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallTransaction">Les résultats des transactions de BiblePay ne peuvent pas être inférieurs à %1$s.</string>
   <!-- Unsupported signature type payment protocol error message -->
   <string name="PaymentProtocol.Errors.unsupportedSignatureType">type de signature non pris en charge</string>
   <!-- Untrusted certificate payment protocol error message -->
@@ -375,9 +375,9 @@
   <!-- Alert message title -->
   <string name="ReScan.alertTitle">Synchroniser avec la chaîne de bloc ?</string>
   <!-- extimated time -->
-  <string name="ReScan.body1">20-45 minutes</string>
+  <string name="ReScan.body1">3-5 minutes</string>
   <!-- Syncing explanation -->
-  <string name="ReScan.body2">Si une transaction apparaît comme achevée sur le réseau de bitcoin mais pas dans votre BRD.</string>
+  <string name="ReScan.body2">Si une transaction apparaît comme achevée sur le réseau de BiblePay mais pas dans votre BRD.</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body3">Vous recevez de manière répétée un message d\'erreur vous informant du rejet de votre transaction.</string>
   <!-- Start Sync button label -->
@@ -403,7 +403,7 @@
   <!-- Security Center Info -->
   <string name="SecurityCenter.info">Activez toutes les fonctionnalités de sécurité pour une protection maximale.</string>
   <!-- Paper Key button description -->
-  <string name="SecurityCenter.paperKeyDescription">La seule façon d\'accéder à votre bitcoin si vous perdez ou mettez à niveau votre téléphone.</string>
+  <string name="SecurityCenter.paperKeyDescription">La seule façon d\'accéder à votre BiblePay si vous perdez ou mettez à niveau votre téléphone.</string>
   <!-- Paper Key button title -->
   <string name="SecurityCenter.paperKeyTitle">Clé de papier</string>
   <!-- PIN button description -->
@@ -443,9 +443,9 @@
   <!-- Payee identity not certified alert title. -->
   <string name="Send.identityNotCertified">L\'identité du bénéficiaire n\'est pas certifiée.</string>
   <!-- Invalid address alert message -->
-  <string name="Send.invalidAddressMessage">L\'adresse de destination n\'est pas une adresse bitcoin valide.</string>
+  <string name="Send.invalidAddressMessage">L\'adresse de destination n\'est pas une adresse BiblePay valide.</string>
   <!-- Invalid address on pasteboard message -->
-  <string name="Send.invalidAddressOnPasteboard">Le tableau d\'affichage ne contient aucune adresse bitcoin valide.</string>
+  <string name="Send.invalidAddressOnPasteboard">Le tableau d\'affichage ne contient aucune adresse BiblePay valide.</string>
   <!-- Invalid address alert title -->
   <string name="Send.invalidAddressTitle">Adresse non valide</string>
   <!-- Is rescanning error message -->
@@ -523,7 +523,7 @@
   <!-- Argument is date -->
   <string name="StartPaperPhrase.date">Vous avez finalement écrit votre clé de papier sur %1$s</string>
   <!-- Start view message -->
-  <string name="StartViewController.message">La façon la plus sécurisée et sûre d\'utiliser bitcoin.</string>
+  <string name="StartViewController.message">La façon la plus sécurisée et sûre d\'utiliser BiblePay.</string>
   <!-- Syncing view connectiong state header text -->
   <string name="SyncingView.connecting">Connexion…</string>
   <!-- Syncing view header text -->
@@ -633,7 +633,7 @@
   <!-- "Sent [$5] to [address]" => This is the "to [address]" part. -->
   <string name="TransactionDetails.to">jusqu\'à %1$s</string>
   <!-- Transaction ID header -->
-  <string name="TransactionDetails.txHashHeader">Identifiant de transaction bitcoin</string>
+  <string name="TransactionDetails.txHashHeader">Identifiant de transaction BiblePayoin</string>
   <!-- (this transaction was) Received at this address: -->
   <string name="TransactionDirection.address">Reçu à cette adresse</string>
   <!-- (this transaction was) Sent to this address: -->
@@ -661,7 +661,7 @@
   <!-- Wallet unlocked message -->
   <string name="UnlockScreen.unlocked">Portefeuille déverrouillé</string>
   <!-- Update PIN caption text -->
-  <string name="UpdatePin.caption">Souvenez-vous de ce code PIN. Si vous l\'oubliez, vous ne pourrez pas accéder à votre bitcoin.</string>
+  <string name="UpdatePin.caption">Souvenez-vous de ce code PIN. Si vous l\'oubliez, vous ne pourrez pas accéder à votre BiblePay.</string>
   <!-- PIN creation info. -->
   <string name="UpdatePin.createInstruction">Votre NIP sera utilisé pour débloquer votre BRD et envoyer de l\'argent.</string>
   <!-- Update PIN title -->

@@ -25,6 +25,7 @@ import com.breadwallet.tools.util.BRConstants;
 import com.breadwallet.tools.util.Utils;
 import com.breadwallet.wallet.WalletsMaster;
 import com.breadwallet.wallet.abstracts.BaseWalletManager;
+import com.breadwallet.wallet.wallets.biblepay.WalletBiblepayManager;
 import com.breadwallet.wallet.wallets.bitcoin.WalletBitcoinManager;
 
 import java.io.UnsupportedEncodingException;
@@ -135,8 +136,8 @@ public class CryptoUriParser {
         String scheme = u.getScheme();
 
         if (scheme == null) {
-            scheme = WalletBitcoinManager.getInstance(app).getScheme(app);
-            obj.iso = WalletBitcoinManager.getInstance(app).getIso(app);
+            scheme = WalletBiblepayManager.getInstance(app).getScheme(app);
+            obj.iso = WalletBiblepayManager.getInstance(app).getIso(app);
 
         } else {
             for (BaseWalletManager walletManager : WalletsMaster.getInstance(app).getAllWallets()) {

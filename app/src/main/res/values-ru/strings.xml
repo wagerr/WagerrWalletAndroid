@@ -375,7 +375,7 @@
   <!-- Alert message title -->
   <string name="ReScan.alertTitle">Синхронизировать с Blockchain?</string>
   <!-- extimated time -->
-  <string name="ReScan.body1">20-45 минут</string>
+  <string name="ReScan.body1">3-5 минут</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body2">Если транзакция описывается как \"выполненная\" в биткойн-сети, но не в вашем BRD-кошельке.</string>
   <!-- Syncing explanation -->

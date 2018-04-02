@@ -106,7 +106,7 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
 
     private static String ISO = "BBP";
 
-    private static final String mName = "Biblepay";
+    private static final String mName = "BiblePay";
     public static final String BTC_SCHEME = "biblepay";
 
 
@@ -590,6 +590,7 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
         if (app == null) return;
         if (replace) MerkleBlockDataSource.getInstance(app).deleteAllBlocks(app, getIso(app));
         BlockEntity[] entities = new BlockEntity[blocks.length];
+        Log.d(TAG, "BBP saveBlocks: " + blocks.length );
         for (int i = 0; i < entities.length; i++) {
             entities[i] = new BlockEntity(blocks[i].serialize(), (int) blocks[i].getHeight());
         }
@@ -604,6 +605,7 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
         if (app == null) return;
         if (replace) PeerDataSource.getInstance(app).deleteAllPeers(app, getIso(app));
         PeerEntity[] entities = new PeerEntity[peers.length];
+        Log.d(TAG, "BBP savePeers: " + peers.length );
         for (int i = 0; i < entities.length; i++) {
             entities[i] = new PeerEntity(peers[i].getAddress(), TypesConverter.intToBytes(peers[i].getPort()), TypesConverter.long2byteArray(peers[i].getTimestamp()));
         }
@@ -638,6 +640,7 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
         List<BRMerkleBlockEntity> blocks = MerkleBlockDataSource.getInstance(app).getAllMerkleBlocks(app, getIso(app));
         if (blocks == null || blocks.size() == 0) return new BRCoreMerkleBlock[0];
         BRCoreMerkleBlock arr[] = new BRCoreMerkleBlock[blocks.size()];
+        Log.d(TAG, "BBP LoadBlocks: " + blocks.size() );
         for (int i = 0; i < blocks.size(); i++) {
             BRMerkleBlockEntity ent = blocks.get(i);
             arr[i] = new BRCoreMerkleBlock(ent.getBuff(), ent.getBlockHeight());
@@ -651,6 +654,7 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
         List<BRPeerEntity> peers = PeerDataSource.getInstance(app).getAllPeers(app, getIso(app));
         if (peers == null || peers.size() == 0) return new BRCorePeer[0];
         BRCorePeer arr[] = new BRCorePeer[peers.size()];
+        Log.d(TAG, "BBP LoadPeers: " + peers.size() );
         for (int i = 0; i < peers.size(); i++) {
             BRPeerEntity ent = peers.get(i);
             arr[i] = new BRCorePeer(ent.getAddress(), TypesConverter.bytesToInt(ent.getPort()), TypesConverter.byteArray2long(ent.getTimeStamp()));
