@@ -7,17 +7,17 @@ import android.net.Uri;
 import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
-import com.breadwallet.BreadApp;
-import com.breadwallet.core.BRCoreKey;
-import com.breadwallet.presenter.activities.util.ActivityUTILS;
-import com.breadwallet.tools.crypto.Base58;
-import com.breadwallet.tools.manager.BRApiManager;
-import com.breadwallet.tools.manager.BRReportsManager;
-import com.breadwallet.tools.manager.BRSharedPrefs;
-import com.breadwallet.tools.crypto.CryptoHelper;
-import com.breadwallet.tools.security.BRKeyStore;
-import com.breadwallet.tools.threads.executor.BRExecutor;
-import com.breadwallet.tools.util.Utils;
+import com.biblepaywallet.BiblePayApp;
+import com.biblepaywallet.core.BRCoreKey;
+import com.biblepaywallet.presenter.activities.util.ActivityUTILS;
+import com.biblepaywallet.tools.crypto.Base58;
+import com.biblepaywallet.tools.manager.BRApiManager;
+import com.biblepaywallet.tools.manager.BRReportsManager;
+import com.biblepaywallet.tools.manager.BRSharedPrefs;
+import com.biblepaywallet.tools.crypto.CryptoHelper;
+import com.biblepaywallet.tools.security.BRKeyStore;
+import com.biblepaywallet.tools.threads.executor.BRExecutor;
+import com.biblepaywallet.tools.util.Utils;
 import com.platform.kvstore.RemoteKVStore;
 import com.platform.kvstore.ReplicatedKVStore;
 
@@ -60,7 +60,7 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSink;
 
-import static com.breadwallet.tools.util.BRCompressor.gZipExtract;
+import static com.biblepaywallet.tools.util.BRCompressor.gZipExtract;
 
 
 /**
@@ -95,7 +95,7 @@ public class APIClient {
     private static final String PROTO = "https";
 
     // convenience getter for the API endpoint
-    public static String BASE_URL = PROTO + "://" + BreadApp.HOST;
+    public static String BASE_URL = PROTO + "://" + BiblePayApp.HOST;
     //feePerKb url
     private static final String FEE_PER_KB_URL = "/v1/fee-per-kb";
     //token
@@ -195,7 +195,7 @@ public class APIClient {
         if (ActivityUTILS.isMainThread()) {
             throw new NetworkOnMainThreadException();
         }
-        if (ctx == null) ctx = BreadApp.getBreadContext();
+        if (ctx == null) ctx = BiblePayApp.getBreadContext();
         if (ctx == null) return null;
         String strUtl = BASE_URL + ME;
         Request request = new Request.Builder()
@@ -225,7 +225,7 @@ public class APIClient {
         if (ActivityUTILS.isMainThread()) {
             throw new NetworkOnMainThreadException();
         }
-        if (ctx == null) ctx = BreadApp.getBreadContext();
+        if (ctx == null) ctx = BiblePayApp.getBreadContext();
         if (ctx == null) return null;
         try {
             String strUtl = BASE_URL + TOKEN;
@@ -312,7 +312,7 @@ public class APIClient {
             throw new RuntimeException("network on main thread");
         }
 
-        Map<String, String> headers = BreadApp.getBreadHeaders();
+        Map<String, String> headers = BiblePayApp.getBreadHeaders();
 
         Iterator it = headers.entrySet().iterator();
 
@@ -354,7 +354,7 @@ public class APIClient {
                 Uri newUri = Uri.parse(newLocation);
                 if (newUri == null) {
                     Log.e(TAG, "sendRequest: redirect uri is null");
-                } else if (!newUri.getHost().equalsIgnoreCase(BreadApp.HOST) || !newUri.getScheme().equalsIgnoreCase(PROTO)) {
+                } else if (!newUri.getHost().equalsIgnoreCase(BiblePayApp.HOST) || !newUri.getScheme().equalsIgnoreCase(PROTO)) {
                     Log.e(TAG, "sendRequest: WARNING: redirect is NOT safe: " + newLocation);
                 } else {
                     Log.w(TAG, "redirecting: " + request.url() + " >>> " + newLocation);
@@ -624,7 +624,7 @@ public class APIClient {
     }
 
     public boolean tryExtractTar() {
-        Context app = BreadApp.getBreadContext();
+        Context app = BiblePayApp.getBreadContext();
         if (app == null) {
             Log.e(TAG, "tryExtractTar: failed to extract, app is null");
             return false;
