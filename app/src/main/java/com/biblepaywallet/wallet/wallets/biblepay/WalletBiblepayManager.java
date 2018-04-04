@@ -397,7 +397,8 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
     @Override
     public BigDecimal getFiatExchangeRate(Context app) {
         CurrencyEntity ent = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, getIso(app), BRSharedPrefs.getPreferredFiatIso(app));
-        return new BigDecimal(ent == null ? 0 : ent.rate); //dollars
+        CurrencyEntity entBBP = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, getIso(app), getIso(app));
+        return new BigDecimal(ent == null ? 0 : ent.rate/entBBP.rate); //dollars
     }
 
     @Override
@@ -415,10 +416,13 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
         if (ent == null) {
             return null;
         }
+        CurrencyEntity entBBP = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, getIso(app), getIso(app));
+
         double rate = ent.rate;
+        double rateBBP = entBBP.rate;
         //get crypto amount
         BigDecimal cryptoAmount = amount.divide(new BigDecimal(100000000), 8, BRConstants.ROUNDING_MODE);
-        return cryptoAmount.multiply(new BigDecimal(rate));
+        return cryptoAmount.multiply(new BigDecimal(rate/rateBBP));
     }
 
     @Override
