@@ -69,7 +69,7 @@ public class BRConstants {
 //    public static final String FEE_KB_PREFS = "feeKb";
 //    public static final String ECONOMY_FEE_KB_PREFS = "EconomyFeeKb";
     public static final String LITTLE_CIRCLE = "\u2022";
-    public static String SUPPORT_EMAIL = "support@breadwallet.com";
+    public static String SUPPORT_EMAIL = "mobile@biblepay.org";
 
     public static final int ONE_BITCOIN = 100000000;
     public static final int HUNDRED_BITS = 10000000;
@@ -81,9 +81,9 @@ public class BRConstants {
     public static final int CURRENT_UNIT_MBITS = 1;
     public static final int CURRENT_UNIT_BITCOINS = 2;
 
-    public static final String symbolBits = "\u0180";
-    public static final String symbolBitcoinSecondary = "\u0243";
-    public static final String symbolBitcoinPrimary = "\u20BF";
+    public static final String symbolBits = "ƀ";        // \u0180";
+    public static final String symbolBitcoinSecondary = "Ƀ";  //"\u0243";
+    public static final String symbolBitcoinPrimary = "₿"; // \u20BF";
 
     public static final long PASS_CODE_TIME_LIMIT = TimeUnit.MILLISECONDS.convert(6, TimeUnit.DAYS);
 

@@ -45,7 +45,7 @@ android {
     // Specifies two flavor dimensions.
     flavorDimensions "mode"
     productFlavors {
-        brd {
+        bbp {
             applicationId = "com.biblepaywallet"
             dimension "mode"
             resValue "string", "app_name", "BiblePay"

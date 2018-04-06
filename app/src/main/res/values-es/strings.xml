@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <!-- App name -->
-  <string name="About.appName.android">BRD</string>
+  <string name="About.appName.android">BiblePay</string>
   <!-- About screen blog label -->
   <string name="About.blog">Blog</string>
   <!-- About screen footer -->
@@ -736,4 +736,15 @@
   <string name="WritePaperPhrase.previous">Anterior</string>
   <!-- 1 of 3 -->
   <string name="WritePaperPhrase.step">%1$d de %2$d</string>
+    <string name="About.footerBBP">Adaptado a BiblePay por MIP</string>
+    <string name="CurrencyBalance">Saldo</string>
+  <string name="CurrencyReceive">Recibir</string>
+  <string name="Dialog.Dismiss">Cancelar</string>
+  <string name="Dialog.Home">Inicio</string>
+  <string name="Portfolio">Cartera</string>
+  <string name="Settings.aboutBread">Acerca de BiblePay</string>
+  <string name="Settings.currencySettings">Configuración de divisas</string>
+  <string name="Settings.other">Otro</string>
+  <string name="Settings.preferences">Preferencias</string>
+  <string name="Settings.updatePin">Actualizar PIN</string>
 </resources>

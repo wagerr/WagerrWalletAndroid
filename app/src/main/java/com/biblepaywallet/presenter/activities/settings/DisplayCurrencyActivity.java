@@ -124,9 +124,13 @@ public class DisplayCurrencyActivity extends BRActivity {
     private void updateExchangeRate() {
         //set the rate from the last saved
         String iso = BRSharedPrefs.getPreferredFiatIso(this);
-        CurrencyEntity entity = CurrencyDataSource.getInstance(this).getCurrencyByCode(this, WalletsMaster.getInstance(this).getCurrentWallet(this).getIso(this), iso);
+        String CurrentISO = WalletsMaster.getInstance(this).getCurrentWallet(this).getIso(this);
+        CurrencyEntity entity = CurrencyDataSource.getInstance(this).getCurrencyByCode(this, CurrentISO, iso);
         if (entity != null) {
-            String formattedExchangeRate = CurrencyUtils.getFormattedAmount(DisplayCurrencyActivity.this, BRSharedPrefs.getPreferredFiatIso(this), new BigDecimal(entity.rate));
+            CurrencyEntity entBBP = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, CurrentISO, CurrentISO);
+            double rateBBP = entBBP.rate;
+
+            String formattedExchangeRate = CurrencyUtils.getFormattedAmount(DisplayCurrencyActivity.this, BRSharedPrefs.getPreferredFiatIso(this), new BigDecimal(entity.rate / rateBBP ));
             exchangeText.setText(String.format("%s = %s", CurrencyUtils.getFormattedAmount(this, mWalletManager.getIso(this), new BigDecimal(100000000)), formattedExchangeRate));
         }
         adapter.notifyDataSetChanged();

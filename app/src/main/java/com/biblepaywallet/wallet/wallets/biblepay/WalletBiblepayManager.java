@@ -743,7 +743,7 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
             BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
                 @Override
                 public void run() {
-                    String am = CurrencyUtils.getFormattedAmount(ctx, getIso(ctx), getCryptoForSmallestCrypto(ctx, new BigDecimal(amount)));
+                    String am = CurrencyUtils.getFormattedAmount(ctx, getIso(ctx),  new BigDecimal(amount) );       // getFormattedAmount already calculates getCryptoForSmallestCrypto no need to do it twice
                     BigDecimal bigAmount = master.getCurrentWallet(ctx).getFiatForSmallestCrypto(ctx, new BigDecimal(amount), null);
                     String amCur = CurrencyUtils.getFormattedAmount(ctx, BRSharedPrefs.getPreferredFiatIso(ctx), bigAmount == null ? new BigDecimal(0) : bigAmount);
                     String formatted = String.format("%s (%s)", am, amCur);

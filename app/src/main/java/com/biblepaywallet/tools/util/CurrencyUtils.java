@@ -80,7 +80,7 @@ public class CurrencyUtils {
         decimalFormatSymbols.setCurrencySymbol(symbol);
 //        currencyFormat.setMaximumFractionDigits(decimalPoints);
         currencyFormat.setGroupingUsed(true);
-        currencyFormat.setMaximumFractionDigits(currency != null ? currency.getDefaultFractionDigits() : wallet.getMaxDecimalPlaces(app));
+        currencyFormat.setMaximumFractionDigits(currency != null ? currency.getDefaultFractionDigits() + 2 : wallet.getMaxDecimalPlaces(app));      // add 2 decimal places for BBP fiat denomination - too low at the moment.
         currencyFormat.setDecimalFormatSymbols(decimalFormatSymbols);
         currencyFormat.setNegativePrefix(decimalFormatSymbols.getCurrencySymbol() + "-");
         currencyFormat.setNegativeSuffix("");
