@@ -48,6 +48,7 @@ import com.biblepaywallet.tools.sqlite.TransactionStorageManager;
 import com.biblepaywallet.tools.threads.executor.BRExecutor;
 import com.biblepaywallet.tools.util.BRConstants;
 import com.biblepaywallet.tools.util.CurrencyUtils;
+import com.biblepaywallet.tools.util.SymbolUtils;
 import com.biblepaywallet.tools.util.TypesConverter;
 import com.biblepaywallet.tools.util.Utils;
 import com.biblepaywallet.wallet.WalletsMaster;
@@ -279,6 +280,7 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
     @Override
     public String getSymbol(Context app) {
 
+        SymbolUtils symbolUtils = new SymbolUtils();
         String currencySymbolString = BRConstants.symbolBits;
         if (app != null) {
             int unit = BRSharedPrefs.getCryptoDenomination(app, getIso(app));
@@ -287,10 +289,22 @@ public class WalletBiblepayManager extends BRCoreWalletManager implements BaseWa
                     currencySymbolString = BRConstants.symbolBits;
                     break;
                 case BRConstants.CURRENT_UNIT_MBITS:
-                    currencySymbolString = "m" + BRConstants.symbolBitcoinSecondary;
+                    if (symbolUtils.doesDeviceSupportSymbol(BRConstants.symbolBitcoinPrimary)) {
+                        currencySymbolString = "m" + BRConstants.symbolBitcoinPrimary;
+
+                    } else {
+                        currencySymbolString = "m" + BRConstants.symbolBitcoinSecondary;
+
+                    }
                     break;
                 case BRConstants.CURRENT_UNIT_BITCOINS:
-                    currencySymbolString = BRConstants.symbolBitcoinPrimary;
+                    if (symbolUtils.doesDeviceSupportSymbol(BRConstants.symbolBitcoinPrimary)) {
+                        currencySymbolString = BRConstants.symbolBitcoinPrimary;
+
+                    } else {
+                        currencySymbolString = BRConstants.symbolBitcoinSecondary;
+
+                    }
                     break;
             }
         }

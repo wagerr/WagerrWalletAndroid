@@ -222,39 +222,24 @@ public class BRApiManager {
      *          taken from bid/ask spread on 2 exchanges
      */
     public static float fetchRatesBiblePay(Activity app, BaseWalletManager walletManager) {
-        String url1 = "https://www.southxchange.com/api/price/BBP/BTC";
-        String url2 = "https://c-cex.com/t/bbp-btc.json";
+        String url1 = "https://api.coinmarketcap.com/v1/ticker/biblepay/";
         String jsonString1 = urlGET(app, url1);
-        String jsonString2 = urlGET(app, url2);
         float price1=0;
-        float price2=0;
 
-        JSONArray jsonArray1 = null, jsonArray2 = null;
+        JSONArray jsonArray1 = null;
         if (jsonString1 == null) {
-            Log.e(TAG, "fetchRatesBiblePay: SouthXChange failed, response is null");
-            return 0;
-        }
-
-        if (jsonString2 == null) {
-            Log.e(TAG, "fetchRatesBiblePay: C-Cex failed, response is null");
+            Log.e(TAG, "fetchRatesBiblePay: coinmarketcap failed, response is null");
             return 0;
         }
 
         try {
-            JSONObject obj1 = new JSONObject(jsonString1);
-            price1 = ((float)obj1.getDouble("Bid") + (float)obj1.getDouble("Ask") ) /2 ;
+            JSONArray arr1 = new JSONArray(jsonString1);
+            JSONObject obj1 = (JSONObject)arr1.get(0);
+            price1 = (1 / (float)obj1.getDouble("price_btc")) ;     // rate of BBP per BTC
         } catch (JSONException ignored) {
         }
 
-        try {
-            JSONObject obj2 = new JSONObject(jsonString2);
-            JSONObject objTicker = new JSONObject();
-            objTicker = (JSONObject)obj2.getJSONObject("ticker");
-            price2 = ((float)objTicker.getDouble("high") + (float)objTicker.getDouble("low") ) /2 ;
-        } catch (JSONException ignored) {
-        }
-
-        return (price1!=0 && price2!=0)?1/((price1+price2)/2):(price1!=0)?price1:price2;
+        return price1;
     }
 
     public static void updateFeePerKb(Context app) {
