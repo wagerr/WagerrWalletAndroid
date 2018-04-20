@@ -111,7 +111,8 @@ public class ImportPrivKeyTask extends AsyncTask<String, String, String> {
         String decoratedAddress = wm.decorateAddress(app, tmpAddress);
 
         //automatically uses testnet if x-testnet is true
-        String fullUrl = String.format("https://%s/q/addr/%s/utxo?currency=%s", BiblePayApp.HOST, decoratedAddress, iso);
+        String fullUrl = String.format("https://%s/ext/getutxos/%s", BiblePayApp.HOST_UTXO, decoratedAddress);
+
         mTransaction = createSweepingTx(app, fullUrl);
         if (mTransaction == null) {
             app.runOnUiThread(new Runnable() {
