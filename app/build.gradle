@@ -8,8 +8,8 @@ android {
         applicationId = 'com.biblepaywallet'
         minSdkVersion 23
         targetSdkVersion 27
-        versionCode 212
-        versionName "212"
+        versionCode 213
+        versionName "213"
         multiDexEnabled true
 
         // Similar to other properties in the defaultConfig block,
