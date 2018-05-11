@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <!-- App name -->
-  <string name="About.appName.android">BiblePay</string>
+  <string name="About.appName.android">Digiwage</string>
   <!-- About screen blog label -->
   <string name="About.blog">Blog</string>
   <!-- About screen footer -->
@@ -23,15 +23,15 @@
   <!-- Loading Wallet Message -->
   <string name="Account.loadingMessage">Caricamento Portafoglio</string>
   <!-- Default wallet name -->
-  <string name="AccountHeader.defaultWalletName">Il Mio BiblePay</string>
+  <string name="AccountHeader.defaultWalletName">Il Mio Digiwage</string>
   <!-- Third party keyboard warning -->
   <string name="Alert.customKeyboard.android">Sembra che tu stia utilizzando una tastiera di terze parti, che può registrare ciò che scrivi e rubare la tua Paper Key. Per favore, utilizza la tastiera Android di default per maggiore protezione.</string>
   <!-- Error alert title -->
   <string name="Alert.error">Errore</string>
   <!-- Keystore error -->
-  <string name="Alert.keystore.generic.android">C’è un problema con il portachiavi del tuo sistema operativo Android, per favore, contatta mobile@biblepay.org</string>
+  <string name="Alert.keystore.generic.android">C’è un problema con il portachiavi del tuo sistema operativo Android, per favore, contatta support@digiwage.org</string>
   <!-- KeyStore error, keys are invalidated -->
-  <string name="Alert.keystore.invalidated.android">I tuoi dati criptati di BiblePay sono stati invalidati recentemente perché la schermata di blocco del tuo Android era disabilitata.</string>
+  <string name="Alert.keystore.invalidated.android">I tuoi dati criptati di Digiwage sono stati invalidati recentemente perché la schermata di blocco del tuo Android era disabilitata.</string>
   <!-- Keystore error title -->
   <string name="Alert.keystore.title.android">Errore Portachiavi Android</string>
   <!-- No internet alert message -->
@@ -137,7 +137,7 @@
   <!-- Word label eg. Word #1, Word #2 -->
   <string name="ConfirmPaperPhrase.word">Parola n°%1$s</string>
   <!-- Bitcoin denomination picker label -->
-  <string name="DefaultCurrency.bitcoinLabel">Unità di visualizzazione BiblePayn</string>
+  <string name="DefaultCurrency.bitcoinLabel">Unità di visualizzazione Digiwagen</string>
   <!-- Exchange rate label -->
   <string name="DefaultCurrency.rateLabel">Tasso di Cambio</string>
   <!-- Email unavailable alert title -->
@@ -145,7 +145,7 @@
   <!-- Email unavailable alert title -->
   <string name="ErrorMessages.emailUnavailableTitle">E-mail Non Disponibile</string>
   <!-- Message that gets shown when we've detected the user has encountered the looping lock-screen bug. (preserve [ ] characters) -->
-  <string name="ErrorMessages.loopingLockScreen.android">BiblePay non può essere autenticato a causa di un bug nella tua versione di Android. [Tocca qui per maggiori informazioni.]</string>
+  <string name="ErrorMessages.loopingLockScreen.android">Digiwage non può essere autenticato a causa di un bug nella tua versione di Android. [Tocca qui per maggiori informazioni.]</string>
   <!-- Messaging unavailable alert title -->
   <string name="ErrorMessages.messagingUnavailableMessage">Questo dispositivo non è configurato per inviare messaggi.</string>
   <!-- Messaging unavailable alert title -->
@@ -187,13 +187,13 @@
   <!-- Caption for graphics -->
   <string name="Import.leftCaption">Portafoglio da importare</string>
   <!-- Import wallet intro screen message -->
-  <string name="Import.message">L\'importazione di un portafoglio trasferisce tutto il denaro dal tuo altro portafoglio al portafoglio BiblePay utilizzando una singola transazione.</string>
+  <string name="Import.message">L\'importazione di un portafoglio trasferisce tutto il denaro dal tuo altro portafoglio al portafoglio Digiwage utilizzando una singola transazione.</string>
   <!-- Enter password alert view title -->
   <string name="Import.password">Questa chiave privata è protetta da password.</string>
   <!-- password textfield placeholder -->
   <string name="Import.passwordPlaceholder">password</string>
   <!-- Caption for graphics -->
-  <string name="Import.rightCaption">Il Tuo Portafoglio BiblePay</string>
+  <string name="Import.rightCaption">Il Tuo Portafoglio Digiwage</string>
   <!-- Scan Private key button label -->
   <string name="Import.scan">Acquisisci Chiave Privata</string>
   <!-- Import wallet success alert title -->
@@ -213,9 +213,9 @@
   <!-- Ignore jailbreak warning button -->
   <string name="JailbreakWarnings.ignore">Ignora</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithBalance">SICUREZZA DEL DISPOSITIVO COMPROMESSA\nQualsiasi applicazione \"jailbreak\" può accedere ai dati di keychain di BiblePay e rubarti i bitcoin! Cancella immediatamente questo portafoglio ed effettua il ripristino su un dispositivo sicuro.</string>
+  <string name="JailbreakWarnings.messageWithBalance">SICUREZZA DEL DISPOSITIVO COMPROMESSA\nQualsiasi applicazione \"jailbreak\" può accedere ai dati di keychain di Digiwage e rubarti i bitcoin! Cancella immediatamente questo portafoglio ed effettua il ripristino su un dispositivo sicuro.</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithoutBalance">SICUREZZA DEL DISPOSITIVO COMPROMESSA\nQualsiasi applicazione \"jailbreak\" può accedere ai dati di keychain di BiblePay e rubarti i bitcoin. Utilizza BiblePay solamente su un dispositivo senza jailbreak.</string>
+  <string name="JailbreakWarnings.messageWithoutBalance">SICUREZZA DEL DISPOSITIVO COMPROMESSA\nQualsiasi applicazione \"jailbreak\" può accedere ai dati di keychain di Digiwage e rubarti i bitcoin. Utilizza Digiwage solamente su un dispositivo senza jailbreak.</string>
   <!-- Jailbreak warning title -->
   <string name="JailbreakWarnings.title">ATTENZIONE</string>
   <!-- Wipe wallet button -->
@@ -223,7 +223,7 @@
   <!-- Location services disabled error -->
   <string name="LocationPlugin.disabled">I servizi di localizzazione sono disabilitati.</string>
   <!-- No permissions for location services -->
-  <string name="LocationPlugin.notAuthorized">BiblePay non dispone dell\'autorizzazione per accedere ai servizi di localizzazione.</string>
+  <string name="LocationPlugin.notAuthorized">Digiwage non dispone dell\'autorizzazione per accedere ai servizi di localizzazione.</string>
   <!-- Wallet creation date prefix -->
   <string name="ManageWallet.creationDatePrefix">Hai creato il tuo portafoglio il %1$s</string>
   <!-- Manage wallet description text -->
@@ -265,7 +265,7 @@
   <!-- Node status label -->
   <string name="NodeSelector.statusLabel">Stato della connessione del nodo</string>
   <!-- Node Selector view title -->
-  <string name="NodeSelector.title">Nodi BiblePay</string>
+  <string name="NodeSelector.title">Nodi Digiwage</string>
   <!-- Bad Payment request alert title -->
   <string name="PaymentProtocol.Errors.badPaymentRequest">Richiesta Cattivo Pagamento</string>
   <!-- Error opening payment protocol file message -->
@@ -277,9 +277,9 @@
   <!-- Payment too small alert title -->
   <string name="PaymentProtocol.Errors.smallOutputError">Impossibile effettuare il pagamento</string>
   <!-- Amount too small error message -->
-  <string name="PaymentProtocol.Errors.smallPayment">I pagamenti in BiblePay non possono essere inferiori a %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallPayment">I pagamenti in Digiwage non possono essere inferiori a %1$s.</string>
   <!-- Output too small error message. -->
-  <string name="PaymentProtocol.Errors.smallTransaction">Gli output di transazione BiblePay non possono essere inferiori a %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallTransaction">Gli output di transazione Digiwage non possono essere inferiori a %1$s.</string>
   <!-- Unsupported signature type payment protocol error message -->
   <string name="PaymentProtocol.Errors.unsupportedSignatureType">tipo di firma non supportato</string>
   <!-- Untrusted certificate payment protocol error message -->
@@ -301,7 +301,7 @@
   <!-- Transaction rejected prompt title -->
   <string name="Prompts.RecommendRescan.title">Transazione Rifiutata</string>
   <!-- Share data prompt body -->
-  <string name="Prompts.ShareData.body">Aiutaci a migliorare BiblePay condividendo i tuoi dati con noi anonimamente</string>
+  <string name="Prompts.ShareData.body">Aiutaci a migliorare Digiwage condividendo i tuoi dati con noi anonimamente</string>
   <!-- Share data prompt title -->
   <string name="Prompts.ShareData.title">Condividi dati anonimamente</string>
   <!-- Enable touch ID prompt body -->
@@ -315,11 +315,11 @@
   <!-- Button on fingerprint prompt so the user can enter their PIN instead -->
   <string name="Prompts.TouchId.usePin.android">PIN</string>
   <!-- Upgrade PIN prompt body. -->
-  <string name="Prompts.UpgradePin.body">BiblePay è stato aggiornato all\'utilizzo di un PIN a 6 cifre. Tocca qui per aggiornare.</string>
+  <string name="Prompts.UpgradePin.body">Digiwage è stato aggiornato all\'utilizzo di un PIN a 6 cifre. Tocca qui per aggiornare.</string>
   <!-- Upgrade PIN prompt title. -->
   <string name="Prompts.UpgradePin.title">Aggiorna il PIN</string>
   <!-- Notifications will be added later but users can set their preferences now, which is why we specify "in the future". -->
-  <string name="PushNotifications.body">Attiva le notifiche per ricevere messaggi speciali da BiblePay in futuro.</string>
+  <string name="PushNotifications.body">Attiva le notifiche per ricevere messaggi speciali da Digiwage in futuro.</string>
   <!-- Push notifications toggle switch label -->
   <string name="PushNotifications.label">Notifiche Push</string>
   <!-- Push notifications are off label -->
@@ -349,7 +349,7 @@
   <!-- Enter paper key instruction -->
   <string name="RecoverWallet.instruction">Inserisci Chiave Cartacea</string>
   <!-- Recover wallet intro -->
-  <string name="RecoverWallet.intro">Recupera il tuo BiblePay con la tua chiave cartacea.</string>
+  <string name="RecoverWallet.intro">Recupera il tuo Digiwage con la tua chiave cartacea.</string>
   <!-- Invalid paper key message -->
   <string name="RecoverWallet.invalid">La chiave cartacea inserita non è valida. Si prega di controllare ogni parola due volte e riprovare.</string>
   <!-- Previous button accessibility label -->
@@ -377,7 +377,7 @@
   <!-- extimated time -->
   <string name="ReScan.body1">3-5 minuti</string>
   <!-- Syncing explanation -->
-  <string name="ReScan.body2">Se una transazione figura come completata sulla rete BiblePay, ma non sul tuo BiblePay.</string>
+  <string name="ReScan.body2">Se una transazione figura come completata sulla rete Digiwage, ma non sul tuo Digiwage.</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body3">Hai ricevuto ripetutamente un errore che dice che la transazione è stata rifiutata.</string>
   <!-- Start Sync button label -->
@@ -403,17 +403,17 @@
   <!-- Security Center Info -->
   <string name="SecurityCenter.info">Attiva tutte le funzionalità di sicurezza per la massima protezione.</string>
   <!-- Paper Key button description -->
-  <string name="SecurityCenter.paperKeyDescription">L\'unico modo per accedere al tuo BiblePay se perdi o aggiorni il telefono.</string>
+  <string name="SecurityCenter.paperKeyDescription">L\'unico modo per accedere al tuo Digiwage se perdi o aggiorni il telefono.</string>
   <!-- Paper Key button title -->
   <string name="SecurityCenter.paperKeyTitle">Chiave Cartacea</string>
   <!-- PIN button description -->
-  <string name="SecurityCenter.pinDescription">Protegge il tuo BiblePay dagli utenti non autorizzati.</string>
+  <string name="SecurityCenter.pinDescription">Protegge il tuo Digiwage dagli utenti non autorizzati.</string>
   <!-- PIN button title -->
   <string name="SecurityCenter.pinTitle">PIN a 6 cifre</string>
   <!-- Security Center Title -->
   <string name="SecurityCenter.title">Centro Sicurezza</string>
   <!-- Touch ID button description -->
-  <string name="SecurityCenter.touchIdDescription">Sblocca comodamente il tuo BiblePay e invia denaro fino a un limite impostato.</string>
+  <string name="SecurityCenter.touchIdDescription">Sblocca comodamente il tuo Digiwage e invia denaro fino a un limite impostato.</string>
   <!-- Touch ID button title -->
   <string name="SecurityCenter.touchIdTitle">Touch ID</string>
   <!-- Security center fingerprint authentication button -->
@@ -425,11 +425,11 @@
   <!-- Instructions how to allow the camera access for the app -->
   <string name="Send.cameraUnavailabeMessage.android">Consenti l’accesso alla fotocamera in “Impostazioni” &gt; “Apps” &gt; “BRD” &gt; “Permessi”</string>
   <!-- Permission required to access camera -->
-  <string name="Send.cameraUnavailabeTitle.android">L’accesso alla fotocamera non è consentito a BiblePay.</string>
+  <string name="Send.cameraUnavailabeTitle.android">L’accesso alla fotocamera non è consentito a Digiwage.</string>
   <!-- Camera not allowed message -->
   <string name="Send.cameraunavailableMessage">Vai su Impostazioni per consentire l\'accesso alla fotocamera.</string>
   <!-- Camera not allowed alert title -->
-  <string name="Send.cameraUnavailableTitle">BiblePay non è autorizzato ad accedere alla fotocamera</string>
+  <string name="Send.cameraUnavailableTitle">Digiwage non è autorizzato ad accedere alla fotocamera</string>
   <!-- Warning when sending to self. -->
   <string name="Send.containsAddress">La destinazione corrisponde al tuo indirizzo. Non puoi inviare a te stesso.</string>
   <!-- Could not create transaction alert title -->
@@ -443,9 +443,9 @@
   <!-- Payee identity not certified alert title. -->
   <string name="Send.identityNotCertified">Identità del beneficiario non certificata.</string>
   <!-- Invalid address alert message -->
-  <string name="Send.invalidAddressMessage">L\'indirizzo di destinazione non è un indirizzo BiblePay valido.</string>
+  <string name="Send.invalidAddressMessage">L\'indirizzo di destinazione non è un indirizzo Digiwage valido.</string>
   <!-- Invalid address on pasteboard message -->
-  <string name="Send.invalidAddressOnPasteboard">Il cartone non contiene un indirizzo BiblePay valido.</string>
+  <string name="Send.invalidAddressOnPasteboard">Il cartone non contiene un indirizzo Digiwage valido.</string>
   <!-- Invalid address alert title -->
   <string name="Send.invalidAddressTitle">Indirizzo Non Valido</string>
   <!-- Is rescanning error message -->
@@ -485,7 +485,7 @@
   <!-- Join Early access label -->
   <string name="Settings.earlyAccess">Iscriviti all\'Accesso Immediato</string>
   <!-- Are you enjoying bread alert message body -->
-  <string name="Settings.enjoying">Ti piace BiblePay?</string>
+  <string name="Settings.enjoying">Ti piace Digiwage?</string>
   <!-- Import wallet label -->
   <string name="Settings.importTitle">Importa Portafoglio</string>
   <!-- Manage settings section header -->
@@ -509,7 +509,7 @@
   <!-- Start or recover another wallet menu label. -->
   <string name="Settings.wipe">Inizia/Recupera un altro portafogli</string>
   <!-- Share data view body -->
-  <string name="ShareData.body">Aiuta a migliorare BiblePay condividendo con noi i tuoi dati anonimi. Ciò non include alcuna informazione finanziaria. Rispettiamo la tua privacy finanziaria.</string>
+  <string name="ShareData.body">Aiuta a migliorare Digiwage condividendo con noi i tuoi dati anonimi. Ciò non include alcuna informazione finanziaria. Rispettiamo la tua privacy finanziaria.</string>
   <!-- Share data header -->
   <string name="ShareData.header">Condividi Dati?</string>
   <!-- Share data switch label. -->
@@ -517,13 +517,13 @@
   <!-- button label -->
   <string name="StartPaperPhrase.againButtonTitle">Annota la Chiave Cartacea di nuovo</string>
   <!-- Paper key explanation text. -->
-  <string name="StartPaperPhrase.body">La tua chiave cartacea è l\'unico modo per ripristinare il tuo BiblePay, nel caso il tuo telefono sia perso, rubato, rotto o aggiornato.\n\nTi mostreremo un elenco di parole da annotare su un pezzo di carta e conservare al sicuro.</string>
+  <string name="StartPaperPhrase.body">La tua chiave cartacea è l\'unico modo per ripristinare il tuo Digiwage, nel caso il tuo telefono sia perso, rubato, rotto o aggiornato.\n\nTi mostreremo un elenco di parole da annotare su un pezzo di carta e conservare al sicuro.</string>
   <!-- button label -->
   <string name="StartPaperPhrase.buttonTitle">Annota la Chiave Cartacea</string>
   <!-- Argument is date -->
   <string name="StartPaperPhrase.date">Hai annotato la tua chiave cartacea l\'ultima volta il %1$s</string>
   <!-- Start view message -->
-  <string name="StartViewController.message">Il modo più sicuro per usare i BiblePay.</string>
+  <string name="StartViewController.message">Il modo più sicuro per usare i Digiwage.</string>
   <!-- Syncing view connectiong state header text -->
   <string name="SyncingView.connecting">Connessione in corso</string>
   <!-- Syncing view header text -->
@@ -549,14 +549,14 @@
   <!-- Fingerprint Is Not Setup -->
   <string name="TouchIdSettings.disabledWarning.title.android">Autenticazione Impronta non abilitata</string>
   <!-- Touch Id screen label -->
-  <string name="TouchIdSettings.label">Utilizza l\'impronta digitale per sbloccare il tuo BiblePay e inviare denaro fino a un limite impostato.</string>
+  <string name="TouchIdSettings.label">Utilizza l\'impronta digitale per sbloccare il tuo Digiwage e inviare denaro fino a un limite impostato.</string>
   <!-- Link Text (see TouchIdSettings.customizeText) -->
   <string name="TouchIdSettings.linkText">Schermata limite di spesa con Touch ID</string>
   <!-- Spending Limit: b100,000 ($100) -->
   <string name="TouchIdSettings.spendingLimit">Limite di spesa: %1$s (%2$s)</string>
   <!-- Touch id switch label. -->
-  <string name="TouchIdSettings.switchLabel">Abilita Touch ID per BiblePay</string>
-  <!-- Enable fingerprint for this wallet called BiblePay -->
+  <string name="TouchIdSettings.switchLabel">Abilita Touch ID per Digiwage</string>
+  <!-- Enable fingerprint for this wallet called Digiwage -->
   <string name="TouchIdSettings.switchLabel.android">Abilita l’Autenticazione con Impronta Digitale</string>
   <!-- Touch ID settings view title -->
   <string name="TouchIdSettings.title">Touch ID</string>
@@ -633,7 +633,7 @@
   <!-- "Sent [$5] to [address]" => This is the "to [address]" part. -->
   <string name="TransactionDetails.to">a %1$s</string>
   <!-- Transaction ID header -->
-  <string name="TransactionDetails.txHashHeader">ID transazione BiblePay</string>
+  <string name="TransactionDetails.txHashHeader">ID transazione Digiwage</string>
   <!-- (this transaction was) Received at this address: -->
   <string name="TransactionDirection.address">Ricevuta a questo indirizzo</string>
   <!-- (this transaction was) Sent to this address: -->
@@ -651,7 +651,7 @@
   <!-- Instruction to touch the sensor for fingerprint authentication -->
   <string name="UnlockScreen.touchIdInstructions.android">Sensore Touch</string>
   <!-- TouchID prompt text -->
-  <string name="UnlockScreen.touchIdPrompt">Sblocca il tuo BiblePay.</string>
+  <string name="UnlockScreen.touchIdPrompt">Sblocca il tuo Digiwage.</string>
   <!-- Device authentication body -->
   <string name="UnlockScreen.touchIdPrompt.android">Per favore, sblocca il tuo dispositivo Android per continuare.</string>
   <!-- Unlock with TouchID accessibility label -->
@@ -661,9 +661,9 @@
   <!-- Wallet unlocked message -->
   <string name="UnlockScreen.unlocked">Portafoglio Sbloccato</string>
   <!-- Update PIN caption text -->
-  <string name="UpdatePin.caption">Ricorda questo PIN. Se lo dimentichi, non sarai in grado di accedere al tuo BiblePay.</string>
+  <string name="UpdatePin.caption">Ricorda questo PIN. Se lo dimentichi, non sarai in grado di accedere al tuo Digiwage.</string>
   <!-- PIN creation info. -->
-  <string name="UpdatePin.createInstruction">Il PIN verrà utilizzato per sbloccare il tuo BiblePay e inviare denaro.</string>
+  <string name="UpdatePin.createInstruction">Il PIN verrà utilizzato per sbloccare il tuo Digiwage e inviare denaro.</string>
   <!-- Update PIN title -->
   <string name="UpdatePin.createTitle">Imposta PIN</string>
   <!-- Update PIN title -->
@@ -697,7 +697,7 @@
   <!-- Authorize transaction with touch id message -->
   <string name="VerifyPin.touchIdMessage">Autorizza questa transazione</string>
   <!-- 'No wallet' warning for watch app -->
-  <string name="Watch.noWalletWarning">Apri l\'app BiblePay per iPhone per impostare tuo il portafoglio.</string>
+  <string name="Watch.noWalletWarning">Apri l\'app Digiwage per iPhone per impostare tuo il portafoglio.</string>
   <!-- Dismiss button label -->
   <string name="Webview.dismiss">Ignora</string>
   <!-- Webview loading error message -->
@@ -705,9 +705,9 @@
   <!-- Updating webview message -->
   <string name="Webview.updating">In aggiornamento…</string>
   <!-- Welcome screen text. (?) will be replaced with the help icon users should look for. -->
-  <string name="Welcome.body">Breadwallet ha cambiato il suo nome in BiblePay e ha un look nuovissimo nonché alcune nuove funzionalità.\n\nSe hai bisogno di aiuto, cerca il (?) a destra in alto sulla maggior parte delle schermate.</string>
+  <string name="Welcome.body">Breadwallet ha cambiato il suo nome in Digiwage e ha un look nuovissimo nonché alcune nuove funzionalità.\n\nSe hai bisogno di aiuto, cerca il (?) a destra in alto sulla maggior parte delle schermate.</string>
   <!-- Top title of welcome screen -->
-  <string name="Welcome.title">Ti diamo il benvenuto su BiblePay!</string>
+  <string name="Welcome.title">Ti diamo il benvenuto su Digiwage!</string>
   <!-- Wipe wallet alert message -->
   <string name="WipeWallet.alertMessage">Sicuro di voler eliminare questo portafogli?</string>
   <!-- Wipe wallet alert title -->
@@ -719,9 +719,9 @@
   <!-- Enter phrase to wipe wallet instruction. -->
   <string name="WipeWallet.instruction">Inserisci la frase di recupero di questo portafogli per ripulirlo o recuperane un\'altra. Il tuo saldo rimane in questa frase.</string>
   <!-- Start wipe wallet view message -->
-  <string name="WipeWallet.startMessage">Iniziare o recuperare un altro portafoglio ti consente di avere accesso e gestire un portafoglio BiblePay diverso su questo dispositivo.</string>
+  <string name="WipeWallet.startMessage">Iniziare o recuperare un altro portafoglio ti consente di avere accesso e gestire un portafoglio Digiwage diverso su questo dispositivo.</string>
   <!-- Start wipe wallet view warning -->
-  <string name="WipeWallet.startWarning">Non sarai più in grado di accedere al tuo portafoglio BiblePay attuale da questo dispositivo. Il saldo resterà solo un modo di dire.</string>
+  <string name="WipeWallet.startWarning">Non sarai più in grado di accedere al tuo portafoglio Digiwage attuale da questo dispositivo. Il saldo resterà solo un modo di dire.</string>
   <!-- Wipe wallet navigation item title. -->
   <string name="WipeWallet.title">Inizia o recupera un altro portafogli.</string>
   <!-- Wipe wallet button title -->

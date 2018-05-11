@@ -6,16 +6,16 @@ import android.security.keystore.UserNotAuthenticatedException;
 import android.util.Base64;
 import android.util.Log;
 
-import com.biblepaywallet.core.BRCoreKey;
-import com.biblepaywallet.core.BRCoreMasterPubKey;
-import com.biblepaywallet.presenter.interfaces.BRAuthCompletion;
-import com.biblepaywallet.tools.manager.BRSharedPrefs;
-import com.biblepaywallet.tools.security.AuthManager;
-import com.biblepaywallet.tools.security.BRKeyStore;
-import com.biblepaywallet.tools.security.PostAuth;
-import com.biblepaywallet.tools.threads.executor.BRExecutor;
-import com.biblepaywallet.tools.util.BRConstants;
-import com.biblepaywallet.tools.util.Utils;
+import com.digiwagewallet.core.BRCoreKey;
+import com.digiwagewallet.core.BRCoreMasterPubKey;
+import com.digiwagewallet.presenter.interfaces.BRAuthCompletion;
+import com.digiwagewallet.tools.manager.BRSharedPrefs;
+import com.digiwagewallet.tools.security.AuthManager;
+import com.digiwagewallet.tools.security.BRKeyStore;
+import com.digiwagewallet.tools.security.PostAuth;
+import com.digiwagewallet.tools.threads.executor.BRExecutor;
+import com.digiwagewallet.tools.util.BRConstants;
+import com.digiwagewallet.tools.util.Utils;
 import com.platform.APIClient;
 import com.platform.middlewares.plugins.WalletPlugin;
 

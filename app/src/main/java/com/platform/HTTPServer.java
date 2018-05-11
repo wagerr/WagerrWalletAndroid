@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.biblepaywallet.BiblePayApp;
-import com.biblepaywallet.tools.threads.executor.BRExecutor;
-import com.biblepaywallet.tools.util.Utils;
+import com.digiwagewallet.DigiWageApp;
+import com.digiwagewallet.tools.threads.executor.BRExecutor;
+import com.digiwagewallet.tools.util.Utils;
 import com.platform.interfaces.Middleware;
 import com.platform.interfaces.Plugin;
 import com.platform.middlewares.APIProxy;
@@ -152,7 +152,7 @@ public class HTTPServer {
 
     private static boolean dispatch(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
         Log.d(TAG, "TRYING TO HANDLE: " + target + " (" + request.getMethod() + ")");
-        final Context app = BiblePayApp.getBreadContext();
+        final Context app = DigiWageApp.getBreadContext();
         boolean result = false;
         if (target.equalsIgnoreCase("/_close")) {
             if (app != null) {

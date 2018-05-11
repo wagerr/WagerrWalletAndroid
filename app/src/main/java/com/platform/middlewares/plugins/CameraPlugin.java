@@ -12,14 +12,14 @@ import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 
-import com.biblepaywallet.BiblePayApp;
-import com.biblepaywallet.R;
-import com.biblepaywallet.presenter.activities.camera.CameraActivity;
-import com.biblepaywallet.presenter.customviews.BRDialogView;
-import com.biblepaywallet.tools.animation.BRDialog;
-import com.biblepaywallet.tools.crypto.CryptoHelper;
-import com.biblepaywallet.tools.threads.executor.BRExecutor;
-import com.biblepaywallet.tools.util.BRConstants;
+import com.digiwagewallet.DigiWageApp;
+import com.digiwagewallet.R;
+import com.digiwagewallet.presenter.activities.camera.CameraActivity;
+import com.digiwagewallet.presenter.customviews.BRDialogView;
+import com.digiwagewallet.tools.animation.BRDialog;
+import com.digiwagewallet.tools.crypto.CryptoHelper;
+import com.digiwagewallet.tools.threads.executor.BRExecutor;
+import com.digiwagewallet.tools.util.BRConstants;
 import com.platform.BRHTTPHelper;
 import com.platform.interfaces.Plugin;
 
@@ -89,7 +89,7 @@ public class CameraPlugin implements Plugin {
 
         if (target.startsWith("/_camera/take_picture")) {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
-            final Context app = BiblePayApp.getBreadContext();
+            final Context app = DigiWageApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "handle: context is null: " + target + " " + baseRequest.getMethod());
 
@@ -149,7 +149,7 @@ public class CameraPlugin implements Plugin {
             return true;
         } else if (target.startsWith("/_camera/picture/")) {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
-            final Context app = BiblePayApp.getBreadContext();
+            final Context app = DigiWageApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "handle: context is null: " + target + " " + baseRequest.getMethod());
                 return BRHTTPHelper.handleError(404, "context is null", baseRequest, response);

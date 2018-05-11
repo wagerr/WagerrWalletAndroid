@@ -17,7 +17,7 @@
 ** limitations under the License.
 */
 -->
-<com.biblepaywallet.presenter.customviews.BRText
+<com.digiwagewallet.presenter.customviews.BRText
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     style="?android:attr/spinnerItemStyle"

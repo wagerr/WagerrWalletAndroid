@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <!-- App name -->
-  <string name="About.appName.android">BiblePay</string>
+  <string name="About.appName.android">Digiwage</string>
   <!-- About screen blog label -->
   <string name="About.blog">部落格</string>
   <!-- About screen footer -->
@@ -23,15 +23,15 @@
   <!-- Loading Wallet Message -->
   <string name="Account.loadingMessage">正在載入電子錢包</string>
   <!-- Default wallet name -->
-  <string name="AccountHeader.defaultWalletName">我的 BiblePay</string>
+  <string name="AccountHeader.defaultWalletName">我的 Digiwage</string>
   <!-- Third party keyboard warning -->
   <string name="Alert.customKeyboard.android">您似乎在使用第三方鍵盤，這可能會記錄您按下的鍵並竊取您的「紙鑰」。請切換至預設的 Android 鍵盤以獲得額外的保護。</string>
   <!-- Error alert title -->
   <string name="Alert.error">錯誤</string>
   <!-- Keystore error -->
-  <string name="Alert.keystore.generic.android">您的 Android OS 金鑰儲存區有問題，請聯絡 mobile@biblepay.org</string>
+  <string name="Alert.keystore.generic.android">您的 Android OS 金鑰儲存區有問題，請聯絡 support@digiwage.org</string>
   <!-- KeyStore error, keys are invalidated -->
-  <string name="Alert.keystore.invalidated.android">您的 BiblePay 加密資料最近已被判定為無效，因爲您的 Android 螢幕鎖定已被停用。</string>
+  <string name="Alert.keystore.invalidated.android">您的 Digiwage 加密資料最近已被判定為無效，因爲您的 Android 螢幕鎖定已被停用。</string>
   <!-- Keystore error title -->
   <string name="Alert.keystore.title.android">Android 金鑰儲存區錯誤</string>
   <!-- No internet alert message -->
@@ -145,7 +145,7 @@
   <!-- Email unavailable alert title -->
   <string name="ErrorMessages.emailUnavailableTitle">無法使用電子郵件</string>
   <!-- Message that gets shown when we've detected the user has encountered the looping lock-screen bug. (preserve [ ] characters) -->
-  <string name="ErrorMessages.loopingLockScreen.android">由於您安卓系統版本中的錯誤，因此 BiblePay 無法取得認證。[請點擊此瞭解更多資訊。]</string>
+  <string name="ErrorMessages.loopingLockScreen.android">由於您安卓系統版本中的錯誤，因此 Digiwage 無法取得認證。[請點擊此瞭解更多資訊。]</string>
   <!-- Messaging unavailable alert title -->
   <string name="ErrorMessages.messagingUnavailableMessage">本裝置並非設定來傳送訊息。</string>
   <!-- Messaging unavailable alert title -->
@@ -187,13 +187,13 @@
   <!-- Caption for graphics -->
   <string name="Import.leftCaption">待匯入的電子錢包</string>
   <!-- Import wallet intro screen message -->
-  <string name="Import.message">匯入一個電子錢包會以單一交易的方式將您其它電子錢包的所有資金轉帳至您的 BiblePay 錢包。</string>
+  <string name="Import.message">匯入一個電子錢包會以單一交易的方式將您其它電子錢包的所有資金轉帳至您的 Digiwage 錢包。</string>
   <!-- Enter password alert view title -->
   <string name="Import.password">此私密金鑰受密碼保護。</string>
   <!-- password textfield placeholder -->
   <string name="Import.passwordPlaceholder">密碼</string>
   <!-- Caption for graphics -->
-  <string name="Import.rightCaption">您的 BiblePay 錢包</string>
+  <string name="Import.rightCaption">您的 Digiwage 錢包</string>
   <!-- Scan Private key button label -->
   <string name="Import.scan">掃描私密金鑰</string>
   <!-- Import wallet success alert title -->
@@ -213,9 +213,9 @@
   <!-- Ignore jailbreak warning button -->
   <string name="JailbreakWarnings.ignore">略過</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithBalance">裝置安全性遭破解\n 任何「越獄」應用程式都可以存取 BiblePay 的鑰匙圈資料、 竊取您的比特幣！立即抹除這個錢包，在安全的裝置上還原。</string>
+  <string name="JailbreakWarnings.messageWithBalance">裝置安全性遭破解\n 任何「越獄」應用程式都可以存取 Digiwage 的鑰匙圈資料、 竊取您的比特幣！立即抹除這個錢包，在安全的裝置上還原。</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithoutBalance">裝置安全性遭破解\n 任何「越獄」應用程式都可以存取 BiblePay 的鑰匙圈資料、 竊取您的比特幣。請只在未越獄的裝置上使用 BRD。</string>
+  <string name="JailbreakWarnings.messageWithoutBalance">裝置安全性遭破解\n 任何「越獄」應用程式都可以存取 Digiwage 的鑰匙圈資料、 竊取您的比特幣。請只在未越獄的裝置上使用 BRD。</string>
   <!-- Jailbreak warning title -->
   <string name="JailbreakWarnings.title">警告</string>
   <!-- Wipe wallet button -->
@@ -223,7 +223,7 @@
   <!-- Location services disabled error -->
   <string name="LocationPlugin.disabled">定位服務已停用。</string>
   <!-- No permissions for location services -->
-  <string name="LocationPlugin.notAuthorized">BiblePay 沒有存取定位服務的權限。</string>
+  <string name="LocationPlugin.notAuthorized">Digiwage 沒有存取定位服務的權限。</string>
   <!-- Wallet creation date prefix -->
   <string name="ManageWallet.creationDatePrefix">您在 %1$s 建立了電子錢包</string>
   <!-- Manage wallet description text -->
@@ -301,7 +301,7 @@
   <!-- Transaction rejected prompt title -->
   <string name="Prompts.RecommendRescan.title">交易被拒</string>
   <!-- Share data prompt body -->
-  <string name="Prompts.ShareData.body">和我們分享您的匿名資料來協助改善 BiblePay</string>
+  <string name="Prompts.ShareData.body">和我們分享您的匿名資料來協助改善 Digiwage</string>
   <!-- Share data prompt title -->
   <string name="Prompts.ShareData.title">分享匿名資料</string>
   <!-- Enable touch ID prompt body -->
@@ -315,11 +315,11 @@
   <!-- Button on fingerprint prompt so the user can enter their PIN instead -->
   <string name="Prompts.TouchId.usePin.android">密碼</string>
   <!-- Upgrade PIN prompt body. -->
-  <string name="Prompts.UpgradePin.body">BiblePay 已經升級至 6 位數 PIN 碼。請點這裡升級。</string>
+  <string name="Prompts.UpgradePin.body">Digiwage 已經升級至 6 位數 PIN 碼。請點這裡升級。</string>
   <!-- Upgrade PIN prompt title. -->
   <string name="Prompts.UpgradePin.title">升級 PIN 碼</string>
   <!-- Notifications will be added later but users can set their preferences now, which is why we specify "in the future". -->
-  <string name="PushNotifications.body">開啟通知，好在未來收到 BiblePay 的特別訊息。</string>
+  <string name="PushNotifications.body">開啟通知，好在未來收到 Digiwage 的特別訊息。</string>
   <!-- Push notifications toggle switch label -->
   <string name="PushNotifications.label">推播</string>
   <!-- Push notifications are off label -->
@@ -349,7 +349,7 @@
   <!-- Enter paper key instruction -->
   <string name="RecoverWallet.instruction">輸入紙本金鑰</string>
   <!-- Recover wallet intro -->
-  <string name="RecoverWallet.intro">以您的紙本金鑰復原您的 BiblePay</string>
+  <string name="RecoverWallet.intro">以您的紙本金鑰復原您的 Digiwage</string>
   <!-- Invalid paper key message -->
   <string name="RecoverWallet.invalid">紙本金鑰</string>
   <!-- Previous button accessibility label -->
@@ -377,7 +377,7 @@
   <!-- extimated time -->
   <string name="ReScan.body1">3-5 分鐘</string>
   <!-- Syncing explanation -->
-  <string name="ReScan.body2">如果交易在比特幣網上已經顯示為完成，但沒有出現在您的 BiblePay 上。</string>
+  <string name="ReScan.body2">如果交易在比特幣網上已經顯示為完成，但沒有出現在您的 Digiwage 上。</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body3">你不斷收到「交易被拒」的錯誤。</string>
   <!-- Start Sync button label -->
@@ -425,11 +425,11 @@
   <!-- Instructions how to allow the camera access for the app -->
   <string name="Send.cameraUnavailabeMessage.android">到「設定」 &gt; 「應用程式」 &gt; 「BRD」 &gt; 「權限」允許相機存取</string>
   <!-- Permission required to access camera -->
-  <string name="Send.cameraUnavailabeTitle.android">BiblePay 尚未獲准存取相機</string>
+  <string name="Send.cameraUnavailabeTitle.android">Digiwage 尚未獲准存取相機</string>
   <!-- Camera not allowed message -->
   <string name="Send.cameraunavailableMessage">請至「設定」允許存取相機。</string>
   <!-- Camera not allowed alert title -->
-  <string name="Send.cameraUnavailableTitle">BiblePay 未獲得存取相機的權限</string>
+  <string name="Send.cameraUnavailableTitle">Digiwage 未獲得存取相機的權限</string>
   <!-- Warning when sending to self. -->
   <string name="Send.containsAddress">目的地為您自己的地址。您不能寄送給自己。</string>
   <!-- Could not create transaction alert title -->
@@ -485,7 +485,7 @@
   <!-- Join Early access label -->
   <string name="Settings.earlyAccess">參加「先行體驗」</string>
   <!-- Are you enjoying bread alert message body -->
-  <string name="Settings.enjoying">您喜歡 BiblePay 嗎？</string>
+  <string name="Settings.enjoying">您喜歡 Digiwage 嗎？</string>
   <!-- Import wallet label -->
   <string name="Settings.importTitle">匯入電子錢包</string>
   <!-- Manage settings section header -->
@@ -517,7 +517,7 @@
   <!-- button label -->
   <string name="StartPaperPhrase.againButtonTitle">再寫一次紙本金鑰</string>
   <!-- Paper key explanation text. -->
-  <string name="StartPaperPhrase.body">您的手機遺失、損壞或升級時，紙本金鑰是復原\n BiblePay 唯一的方式。\n\n我們會向您出示一個字串，請寫在紙上並妥善保管。</string>
+  <string name="StartPaperPhrase.body">您的手機遺失、損壞或升級時，紙本金鑰是復原\n Digiwage 唯一的方式。\n\n我們會向您出示一個字串，請寫在紙上並妥善保管。</string>
   <!-- button label -->
   <string name="StartPaperPhrase.buttonTitle">寫下紙本金鑰</string>
   <!-- Argument is date -->
@@ -555,8 +555,8 @@
   <!-- Spending Limit: b100,000 ($100) -->
   <string name="TouchIdSettings.spendingLimit">花費上限：%1$s（%2$s）</string>
   <!-- Touch id switch label. -->
-  <string name="TouchIdSettings.switchLabel">為 BiblePay 啟用 Touch ID</string>
-  <!-- Enable fingerprint for this wallet called BiblePay -->
+  <string name="TouchIdSettings.switchLabel">為 Digiwage 啟用 Touch ID</string>
+  <!-- Enable fingerprint for this wallet called Digiwage -->
   <string name="TouchIdSettings.switchLabel.android">指紋驗證</string>
   <!-- Touch ID settings view title -->
   <string name="TouchIdSettings.title">Touch ID</string>
@@ -663,7 +663,7 @@
   <!-- Update PIN caption text -->
   <string name="UpdatePin.caption">請記住此 PIN 碼。如果忘記，會無法存取您的比特幣。</string>
   <!-- PIN creation info. -->
-  <string name="UpdatePin.createInstruction">您的 PIN 碼會用於解鎖 BiblePay 及送出款項。</string>
+  <string name="UpdatePin.createInstruction">您的 PIN 碼會用於解鎖 Digiwage 及送出款項。</string>
   <!-- Update PIN title -->
   <string name="UpdatePin.createTitle">設定 PIN 碼</string>
   <!-- Update PIN title -->
@@ -697,7 +697,7 @@
   <!-- Authorize transaction with touch id message -->
   <string name="VerifyPin.touchIdMessage">授權此交易</string>
   <!-- 'No wallet' warning for watch app -->
-  <string name="Watch.noWalletWarning">開啟 BiblePay iPhone 應用程式以設定您的錢包。</string>
+  <string name="Watch.noWalletWarning">開啟 Digiwage iPhone 應用程式以設定您的錢包。</string>
   <!-- Dismiss button label -->
   <string name="Webview.dismiss">駁回</string>
   <!-- Webview loading error message -->
@@ -719,9 +719,9 @@
   <!-- Enter phrase to wipe wallet instruction. -->
   <string name="WipeWallet.instruction">輸入此錢包的復原短語（recovery phrase）以進行抹除，並開啟或復原其他錢包。您目前的餘額會保留在於短語。</string>
   <!-- Start wipe wallet view message -->
-  <string name="WipeWallet.startMessage">開始或復原另一個電子錢包會讓您能夠在這項裝置上存取和管理不一樣的 BiblePay 錢包。</string>
+  <string name="WipeWallet.startMessage">開始或復原另一個電子錢包會讓您能夠在這項裝置上存取和管理不一樣的 Digiwage 錢包。</string>
   <!-- Start wipe wallet view warning -->
-  <string name="WipeWallet.startWarning">您將再也無法從這項裝置存取目前的 BiblePay 錢包。餘額會留在片段上。</string>
+  <string name="WipeWallet.startWarning">您將再也無法從這項裝置存取目前的 Digiwage 錢包。餘額會留在片段上。</string>
   <!-- Wipe wallet navigation item title. -->
   <string name="WipeWallet.title">開啟或復原其他錢包</string>
   <!-- Wipe wallet button title -->

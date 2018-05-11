@@ -1,9 +1,9 @@
-![ƀ](/images/icon.png) breadwallet for Android
+![ƀ](/images/icon.png) digiwagewallet for Android
 ----------------------------------
 
-[![Get it on Google Play](/images/icon-google-play.png)](https://play.google.com/store/apps/details?id=com.biblepaywallet)
+[![Get it on Google Play](/images/icon-google-play.png)](https://play.google.com/store/apps/details?id=com.digiwagewallet)
 
-### bitcoin done right
+### Digiwage done right
 
 This is the Android port of the breadwallet iOS app, which can be found [here](https://github.com/breadwallet/breadwallet/).
 

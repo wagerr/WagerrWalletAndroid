@@ -65,37 +65,37 @@ add_library( # The name of the library.
              # Core JNI files
              src/main/jni/breadwallet-core/Java/BRCoreJni.h
              src/main/jni/breadwallet-core/Java/BRCoreJni.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreJniReference.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreJniReference.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreAddress.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreAddress.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreChainParams.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreChainParams.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCorePeer.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCorePeer.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreMasterPubKey.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreMasterPubKey.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreKey.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreKey.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreMerkleBlock.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreMerkleBlock.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCorePeerManager.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCorePeerManager.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreTransaction.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreTransaction.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreTransactionInput.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreTransactionInput.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreTransactionOutput.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreTransactionOutput.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCorePaymentProtocol.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCorePaymentProtocol.h
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreWallet.c
-             src/main/jni/breadwallet-core/Java/com_biblepaywallet_core_BRCoreWallet.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreJniReference.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreJniReference.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreAddress.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreAddress.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreChainParams.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreChainParams.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCorePeer.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCorePeer.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreMasterPubKey.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreMasterPubKey.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreKey.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreKey.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreMerkleBlock.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreMerkleBlock.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCorePeerManager.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCorePeerManager.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreTransaction.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreTransaction.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreTransactionInput.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreTransactionInput.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreTransactionOutput.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreTransactionOutput.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCorePaymentProtocol.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCorePaymentProtocol.h
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreWallet.c
+             src/main/jni/breadwallet-core/Java/com_digiwagewallet_core_BRCoreWallet.h
 
-            # Biblepay files
-             src/main/jni/breadwallet-core/biblepay/BRBiblepayAddr.c
-             src/main/jni/breadwallet-core/biblepay/BRBiblepayAddr.h
-             src/main/jni/breadwallet-core/biblepay/BRBiblepayParams.h
+            # Digiwage files
+             src/main/jni/breadwallet-core/digiwage/BRDigiwageAddr.c
+             src/main/jni/breadwallet-core/digiwage/BRDigiwageAddr.h
+             src/main/jni/breadwallet-core/digiwage/BRDigiwageParams.h
 
              # BCash files
              src/main/jni/breadwallet-core/bcash/BRBCashAddr.c
@@ -107,8 +107,8 @@ add_library( # The name of the library.
              src/main/jni/breadwallet-core/BRBech32.h
 
              # X11 files
-             src/main/jni/breadwallet-core/x11.c
-             src/main/jni/breadwallet-core/x11.h
+             src/main/jni/breadwallet-core/quark.c
+             src/main/jni/breadwallet-core/quark.h
              src/main/jni/breadwallet-core/sha3/aes_helper.c
             src/main/jni/breadwallet-core/sha3/blake.c
             src/main/jni/breadwallet-core/sha3/bmw.c
@@ -137,7 +137,7 @@ add_library( # The name of the library.
              )
 
 include_directories(src/main/jni/breadwallet-core/bcash)
-include_directories(src/main/jni/breadwallet-core/biblepay)
+include_directories(src/main/jni/breadwallet-core/digiwage)
 include_directories(src/main/jni/breadwallet-core/Java)
 include_directories(src/main/jni/breadwallet-core/)
 include_directories(src/main/jni/breadwallet-core/secp256k1/include)

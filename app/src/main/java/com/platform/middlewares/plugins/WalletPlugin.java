@@ -3,15 +3,15 @@ package com.platform.middlewares.plugins;
 import android.app.Activity;
 import android.util.Log;
 
-import com.biblepaywallet.BiblePayApp;
-import com.biblepaywallet.presenter.interfaces.BRAuthCompletion;
-import com.biblepaywallet.tools.manager.BREventManager;
-import com.biblepaywallet.tools.manager.BRSharedPrefs;
-import com.biblepaywallet.tools.security.AuthManager;
-import com.biblepaywallet.tools.threads.executor.BRExecutor;
-import com.biblepaywallet.tools.util.BRConstants;
-import com.biblepaywallet.tools.util.Utils;
-import com.biblepaywallet.wallet.WalletsMaster;
+import com.digiwagewallet.DigiWageApp;
+import com.digiwagewallet.presenter.interfaces.BRAuthCompletion;
+import com.digiwagewallet.tools.manager.BREventManager;
+import com.digiwagewallet.tools.manager.BRSharedPrefs;
+import com.digiwagewallet.tools.security.AuthManager;
+import com.digiwagewallet.tools.threads.executor.BRExecutor;
+import com.digiwagewallet.tools.util.BRConstants;
+import com.digiwagewallet.tools.util.Utils;
+import com.digiwagewallet.wallet.WalletsMaster;
 import com.platform.BRHTTPHelper;
 import com.platform.interfaces.Plugin;
 import com.platform.tools.BRBitId;
@@ -65,7 +65,7 @@ public class WalletPlugin implements Plugin {
     @Override
     public boolean handle(String target, final Request baseRequest, HttpServletRequest request, final HttpServletResponse response) {
         if (!target.startsWith("/_wallet")) return false;
-        Activity app = (Activity) BiblePayApp.getBreadContext();
+        Activity app = (Activity) DigiWageApp.getBreadContext();
 
         if (target.startsWith("/_wallet/info") && request.getMethod().equalsIgnoreCase("get")) {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
@@ -80,7 +80,7 @@ public class WalletPlugin implements Plugin {
                 jsonResp.put("no_wallet", wm.noWalletForPlatform(app));
 
                 /**the current receive address*/
-                jsonResp.put("receive_address", BRSharedPrefs.getReceiveAddress(app, "BBP"));
+                jsonResp.put("receive_address", BRSharedPrefs.getReceiveAddress(app, "WAGE"));
 
                 /**how digits after the decimal point. 2 = bits 8 = btc 6 = mbtc*/
                 jsonResp.put("btc_denomiation_digits", BRSharedPrefs.getCryptoDenomination(app, wm.getCurrentWallet(app).getIso(app)) == BRConstants.CURRENT_UNIT_BITCOINS ? 8 : 2);
