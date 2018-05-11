@@ -73,7 +73,7 @@ public class WalletTests {
     // Test Wallets
     BaseWalletManager mBtcWallet;
     BaseWalletManager mBchWallet;
-    BaseWalletManager mBbpWallet;
+    BaseWalletManager mWageWallet;
 
     @Before
     public void setUp() {
@@ -82,7 +82,7 @@ public class WalletTests {
         BRKeyStore.putMasterPublicKey(pubKey.serialize(), mActivityRule.getActivity());
         mBtcWallet = WalletBitcoinManager.getInstance(mActivityRule.getActivity());
         mBchWallet = WalletBchManager.getInstance(mActivityRule.getActivity());
-        mBbpWallet = WalletDigiwageManager.getInstance(mActivityRule.getActivity());
+        mWageWallet = WalletDigiwageManager.getInstance(mActivityRule.getActivity());
     }
 
     @After

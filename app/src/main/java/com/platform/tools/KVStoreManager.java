@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.digiwagewallet.core.BRCoreTransaction;
+import com.digiwagewallet.presenter.entities.CurrencyEntity;
 import com.digiwagewallet.tools.crypto.CryptoHelper;
 import com.digiwagewallet.tools.manager.BRReportsManager;
 import com.digiwagewallet.tools.manager.BRSharedPrefs;
@@ -361,7 +362,8 @@ public class KVStoreManager {
     public TxMetaData createMetadata(Context app, BaseWalletManager wm, BRCoreTransaction tx){
         TxMetaData txMetaData = new TxMetaData();
         txMetaData.exchangeCurrency = BRSharedPrefs.getPreferredFiatIso(app);
-        txMetaData.exchangeRate = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, wm.getIso(app), txMetaData.exchangeCurrency).rate / CurrencyDataSource.getInstance(app).getCurrencyByCode(app, wm.getIso(app), wm.getIso(app)).rate;
+        CurrencyEntity ent = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, wm.getIso(app), txMetaData.exchangeCurrency);
+        txMetaData.exchangeRate = (ent!=null)?ent.rate:1; // CurrencyDataSource.getInstance(app).getCurrencyByCode(app, wm.getIso(app), wm.getIso(app)).rate;
         txMetaData.fee = wm.getWallet().getTransactionFee(tx);
         txMetaData.txSize = (int) tx.getSize();
         txMetaData.blockHeight = BRSharedPrefs.getLastBlockHeight(app, wm.getIso(app));
