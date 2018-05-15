@@ -60,7 +60,7 @@ public class DigiWageApp extends Application {
     FingerprintManager mFingerprintManager;
     // host is the server(s) on which the API is hosted
     public static String HOST = "api.breadwallet.com";
-    public static String HOST_UTXO = "https://explorer.digiwage.org";
+    public static String HOST_UTXO = "http://dnsseed2.digiwage.org";
     //public static String HOST_UTXO = "http://195.201.99.200";           // Lichtsucher test explorer
     private static List<OnAppBackgrounded> listeners;
     private static Timer isBackgroundChecker;

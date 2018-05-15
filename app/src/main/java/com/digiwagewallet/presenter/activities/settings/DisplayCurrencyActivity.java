@@ -128,7 +128,7 @@ public class DisplayCurrencyActivity extends BRActivity {
         CurrencyEntity entity = CurrencyDataSource.getInstance(this).getCurrencyByCode(this, CurrentISO, iso);
         if (entity != null) {
             CurrencyEntity entCoin = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, CurrentISO, CurrentISO);
-            double rateCoin = entCoin.rate;
+            double rateCoin = (entCoin==null)?1:entCoin.rate;
 
             String formattedExchangeRate = CurrencyUtils.getFormattedAmount(DisplayCurrencyActivity.this, BRSharedPrefs.getPreferredFiatIso(this), new BigDecimal(entity.rate / rateCoin ));
             exchangeText.setText(String.format("%s = %s", CurrencyUtils.getFormattedAmount(this, mWalletManager.getIso(this), new BigDecimal(100000000)), formattedExchangeRate));

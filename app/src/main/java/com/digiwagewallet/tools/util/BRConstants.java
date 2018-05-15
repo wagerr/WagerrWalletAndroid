@@ -81,9 +81,9 @@ public class BRConstants {
     public static final int CURRENT_UNIT_MBITS = 1;
     public static final int CURRENT_UNIT_BITCOINS = 2;
 
-    public static final String symbolBits = "\u0180";
-    public static final String symbolBitcoinSecondary = "\u0243";
-    public static final String symbolBitcoinPrimary = "\u20BF";
+    public static final String symbolBits = "w";
+    public static final String symbolBitcoinSecondary = "W";
+    public static final String symbolBitcoinPrimary = "W";
 
     public static final long PASS_CODE_TIME_LIMIT = TimeUnit.MILLISECONDS.convert(6, TimeUnit.DAYS);
 

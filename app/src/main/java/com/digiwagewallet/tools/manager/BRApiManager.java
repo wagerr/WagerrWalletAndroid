@@ -219,23 +219,30 @@ public class BRApiManager {
      * @param app
      * @param walletManager
      * @return average rate for Coin referenced to 1 BTC
-     *          taken from bid/ask spread on 2 exchanges
+     *          taken from last price
      */
     public static float fetchRatesDigiwage(Activity app, BaseWalletManager walletManager) {
-        String url1 = "https://api.coinmarketcap.com/v1/ticker/digiwage/";
+        String url1 = "https://api.crypto-bridge.org/api/v1/ticker/";
         String jsonString1 = urlGET(app, url1);
-        float price1=0;
+        float price1=1;
 
         JSONArray jsonArray1 = null;
         if (jsonString1 == null) {
-            Log.e(TAG, "fetchRatesDigiwage: coinmarketcap failed, response is null");
+            Log.e(TAG, "fetchRatesDigiwage: cryptobridge failed, response is null");
             return 0;
         }
 
         try {
             JSONArray arr1 = new JSONArray(jsonString1);
-            JSONObject obj1 = (JSONObject)arr1.get(0);
-            price1 = (1 / (float)obj1.getDouble("price_btc")) ;     // rate of WAGE per BTC
+            for(int n = 0; n < arr1.length(); n++)
+            {
+                JSONObject object = arr1.getJSONObject(n);
+                if ( object.getString("id").equals("WAGE_BTC") )
+                {
+                    price1 = (1 / (float)object.getDouble("last"));
+                    break;
+                }
+            }
         } catch (JSONException ignored) {
         }
 
