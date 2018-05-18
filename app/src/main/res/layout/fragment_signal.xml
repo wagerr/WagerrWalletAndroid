@@ -1,4 +1,4 @@
-<com.digiwagewallet.presenter.customviews.BRRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.nyxwallet.presenter.customviews.BRRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                         xmlns:app="http://schemas.android.com/apk/res-auto"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="match_parent"
@@ -15,7 +15,7 @@
         android:background="@drawable/signal_layout"
         android:orientation="vertical">
 
-        <com.digiwagewallet.presenter.customviews.BRText
+        <com.nyxwallet.presenter.customviews.BRText
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:src="@drawable/ic_check_mark_white"
             />
 
-        <com.digiwagewallet.presenter.customviews.BRText
+        <com.nyxwallet.presenter.customviews.BRText
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,4 +63,4 @@
     </LinearLayout>
 
 
-</com.digiwagewallet.presenter.customviews.BRRelativeLayout>
+</com.nyxwallet.presenter.customviews.BRRelativeLayout>

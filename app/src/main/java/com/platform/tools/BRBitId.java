@@ -6,16 +6,16 @@ import android.security.keystore.UserNotAuthenticatedException;
 import android.util.Base64;
 import android.util.Log;
 
-import com.digiwagewallet.core.BRCoreKey;
-import com.digiwagewallet.core.BRCoreMasterPubKey;
-import com.digiwagewallet.presenter.interfaces.BRAuthCompletion;
-import com.digiwagewallet.tools.manager.BRSharedPrefs;
-import com.digiwagewallet.tools.security.AuthManager;
-import com.digiwagewallet.tools.security.BRKeyStore;
-import com.digiwagewallet.tools.security.PostAuth;
-import com.digiwagewallet.tools.threads.executor.BRExecutor;
-import com.digiwagewallet.tools.util.BRConstants;
-import com.digiwagewallet.tools.util.Utils;
+import com.nyxwallet.core.BRCoreKey;
+import com.nyxwallet.core.BRCoreMasterPubKey;
+import com.nyxwallet.presenter.interfaces.BRAuthCompletion;
+import com.nyxwallet.tools.manager.BRSharedPrefs;
+import com.nyxwallet.tools.security.AuthManager;
+import com.nyxwallet.tools.security.BRKeyStore;
+import com.nyxwallet.tools.security.PostAuth;
+import com.nyxwallet.tools.threads.executor.BRExecutor;
+import com.nyxwallet.tools.util.BRConstants;
+import com.nyxwallet.tools.util.Utils;
 import com.platform.APIClient;
 import com.platform.middlewares.plugins.WalletPlugin;
 

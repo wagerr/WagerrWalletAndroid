@@ -7,17 +7,17 @@ import android.net.Uri;
 import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
-import com.digiwagewallet.DigiWageApp;
-import com.digiwagewallet.core.BRCoreKey;
-import com.digiwagewallet.presenter.activities.util.ActivityUTILS;
-import com.digiwagewallet.tools.crypto.Base58;
-import com.digiwagewallet.tools.manager.BRApiManager;
-import com.digiwagewallet.tools.manager.BRReportsManager;
-import com.digiwagewallet.tools.manager.BRSharedPrefs;
-import com.digiwagewallet.tools.crypto.CryptoHelper;
-import com.digiwagewallet.tools.security.BRKeyStore;
-import com.digiwagewallet.tools.threads.executor.BRExecutor;
-import com.digiwagewallet.tools.util.Utils;
+import com.nyxwallet.NYXApp;
+import com.nyxwallet.core.BRCoreKey;
+import com.nyxwallet.presenter.activities.util.ActivityUTILS;
+import com.nyxwallet.tools.crypto.Base58;
+import com.nyxwallet.tools.manager.BRApiManager;
+import com.nyxwallet.tools.manager.BRReportsManager;
+import com.nyxwallet.tools.manager.BRSharedPrefs;
+import com.nyxwallet.tools.crypto.CryptoHelper;
+import com.nyxwallet.tools.security.BRKeyStore;
+import com.nyxwallet.tools.threads.executor.BRExecutor;
+import com.nyxwallet.tools.util.Utils;
 import com.platform.kvstore.RemoteKVStore;
 import com.platform.kvstore.ReplicatedKVStore;
 
@@ -60,7 +60,7 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSink;
 
-import static com.digiwagewallet.tools.util.BRCompressor.gZipExtract;
+import static com.nyxwallet.tools.util.BRCompressor.gZipExtract;
 
 
 /**
@@ -95,7 +95,7 @@ public class APIClient {
     private static final String PROTO = "https";
 
     // convenience getter for the API endpoint
-    public static String BASE_URL = PROTO + "://" + DigiWageApp.HOST;
+    public static String BASE_URL = PROTO + "://" + NYXApp.HOST;
     //feePerKb url
     private static final String FEE_PER_KB_URL = "/v1/fee-per-kb";
     //token
@@ -195,7 +195,7 @@ public class APIClient {
         if (ActivityUTILS.isMainThread()) {
             throw new NetworkOnMainThreadException();
         }
-        if (ctx == null) ctx = DigiWageApp.getBreadContext();
+        if (ctx == null) ctx = NYXApp.getBreadContext();
         if (ctx == null) return null;
         String strUtl = BASE_URL + ME;
         Request request = new Request.Builder()
@@ -225,7 +225,7 @@ public class APIClient {
         if (ActivityUTILS.isMainThread()) {
             throw new NetworkOnMainThreadException();
         }
-        if (ctx == null) ctx = DigiWageApp.getBreadContext();
+        if (ctx == null) ctx = NYXApp.getBreadContext();
         if (ctx == null) return null;
         try {
             String strUtl = BASE_URL + TOKEN;
@@ -312,7 +312,7 @@ public class APIClient {
             throw new RuntimeException("network on main thread");
         }
 
-        Map<String, String> headers = DigiWageApp.getBreadHeaders();
+        Map<String, String> headers = NYXApp.getBreadHeaders();
 
         Iterator it = headers.entrySet().iterator();
 
@@ -354,7 +354,7 @@ public class APIClient {
                 Uri newUri = Uri.parse(newLocation);
                 if (newUri == null) {
                     Log.e(TAG, "sendRequest: redirect uri is null");
-                } else if (!newUri.getHost().equalsIgnoreCase(DigiWageApp.HOST) || !newUri.getScheme().equalsIgnoreCase(PROTO)) {
+                } else if (!newUri.getHost().equalsIgnoreCase(NYXApp.HOST) || !newUri.getScheme().equalsIgnoreCase(PROTO)) {
                     Log.e(TAG, "sendRequest: WARNING: redirect is NOT safe: " + newLocation);
                 } else {
                     Log.w(TAG, "redirecting: " + request.url() + " >>> " + newLocation);
@@ -624,7 +624,7 @@ public class APIClient {
     }
 
     public boolean tryExtractTar() {
-        Context app = DigiWageApp.getBreadContext();
+        Context app = NYXApp.getBreadContext();
         if (app == null) {
             Log.e(TAG, "tryExtractTar: failed to extract, app is null");
             return false;

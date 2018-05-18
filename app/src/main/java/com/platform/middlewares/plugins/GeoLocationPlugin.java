@@ -9,10 +9,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.digiwagewallet.DigiWageApp;
-import com.digiwagewallet.tools.manager.BRSharedPrefs;
-import com.digiwagewallet.tools.threads.executor.BRExecutor;
-import com.digiwagewallet.tools.util.BRConstants;
+import com.nyxwallet.NYXApp;
+import com.nyxwallet.tools.manager.BRSharedPrefs;
+import com.nyxwallet.tools.threads.executor.BRExecutor;
+import com.nyxwallet.tools.util.BRConstants;
 import com.platform.BRHTTPHelper;
 import com.platform.GeoLocationManager;
 import com.platform.interfaces.Plugin;
@@ -96,7 +96,7 @@ public class GeoLocationPlugin implements Plugin {
     public boolean handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
         if (target.startsWith("/_permissions/geo")) {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
-            Context app =  DigiWageApp.getBreadContext();
+            Context app =  NYXApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "handle: context is null: " + target + " " + baseRequest.getMethod());
                 return BRHTTPHelper.handleError(500, "context is null", baseRequest, response);
@@ -175,7 +175,7 @@ public class GeoLocationPlugin implements Plugin {
             // "description" = "a string representation of this object"
             // "timestamp" = "ISO-8601 timestamp of when this location was generated"
             // "horizontal_accuracy" = double
-            Context app =  DigiWageApp.getBreadContext();
+            Context app =  NYXApp.getBreadContext();
             if (app == null) {                    Log.e(TAG, "handle: context is null: " + target + " " + baseRequest.getMethod());
                 return BRHTTPHelper.handleError(500, "context is null", baseRequest, response);
             }

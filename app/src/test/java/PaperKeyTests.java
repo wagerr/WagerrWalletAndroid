@@ -1,7 +1,7 @@
 import android.util.Log;
 
-import com.digiwagewallet.tools.util.Bip39Reader;
-import com.digiwagewallet.wallet.WalletsMaster;
+import com.nyxwallet.tools.util.Bip39Reader;
+import com.nyxwallet.wallet.WalletsMaster;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;

@@ -5,7 +5,7 @@ android {
     buildToolsVersion = '27.0.3'
     defaultConfig {
         testInstrumentationRunner = 'android.support.test.runner.AndroidJUnitRunner'
-        applicationId = 'com.digiwagewallet'
+        applicationId = 'com.nyxwallet'
         minSdkVersion 23
         targetSdkVersion 27
         versionCode 212
@@ -45,10 +45,10 @@ android {
     // Specifies two flavor dimensions.
     flavorDimensions "mode"
     productFlavors {
-        wage {
-            applicationId = "com.digiwagewallet"
+        nyx {
+            applicationId = "com.nyxwallet"
             dimension "mode"
-            resValue "string", "app_name", "Digiwage"
+            resValue "string", "app_name", "NYXCOIN"
             buildConfigField "boolean", "BITCOIN_TESTNET", "false"
             externalNativeBuild {
                 cmake {

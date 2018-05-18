@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <!-- App name -->
-  <string name="About.appName.android">Digiwage</string>
+  <string name="About.appName.android">NYXCoin</string>
   <!-- About screen blog label -->
   <string name="About.blog">Blogg</string>
   <!-- About screen footer -->
@@ -23,7 +23,7 @@
   <!-- Loading Wallet Message -->
   <string name="Account.loadingMessage">Laddar plånbok</string>
   <!-- Default wallet name -->
-  <string name="AccountHeader.defaultWalletName">Mitt Digiwage</string>
+  <string name="AccountHeader.defaultWalletName">Mitt NYXCoin</string>
   <!-- Third party keyboard warning -->
   <string name="Alert.customKeyboard.android">Det verkar som att du använder ett tangentbord från tredje part, vilket kan registrera det du skriver och stjäla din kryptonyckel. Byt till Androids standardtangentbord för extra säkerhet.</string>
   <!-- Error alert title -->
@@ -31,7 +31,7 @@
   <!-- Keystore error -->
   <string name="Alert.keystore.generic.android">Det har uppstått ett problem med KeyStore till Android OS. Kontakta support@breadwallet.com</string>
   <!-- KeyStore error, keys are invalidated -->
-  <string name="Alert.keystore.invalidated.android">Dina krypterade Digiwage-uppgifter har nyligen ogiltigförklarats på grund av att Androids skärmlås inaktiverades.</string>
+  <string name="Alert.keystore.invalidated.android">Dina krypterade NYXCoin-uppgifter har nyligen ogiltigförklarats på grund av att Androids skärmlås inaktiverades.</string>
   <!-- Keystore error title -->
   <string name="Alert.keystore.title.android">KeyStore-fel för Android</string>
   <!-- No internet alert message -->
@@ -137,7 +137,7 @@
   <!-- Word label eg. Word #1, Word #2 -->
   <string name="ConfirmPaperPhrase.word">Ord #%1$s</string>
   <!-- Bitcoin denomination picker label -->
-  <string name="DefaultCurrency.bitcoinLabel">Digiwage visningsenhet</string>
+  <string name="DefaultCurrency.bitcoinLabel">NYXCoin visningsenhet</string>
   <!-- Exchange rate label -->
   <string name="DefaultCurrency.rateLabel">Växelkurs</string>
   <!-- Email unavailable alert title -->
@@ -145,7 +145,7 @@
   <!-- Email unavailable alert title -->
   <string name="ErrorMessages.emailUnavailableTitle">E-posten är inte tillgänglig</string>
   <!-- Message that gets shown when we've detected the user has encountered the looping lock-screen bug. (preserve [ ] characters) -->
-  <string name="ErrorMessages.loopingLockScreen.android">Digiwage kan inte verifieras på grund av en bugg i din version av Android. [Klicka här för mer information.]</string>
+  <string name="ErrorMessages.loopingLockScreen.android">NYXCoin kan inte verifieras på grund av en bugg i din version av Android. [Klicka här för mer information.]</string>
   <!-- Messaging unavailable alert title -->
   <string name="ErrorMessages.messagingUnavailableMessage">Denna enhet är inte konfigurerad för att skicka meddelanden.</string>
   <!-- Messaging unavailable alert title -->
@@ -187,13 +187,13 @@
   <!-- Caption for graphics -->
   <string name="Import.leftCaption">Plånbok som ska importeras</string>
   <!-- Import wallet intro screen message -->
-  <string name="Import.message">Genom att importera en plånbok överförs alla pengar från din andra plånbok till Digiwage genom en enda transaktion.</string>
+  <string name="Import.message">Genom att importera en plånbok överförs alla pengar från din andra plånbok till NYXCoin genom en enda transaktion.</string>
   <!-- Enter password alert view title -->
   <string name="Import.password">Denna privata nyckel är lösenordsskyddad.</string>
   <!-- password textfield placeholder -->
   <string name="Import.passwordPlaceholder">lösenord</string>
   <!-- Caption for graphics -->
-  <string name="Import.rightCaption">Din Digiwage-plånbok</string>
+  <string name="Import.rightCaption">Din NYXCoin-plånbok</string>
   <!-- Scan Private key button label -->
   <string name="Import.scan">Läs av privat nyckel</string>
   <!-- Import wallet success alert title -->
@@ -215,7 +215,7 @@
   <!-- Jailbreak warning message -->
   <string name="JailbreakWarnings.messageWithBalance">ENHETENS SÄKERHET ÄR ÄVENTYRAD\nEn \"intrångs\"-app kan få tillgång till BRDs nyckeldata och stjäla dina bitcoin! Töm denna plånbok direkt och återupprätta den på en säker enhet.</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithoutBalance">ENHETENS SÄKERHET ÄR ÄVENTYRAD\nEn \"intrångs\"-app kan få tillgång till BRDs nyckeldata och stjäla dina bitcoin! Använd Digiwage endast på en säker enhet.</string>
+  <string name="JailbreakWarnings.messageWithoutBalance">ENHETENS SÄKERHET ÄR ÄVENTYRAD\nEn \"intrångs\"-app kan få tillgång till BRDs nyckeldata och stjäla dina bitcoin! Använd NYXCoin endast på en säker enhet.</string>
   <!-- Jailbreak warning title -->
   <string name="JailbreakWarnings.title">VARNING</string>
   <!-- Wipe wallet button -->
@@ -223,7 +223,7 @@
   <!-- Location services disabled error -->
   <string name="LocationPlugin.disabled">Platstjänster är inaktiverade.</string>
   <!-- No permissions for location services -->
-  <string name="LocationPlugin.notAuthorized">Digiwage har inte rätt att utnyttja platstjänster</string>
+  <string name="LocationPlugin.notAuthorized">NYXCoin har inte rätt att utnyttja platstjänster</string>
   <!-- Wallet creation date prefix -->
   <string name="ManageWallet.creationDatePrefix">Du skapade din plånbok på %1$s</string>
   <!-- Manage wallet description text -->
@@ -265,7 +265,7 @@
   <!-- Node status label -->
   <string name="NodeSelector.statusLabel">Nodens anslutningsstatus</string>
   <!-- Node Selector view title -->
-  <string name="NodeSelector.title">Digiwage-noder</string>
+  <string name="NodeSelector.title">NYXCoin-noder</string>
   <!-- Bad Payment request alert title -->
   <string name="PaymentProtocol.Errors.badPaymentRequest">Felaktig utbetalningsbegäran</string>
   <!-- Error opening payment protocol file message -->
@@ -277,9 +277,9 @@
   <!-- Payment too small alert title -->
   <string name="PaymentProtocol.Errors.smallOutputError">Kunde inte göra utbetalning</string>
   <!-- Amount too small error message -->
-  <string name="PaymentProtocol.Errors.smallPayment">Utbetalning av Digiwage får inte vara lägre än %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallPayment">Utbetalning av NYXCoin får inte vara lägre än %1$s.</string>
   <!-- Output too small error message. -->
-  <string name="PaymentProtocol.Errors.smallTransaction">Utbetalningstransaktioner av Digiwage får inte vara lägre än %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallTransaction">Utbetalningstransaktioner av NYXCoin får inte vara lägre än %1$s.</string>
   <!-- Unsupported signature type payment protocol error message -->
   <string name="PaymentProtocol.Errors.unsupportedSignatureType">signaturtypen saknar stöd</string>
   <!-- Untrusted certificate payment protocol error message -->
@@ -301,7 +301,7 @@
   <!-- Transaction rejected prompt title -->
   <string name="Prompts.RecommendRescan.title">Transaktionen avslogs</string>
   <!-- Share data prompt body -->
-  <string name="Prompts.ShareData.body">Hjälp till att förbättra Digiwage genom att dela dina anonyma data med oss</string>
+  <string name="Prompts.ShareData.body">Hjälp till att förbättra NYXCoin genom att dela dina anonyma data med oss</string>
   <!-- Share data prompt title -->
   <string name="Prompts.ShareData.title">Dela anonyma data</string>
   <!-- Enable touch ID prompt body -->
@@ -315,11 +315,11 @@
   <!-- Button on fingerprint prompt so the user can enter their PIN instead -->
   <string name="Prompts.TouchId.usePin.android">PIN-kod</string>
   <!-- Upgrade PIN prompt body. -->
-  <string name="Prompts.UpgradePin.body">Digiwage har uppgraderat till att använda 6-siffrig PIN-kod. Klicka här för att uppgradera.</string>
+  <string name="Prompts.UpgradePin.body">NYXCoin har uppgraderat till att använda 6-siffrig PIN-kod. Klicka här för att uppgradera.</string>
   <!-- Upgrade PIN prompt title. -->
   <string name="Prompts.UpgradePin.title">Uppgradera PIN-kod</string>
   <!-- Notifications will be added later but users can set their preferences now, which is why we specify "in the future". -->
-  <string name="PushNotifications.body">Slå på aviseringar för att få särskilda meddelanden från Digiwage i framtiden.</string>
+  <string name="PushNotifications.body">Slå på aviseringar för att få särskilda meddelanden från NYXCoin i framtiden.</string>
   <!-- Push notifications toggle switch label -->
   <string name="PushNotifications.label">Push-meddelanden</string>
   <!-- Push notifications are off label -->
@@ -349,7 +349,7 @@
   <!-- Enter paper key instruction -->
   <string name="RecoverWallet.instruction">Ange ordnyckel</string>
   <!-- Recover wallet intro -->
-  <string name="RecoverWallet.intro">Återupprätta Digiwage med din ordnyckel.</string>
+  <string name="RecoverWallet.intro">Återupprätta NYXCoin med din ordnyckel.</string>
   <!-- Invalid paper key message -->
   <string name="RecoverWallet.invalid">Den ordnyckel du angav är ogiltig. Dubbelkolla varje ord och försök igen.</string>
   <!-- Previous button accessibility label -->
@@ -377,7 +377,7 @@
   <!-- extimated time -->
   <string name="ReScan.body1">3-5 minuter</string>
   <!-- Syncing explanation -->
-  <string name="ReScan.body2">Om en transaktion visar sig som klar i Digiwage nätverk men inte i Digiwage.</string>
+  <string name="ReScan.body2">Om en transaktion visar sig som klar i NYXCoin nätverk men inte i NYXCoin.</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body3">Du får gång på gång ett meddelande som säger att din transaktion avvisades.</string>
   <!-- Start Sync button label -->
@@ -403,17 +403,17 @@
   <!-- Security Center Info -->
   <string name="SecurityCenter.info">Aktivera alla säkerhetsfunktioner för maximal säkerhet.</string>
   <!-- Paper Key button description -->
-  <string name="SecurityCenter.paperKeyDescription">Det enda sättet att komma åt dina Digiwage in om du förlorar eller uppgraderar din telefon.</string>
+  <string name="SecurityCenter.paperKeyDescription">Det enda sättet att komma åt dina NYXCoin in om du förlorar eller uppgraderar din telefon.</string>
   <!-- Paper Key button title -->
   <string name="SecurityCenter.paperKeyTitle">Ordnyckel</string>
   <!-- PIN button description -->
-  <string name="SecurityCenter.pinDescription">Skyddar ditt Digiwage från obehöriga användare.</string>
+  <string name="SecurityCenter.pinDescription">Skyddar ditt NYXCoin från obehöriga användare.</string>
   <!-- PIN button title -->
   <string name="SecurityCenter.pinTitle">6-siffrig PIN-kod</string>
   <!-- Security Center Title -->
   <string name="SecurityCenter.title">Säkerhetscenter</string>
   <!-- Touch ID button description -->
-  <string name="SecurityCenter.touchIdDescription">Lås enkelt upp ditt Digiwage och skicka pengar upp till en inställd gräns.</string>
+  <string name="SecurityCenter.touchIdDescription">Lås enkelt upp ditt NYXCoin och skicka pengar upp till en inställd gräns.</string>
   <!-- Touch ID button title -->
   <string name="SecurityCenter.touchIdTitle">Touch ID</string>
   <!-- Security center fingerprint authentication button -->
@@ -423,13 +423,13 @@
   <!-- Balance: $4.00 -->
   <string name="Send.balance">Saldo: %1$s</string>
   <!-- Instructions how to allow the camera access for the app -->
-  <string name="Send.cameraUnavailabeMessage.android">Tillåt kameraåtkomst under Inställningar &gt; Appar &gt; Digiwage &gt; Behörigheter</string>
+  <string name="Send.cameraUnavailabeMessage.android">Tillåt kameraåtkomst under Inställningar &gt; Appar &gt; NYXCoin &gt; Behörigheter</string>
   <!-- Permission required to access camera -->
-  <string name="Send.cameraUnavailabeTitle.android">Digiwage har inte åtkomst till kameran</string>
+  <string name="Send.cameraUnavailabeTitle.android">NYXCoin har inte åtkomst till kameran</string>
   <!-- Camera not allowed message -->
   <string name="Send.cameraunavailableMessage">Gå till Inställningar för att ge tillgång till kameran.</string>
   <!-- Camera not allowed alert title -->
-  <string name="Send.cameraUnavailableTitle">Digiwage har inte tillgång till kameran</string>
+  <string name="Send.cameraUnavailableTitle">NYXCoin har inte tillgång till kameran</string>
   <!-- Warning when sending to self. -->
   <string name="Send.containsAddress">Destinationen är din egen adress. Du kan inte skicka till dig själv.</string>
   <!-- Could not create transaction alert title -->
@@ -443,9 +443,9 @@
   <!-- Payee identity not certified alert title. -->
   <string name="Send.identityNotCertified">Betalningsmottagaren är inte certifierad.</string>
   <!-- Invalid address alert message -->
-  <string name="Send.invalidAddressMessage">Mottagaradressen är inte en giltig Digiwage-adress.</string>
+  <string name="Send.invalidAddressMessage">Mottagaradressen är inte en giltig NYXCoin-adress.</string>
   <!-- Invalid address on pasteboard message -->
-  <string name="Send.invalidAddressOnPasteboard">Urklipp innehåller inte en giltig Digiwage-adress.</string>
+  <string name="Send.invalidAddressOnPasteboard">Urklipp innehåller inte en giltig NYXCoin-adress.</string>
   <!-- Invalid address alert title -->
   <string name="Send.invalidAddressTitle">Ogiltig adress</string>
   <!-- Is rescanning error message -->
@@ -485,7 +485,7 @@
   <!-- Join Early access label -->
   <string name="Settings.earlyAccess">Använd Snabb tillgång</string>
   <!-- Are you enjoying bread alert message body -->
-  <string name="Settings.enjoying">Gillar du Digiwage?</string>
+  <string name="Settings.enjoying">Gillar du NYXCoin?</string>
   <!-- Import wallet label -->
   <string name="Settings.importTitle">Importera plånbok</string>
   <!-- Manage settings section header -->
@@ -509,7 +509,7 @@
   <!-- Start or recover another wallet menu label. -->
   <string name="Settings.wipe">Starta/Återställ en annan plånbok</string>
   <!-- Share data view body -->
-  <string name="ShareData.body">Hjälp till att förbättra Digiwage genom att dela dina anonyma uppgifter med oss. Detta inbegriper inga ekonomiska uppgifter. Vi respekterar din ekonomiska sekretess.</string>
+  <string name="ShareData.body">Hjälp till att förbättra NYXCoin genom att dela dina anonyma uppgifter med oss. Detta inbegriper inga ekonomiska uppgifter. Vi respekterar din ekonomiska sekretess.</string>
   <!-- Share data header -->
   <string name="ShareData.header">Dela uppgifter?</string>
   <!-- Share data switch label. -->
@@ -517,13 +517,13 @@
   <!-- button label -->
   <string name="StartPaperPhrase.againButtonTitle">Skriv ner ordnyckel på nytt</string>
   <!-- Paper key explanation text. -->
-  <string name="StartPaperPhrase.body">Din ordnyckel  är enda sättet att återupprätta Digiwage om du förlorat din telefon, blivit bestulen på den eller har uppgraderat den.\n\nVi visar dig en lista över ord som du kan skriva ner på ett papper och gömma undan.</string>
+  <string name="StartPaperPhrase.body">Din ordnyckel  är enda sättet att återupprätta NYXCoin om du förlorat din telefon, blivit bestulen på den eller har uppgraderat den.\n\nVi visar dig en lista över ord som du kan skriva ner på ett papper och gömma undan.</string>
   <!-- button label -->
   <string name="StartPaperPhrase.buttonTitle">Skriv ner ordnyckel</string>
   <!-- Argument is date -->
   <string name="StartPaperPhrase.date">Senast skrev du ner din ordnyckel på %1$s</string>
   <!-- Start view message -->
-  <string name="StartViewController.message">Det säkraste och tryggaste sättet att använda Digiwage.</string>
+  <string name="StartViewController.message">Det säkraste och tryggaste sättet att använda NYXCoin.</string>
   <!-- Syncing view connectiong state header text -->
   <string name="SyncingView.connecting">Ansluter</string>
   <!-- Syncing view header text -->
@@ -549,14 +549,14 @@
   <!-- Fingerprint Is Not Setup -->
   <string name="TouchIdSettings.disabledWarning.title.android">Fingeravtrycksautentisering har inte aktiverats</string>
   <!-- Touch Id screen label -->
-  <string name="TouchIdSettings.label">Använd ditt fingeravtryck för att låsa upp Digiwage och skicka pengar upp till en inställd gräns.</string>
+  <string name="TouchIdSettings.label">Använd ditt fingeravtryck för att låsa upp NYXCoin och skicka pengar upp till en inställd gräns.</string>
   <!-- Link Text (see TouchIdSettings.customizeText) -->
   <string name="TouchIdSettings.linkText">Sida för utgiftsgräns i Touch ID</string>
   <!-- Spending Limit: b100,000 ($100) -->
   <string name="TouchIdSettings.spendingLimit">Utnyttjandegräns: %1$s (%2$s)</string>
   <!-- Touch id switch label. -->
-  <string name="TouchIdSettings.switchLabel">Aktivera Touch ID för Digiwage</string>
-  <!-- Enable fingerprint for this wallet called Digiwage -->
+  <string name="TouchIdSettings.switchLabel">Aktivera Touch ID för NYXCoin</string>
+  <!-- Enable fingerprint for this wallet called NYXCoin -->
   <string name="TouchIdSettings.switchLabel.android">Aktivera fingeravtrycksautentisering</string>
   <!-- Touch ID settings view title -->
   <string name="TouchIdSettings.title">Touch ID</string>
@@ -633,7 +633,7 @@
   <!-- "Sent [$5] to [address]" => This is the "to [address]" part. -->
   <string name="TransactionDetails.to">till %1$s</string>
   <!-- Transaction ID header -->
-  <string name="TransactionDetails.txHashHeader">Digiwage transaktions-ID</string>
+  <string name="TransactionDetails.txHashHeader">NYXCoin transaktions-ID</string>
   <!-- (this transaction was) Received at this address: -->
   <string name="TransactionDirection.address">Togs emot på den här adressen</string>
   <!-- (this transaction was) Sent to this address: -->
@@ -651,7 +651,7 @@
   <!-- Instruction to touch the sensor for fingerprint authentication -->
   <string name="UnlockScreen.touchIdInstructions.android">Touchsensor</string>
   <!-- TouchID prompt text -->
-  <string name="UnlockScreen.touchIdPrompt">Lås upp Digiwage.</string>
+  <string name="UnlockScreen.touchIdPrompt">Lås upp NYXCoin.</string>
   <!-- Device authentication body -->
   <string name="UnlockScreen.touchIdPrompt.android">Lås upp din Android-enhet för att fortsätta.</string>
   <!-- Unlock with TouchID accessibility label -->
@@ -661,9 +661,9 @@
   <!-- Wallet unlocked message -->
   <string name="UnlockScreen.unlocked">Plånbok upplåst</string>
   <!-- Update PIN caption text -->
-  <string name="UpdatePin.caption">Kom ihåg PIN-koden. Om du glömmer den, kommer du inte åt dina Digiwage.</string>
+  <string name="UpdatePin.caption">Kom ihåg PIN-koden. Om du glömmer den, kommer du inte åt dina NYXCoin.</string>
   <!-- PIN creation info. -->
-  <string name="UpdatePin.createInstruction">Din PIN-kod används för att låsa upp ditt Digiwage och skicka pengar</string>
+  <string name="UpdatePin.createInstruction">Din PIN-kod används för att låsa upp ditt NYXCoin och skicka pengar</string>
   <!-- Update PIN title -->
   <string name="UpdatePin.createTitle">Ställ in PIN-kod</string>
   <!-- Update PIN title -->
@@ -697,7 +697,7 @@
   <!-- Authorize transaction with touch id message -->
   <string name="VerifyPin.touchIdMessage">Godkänn denna transaktion</string>
   <!-- 'No wallet' warning for watch app -->
-  <string name="Watch.noWalletWarning">Öppna iPhone-appen Digiwage för att ställa in din plånbok.</string>
+  <string name="Watch.noWalletWarning">Öppna iPhone-appen NYXCoin för att ställa in din plånbok.</string>
   <!-- Dismiss button label -->
   <string name="Webview.dismiss">Avfärda</string>
   <!-- Webview loading error message -->
@@ -705,9 +705,9 @@
   <!-- Updating webview message -->
   <string name="Webview.updating">Uppdaterar...</string>
   <!-- Welcome screen text. (?) will be replaced with the help icon users should look for. -->
-  <string name="Welcome.body">Breadplånboken har bytt namn till Digiwage, med ett splitter nytt utseende och några nya funktioner.\n\nOm du behöver hjälp, leta efter (?)-tecknet i det övre högra hörnet på de flesta skärmar.</string>
+  <string name="Welcome.body">Breadplånboken har bytt namn till NYXCoin, med ett splitter nytt utseende och några nya funktioner.\n\nOm du behöver hjälp, leta efter (?)-tecknet i det övre högra hörnet på de flesta skärmar.</string>
   <!-- Top title of welcome screen -->
-  <string name="Welcome.title">Välkommen till Digiwage!</string>
+  <string name="Welcome.title">Välkommen till NYXCoin!</string>
   <!-- Wipe wallet alert message -->
   <string name="WipeWallet.alertMessage">Är du säker på att du vill ta bort den här plånboken.</string>
   <!-- Wipe wallet alert title -->

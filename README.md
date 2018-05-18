@@ -3,7 +3,7 @@
 
 [![Get it on Google Play](/images/icon-google-play.png)](https://play.google.com/store/apps/details?id=com.digiwagewallet)
 
-### Digiwage done right
+### Cryptos done right
 
 This is the Android port of the breadwallet iOS app, which can be found [here](https://github.com/breadwallet/breadwallet/).
 

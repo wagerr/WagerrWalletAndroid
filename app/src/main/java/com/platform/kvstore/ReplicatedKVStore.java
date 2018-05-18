@@ -32,12 +32,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.digiwagewallet.DigiWageApp;
-import com.digiwagewallet.core.BRCoreKey;
-import com.digiwagewallet.tools.security.BRKeyStore;
-import com.digiwagewallet.tools.threads.executor.BRExecutor;
-import com.digiwagewallet.tools.util.BRConstants;
-import com.digiwagewallet.tools.util.Utils;
+import com.nyxwallet.NYXApp;
+import com.nyxwallet.core.BRCoreKey;
+import com.nyxwallet.tools.security.BRKeyStore;
+import com.nyxwallet.tools.threads.executor.BRExecutor;
+import com.nyxwallet.tools.util.BRConstants;
+import com.nyxwallet.tools.util.Utils;
 import com.platform.interfaces.KVStoreAdaptor;
 import com.platform.sqlite.KVItem;
 import com.platform.sqlite.PlatformSqliteHelper;
@@ -854,7 +854,7 @@ public class ReplicatedKVStore {
             Log.e(TAG, "encrypt: data is null");
             return null;
         }
-        if (app == null) app = DigiWageApp.getBreadContext();
+        if (app == null) app = NYXApp.getBreadContext();
         if (app == null) {
             Log.e(TAG, "encrypt: app is null");
             return null;
@@ -894,7 +894,7 @@ public class ReplicatedKVStore {
             Log.e(TAG, "decrypt: failed to decrypt: " + (data == null ? null : data.length));
             return null;
         }
-        if (app == null) app = DigiWageApp.getBreadContext();
+        if (app == null) app = NYXApp.getBreadContext();
         if (app == null) return null;
         if (tempAuthKey == null)
             retrieveAuthKey(app);

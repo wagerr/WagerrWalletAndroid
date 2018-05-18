@@ -3,15 +3,15 @@ package com.platform.middlewares.plugins;
 import android.app.Activity;
 import android.util.Log;
 
-import com.digiwagewallet.DigiWageApp;
-import com.digiwagewallet.presenter.interfaces.BRAuthCompletion;
-import com.digiwagewallet.tools.manager.BREventManager;
-import com.digiwagewallet.tools.manager.BRSharedPrefs;
-import com.digiwagewallet.tools.security.AuthManager;
-import com.digiwagewallet.tools.threads.executor.BRExecutor;
-import com.digiwagewallet.tools.util.BRConstants;
-import com.digiwagewallet.tools.util.Utils;
-import com.digiwagewallet.wallet.WalletsMaster;
+import com.nyxwallet.NYXApp;
+import com.nyxwallet.presenter.interfaces.BRAuthCompletion;
+import com.nyxwallet.tools.manager.BREventManager;
+import com.nyxwallet.tools.manager.BRSharedPrefs;
+import com.nyxwallet.tools.security.AuthManager;
+import com.nyxwallet.tools.threads.executor.BRExecutor;
+import com.nyxwallet.tools.util.BRConstants;
+import com.nyxwallet.tools.util.Utils;
+import com.nyxwallet.wallet.WalletsMaster;
 import com.platform.BRHTTPHelper;
 import com.platform.interfaces.Plugin;
 import com.platform.tools.BRBitId;
@@ -65,7 +65,7 @@ public class WalletPlugin implements Plugin {
     @Override
     public boolean handle(String target, final Request baseRequest, HttpServletRequest request, final HttpServletResponse response) {
         if (!target.startsWith("/_wallet")) return false;
-        Activity app = (Activity) DigiWageApp.getBreadContext();
+        Activity app = (Activity) NYXApp.getBreadContext();
 
         if (target.startsWith("/_wallet/info") && request.getMethod().equalsIgnoreCase("get")) {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
@@ -80,7 +80,7 @@ public class WalletPlugin implements Plugin {
                 jsonResp.put("no_wallet", wm.noWalletForPlatform(app));
 
                 /**the current receive address*/
-                jsonResp.put("receive_address", BRSharedPrefs.getReceiveAddress(app, "WAGE"));
+                jsonResp.put("receive_address", BRSharedPrefs.getReceiveAddress(app, "NYX"));
 
                 /**how digits after the decimal point. 2 = bits 8 = btc 6 = mbtc*/
                 jsonResp.put("btc_denomiation_digits", BRSharedPrefs.getCryptoDenomination(app, wm.getCurrentWallet(app).getIso(app)) == BRConstants.CURRENT_UNIT_BITCOINS ? 8 : 2);

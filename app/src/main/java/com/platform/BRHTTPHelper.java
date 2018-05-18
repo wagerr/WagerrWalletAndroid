@@ -1,7 +1,7 @@
 package com.platform;
 
 
-import com.digiwagewallet.tools.util.Utils;
+import com.nyxwallet.tools.util.Utils;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
