@@ -88,7 +88,7 @@ public class AboutActivity extends BRActivity {
         policyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://digiwage.org/privacy-policy.htm"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://digiwage.org/privacy-policy/"));
                 startActivity(browserIntent);
                 app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
             }

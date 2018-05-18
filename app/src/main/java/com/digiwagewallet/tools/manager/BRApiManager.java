@@ -101,10 +101,7 @@ public class BRApiManager {
                         tmp.code = tmpObj.getString("code");
                         tmp.rate = (float) tmpObj.getDouble("rate");
                         String selectedISO = BRSharedPrefs.getPreferredFiatIso(context);
-//                        Log.e(TAG,"selectedISO: " + selectedISO);
                         if (tmp.code.equalsIgnoreCase(selectedISO)) {
-//                            Log.e(TAG, "theIso : " + theIso);
-//                                Log.e(TAG, "Putting the shit in the shared prefs");
                             BRSharedPrefs.putPreferredFiatIso(context, tmp.code);
                         }
                     } catch (JSONException e) {
@@ -118,6 +115,7 @@ public class BRApiManager {
                 wage.name="Digiwage";
                 wage.code="WAGE";
                 wage.rate= fetchRatesDigiwage( context, walletManager );
+
                 set.add(wage);
 
             } else {
@@ -224,12 +222,16 @@ public class BRApiManager {
     public static float fetchRatesDigiwage(Activity app, BaseWalletManager walletManager) {
         String url1 = "https://api.crypto-bridge.org/api/v1/ticker/";
         String jsonString1 = urlGET(app, url1);
-        float price1=1;
+
+        float price1=100000;
 
         JSONArray jsonArray1 = null;
         if (jsonString1 == null) {
-            Log.e(TAG, "fetchRatesDigiwage: cryptobridge failed, response is null");
-            return 0;
+            jsonString1 = urlGET(app, url1);        // retry
+            if (jsonString1 == null) {
+                Log.e(TAG, "fetchRatesDigiwage: cryptobridge failed, response is null");
+                return price1;
+            }
         }
 
         try {

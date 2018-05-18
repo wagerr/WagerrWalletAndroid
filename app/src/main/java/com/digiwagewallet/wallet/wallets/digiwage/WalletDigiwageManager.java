@@ -179,7 +179,7 @@ public class WalletDigiwageManager extends BRCoreWalletManager implements BaseWa
             WalletsMaster.getInstance(app).updateFixedPeer(app, this);
 //        balanceListeners = new ArrayList<>();
 
-            uiConfig = new WalletUiConfiguration("#CA9419" /* digiwage.org */, true, true, false);
+            uiConfig = new WalletUiConfiguration("#fcb81f" /* digiwage.org */, true, true, false);
 
         } finally {
             isInitiatingWallet = false;
