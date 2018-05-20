@@ -12,7 +12,7 @@
             android:fitsSystemWindows="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical"
-            tools:context="com.nyxwallet.presenter.activities.HomeActivity">
+            tools:context="com.bifrostwallet.presenter.activities.HomeActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 android:layout_alignStart="@+id/portfolio_label"
                 android:background="@drawable/brd_logo_gradient" />
 
-            <com.nyxwallet.presenter.customviews.BRText
+            <com.bifrostwallet.presenter.customviews.BRText
                 android:id="@+id/total_assets_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
                 android:textColor="@color/total_assets_label_color"
                 app:customTFont="CircularPro-Book.otf" />
 
-            <com.nyxwallet.presenter.customviews.BRText
+            <com.bifrostwallet.presenter.customviews.BRText
                 android:id="@+id/total_assets_usd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/extra_light_blue_background">
 
-                    <com.nyxwallet.presenter.customviews.BRText
+                    <com.bifrostwallet.presenter.customviews.BRText
                         android:id="@+id/prompt_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                         android:textSize="16sp"
                         app:customTFont="CircularPro-Bold.otf" />
 
-                    <com.nyxwallet.presenter.customviews.BRText
+                    <com.bifrostwallet.presenter.customviews.BRText
                         android:id="@+id/prompt_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
                         android:layout_marginRight="16dp"
                         android:weightSum="2">
 
-                        <com.nyxwallet.presenter.customviews.BRButton
+                        <com.bifrostwallet.presenter.customviews.BRButton
                             android:id="@+id/dismiss_button"
                             android:layout_width="10dp"
                             android:layout_height="60dp"
@@ -119,7 +119,7 @@
                             app:hasShadow="false"
                             app:isBreadButton="true" />
 
-                        <com.nyxwallet.presenter.customviews.BRButton
+                        <com.bifrostwallet.presenter.customviews.BRButton
                             android:id="@+id/continue_button"
                             android:layout_width="10dp"
                             android:layout_height="60dp"
@@ -144,7 +144,7 @@
             </android.support.v7.widget.CardView>
 
 
-            <com.nyxwallet.presenter.customviews.BRText
+            <com.bifrostwallet.presenter.customviews.BRText
                 android:id="@+id/portfolio_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
             </android.support.v7.widget.RecyclerView>
 
 
-            <com.nyxwallet.presenter.customviews.BRText
+            <com.bifrostwallet.presenter.customviews.BRText
                 android:id="@+id/admin_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
                 android:background="@drawable/admin_card_shape">
 
 
-                <com.nyxwallet.presenter.customviews.BRText
+                <com.bifrostwallet.presenter.customviews.BRText
                     android:id="@+id/settings_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -230,7 +230,7 @@
                 android:background="@drawable/admin_card_shape">
 
 
-                <com.nyxwallet.presenter.customviews.BRText
+                <com.bifrostwallet.presenter.customviews.BRText
                     android:id="@+id/security_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -271,7 +271,7 @@
                 android:background="@drawable/admin_card_shape">
 
 
-                <com.nyxwallet.presenter.customviews.BRText
+                <com.bifrostwallet.presenter.customviews.BRText
                     android:id="@+id/support_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -301,7 +301,7 @@
 
         </RelativeLayout>
 
-        <com.nyxwallet.presenter.customviews.BRNotificationBar
+        <com.bifrostwallet.presenter.customviews.BRNotificationBar
             android:id="@+id/notification_bar"
             android:layout_width="match_parent"
             android:layout_height="160dp"

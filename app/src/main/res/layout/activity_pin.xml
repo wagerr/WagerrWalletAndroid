@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.nyxwallet.presenter.customviews.BRLockScreenConstraintLayout
+<com.bifrostwallet.presenter.customviews.BRLockScreenConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bread_gradient"
-    tools:context="com.nyxwallet.presenter.activities.LoginActivity">
+    tools:context="com.bifrostwallet.presenter.activities.LoginActivity">
 
     <ImageView
         android:id="@+id/title"
@@ -81,7 +81,7 @@
             android:background="@drawable/ic_pin_dot_white"/>
     </LinearLayout>
 
-    <com.nyxwallet.presenter.customviews.BRKeyboard
+    <com.bifrostwallet.presenter.customviews.BRKeyboard
         android:id="@+id/brkeyboard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:showAlphabet="true"/>
 
-    <com.nyxwallet.presenter.customviews.BRText
+    <com.bifrostwallet.presenter.customviews.BRText
         android:id="@+id/enter_pin_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.nyxwallet.presenter.customviews.BRButton
+        <com.bifrostwallet.presenter.customviews.BRButton
             android:id="@+id/left_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
             app:isBreadButton="false"
             />
 
-        <com.nyxwallet.presenter.customviews.BRButton
+        <com.bifrostwallet.presenter.customviews.BRButton
             android:id="@+id/right_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.nyxwallet.presenter.customviews.BRText
+    <com.bifrostwallet.presenter.customviews.BRText
         android:id="@+id/unlocked_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -192,4 +192,4 @@
         app:layout_constraintBottom_toTopOf="@+id/brkeyboard"
         app:layout_constraintRight_toRightOf="parent"/>
 
-</com.nyxwallet.presenter.customviews.BRLockScreenConstraintLayout>
+</com.bifrostwallet.presenter.customviews.BRLockScreenConstraintLayout>

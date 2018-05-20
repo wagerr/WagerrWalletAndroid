@@ -1,7 +1,7 @@
 import android.util.Log;
 
-import com.nyxwallet.tools.util.Bip39Reader;
-import com.nyxwallet.wallet.WalletsMaster;
+import com.bifrostwallet.tools.util.Bip39Reader;
+import com.bifrostwallet.wallet.WalletsMaster;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;

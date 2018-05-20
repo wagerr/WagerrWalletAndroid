@@ -12,14 +12,14 @@ import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 
-import com.nyxwallet.NYXApp;
-import com.nyxwallet.R;
-import com.nyxwallet.presenter.activities.camera.CameraActivity;
-import com.nyxwallet.presenter.customviews.BRDialogView;
-import com.nyxwallet.tools.animation.BRDialog;
-import com.nyxwallet.tools.crypto.CryptoHelper;
-import com.nyxwallet.tools.threads.executor.BRExecutor;
-import com.nyxwallet.tools.util.BRConstants;
+import com.bifrostwallet.BifrostApp;
+import com.bifrostwallet.R;
+import com.bifrostwallet.presenter.activities.camera.CameraActivity;
+import com.bifrostwallet.presenter.customviews.BRDialogView;
+import com.bifrostwallet.tools.animation.BRDialog;
+import com.bifrostwallet.tools.crypto.CryptoHelper;
+import com.bifrostwallet.tools.threads.executor.BRExecutor;
+import com.bifrostwallet.tools.util.BRConstants;
 import com.platform.BRHTTPHelper;
 import com.platform.interfaces.Plugin;
 
@@ -89,7 +89,7 @@ public class CameraPlugin implements Plugin {
 
         if (target.startsWith("/_camera/take_picture")) {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
-            final Context app = NYXApp.getBreadContext();
+            final Context app = BifrostApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "handle: context is null: " + target + " " + baseRequest.getMethod());
 
@@ -149,7 +149,7 @@ public class CameraPlugin implements Plugin {
             return true;
         } else if (target.startsWith("/_camera/picture/")) {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
-            final Context app = NYXApp.getBreadContext();
+            final Context app = BifrostApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "handle: context is null: " + target + " " + baseRequest.getMethod());
                 return BRHTTPHelper.handleError(404, "context is null", baseRequest, response);

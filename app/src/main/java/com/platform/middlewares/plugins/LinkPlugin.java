@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.nyxwallet.NYXApp;
-import com.nyxwallet.R;
-import com.nyxwallet.presenter.activities.settings.WebViewActivity;
-import com.nyxwallet.tools.manager.BRReportsManager;
-import com.nyxwallet.tools.util.Utils;
+import com.bifrostwallet.BifrostApp;
+import com.bifrostwallet.R;
+import com.bifrostwallet.presenter.activities.settings.WebViewActivity;
+import com.bifrostwallet.tools.manager.BRReportsManager;
+import com.bifrostwallet.tools.util.Utils;
 import com.platform.BRHTTPHelper;
 import com.platform.interfaces.Plugin;
 
@@ -55,7 +55,7 @@ public class LinkPlugin implements Plugin {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
             String url = request.getParameter("url");
 
-            Context app = NYXApp.getBreadContext();
+            Context app = BifrostApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "handle: context is null: " + target + " " + baseRequest.getMethod());
                 return BRHTTPHelper.handleError(500, "context is null", baseRequest, response);
@@ -72,7 +72,7 @@ public class LinkPlugin implements Plugin {
             return BRHTTPHelper.handleSuccess(204, null, baseRequest, response, null);
         } else if (target.startsWith("/_open_maps")) {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
-            Context app = NYXApp.getBreadContext();
+            Context app = BifrostApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "handle: context is null: " + target + " " + baseRequest.getMethod());
                 return BRHTTPHelper.handleError(500, "context is null", baseRequest, response);
@@ -88,7 +88,7 @@ public class LinkPlugin implements Plugin {
             app.startActivity(Intent.createChooser(intent, "Select an application"));
             return BRHTTPHelper.handleSuccess(204, null, baseRequest, response, null);
         } else if (target.startsWith("/_browser")) {
-            Context app = NYXApp.getBreadContext();
+            Context app = BifrostApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "handle: context is null: " + target + " " + baseRequest.getMethod());
                 return BRHTTPHelper.handleError(500, "context is null", baseRequest, response);

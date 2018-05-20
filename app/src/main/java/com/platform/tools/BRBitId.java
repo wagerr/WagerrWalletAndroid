@@ -6,16 +6,16 @@ import android.security.keystore.UserNotAuthenticatedException;
 import android.util.Base64;
 import android.util.Log;
 
-import com.nyxwallet.core.BRCoreKey;
-import com.nyxwallet.core.BRCoreMasterPubKey;
-import com.nyxwallet.presenter.interfaces.BRAuthCompletion;
-import com.nyxwallet.tools.manager.BRSharedPrefs;
-import com.nyxwallet.tools.security.AuthManager;
-import com.nyxwallet.tools.security.BRKeyStore;
-import com.nyxwallet.tools.security.PostAuth;
-import com.nyxwallet.tools.threads.executor.BRExecutor;
-import com.nyxwallet.tools.util.BRConstants;
-import com.nyxwallet.tools.util.Utils;
+import com.bifrostwallet.core.BRCoreKey;
+import com.bifrostwallet.core.BRCoreMasterPubKey;
+import com.bifrostwallet.presenter.interfaces.BRAuthCompletion;
+import com.bifrostwallet.tools.manager.BRSharedPrefs;
+import com.bifrostwallet.tools.security.AuthManager;
+import com.bifrostwallet.tools.security.BRKeyStore;
+import com.bifrostwallet.tools.security.PostAuth;
+import com.bifrostwallet.tools.threads.executor.BRExecutor;
+import com.bifrostwallet.tools.util.BRConstants;
+import com.bifrostwallet.tools.util.Utils;
 import com.platform.APIClient;
 import com.platform.middlewares.plugins.WalletPlugin;
 

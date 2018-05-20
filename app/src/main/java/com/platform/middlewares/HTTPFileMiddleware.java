@@ -3,10 +3,10 @@ package com.platform.middlewares;
 import android.content.Context;
 import android.util.Log;
 
-import com.nyxwallet.NYXApp;
-import com.nyxwallet.tools.crypto.CryptoHelper;
-import com.nyxwallet.tools.util.TypesConverter;
-import com.nyxwallet.tools.util.Utils;
+import com.bifrostwallet.BifrostApp;
+import com.bifrostwallet.tools.crypto.CryptoHelper;
+import com.bifrostwallet.tools.util.TypesConverter;
+import com.bifrostwallet.tools.util.Utils;
 import com.platform.APIClient;
 import com.platform.BRHTTPHelper;
 import com.platform.interfaces.Middleware;
@@ -60,7 +60,7 @@ public class HTTPFileMiddleware implements Middleware {
         if (target.equals("/favicon.ico")) {
             return BRHTTPHelper.handleSuccess(200, null, baseRequest, response, null);
         }
-        Context app = NYXApp.getBreadContext();
+        Context app = BifrostApp.getBreadContext();
         if (app == null) {
             Log.e(TAG, "handle: app is null!");
             return true;

@@ -3,7 +3,7 @@ package com.platform.middlewares;
 import android.content.Context;
 import android.util.Log;
 
-import com.nyxwallet.NYXApp;
+import com.bifrostwallet.BifrostApp;
 import com.platform.APIClient;
 import com.platform.interfaces.Middleware;
 
@@ -69,7 +69,7 @@ public class APIProxy implements Middleware {
             "connection"};
 
     public APIProxy() {
-        Context app = NYXApp.getBreadContext();
+        Context app = BifrostApp.getBreadContext();
         if (app == null) {
             Log.e(TAG, "APIProxy: app is null!");
         }

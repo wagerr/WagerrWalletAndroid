@@ -7,9 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/extra_light_blue_background"
-    tools:context="com.nyxwallet.presenter.activities.SetPinActivity">
+    tools:context="com.bifrostwallet.presenter.activities.SetPinActivity">
 
-    <com.nyxwallet.presenter.customviews.BRText
+    <com.bifrostwallet.presenter.customviews.BRText
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.nyxwallet.presenter.customviews.BRText
+    <com.bifrostwallet.presenter.customviews.BRText
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"/>
 
-    <com.nyxwallet.presenter.customviews.BRText
+    <com.bifrostwallet.presenter.customviews.BRText
         android:id="@+id/BRText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,13 +66,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BRText2">
 
-        <com.nyxwallet.presenter.customviews.BRButton
+        <com.bifrostwallet.presenter.customviews.BRButton
             android:id="@+id/left_button"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_weight="1.0"
             android:background="@drawable/b_half_left_blue"
-            android:text="Bits (mNYX)"
+            android:text="Bits (mFROST)"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:padding="0dp"
@@ -80,21 +80,21 @@
             app:isBreadButton="false"
             />
 
-        <com.nyxwallet.presenter.customviews.BRButton
+        <com.bifrostwallet.presenter.customviews.BRButton
             android:id="@+id/right_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:background="@drawable/b_half_right_blue_stroke"
             android:padding="0dp"
-            android:text="NYXCoin (NYX)"
+            android:text="Bifrost (FROST)"
             android:textColor="@color/dark_blue"
             android:textSize="14sp"
             app:customBFont="CircularPro-Medium.otf"
             app:isBreadButton="false" />
     </LinearLayout>
 
-    <com.nyxwallet.presenter.customviews.BRText
+    <com.bifrostwallet.presenter.customviews.BRText
         android:id="@+id/exchange_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
