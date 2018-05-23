@@ -48,7 +48,7 @@ android {
         bifrost {
             applicationId = "com.bifrostwallet"
             dimension "mode"
-            resValue "string", "app_name", "Bifrost Coin"
+            resValue "string", "app_name", "Bifrost"
             buildConfigField "boolean", "BITCOIN_TESTNET", "false"
             externalNativeBuild {
                 cmake {

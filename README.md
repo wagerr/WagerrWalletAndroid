@@ -1,7 +1,7 @@
 ![ƀ](/images/icon.png) digiwagewallet for Android
 ----------------------------------
 
-[![Get it on Google Play](/images/icon-google-play.png)](https://play.google.com/store/apps/details?id=com.digiwagewallet)
+[![Get it on Google Play](/images/icon-google-play.png)](https://play.google.com/store/apps/details?id=com.bifrostwallet)
 
 ### Cryptos done right
 

@@ -106,7 +106,7 @@ public class WalletBifrostManager extends BRCoreWalletManager implements BaseWal
 
     private static String ISO = "FROST";
 
-    private static final String mName = "BIFROST Coin";
+    private static final String mName = "BIFROST";
     public static final String BTC_SCHEME = "";
 
 
@@ -179,7 +179,7 @@ public class WalletBifrostManager extends BRCoreWalletManager implements BaseWal
             WalletsMaster.getInstance(app).updateFixedPeer(app, this);
 //        balanceListeners = new ArrayList<>();
 
-            uiConfig = new WalletUiConfiguration("#0088CC" , true, true, false);
+            uiConfig = new WalletUiConfiguration("#2972CC" , true, true, false);
 
         } finally {
             isInitiatingWallet = false;
