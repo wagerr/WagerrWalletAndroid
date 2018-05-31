@@ -30,7 +30,7 @@
     <View
         android:id="@+id/view3"
         android:layout_width="191dp"
-        android:layout_height="55dp"
+        android:layout_height="45dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/brd_logo_gradient"
         app:layout_constraintHorizontal_bias="0.501"

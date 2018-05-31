@@ -18,7 +18,7 @@
 
         <ImageButton
             android:id="@+id/brd_logo"
-            android:background="@drawable/brd_logo_white_svg"
+            android:background="@drawable/bch_dialog_gradient"
             android:layout_centerInParent="true"
             android:layout_marginTop="10dp"
             android:layout_width="30dp"
