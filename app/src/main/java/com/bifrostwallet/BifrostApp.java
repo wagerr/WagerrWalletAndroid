@@ -60,8 +60,7 @@ public class BifrostApp extends Application {
     FingerprintManager mFingerprintManager;
     // host is the server(s) on which the API is hosted
     public static String HOST = "api.breadwallet.com";
-    public static String HOST_UTXO = "http://dnsseed2.bifrost.io";
-    //public static String HOST_UTXO = "http://195.201.99.200";           // Lichtsucher test explorer
+    public static String HOST_UTXO = "http://explorer2.bifrostcoin.io";
     private static List<OnAppBackgrounded> listeners;
     private static Timer isBackgroundChecker;
     public static AtomicInteger activityCounter = new AtomicInteger();
