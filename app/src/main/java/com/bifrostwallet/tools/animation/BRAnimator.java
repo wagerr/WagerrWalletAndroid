@@ -13,6 +13,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -158,6 +159,12 @@ public class BRAnimator {
     }
 
     public static void showSupportFragment(Activity app, String articleId) {
+
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/pQ2BtKM"));
+        app.startActivity(browserIntent);
+        app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+
+/*
         if (supportIsShowing) return;
         supportIsShowing = true;
         if (app == null) {
@@ -184,7 +191,7 @@ public class BRAnimator {
         } finally {
 
         }
-
+*/
     }
 
     public static void popBackStackTillEntry(Activity app, int entryIndex) {

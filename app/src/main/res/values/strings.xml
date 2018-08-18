@@ -29,7 +29,7 @@
   <!-- Error alert title -->
   <string name="Alert.error">Error</string>
   <!-- Keystore error -->
-  <string name="Alert.keystore.generic.android">There is a problem with your Android OS keystore, please contact support@bifrost.io</string>
+  <string name="Alert.keystore.generic.android">There is a problem with your Android OS keystore, please contact support@bifrostcoin.io</string>
   <!-- KeyStore error, keys are invalidated -->
   <string name="Alert.keystore.invalidated.android">Your Bifrost encrypted data was recently invalidated because your Android lock screen was disabled.</string>
   <!-- Keystore error title -->

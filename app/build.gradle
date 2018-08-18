@@ -8,8 +8,8 @@ android {
         applicationId = 'com.bifrostwallet'
         minSdkVersion 23
         targetSdkVersion 27
-        versionCode 212
-        versionName "212"
+        versionCode 214
+        versionName "214"
         multiDexEnabled true
 
         // Similar to other properties in the defaultConfig block,

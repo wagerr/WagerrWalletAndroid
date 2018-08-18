@@ -88,7 +88,7 @@ public class AboutActivity extends BRActivity {
         policyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.bifrostcoin.io/privacy-policy/"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.bifrostcoin.io/privacy/"));
                 startActivity(browserIntent);
                 app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
             }

@@ -29,7 +29,7 @@
   <!-- Error alert title -->
   <string name="Alert.error">Error</string>
   <!-- Keystore error -->
-  <string name="Alert.keystore.generic.android">Er is een probleem het uw Android OS keystore, neemt u alstublieft contact op met support@bifrost.io</string>
+  <string name="Alert.keystore.generic.android">Er is een probleem het uw Android OS keystore, neemt u alstublieft contact op met support@bifrostcoin.io</string>
   <!-- KeyStore error, keys are invalidated -->
   <string name="Alert.keystore.invalidated.android">Uw door Bifrost geëncrypteerde data is onlangs ongeldig gemaakt omdat uw Android schermvergrendeling is uitgeschakeld.</string>
   <!-- Keystore error title -->

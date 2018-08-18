@@ -29,7 +29,7 @@
   <!-- Error alert title -->
   <string name="Alert.error">Fejl</string>
   <!-- Keystore error -->
-  <string name="Alert.keystore.generic.android">Der er et problem med din Android OS keystore, kontakt venligst support@bifrost.io</string>
+  <string name="Alert.keystore.generic.android">Der er et problem med din Android OS keystore, kontakt venligst support@bifrostcoin.io</string>
   <!-- KeyStore error, keys are invalidated -->
   <string name="Alert.keystore.invalidated.android">Dine Bifrost-krypterede data blev for nyligt ugyldiggjort, eftersom din Android skærmlås blev deaktiveret.</string>
   <!-- Keystore error title -->
