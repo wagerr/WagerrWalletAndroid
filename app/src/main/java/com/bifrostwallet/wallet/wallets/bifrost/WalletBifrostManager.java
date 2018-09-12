@@ -107,6 +107,7 @@ public class WalletBifrostManager extends BRCoreWalletManager implements BaseWal
     private static String ISO = "FROST";
 
     private static final String mName = "BIFROST";
+    private static final long TIME_GENESIS = 1523854631;
     public static final String BTC_SCHEME = "";
 
 
@@ -136,9 +137,10 @@ public class WalletBifrostManager extends BRCoreWalletManager implements BaseWal
             }
             BRCoreMasterPubKey pubKey = new BRCoreMasterPubKey(rawPubKey, false);
             long time = BRKeyStore.getWalletCreationTime(app);
-//            if (Utils.isEmulatorOrDebug(app)) time = 1517955529;
-            //long time = 1519190488;
-//            long time = (System.currentTimeMillis() / 1000) - 3 * 7 * 24 * 60 * 60; // 3 * 7
+            if (time == 0L)
+            {
+                time = TIME_GENESIS;      // Genesis for Bifrost
+            }
 
             instance = new WalletBifrostManager(app, pubKey, BuildConfig.BITCOIN_TESTNET ? BRCoreChainParams.testnetCoinChainParams : BRCoreChainParams.mainnetCoinChainParams, time);
         }
