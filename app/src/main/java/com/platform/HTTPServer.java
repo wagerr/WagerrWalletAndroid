@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.bifrostwallet.BifrostApp;
-import com.bifrostwallet.tools.threads.executor.BRExecutor;
-import com.bifrostwallet.tools.util.Utils;
+import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
+import com.wagerrwallet.tools.util.Utils;
 import com.platform.interfaces.Middleware;
 import com.platform.interfaces.Plugin;
 import com.platform.middlewares.APIProxy;

@@ -3,10 +3,10 @@ package com.platform.middlewares;
 import android.content.Context;
 import android.util.Log;
 
-import com.bifrostwallet.BifrostApp;
-import com.bifrostwallet.tools.crypto.CryptoHelper;
-import com.bifrostwallet.tools.util.TypesConverter;
-import com.bifrostwallet.tools.util.Utils;
+import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.tools.crypto.CryptoHelper;
+import com.wagerrwallet.tools.util.TypesConverter;
+import com.wagerrwallet.tools.util.Utils;
 import com.platform.APIClient;
 import com.platform.BRHTTPHelper;
 import com.platform.interfaces.Middleware;

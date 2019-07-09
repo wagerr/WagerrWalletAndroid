@@ -32,12 +32,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.bifrostwallet.BifrostApp;
-import com.bifrostwallet.core.BRCoreKey;
-import com.bifrostwallet.tools.security.BRKeyStore;
-import com.bifrostwallet.tools.threads.executor.BRExecutor;
-import com.bifrostwallet.tools.util.BRConstants;
-import com.bifrostwallet.tools.util.Utils;
+import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.core.BRCoreKey;
+import com.wagerrwallet.tools.security.BRKeyStore;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
+import com.wagerrwallet.tools.util.BRConstants;
+import com.wagerrwallet.tools.util.Utils;
 import com.platform.interfaces.KVStoreAdaptor;
 import com.platform.sqlite.KVItem;
 import com.platform.sqlite.PlatformSqliteHelper;

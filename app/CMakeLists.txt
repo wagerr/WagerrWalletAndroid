@@ -93,9 +93,9 @@ add_library( # The name of the library.
              src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreWallet.h
 
             # Coin files
-             src/main/jni/breadwallet-core/bifrost/BRBifrostAddr.c
-             src/main/jni/breadwallet-core/bifrost/BRBifrostAddr.h
-             src/main/jni/breadwallet-core/bifrost/BRBifrostParams.h
+        src/main/jni/breadwallet-core/wagerr/BRWagerrAddr.c
+        src/main/jni/breadwallet-core/wagerr/BRWagerrAddr.h
+        src/main/jni/breadwallet-core/wagerr/BRWagerrParams.h
 
              # BCash files
              src/main/jni/breadwallet-core/bcash/BRBCashAddr.c
@@ -137,7 +137,7 @@ add_library( # The name of the library.
              )
 
 include_directories(src/main/jni/breadwallet-core/bcash)
-include_directories(src/main/jni/breadwallet-core/bifrost)
+include_directories(src/main/jni/breadwallet-core/wagerr)
 include_directories(src/main/jni/breadwallet-core/Java)
 include_directories(src/main/jni/breadwallet-core/)
 include_directories(src/main/jni/breadwallet-core/secp256k1/include)

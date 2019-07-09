@@ -12,14 +12,14 @@ import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 
-import com.bifrostwallet.BifrostApp;
-import com.bifrostwallet.R;
-import com.bifrostwallet.presenter.activities.camera.CameraActivity;
-import com.bifrostwallet.presenter.customviews.BRDialogView;
-import com.bifrostwallet.tools.animation.BRDialog;
-import com.bifrostwallet.tools.crypto.CryptoHelper;
-import com.bifrostwallet.tools.threads.executor.BRExecutor;
-import com.bifrostwallet.tools.util.BRConstants;
+import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.R;
+import com.wagerrwallet.presenter.activities.camera.CameraActivity;
+import com.wagerrwallet.presenter.customviews.BRDialogView;
+import com.wagerrwallet.tools.animation.BRDialog;
+import com.wagerrwallet.tools.crypto.CryptoHelper;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
+import com.wagerrwallet.tools.util.BRConstants;
 import com.platform.BRHTTPHelper;
 import com.platform.interfaces.Plugin;
 

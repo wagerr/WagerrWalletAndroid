@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.bifrostwallet">
+    package="com.wagerrwallet">
 
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -41,7 +41,7 @@
         android:required="false"/>
 
     <application
-        android:name=".BifrostApp"
+        android:name=".WagerrApp"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -54,7 +54,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.bifrostwallet"
+            android:authorities="com.wagerrwallet"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

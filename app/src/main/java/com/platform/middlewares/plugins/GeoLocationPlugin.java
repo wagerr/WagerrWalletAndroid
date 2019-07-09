@@ -9,10 +9,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.bifrostwallet.BifrostApp;
-import com.bifrostwallet.tools.manager.BRSharedPrefs;
-import com.bifrostwallet.tools.threads.executor.BRExecutor;
-import com.bifrostwallet.tools.util.BRConstants;
+import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.tools.manager.BRSharedPrefs;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
+import com.wagerrwallet.tools.util.BRConstants;
 import com.platform.BRHTTPHelper;
 import com.platform.GeoLocationManager;
 import com.platform.interfaces.Plugin;

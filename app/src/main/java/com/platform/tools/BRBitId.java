@@ -6,16 +6,16 @@ import android.security.keystore.UserNotAuthenticatedException;
 import android.util.Base64;
 import android.util.Log;
 
-import com.bifrostwallet.core.BRCoreKey;
-import com.bifrostwallet.core.BRCoreMasterPubKey;
-import com.bifrostwallet.presenter.interfaces.BRAuthCompletion;
-import com.bifrostwallet.tools.manager.BRSharedPrefs;
-import com.bifrostwallet.tools.security.AuthManager;
-import com.bifrostwallet.tools.security.BRKeyStore;
-import com.bifrostwallet.tools.security.PostAuth;
-import com.bifrostwallet.tools.threads.executor.BRExecutor;
-import com.bifrostwallet.tools.util.BRConstants;
-import com.bifrostwallet.tools.util.Utils;
+import com.wagerrwallet.core.BRCoreKey;
+import com.wagerrwallet.core.BRCoreMasterPubKey;
+import com.wagerrwallet.presenter.interfaces.BRAuthCompletion;
+import com.wagerrwallet.tools.manager.BRSharedPrefs;
+import com.wagerrwallet.tools.security.AuthManager;
+import com.wagerrwallet.tools.security.BRKeyStore;
+import com.wagerrwallet.tools.security.PostAuth;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
+import com.wagerrwallet.tools.util.BRConstants;
+import com.wagerrwallet.tools.util.Utils;
 import com.platform.APIClient;
 import com.platform.middlewares.plugins.WalletPlugin;
 

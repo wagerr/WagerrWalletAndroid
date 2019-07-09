@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_trans"
-    tools:context="com.bifrostwallet.presenter.activities.LoginActivity">
+    tools:context="com.wagerrwallet.presenter.activities.LoginActivity">
 
     <RelativeLayout
         android:id="@+id/pin_dialog"
@@ -22,7 +22,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.bifrostwallet.presenter.customviews.BRText
+        <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             android:textSize="22sp"
             app:customTFont="CircularPro-Bold.otf"/>
 
-        <com.bifrostwallet.presenter.customviews.BRText
+        <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
 
     </RelativeLayout>
 
-    <com.bifrostwallet.presenter.customviews.BRKeyboard
+    <com.wagerrwallet.presenter.customviews.BRKeyboard
         android:id="@+id/brkeyboard"
         android:layout_width="0dp"
         android:paddingTop="8dp"

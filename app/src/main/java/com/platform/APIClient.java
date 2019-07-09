@@ -7,17 +7,17 @@ import android.net.Uri;
 import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
-import com.bifrostwallet.BifrostApp;
-import com.bifrostwallet.core.BRCoreKey;
-import com.bifrostwallet.presenter.activities.util.ActivityUTILS;
-import com.bifrostwallet.tools.crypto.Base58;
-import com.bifrostwallet.tools.manager.BRApiManager;
-import com.bifrostwallet.tools.manager.BRReportsManager;
-import com.bifrostwallet.tools.manager.BRSharedPrefs;
-import com.bifrostwallet.tools.crypto.CryptoHelper;
-import com.bifrostwallet.tools.security.BRKeyStore;
-import com.bifrostwallet.tools.threads.executor.BRExecutor;
-import com.bifrostwallet.tools.util.Utils;
+import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.core.BRCoreKey;
+import com.wagerrwallet.presenter.activities.util.ActivityUTILS;
+import com.wagerrwallet.tools.crypto.Base58;
+import com.wagerrwallet.tools.manager.BRApiManager;
+import com.wagerrwallet.tools.manager.BRReportsManager;
+import com.wagerrwallet.tools.manager.BRSharedPrefs;
+import com.wagerrwallet.tools.crypto.CryptoHelper;
+import com.wagerrwallet.tools.security.BRKeyStore;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
+import com.wagerrwallet.tools.util.Utils;
 import com.platform.kvstore.RemoteKVStore;
 import com.platform.kvstore.ReplicatedKVStore;
 
@@ -60,7 +60,7 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSink;
 
-import static com.bifrostwallet.tools.util.BRCompressor.gZipExtract;
+import static com.wagerrwallet.tools.util.BRCompressor.gZipExtract;
 
 
 /**

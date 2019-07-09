@@ -11,10 +11,10 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 
-import com.bifrostwallet.BifrostApp;
-import com.bifrostwallet.tools.manager.BRReportsManager;
-import com.bifrostwallet.tools.threads.executor.BRExecutor;
-import com.bifrostwallet.tools.util.Utils;
+import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.tools.manager.BRReportsManager;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
+import com.wagerrwallet.tools.util.Utils;
 
 import org.eclipse.jetty.continuation.Continuation;
 import org.eclipse.jetty.server.Request;

@@ -3,7 +3,7 @@ package com.platform.middlewares;
 import android.content.Context;
 import android.util.Log;
 
-import com.bifrostwallet.BifrostApp;
+import com.wagerrwallet.BifrostApp;
 import com.platform.APIClient;
 import com.platform.interfaces.Middleware;
 

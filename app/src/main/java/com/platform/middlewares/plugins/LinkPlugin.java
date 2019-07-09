@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.bifrostwallet.BifrostApp;
-import com.bifrostwallet.R;
-import com.bifrostwallet.presenter.activities.settings.WebViewActivity;
-import com.bifrostwallet.tools.manager.BRReportsManager;
-import com.bifrostwallet.tools.util.Utils;
+import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.R;
+import com.wagerrwallet.presenter.activities.settings.WebViewActivity;
+import com.wagerrwallet.tools.manager.BRReportsManager;
+import com.wagerrwallet.tools.util.Utils;
 import com.platform.BRHTTPHelper;
 import com.platform.interfaces.Plugin;
 
