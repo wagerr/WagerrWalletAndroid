@@ -65,32 +65,32 @@ add_library( # The name of the library.
              # Core JNI files
              src/main/jni/breadwallet-core/Java/BRCoreJni.h
              src/main/jni/breadwallet-core/Java/BRCoreJni.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreJniReference.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreJniReference.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreAddress.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreAddress.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreChainParams.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreChainParams.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCorePeer.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCorePeer.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreMasterPubKey.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreMasterPubKey.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreKey.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreKey.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreMerkleBlock.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreMerkleBlock.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCorePeerManager.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCorePeerManager.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreTransaction.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreTransaction.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreTransactionInput.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreTransactionInput.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreTransactionOutput.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreTransactionOutput.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCorePaymentProtocol.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCorePaymentProtocol.h
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreWallet.c
-             src/main/jni/breadwallet-core/Java/com_bifrostwallet_core_BRCoreWallet.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreJniReference.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreJniReference.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreAddress.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreAddress.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreChainParams.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreChainParams.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCorePeer.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCorePeer.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreMasterPubKey.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreMasterPubKey.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreKey.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreKey.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreMerkleBlock.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreMerkleBlock.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCorePeerManager.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCorePeerManager.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreTransaction.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreTransaction.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreTransactionInput.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreTransactionInput.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreTransactionOutput.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreTransactionOutput.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCorePaymentProtocol.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCorePaymentProtocol.h
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreWallet.c
+        src/main/jni/breadwallet-core/Java/com_wagerrwallet_core_BRCoreWallet.h
 
             # Coin files
         src/main/jni/breadwallet-core/wagerr/BRWagerrAddr.c
