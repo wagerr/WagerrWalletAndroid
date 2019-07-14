@@ -3,7 +3,7 @@ package com.platform.middlewares;
 import android.content.Context;
 import android.util.Log;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.tools.crypto.CryptoHelper;
 import com.wagerrwallet.tools.util.TypesConverter;
 import com.wagerrwallet.tools.util.Utils;
@@ -60,7 +60,7 @@ public class HTTPFileMiddleware implements Middleware {
         if (target.equals("/favicon.ico")) {
             return BRHTTPHelper.handleSuccess(200, null, baseRequest, response, null);
         }
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         if (app == null) {
             Log.e(TAG, "handle: app is null!");
             return true;

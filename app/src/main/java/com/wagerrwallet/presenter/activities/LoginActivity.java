@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.camera.ScanQRActivity;
 import com.wagerrwallet.presenter.activities.util.BRActivity;
@@ -204,7 +204,7 @@ public class LoginActivity extends BRActivity {
             }
         }, 500);
 
-        BifrostApp.addOnBackgroundedListener(new BifrostApp.OnAppBackgrounded() {
+        WagerrApp.addOnBackgroundedListener(new WagerrApp.OnAppBackgrounded() {
             @Override
             public void onBackgrounded() {
                 //disconnect all wallets on backgrounded

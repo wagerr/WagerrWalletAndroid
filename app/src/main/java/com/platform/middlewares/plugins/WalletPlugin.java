@@ -3,7 +3,7 @@ package com.platform.middlewares.plugins;
 import android.app.Activity;
 import android.util.Log;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.interfaces.BRAuthCompletion;
 import com.wagerrwallet.tools.manager.BREventManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
@@ -65,7 +65,7 @@ public class WalletPlugin implements Plugin {
     @Override
     public boolean handle(String target, final Request baseRequest, HttpServletRequest request, final HttpServletResponse response) {
         if (!target.startsWith("/_wallet")) return false;
-        Activity app = (Activity) BifrostApp.getBreadContext();
+        Activity app = (Activity) WagerrApp.getBreadContext();
 
         if (target.startsWith("/_wallet/info") && request.getMethod().equalsIgnoreCase("get")) {
             Log.i(TAG, "handling: " + target + " " + baseRequest.getMethod());
@@ -80,7 +80,7 @@ public class WalletPlugin implements Plugin {
                 jsonResp.put("no_wallet", wm.noWalletForPlatform(app));
 
                 /**the current receive address*/
-                jsonResp.put("receive_address", BRSharedPrefs.getReceiveAddress(app, "FROST"));
+                jsonResp.put("receive_address", BRSharedPrefs.getReceiveAddress(app, "WGR"));
 
                 /**how digits after the decimal point. 2 = bits 8 = btc 6 = mbtc*/
                 jsonResp.put("btc_denomiation_digits", BRSharedPrefs.getCryptoDenomination(app, wm.getCurrentWallet(app).getIso(app)) == BRConstants.CURRENT_UNIT_BITCOINS ? 8 : 2);

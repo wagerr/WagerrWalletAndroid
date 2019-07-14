@@ -91,7 +91,7 @@ public class DisplayCurrencyActivity extends BRActivity {
             }
         });
 
-        int unit = BRSharedPrefs.getCryptoDenomination(this, "FROST"); // any iso, using one for all for now
+        int unit = BRSharedPrefs.getCryptoDenomination(this, "WGR"); // any iso, using one for all for now
         if (unit == BRConstants.CURRENT_UNIT_BITS) {
             setButton(true);
         } else {

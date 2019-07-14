@@ -11,7 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.Utils;
@@ -67,7 +67,7 @@ public class GeoLocationManager {
     public void getOneTimeGeoLocation(Continuation cont, Request req) {
         this.continuation = cont;
         this.baseRequest = req;
-        final Context app = BifrostApp.getBreadContext();
+        final Context app = WagerrApp.getBreadContext();
         if (app == null)
             return;
         locationManager = (LocationManager) app.getSystemService(Context.LOCATION_SERVICE);
@@ -95,7 +95,7 @@ public class GeoLocationManager {
     public void startGeoSocket(Session sess) {
         session = sess;
 
-        final Context app = BifrostApp.getBreadContext();
+        final Context app = WagerrApp.getBreadContext();
         if (app == null)
             return;
         final LocationManager locationManager = (LocationManager) app.getSystemService(Context.LOCATION_SERVICE);
@@ -116,7 +116,7 @@ public class GeoLocationManager {
     }
 
     public void stopGeoSocket() {
-        final Context app = BifrostApp.getBreadContext();
+        final Context app = WagerrApp.getBreadContext();
         if (app == null)
             return;
         final LocationManager locationManager = (LocationManager) app.getSystemService(Context.LOCATION_SERVICE);
@@ -213,7 +213,7 @@ public class GeoLocationManager {
                         } finally {
 
                             processing = false;
-                            Context app = BifrostApp.getBreadContext();
+                            Context app = WagerrApp.getBreadContext();
                             if (app == null || ActivityCompat.checkSelfPermission(app, Manifest.permission.ACCESS_FINE_LOCATION)
                                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(app,
                                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

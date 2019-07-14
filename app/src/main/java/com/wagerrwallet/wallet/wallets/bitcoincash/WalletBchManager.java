@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.BuildConfig;
 import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCoreAddress;
@@ -201,13 +201,13 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     @Override
     public void updateFee(Context app) {
         if (app == null) {
-            app = BifrostApp.getBreadContext();
+            app = WagerrApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "updateFee: FAILED, app is null");
                 return;
             }
         }
-        String jsonString = BRApiManager.urlGET(app, "https://" + BifrostApp.HOST + "/fee-per-kb?currency=" + getIso(app));
+        String jsonString = BRApiManager.urlGET(app, "https://" + WagerrApp.HOST + "/fee-per-kb?currency=" + getIso(app));
         if (jsonString == null || jsonString.isEmpty()) {
             Log.e(TAG, "updateFeePerKb: failed to update fee, response string: " + jsonString);
             return;
@@ -551,7 +551,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     @Override
     public void txPublished(final String error) {
         super.txPublished(error);
-        final Context app = BifrostApp.getBreadContext();
+        final Context app = WagerrApp.getBreadContext();
         BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
             @Override
             public void run() {
@@ -573,7 +573,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     @Override
     public void balanceChanged(long balance) {
         super.balanceChanged(balance);
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         setCashedBalance(app, balance);
         for (OnTxListModified list : txModifiedListeners)
             if (list != null) list.txListModified(null);
@@ -590,7 +590,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
             public void run() {
                 long blockHeight = getPeerManager().getLastBlockHeight();
 
-                final Context ctx = BifrostApp.getBreadContext();
+                final Context ctx = WagerrApp.getBreadContext();
                 if (ctx == null) return;
                 BRSharedPrefs.putLastBlockHeight(ctx, getIso(ctx), (int) blockHeight);
             }
@@ -603,7 +603,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     @Override
     public void saveBlocks(boolean replace, BRCoreMerkleBlock[] blocks) {
         super.saveBlocks(replace, blocks);
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         if (replace) MerkleBlockDataSource.getInstance(app).deleteAllBlocks(app, getIso(app));
         BlockEntity[] entities = new BlockEntity[blocks.length];
         for (int i = 0; i < entities.length; i++) {
@@ -616,7 +616,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     @Override
     public void savePeers(boolean replace, BRCorePeer[] peers) {
         super.savePeers(replace, peers);
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         if (replace) PeerDataSource.getInstance(app).deleteAllPeers(app, getIso(app));
         PeerEntity[] entities = new PeerEntity[peers.length];
         for (int i = 0; i < entities.length; i++) {
@@ -628,14 +628,14 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
 
     @Override
     public boolean networkIsReachable() {
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         return InternetManager.getInstance().isConnected(app);
     }
 
 
     @Override
     public BRCoreTransaction[] loadTransactions() {
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         List<BRTransactionEntity> txs = BtcBchTransactionDataStore.getInstance(app).getAllTransactions(app, getIso(app));
         if (txs == null || txs.size() == 0) return new BRCoreTransaction[0];
         BRCoreTransaction arr[] = new BRCoreTransaction[txs.size()];
@@ -648,7 +648,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
 
     @Override
     public BRCoreMerkleBlock[] loadBlocks() {
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         List<BRMerkleBlockEntity> blocks = MerkleBlockDataSource.getInstance(app).getAllMerkleBlocks(app, getIso(app));
         if (blocks == null || blocks.size() == 0) return new BRCoreMerkleBlock[0];
         BRCoreMerkleBlock arr[] = new BRCoreMerkleBlock[blocks.size()];
@@ -663,7 +663,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
 
     @Override
     public BRCorePeer[] loadPeers() {
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         List<BRPeerEntity> peers = PeerDataSource.getInstance(app).getAllPeers(app, getIso(app));
         if (peers == null || peers.size() == 0) return new BRCorePeer[0];
         BRCorePeer arr[] = new BRCorePeer[peers.size()];
@@ -678,7 +678,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     public void syncStarted() {
         super.syncStarted();
         Log.d(TAG, "syncStarted: ");
-        final Context app = BifrostApp.getBreadContext();
+        final Context app = WagerrApp.getBreadContext();
         if (Utils.isEmulatorOrDebug(app))
             BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
                 @Override
@@ -695,7 +695,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     public void syncStopped(final String error) {
         super.syncStopped(error);
         Log.d(TAG, "syncStopped: " + error);
-        final Context app = BifrostApp.getBreadContext();
+        final Context app = WagerrApp.getBreadContext();
         if (Utils.isNullOrEmpty(error)) {
             BRSharedPrefs.putAllowSpend(app, getIso(app), true);
             BRSharedPrefs.putBchPreforkSynced(app, true);
@@ -734,7 +734,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     @Override
     public void onTxAdded(BRCoreTransaction transaction) {
         super.onTxAdded(transaction);
-        final Context ctx = BifrostApp.getBreadContext();
+        final Context ctx = WagerrApp.getBreadContext();
         final WalletsMaster master = WalletsMaster.getInstance(ctx);
 
         TxMetaData metaData = KVStoreManager.getInstance().createMetadata(ctx, this, transaction);
@@ -755,7 +755,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
                         public void run() {
                             if (!BRToast.isToastShown()) {
                                 BRToast.showCustomToast(ctx, strToShow,
-                                        BifrostApp.DISPLAY_HEIGHT_PX / 2, Toast.LENGTH_LONG, R.drawable.toast_layout_black);
+                                        WagerrApp.DISPLAY_HEIGHT_PX / 2, Toast.LENGTH_LONG, R.drawable.toast_layout_black);
                                 AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
                                 if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                                     final MediaPlayer mp = MediaPlayer.create(ctx, R.raw.coinflip);
@@ -790,7 +790,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     public void onTxDeleted(final String hash, int notifyUser, int recommendRescan) {
         super.onTxDeleted(hash, notifyUser, recommendRescan);
         Log.e(TAG, "onTxDeleted: " + String.format("hash: %s, notifyUser: %d, recommendRescan: %d", hash, notifyUser, recommendRescan));
-        final Context ctx = BifrostApp.getBreadContext();
+        final Context ctx = WagerrApp.getBreadContext();
         if (ctx != null) {
             if (recommendRescan != 0)
                 BRSharedPrefs.putScanRecommended(ctx, getIso(ctx), true);
@@ -813,7 +813,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
     public void onTxUpdated(String hash, int blockHeight, int timeStamp) {
         super.onTxUpdated(hash, blockHeight, timeStamp);
         Log.d(TAG, "onTxUpdated: " + String.format("hash: %s, blockHeight: %d, timestamp: %d", hash, blockHeight, timeStamp));
-        Context ctx = BifrostApp.getBreadContext();
+        Context ctx = WagerrApp.getBreadContext();
         if (ctx != null) {
             TransactionStorageManager.updateTransaction(ctx, getIso(ctx), new BRTransactionEntity(null, blockHeight, timeStamp, hash, getIso(ctx)));
 

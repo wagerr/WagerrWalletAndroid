@@ -61,7 +61,6 @@ add_library( # The name of the library.
              src/main/jni/breadwallet-core/BRWallet.c
              src/main/jni/breadwallet-core/BRWallet.h
 
-
              # Core JNI files
              src/main/jni/breadwallet-core/Java/BRCoreJni.h
              src/main/jni/breadwallet-core/Java/BRCoreJni.c
@@ -107,8 +106,8 @@ add_library( # The name of the library.
              src/main/jni/breadwallet-core/BRBech32.h
 
              # X11 files
-             src/main/jni/breadwallet-core/hash9.c
-             src/main/jni/breadwallet-core/hash9.h
+             src/main/jni/breadwallet-core/quark.c
+             src/main/jni/breadwallet-core/quark.h
              src/main/jni/breadwallet-core/sha3/aes_helper.c
             src/main/jni/breadwallet-core/sha3/blake.c
             src/main/jni/breadwallet-core/sha3/bmw.c

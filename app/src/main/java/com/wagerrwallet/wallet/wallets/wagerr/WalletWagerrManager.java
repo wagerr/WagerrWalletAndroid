@@ -107,7 +107,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     private static String ISO = "WGR";
 
     private static final String mName = "WAGERR";
-    private static final long TIME_GENESIS = 1523854631;
+    private static final long TIME_GENESIS = 1518743781;
     public static final String BTC_SCHEME = "";
 
 

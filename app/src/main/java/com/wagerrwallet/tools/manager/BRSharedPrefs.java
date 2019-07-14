@@ -307,7 +307,7 @@ public class BRSharedPrefs {
 //        Log.d(TAG, "getCurrentWalletIso() Activity -> " + activity.getClass().getSimpleName());
         SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 //        Log.d(TAG, "Getting current wallet ISO -> " + prefs.getString("currentWalletIso", "BTC"));
-        return prefs.getString("currentWalletIso", "FROST");
+        return prefs.getString("currentWalletIso", "WGR");
     }
 
     public static void putCurrentWalletIso(Context activity, String iso) {

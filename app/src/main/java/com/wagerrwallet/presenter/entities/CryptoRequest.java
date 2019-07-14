@@ -37,7 +37,7 @@ import java.math.BigDecimal;
 
 public class CryptoRequest {
     public static final String TAG = CryptoRequest.class.getName();
-    public String iso = "FROST"; //make it default
+    public String iso = "WGR"; //make it default
     public String address;
     public String scheme;
     public String r;

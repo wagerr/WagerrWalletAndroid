@@ -4,7 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.activities.settings.TestActivity;
 import com.wagerrwallet.tools.util.BRCompressor;
 import com.wagerrwallet.tools.util.BRConstants;
@@ -65,7 +65,7 @@ public class PlatformTests {
     // host is the server(s) on which the API is hosted
 //    private static final String HOST = "api.breadwallet.com";
     // convenience getter for the API endpoint
-    private static final String BASE_URL = PROTO + "://" + BifrostApp.HOST;
+    private static final String BASE_URL = PROTO + "://" + WagerrApp.HOST;
     //feePerKb url
     private static final String FEE_PER_KB_URL = "/v1/fee-per-kb";
     //token

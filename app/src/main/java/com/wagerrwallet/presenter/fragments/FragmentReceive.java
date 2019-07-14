@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.BuildConfig;
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.customviews.BRButton;
@@ -288,7 +288,7 @@ public class FragmentReceive extends Fragment {
     }
 
     private void updateQr() {
-        final Context ctx = getContext() == null ? BifrostApp.getBreadContext() : (Activity) getContext();
+        final Context ctx = getContext() == null ? WagerrApp.getBreadContext() : (Activity) getContext();
         BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
             @Override
             public void run() {

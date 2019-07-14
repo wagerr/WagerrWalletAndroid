@@ -42,7 +42,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.Toast;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.util.BRActivity;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
@@ -895,7 +895,7 @@ public class CameraActivity extends BRActivity implements View.OnClickListener, 
                         public void run() {
                             try {
                                 Thread.sleep(1000);
-                                CameraPlugin.handleCameraImageTaken(BifrostApp.getBreadContext(), bytes);
+                                CameraPlugin.handleCameraImageTaken(WagerrApp.getBreadContext(), bytes);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }

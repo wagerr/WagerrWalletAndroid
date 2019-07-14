@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCoreAddress;
 import com.wagerrwallet.core.BRCoreKey;
@@ -101,7 +101,7 @@ public class ImportPrivKeyTask extends AsyncTask<String, String, String> {
             return null;
         }
 
-        if (!iso.equalsIgnoreCase("FROST") && !iso.equalsIgnoreCase("BTC") && !iso.equalsIgnoreCase("BCH")) {
+        if (!iso.equalsIgnoreCase("WGR") && !iso.equalsIgnoreCase("BTC") && !iso.equalsIgnoreCase("BCH")) {
             String err = "doInBackground: Can't happen, uknown iso: " + iso;
             BRReportsManager.reportBug(new NullPointerException(err));
             Log.e(TAG, err);
@@ -111,7 +111,7 @@ public class ImportPrivKeyTask extends AsyncTask<String, String, String> {
         String decoratedAddress = wm.decorateAddress(app, tmpAddress);
 
         //automatically uses testnet if x-testnet is true
-        String fullUrl = String.format("%s/ext/getutxos/%s", BifrostApp.HOST_UTXO, decoratedAddress);
+        String fullUrl = String.format("%s/ext/getutxos/%s", WagerrApp.HOST_UTXO, decoratedAddress);
 
         mTransaction = createSweepingTx(app, fullUrl);
         if (mTransaction == null) {

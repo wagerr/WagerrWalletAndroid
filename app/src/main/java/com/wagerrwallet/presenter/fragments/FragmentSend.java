@@ -345,7 +345,7 @@ public class FragmentSend extends Fragment {
                                             firstLine = getString(R.string.Sendbtc_UsedAddress_firstLine);
                                         } else if (walletIso.equalsIgnoreCase("BCH")) {
                                             firstLine = getString(R.string.Sendbch_UsedAddress_firstLine);
-                                        } else if (walletIso.equalsIgnoreCase("FROST")) {
+                                        } else if (walletIso.equalsIgnoreCase("WGR")) {
                                             firstLine = getString(R.string.Sendbbp_UsedAddress_firstLine);
                                         }
                                         BRDialog.showCustomDialog(getActivity(), firstLine, getString(R.string.Send_UsedAddress_secondLIne), "Ignore", "Cancel", new BRDialogView.BROnClickListener() {

@@ -9,7 +9,7 @@ import android.net.NetworkInfo;
 import android.security.keystore.UserNotAuthenticatedException;
 import android.util.Log;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCoreKey;
 import com.wagerrwallet.core.BRCoreMasterPubKey;
@@ -92,7 +92,7 @@ public class WalletsMaster {
         if (iso.equalsIgnoreCase("BCH"))
             return WalletBchManager.getInstance(app);
         */
-        if (iso.equalsIgnoreCase("FROST"))
+        if (iso.equalsIgnoreCase("WGR"))
             return WalletWagerrManager.getInstance(app);
         return null;
     }
@@ -270,14 +270,14 @@ public class WalletsMaster {
 
     public void initLastWallet(Context app) {
         if (app == null) {
-            app = BifrostApp.getBreadContext();
+            app = WagerrApp.getBreadContext();
             if (app == null) {
                 Log.e(TAG, "initLastWallet: FAILED, app is null");
                 return;
             }
         }
         BaseWalletManager wallet = getWalletByIso(app, BRSharedPrefs.getCurrentWalletIso(app));
-        if (wallet == null) wallet = getWalletByIso(app, "FROST");
+        if (wallet == null) wallet = getWalletByIso(app, "WGR");
         wallet.connectWallet(app);
     }
 

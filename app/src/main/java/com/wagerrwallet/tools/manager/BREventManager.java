@@ -5,7 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.tools.util.Utils;
 import com.platform.APIClient;
 
@@ -52,7 +52,7 @@ import okhttp3.Response;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-public class BREventManager implements BifrostApp.OnAppBackgrounded {
+public class BREventManager implements WagerrApp.OnAppBackgrounded {
     private static final String TAG = BREventManager.class.getName();
 
     private static BREventManager instance;
@@ -61,7 +61,7 @@ public class BREventManager implements BifrostApp.OnAppBackgrounded {
 
     private BREventManager() {
         sessionId = UUID.randomUUID().toString();
-        BifrostApp.addOnBackgroundedListener(this);
+        WagerrApp.addOnBackgroundedListener(this);
     }
 
     public static BREventManager getInstance() {
@@ -111,7 +111,7 @@ public class BREventManager implements BifrostApp.OnAppBackgrounded {
 //            Log.e(TAG, "saveEvents: insert json to array: " + obj);
             array.put(obj);
         }
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         if (app != null) {
             String fileName = app.getFilesDir().getAbsolutePath() + "/events/" + UUID.randomUUID().toString();
             writeEventsToDisk(fileName, array.toString());
@@ -122,7 +122,7 @@ public class BREventManager implements BifrostApp.OnAppBackgrounded {
 
     private void pushToServer() {
 //        Log.d(TAG, "pushToServer");
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         if (app != null) {
             List<JSONArray> arrs = getEventsFromDisk(app);
             int fails = 0;

@@ -6,7 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.activities.DisabledActivity;
 import com.wagerrwallet.presenter.activities.intro.IntroActivity;
 import com.wagerrwallet.presenter.activities.intro.RecoverActivity;
@@ -65,15 +65,15 @@ public class BRActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        BifrostApp.activityCounter.decrementAndGet();
-        BifrostApp.onStop(this);
+        WagerrApp.activityCounter.decrementAndGet();
+        WagerrApp.onStop(this);
     }
 
     @Override
     protected void onResume() {
         init(this);
         super.onResume();
-        BifrostApp.backgroundedTime = 0;
+        WagerrApp.backgroundedTime = 0;
 
     }
 
@@ -222,8 +222,8 @@ public class BRActivity extends Activity {
             if (AuthManager.getInstance().isWalletDisabled(app))
                 AuthManager.getInstance().setWalletDisabled(app);
 
-        BifrostApp.activityCounter.incrementAndGet();
-        BifrostApp.setBreadContext(app);
+        WagerrApp.activityCounter.incrementAndGet();
+        WagerrApp.setBreadContext(app);
 
         if (!HTTPServer.isStarted())
             BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
@@ -239,11 +239,11 @@ public class BRActivity extends Activity {
 
     private void lockIfNeeded(Activity app) {
         //lock wallet if 3 minutes passed
-        if (BifrostApp.backgroundedTime != 0
-                && ((System.currentTimeMillis() - BifrostApp.backgroundedTime) >= 180 * 1000)
+        if (WagerrApp.backgroundedTime != 0
+                && ((System.currentTimeMillis() - WagerrApp.backgroundedTime) >= 180 * 1000)
                 && !(app instanceof DisabledActivity)) {
             if (!BRKeyStore.getPinCode(app).isEmpty()) {
-                Log.e(TAG, "lockIfNeeded: " + BifrostApp.backgroundedTime);
+                Log.e(TAG, "lockIfNeeded: " + WagerrApp.backgroundedTime);
                 BRAnimator.startBreadActivity(app, true);
             }
         }

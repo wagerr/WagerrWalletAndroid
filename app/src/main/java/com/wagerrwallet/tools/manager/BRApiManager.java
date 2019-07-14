@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.activities.util.ActivityUTILS;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.tools.sqlite.CurrencyDataSource;
@@ -112,8 +112,8 @@ public class BRApiManager {
 
                 // add Coin
                 CurrencyEntity coin = new CurrencyEntity();
-                coin.name="Bifrost";
-                coin.code="FROST";
+                coin.name="WAGERR";
+                coin.code="WGR";
                 coin.rate= fetchRatesCoin( context, walletManager );
 
                 set.add(coin);
@@ -140,7 +140,7 @@ public class BRApiManager {
                         BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
                             @Override
                             public void run() {
-                                if (BifrostApp.isAppInBackground(context)) {
+                                if (WagerrApp.isAppInBackground(context)) {
                                     Log.e(TAG, "doInBackground: Stopping timer, no activity on.");
                                     stopTimerTask();
                                 }
@@ -177,7 +177,7 @@ public class BRApiManager {
     }
 
     public static JSONArray fetchRates(Activity app, BaseWalletManager walletManager) {
-        String url = "https://" + BifrostApp.HOST + "/rates?currency=" + walletManager.getIso(app);
+        String url = "https://" + WagerrApp.HOST + "/rates?currency=" + walletManager.getIso(app);
         String jsonString = urlGET(app, url);
         JSONArray jsonArray = null;
         if (jsonString == null) {
@@ -239,7 +239,7 @@ public class BRApiManager {
             for(int n = 0; n < arr1.length(); n++)
             {
                 JSONObject object = arr1.getJSONObject(n);
-                if ( object.getString("id").equals("FROST_BTC") )
+                if ( object.getString("id").equals("WGR_BTC") )
                 {
                     price1 = (1 / (float)object.getDouble("last"));
                     break;
@@ -264,7 +264,7 @@ public class BRApiManager {
             Log.e(TAG, "urlGET: network on main thread");
             throw new RuntimeException("network on main thread");
         }
-        Map<String, String> headers = BifrostApp.getBreadHeaders();
+        Map<String, String> headers = WagerrApp.getBreadHeaders();
 
         Request.Builder builder = new Request.Builder()
                 .url(myURL)

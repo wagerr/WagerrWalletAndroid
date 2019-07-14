@@ -236,7 +236,7 @@ public class SettingsActivity extends BRActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SettingsActivity.this, CurrencySettingsActivity.class);
-                BRSharedPrefs.putCurrentWalletIso(app, "FROST");//change the current wallet to the one they enter settings to
+                BRSharedPrefs.putCurrentWalletIso(app, "WGR");//change the current wallet to the one they enter settings to
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }

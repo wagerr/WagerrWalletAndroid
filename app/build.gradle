@@ -60,9 +60,9 @@ android {
             }
         }
         brdTestnet {
-            applicationId = "com.breadtestnet"
+            applicationId = "com.wagerrtestnet"
             dimension "mode"
-            resValue "string", "app_name", "BRD-testnet"
+            resValue "string", "app_name", "Wagerr-testnet"
             buildConfigField "boolean", "BITCOIN_TESTNET", "true"
             externalNativeBuild {
                 cmake {
@@ -125,11 +125,17 @@ task copyResDirectoryToClasses(type: Copy) {
     into "${buildDir}/intermediates/classes/test/debug/res"
 }
 
+tasks.whenTaskAdded { task ->
+    if (task.name == 'assembleWagerrDebug') {
+        task.dependsOn(copyResDirectoryToClasses)
+    }
+}
+/*
 //gradle.projectsEvaluated {
 afterEvaluate {
     project.tasks.findByName('assembleDebug').dependsOn(copyResDirectoryToClasses)
 }
-
+*/
 
 //def gitUpdateModules() {
 //    ['sh', '-c', 'git submodule foreach git pull origin master'].execute().text.trim()

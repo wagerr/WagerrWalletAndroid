@@ -3,7 +3,7 @@ package com.platform.middlewares;
 import android.content.Context;
 import android.util.Log;
 
-import com.wagerrwallet.BifrostApp;
+import com.wagerrwallet.WagerrApp;
 import com.platform.APIClient;
 import com.platform.interfaces.Middleware;
 
@@ -69,7 +69,7 @@ public class APIProxy implements Middleware {
             "connection"};
 
     public APIProxy() {
-        Context app = BifrostApp.getBreadContext();
+        Context app = WagerrApp.getBreadContext();
         if (app == null) {
             Log.e(TAG, "APIProxy: app is null!");
         }
