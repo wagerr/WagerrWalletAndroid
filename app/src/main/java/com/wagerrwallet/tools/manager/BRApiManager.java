@@ -220,7 +220,7 @@ public class BRApiManager {
      *          taken from last price
      */
     public static float fetchRatesCoin(Activity app, BaseWalletManager walletManager) {
-        String url1 = "https://api.crypto-bridge.org/api/v1/ticker/";
+        String url1 = "https://api.crex24.com/CryptoExchangeService/BotPublic/ReturnTicker?request=[NamePairs=BTC_WGR]";
         String jsonString1 = urlGET(app, url1);
 
         float price1=100000;
@@ -229,22 +229,15 @@ public class BRApiManager {
         if (jsonString1 == null) {
             jsonString1 = urlGET(app, url1);        // retry
             if (jsonString1 == null) {
-                Log.e(TAG, "fetchRates: cryptobridge failed, response is null");
+                Log.e(TAG, "fetchRates: crex24 failed, response is null");
                 return price1;
             }
         }
 
         try {
-            JSONArray arr1 = new JSONArray(jsonString1);
-            for(int n = 0; n < arr1.length(); n++)
-            {
-                JSONObject object = arr1.getJSONObject(n);
-                if ( object.getString("id").equals("WGR_BTC") )
-                {
-                    price1 = (1 / (float)object.getDouble("last"));
-                    break;
-                }
-            }
+            JSONObject object = new JSONObject(jsonString1);
+            JSONObject objectTicker = object.getJSONObject("Tickers");
+            price1 = (1 / (float)object.getDouble("Last"));
         } catch (JSONException ignored) {
         }
 
