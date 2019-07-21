@@ -181,7 +181,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             WalletsMaster.getInstance(app).updateFixedPeer(app, this);
 //        balanceListeners = new ArrayList<>();
 
-            uiConfig = new WalletUiConfiguration("#2972CC" , true, true, false);
+            uiConfig = new WalletUiConfiguration("#df001c" , true, true, false);
 
         } finally {
             isInitiatingWallet = false;
