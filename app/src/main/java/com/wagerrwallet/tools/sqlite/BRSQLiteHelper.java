@@ -90,6 +90,156 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
             TX_ISO + " text DEFAULT 'BTC' );";
 
     /**
+     * Betting Transaction tables
+     * betMappingTxTable
+     * betEventTxTable
+     * betResultTxTable
+     * betTransactionTable
+     * betUpdateOddsTxTable
+     */
+
+    // betMappingTxTable
+    public static final String BMTX_TABLE_NAME = "betMappingTxTable";
+    public static final String BMTX_COLUMN_ID = "_id";
+    public static final String BMTX_TYPE = "type";
+    public static final String BMTX_VERSION = "version";
+    public static final String BMTX_BLOCK_HEIGHT = "transactionBlockHeight";
+    public static final String BMTX_TIMESTAMP = "transactionTimeStamp";
+    public static final String BMTX_ISO = "transactionISO";
+    public static final String BMTX_NAMESPACEID = "namespaceId";
+    public static final String BMTX_MAPPINGID = "mappingId";
+    public static final String BMTX_STRING = "string";
+
+    private static final String BMTX_DATABASE_CREATE = "create table if not exists " + BMTX_TABLE_NAME + " (" +
+            BMTX_COLUMN_ID + " text, " +
+            BMTX_TYPE + " integer, " +
+            BMTX_VERSION + " integer, " +
+            BMTX_NAMESPACEID + " integer, " +
+            BMTX_MAPPINGID + " integer, " +
+            BMTX_STRING + " text, " +
+            BMTX_BLOCK_HEIGHT + " integer, " +
+            BMTX_TIMESTAMP + " integer, " +
+            BMTX_ISO + " text DEFAULT 'WGR' );";
+
+    //  betEventTxTable
+    public static final String BETX_TABLE_NAME = "betEventTxTable";
+    public static final String BETX_COLUMN_ID = "_id";
+    public static final String BETX_TYPE = "type";
+    public static final String BETX_VERSION = "version";
+    public static final String BETX_BLOCK_HEIGHT = "transactionBlockHeight";
+    public static final String BETX_TIMESTAMP = "transactionTimeStamp";
+    public static final String BETX_ISO = "transactionISO";
+    public static final String BETX_EVENTID = "eventId";
+    public static final String BETX_EVENT_TIMESTAMP = "eventTimestamp";
+    public static final String BETX_SPORT = "eventSport";
+    public static final String BETX_TOURNAMENT = "eventTournament";
+    public static final String BETX_ROUND = "eventRound";
+    public static final String BETX_HOME_TEAM = "homeTeam";
+    public static final String BETX_AWAY_TEAM = "awayTeam";
+    public static final String BETX_HOME_ODDS = "homeOdds";
+    public static final String BETX_AWAY_ODDS = "awayOdds";
+    public static final String BETX_DRAW_ODDS = "drawOdds";
+    public static final String BETX_ENTRY_PRICE = "entryPrice";
+    public static final String BETX_SPREAD_POINTS = "spreadPoints";
+    public static final String BETX_TOTAL_POINTS = "totalPoints";
+    public static final String BETX_OVER_ODDS = "overOdds";
+    public static final String BETX_UNDER_ODDS = "underOdds";
+
+    private static final String BETX_DATABASE_CREATE = "create table if not exists " + BETX_TABLE_NAME + " (" +
+            BETX_COLUMN_ID + " text, " +
+            BETX_TYPE + " integer, " +
+            BETX_VERSION + " integer, " +
+            BETX_EVENTID + " integer, " +
+            BETX_EVENT_TIMESTAMP + " integer, " +
+            BETX_SPORT + " integer, " +
+            BETX_TOURNAMENT + " integer, " +
+            BETX_ROUND + " integer, " +
+            BETX_HOME_TEAM + " integer, " +
+            BETX_AWAY_TEAM + " integer, " +
+            BETX_HOME_ODDS + " integer, " +
+            BETX_AWAY_ODDS + " integer, " +
+            BETX_DRAW_ODDS + " integer, " +
+            BETX_ENTRY_PRICE + " integer, " +
+            BETX_SPREAD_POINTS + " integer, " +
+            BETX_TOTAL_POINTS + " integer, " +
+            BETX_OVER_ODDS + " integer, " +
+            BETX_UNDER_ODDS + " integer, " +
+            BETX_BLOCK_HEIGHT + " integer, " +
+            BETX_TIMESTAMP + " integer, " +
+            BETX_ISO + " text DEFAULT 'WGR' );";
+
+    //  betResultTxTable
+    public static final String BRTX_TABLE_NAME = "betResultTxTable";
+    public static final String BRTX_COLUMN_ID = "_id";
+    public static final String BRTX_TYPE = "type";
+    public static final String BRTX_VERSION = "version";
+    public static final String BRTX_BLOCK_HEIGHT = "transactionBlockHeight";
+    public static final String BRTX_TIMESTAMP = "transactionTimeStamp";
+    public static final String BRTX_ISO = "transactionISO";
+    public static final String BRTX_EVENTID = "eventId";
+    public static final String BRTX_RESULTS_TYPE = "resultType";   // standard payout is 1    event refund is 02    moneyline refund is 03
+    public static final String BRTX_HOME_TEAM_SCORE = "homeTeamScore";
+    public static final String BRTX_AWAY_TEAM_SCORE = "awayTeamScore";
+
+    private static final String BRTX_DATABASE_CREATE = "create table if not exists " + BRTX_TABLE_NAME + " (" +
+            BRTX_COLUMN_ID + " text, " +
+            BRTX_TYPE + " integer, " +
+            BRTX_VERSION + " integer, " +
+            BRTX_EVENTID + " integer, " +
+            BRTX_RESULTS_TYPE + " integer, " +
+            BRTX_HOME_TEAM_SCORE + " integer, " +
+            BRTX_AWAY_TEAM_SCORE + " integer, " +
+            BRTX_BLOCK_HEIGHT + " integer, " +
+            BRTX_TIMESTAMP + " integer, " +
+            BRTX_ISO + " text DEFAULT 'WGR' );";
+
+    //  betUpdateOddsTxTable
+    public static final String BUTX_TABLE_NAME = "betUpdateOddsTxTable";
+    public static final String BUTX_COLUMN_ID = "_id";
+    public static final String BUTX_TYPE = "type";
+    public static final String BUTX_VERSION = "version";
+    public static final String BUTX_BLOCK_HEIGHT = "transactionBlockHeight";
+    public static final String BUTX_TIMESTAMP = "transactionTimeStamp";
+    public static final String BUTX_ISO = "transactionISO";
+    public static final String BUTX_EVENTID = "eventId";
+    public static final String BUTX_HOME_ODDS = "homeOdds";
+    public static final String BUTX_AWAY_ODDS = "awayOdds";
+    public static final String BUTX_DRAW_ODDS = "drawOdds";
+
+    private static final String BUTX_DATABASE_CREATE = "create table if not exists " + BUTX_TABLE_NAME + " (" +
+            BUTX_COLUMN_ID + " text, " +
+            BUTX_TYPE + " integer, " +
+            BUTX_VERSION + " integer, " +
+            BUTX_EVENTID + " integer, " +
+            BUTX_HOME_ODDS + " integer, " +
+            BUTX_AWAY_ODDS + " integer, " +
+            BUTX_DRAW_ODDS + " integer, " +
+            BUTX_BLOCK_HEIGHT + " integer, " +
+            BUTX_TIMESTAMP + " integer, " +
+            BUTX_ISO + " text DEFAULT 'WGR' );";
+
+    //  betTransactionTable
+    public static final String BTX_TABLE_NAME = "betTransactionTable";
+    public static final String BTX_COLUMN_ID = "_id";
+    public static final String BTX_TYPE = "type";
+    public static final String BTX_VERSION = "version";
+    public static final String BTX_BLOCK_HEIGHT = "transactionBlockHeight";
+    public static final String BTX_TIME_STAMP = "transactionTimeStamp";
+    public static final String BTX_ISO = "transactionISO";
+    public static final String BTX_EVENTID = "eventId";
+    public static final String BTX_OUTCOME   = "eventOutcome";
+    public static final String BTX_AMOUNT   = "betAmount";
+
+    private static final String BTX_DATABASE_CREATE = "create table if not exists " + BTX_TABLE_NAME + " (" +
+            BTX_COLUMN_ID + " text, " +
+            BTX_EVENTID + " integer, " +
+            BTX_OUTCOME + " integer, " +
+            BTX_AMOUNT + " integer, " +
+            BTX_BLOCK_HEIGHT + " integer, " +
+            BTX_TIME_STAMP + " integer, " +
+            BTX_ISO + " text DEFAULT 'BTC' );";
+
+    /**
      * Peer table
      */
 
@@ -139,6 +289,18 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
         database.execSQL(TX_DATABASE_CREATE);
         database.execSQL(PEER_DATABASE_CREATE);
         database.execSQL(CURRENCY_DATABASE_CREATE);
+
+        // betting DB
+        Log.e(TAG, "onCreate: " + BTX_DATABASE_CREATE);
+        Log.e(TAG, "onCreate: " + BETX_DATABASE_CREATE);
+        Log.e(TAG, "onCreate: " + BMTX_DATABASE_CREATE);
+        Log.e(TAG, "onCreate: " + BRTX_DATABASE_CREATE);
+        Log.e(TAG, "onCreate: " + BUTX_DATABASE_CREATE);
+        database.execSQL(BTX_DATABASE_CREATE);
+        database.execSQL(BETX_DATABASE_CREATE);
+        database.execSQL(BMTX_DATABASE_CREATE);
+        database.execSQL(BRTX_DATABASE_CREATE);
+        database.execSQL(BUTX_DATABASE_CREATE);
 
 //        printTableStructures(database, MB_TABLE_NAME);
 //        printTableStructures(database, TX_TABLE_NAME);
