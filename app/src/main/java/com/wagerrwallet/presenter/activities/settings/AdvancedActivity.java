@@ -85,7 +85,7 @@ public class AdvancedActivity extends BRActivity {
 
             TextView title = v.findViewById(R.id.item_title);
             if (position == 1)
-                title.setText("Bifrost Nodes");
+                title.setText("Wagerr Nodes");
             return v;
 
         }

@@ -29,7 +29,7 @@
   <!-- Error alert title -->
   <string name="Alert.error">Error</string>
   <!-- Keystore error -->
-  <string name="Alert.keystore.generic.android">There is a problem with your Android OS keystore, please contact support@Wagerrcoin.io</string>
+  <string name="Alert.keystore.generic.android">There is a problem with your Android OS keystore, please contact support@wagerr.com</string>
   <!-- KeyStore error, keys are invalidated -->
   <string name="Alert.keystore.invalidated.android">Your Wagerr encrypted data was recently invalidated because your Android lock screen was disabled.</string>
   <!-- Keystore error title -->
@@ -373,7 +373,7 @@
   <!-- Alert message title -->
   <string name="ReScan.alertTitle">Sync with Blockchain?</string>
   <!-- extimated time -->
-  <string name="ReScan.body1">3-5 minutes</string>
+  <string name="ReScan.body1">15-20 minutes</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body2">If a transaction shows as completed on the Wagerr network but not in your Wagerr.</string>
   <!-- Syncing explanation -->

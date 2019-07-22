@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <!-- App name -->
-  <string name="About.appName.android">Bifrost</string>
+  <string name="About.appName.android">Wagerr</string>
   <!-- About screen blog label -->
   <string name="About.blog">Blog</string>
   <!-- About screen footer -->
@@ -23,15 +23,15 @@
   <!-- Loading Wallet Message -->
   <string name="Account.loadingMessage">A Carregar Carteira</string>
   <!-- Default wallet name -->
-  <string name="AccountHeader.defaultWalletName">Minha Bifrost</string>
+  <string name="AccountHeader.defaultWalletName">Minha Wagerr</string>
   <!-- Third party keyboard warning -->
   <string name="Alert.customKeyboard.android">Ao que parece, está a utilizar um teclado de terceiros, o qual pode gravar aquilo que digita e furtar a sua Paper Key. Por favor, mude para o teclado predefinido do Android, a fim de ficar mais protegido.</string>
   <!-- Error alert title -->
   <string name="Alert.error">Erro</string>
   <!-- Keystore error -->
-  <string name="Alert.keystore.generic.android">Há um problema com a KeyStore do seu SO Android. Por favor, contacte support@bifrostcoin.io</string>
+  <string name="Alert.keystore.generic.android">Há um problema com a KeyStore do seu SO Android. Por favor, contacte support@wagerr.com</string>
   <!-- KeyStore error, keys are invalidated -->
-  <string name="Alert.keystore.invalidated.android">Os seus dados encriptados pelo Bifrost foram recentemente invalidados porque o seu ecrã de bloqueio do Android estava desativado.</string>
+  <string name="Alert.keystore.invalidated.android">Os seus dados encriptados pelo Wagerr foram recentemente invalidados porque o seu ecrã de bloqueio do Android estava desativado.</string>
   <!-- Keystore error title -->
   <string name="Alert.keystore.title.android">Erro na KeyStore do Android</string>
   <!-- No internet alert message -->
@@ -137,7 +137,7 @@
   <!-- Word label eg. Word #1, Word #2 -->
   <string name="ConfirmPaperPhrase.word">Palavra #%1$s</string>
   <!-- Bitcoin denomination picker label -->
-  <string name="DefaultCurrency.bitcoinLabel">Moeda de apresentação da Bifrost</string>
+  <string name="DefaultCurrency.bitcoinLabel">Moeda de apresentação da Wagerr</string>
   <!-- Exchange rate label -->
   <string name="DefaultCurrency.rateLabel">Taxa de Câmbio</string>
   <!-- Email unavailable alert title -->
@@ -145,7 +145,7 @@
   <!-- Email unavailable alert title -->
   <string name="ErrorMessages.emailUnavailableTitle">Email Indisponível</string>
   <!-- Message that gets shown when we've detected the user has encountered the looping lock-screen bug. (preserve [ ] characters) -->
-  <string name="ErrorMessages.loopingLockScreen.android">Devido a um erro existente na sua versão do Android, o Bifrost não pode ser autenticado. [Por favor, toque aqui, a fim de obter mais informações.]</string>
+  <string name="ErrorMessages.loopingLockScreen.android">Devido a um erro existente na sua versão do Android, o Wagerr não pode ser autenticado. [Por favor, toque aqui, a fim de obter mais informações.]</string>
   <!-- Messaging unavailable alert title -->
   <string name="ErrorMessages.messagingUnavailableMessage">Este dispositivo não está configurado para enviar mensagens.</string>
   <!-- Messaging unavailable alert title -->
@@ -187,13 +187,13 @@
   <!-- Caption for graphics -->
   <string name="Import.leftCaption">Carteira a ser importada</string>
   <!-- Import wallet intro screen message -->
-  <string name="Import.message">Importar uma carteira transfere todo o dinheiro da sua outra carteira para a carteira Bifrost usando uma única transação.</string>
+  <string name="Import.message">Importar uma carteira transfere todo o dinheiro da sua outra carteira para a carteira Wagerr usando uma única transação.</string>
   <!-- Enter password alert view title -->
   <string name="Import.password">Esta chave privada está protegida com uma palavra-passe.</string>
   <!-- password textfield placeholder -->
   <string name="Import.passwordPlaceholder">palavra-passe</string>
   <!-- Caption for graphics -->
-  <string name="Import.rightCaption">A Sua Carteira Bifrost</string>
+  <string name="Import.rightCaption">A Sua Carteira Wagerr</string>
   <!-- Scan Private key button label -->
   <string name="Import.scan">Digitalizar Chave Privada</string>
   <!-- Import wallet success alert title -->
@@ -215,7 +215,7 @@
   <!-- Jailbreak warning message -->
   <string name="JailbreakWarnings.messageWithBalance">SEGURANÇA DO DISPOSITIVO COMPROMETIDA\n Qualquer aplicação com \"jailbreak\" consegue aceder aos seus dados de porta-chaves e roubar as suas bitcoins! Apague esta carteira imediatamente e restaure-a num dispositivo seguro.</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithoutBalance">SEGURANÇA DO DISPOSITIVO COMPROMETIDA\n Qualquer aplicação com \"jailbreak\" consegue aceder aos seus dados de porta-chaves da Bifrost e roubar as suas bitcoins. Por favor, use a Bifrost somente num dispositivo não desbloqueado.</string>
+  <string name="JailbreakWarnings.messageWithoutBalance">SEGURANÇA DO DISPOSITIVO COMPROMETIDA\n Qualquer aplicação com \"jailbreak\" consegue aceder aos seus dados de porta-chaves da Wagerr e roubar as suas bitcoins. Por favor, use a Wagerr somente num dispositivo não desbloqueado.</string>
   <!-- Jailbreak warning title -->
   <string name="JailbreakWarnings.title">AVISO</string>
   <!-- Wipe wallet button -->
@@ -223,7 +223,7 @@
   <!-- Location services disabled error -->
   <string name="LocationPlugin.disabled">Os serviços de localização estão desativados.</string>
   <!-- No permissions for location services -->
-  <string name="LocationPlugin.notAuthorized">A Bifrost não tem permissão para aceder aos serviços de localização.</string>
+  <string name="LocationPlugin.notAuthorized">A Wagerr não tem permissão para aceder aos serviços de localização.</string>
   <!-- Wallet creation date prefix -->
   <string name="ManageWallet.creationDatePrefix">Criou a sua carteira em %1$s</string>
   <!-- Manage wallet description text -->
@@ -265,7 +265,7 @@
   <!-- Node status label -->
   <string name="NodeSelector.statusLabel">Estado da ligação do nó</string>
   <!-- Node Selector view title -->
-  <string name="NodeSelector.title">Nós de Bifrost</string>
+  <string name="NodeSelector.title">Nós de Wagerr</string>
   <!-- Bad Payment request alert title -->
   <string name="PaymentProtocol.Errors.badPaymentRequest">Pedido de Pagamento Inválido</string>
   <!-- Error opening payment protocol file message -->
@@ -277,9 +277,9 @@
   <!-- Payment too small alert title -->
   <string name="PaymentProtocol.Errors.smallOutputError">Não foi possível fazer o pagamento</string>
   <!-- Amount too small error message -->
-  <string name="PaymentProtocol.Errors.smallPayment">Os pagamentos em Bifrost não podem ser inferiores a %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallPayment">Os pagamentos em Wagerr não podem ser inferiores a %1$s.</string>
   <!-- Output too small error message. -->
-  <string name="PaymentProtocol.Errors.smallTransaction">As saídas de transações em Bifrost não podem ser inferiores a %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallTransaction">As saídas de transações em Wagerr não podem ser inferiores a %1$s.</string>
   <!-- Unsupported signature type payment protocol error message -->
   <string name="PaymentProtocol.Errors.unsupportedSignatureType">tipo de assinatura não suportado</string>
   <!-- Untrusted certificate payment protocol error message -->
@@ -301,7 +301,7 @@
   <!-- Transaction rejected prompt title -->
   <string name="Prompts.RecommendRescan.title">Transação Rejeitada</string>
   <!-- Share data prompt body -->
-  <string name="Prompts.ShareData.body">Ajude a melhorar a Bifrost, partilhando connosco os seus dados anónimos</string>
+  <string name="Prompts.ShareData.body">Ajude a melhorar a Wagerr, partilhando connosco os seus dados anónimos</string>
   <!-- Share data prompt title -->
   <string name="Prompts.ShareData.title">Partilhar dados anónimos</string>
   <!-- Enable touch ID prompt body -->
@@ -315,11 +315,11 @@
   <!-- Button on fingerprint prompt so the user can enter their PIN instead -->
   <string name="Prompts.TouchId.usePin.android">PIN</string>
   <!-- Upgrade PIN prompt body. -->
-  <string name="Prompts.UpgradePin.body">A Bifrost foi atualizada para usar um PIN de 6-dígitos. Toque aqui para atualizar.</string>
+  <string name="Prompts.UpgradePin.body">A Wagerr foi atualizada para usar um PIN de 6-dígitos. Toque aqui para atualizar.</string>
   <!-- Upgrade PIN prompt title. -->
   <string name="Prompts.UpgradePin.title">Atualizar PIN</string>
   <!-- Notifications will be added later but users can set their preferences now, which is why we specify "in the future". -->
-  <string name="PushNotifications.body">Ative as notificações para receber mensagens especiais da Bifrost no futuro.</string>
+  <string name="PushNotifications.body">Ative as notificações para receber mensagens especiais da Wagerr no futuro.</string>
   <!-- Push notifications toggle switch label -->
   <string name="PushNotifications.label">Notificações Push</string>
   <!-- Push notifications are off label -->
@@ -349,7 +349,7 @@
   <!-- Enter paper key instruction -->
   <string name="RecoverWallet.instruction">Introduzir Chave de Papel</string>
   <!-- Recover wallet intro -->
-  <string name="RecoverWallet.intro">Recupere a sua Bifrost com a sua chave de papel.</string>
+  <string name="RecoverWallet.intro">Recupere a sua Wagerr com a sua chave de papel.</string>
   <!-- Invalid paper key message -->
   <string name="RecoverWallet.invalid">A chave de papel que introduziu é inválida. Por favor verifique cada palavra e tente novamente.</string>
   <!-- Previous button accessibility label -->
@@ -375,9 +375,9 @@
   <!-- Alert message title -->
   <string name="ReScan.alertTitle">Sincronizar com a Blockchain?</string>
   <!-- extimated time -->
-  <string name="ReScan.body1">3-5 minutos</string>
+  <string name="ReScan.body1">15-20 minutos</string>
   <!-- Syncing explanation -->
-  <string name="ReScan.body2">Se uma transação aparece como concluída na sua rede Bifrost mas não na sua Bifrost.</string>
+  <string name="ReScan.body2">Se uma transação aparece como concluída na sua rede Wagerr mas não na sua Wagerr.</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body3">Recebe repetidamente uma mensagem de erro dizendo que a sua transação foi rejeitada.</string>
   <!-- Start Sync button label -->
@@ -403,17 +403,17 @@
   <!-- Security Center Info -->
   <string name="SecurityCenter.info">Ativar todos os recursos de segurança para máxima proteção.</string>
   <!-- Paper Key button description -->
-  <string name="SecurityCenter.paperKeyDescription">A única forma de aceder às suas Bifrost se perder ou atualizar o seu telefone.</string>
+  <string name="SecurityCenter.paperKeyDescription">A única forma de aceder às suas Wagerr se perder ou atualizar o seu telefone.</string>
   <!-- Paper Key button title -->
   <string name="SecurityCenter.paperKeyTitle">Chave de Papel</string>
   <!-- PIN button description -->
-  <string name="SecurityCenter.pinDescription">Protege a sua Bifrost de utilizadores não autorizados.</string>
+  <string name="SecurityCenter.pinDescription">Protege a sua Wagerr de utilizadores não autorizados.</string>
   <!-- PIN button title -->
   <string name="SecurityCenter.pinTitle">PIN de 6-Dígitos</string>
   <!-- Security Center Title -->
   <string name="SecurityCenter.title">Centro de Segurança</string>
   <!-- Touch ID button description -->
-  <string name="SecurityCenter.touchIdDescription">Desbloqueie convenientemente a sua Bifrost e envie dinheiro até um limite definido</string>
+  <string name="SecurityCenter.touchIdDescription">Desbloqueie convenientemente a sua Wagerr e envie dinheiro até um limite definido</string>
   <!-- Touch ID button title -->
   <string name="SecurityCenter.touchIdTitle">Touch ID</string>
   <!-- Security center fingerprint authentication button -->
@@ -423,13 +423,13 @@
   <!-- Balance: $4.00 -->
   <string name="Send.balance">Saldo: %1$s</string>
   <!-- Instructions how to allow the camera access for the app -->
-  <string name="Send.cameraUnavailabeMessage.android">Permita o acesso à câmara em \"Definições\" &gt; \"Aplicações\" &gt; \"Bifrost\" &gt; \"Permissões\"</string>
+  <string name="Send.cameraUnavailabeMessage.android">Permita o acesso à câmara em \"Definições\" &gt; \"Aplicações\" &gt; \"Wagerr\" &gt; \"Permissões\"</string>
   <!-- Permission required to access camera -->
-  <string name="Send.cameraUnavailabeTitle.android">O Bifrost não tem autorização para aceder à câmara</string>
+  <string name="Send.cameraUnavailabeTitle.android">O Wagerr não tem autorização para aceder à câmara</string>
   <!-- Camera not allowed message -->
   <string name="Send.cameraunavailableMessage">Vá às Definições para permitir acesso à câmara.</string>
   <!-- Camera not allowed alert title -->
-  <string name="Send.cameraUnavailableTitle">A Bifrost não tem autorização para aceder à câmara</string>
+  <string name="Send.cameraUnavailableTitle">A Wagerr não tem autorização para aceder à câmara</string>
   <!-- Warning when sending to self. -->
   <string name="Send.containsAddress">O destino é o seu próprio endereço. Não pode enviar a si mesmo.</string>
   <!-- Could not create transaction alert title -->
@@ -443,9 +443,9 @@
   <!-- Payee identity not certified alert title. -->
   <string name="Send.identityNotCertified">A identidade do beneficiário não está certificada.</string>
   <!-- Invalid address alert message -->
-  <string name="Send.invalidAddressMessage">O endereço de destino não é um endereço de Bifrost válido.</string>
+  <string name="Send.invalidAddressMessage">O endereço de destino não é um endereço de Wagerr válido.</string>
   <!-- Invalid address on pasteboard message -->
-  <string name="Send.invalidAddressOnPasteboard">A área de transferência não possui nenhum endereço de Bifrost válido.</string>
+  <string name="Send.invalidAddressOnPasteboard">A área de transferência não possui nenhum endereço de Wagerr válido.</string>
   <!-- Invalid address alert title -->
   <string name="Send.invalidAddressTitle">Endereço Inválido</string>
   <!-- Is rescanning error message -->
@@ -485,7 +485,7 @@
   <!-- Join Early access label -->
   <string name="Settings.earlyAccess">Registe-se no Acesso Antecipado</string>
   <!-- Are you enjoying bread alert message body -->
-  <string name="Settings.enjoying">Está a gostar da Bifrost?</string>
+  <string name="Settings.enjoying">Está a gostar da Wagerr?</string>
   <!-- Import wallet label -->
   <string name="Settings.importTitle">Importar Carteira</string>
   <!-- Manage settings section header -->
@@ -509,7 +509,7 @@
   <!-- Start or recover another wallet menu label. -->
   <string name="Settings.wipe">Iniciar/recuperar outra carteira</string>
   <!-- Share data view body -->
-  <string name="ShareData.body">Ajude a melhorar a Bifrost partilhando os seus dados anónimos connosco. Isto não inclui quaisquer informações financeiras. Respeitamos a sua privacidade financeira.</string>
+  <string name="ShareData.body">Ajude a melhorar a Wagerr partilhando os seus dados anónimos connosco. Isto não inclui quaisquer informações financeiras. Respeitamos a sua privacidade financeira.</string>
   <!-- Share data header -->
   <string name="ShareData.header">Partilhar Dados?</string>
   <!-- Share data switch label. -->
@@ -517,13 +517,13 @@
   <!-- button label -->
   <string name="StartPaperPhrase.againButtonTitle">Escrever Novamente Chave de Papel</string>
   <!-- Paper key explanation text. -->
-  <string name="StartPaperPhrase.body">A chave de papel é a única forma de restaurar a sua Bifrost se o seu telefone for perdido, roubado, partido ou atualizado.\n\nVamos mostrar-lhe uma lista de palavras para escrever numa folha de papel e manter em segurança.</string>
+  <string name="StartPaperPhrase.body">A chave de papel é a única forma de restaurar a sua Wagerr se o seu telefone for perdido, roubado, partido ou atualizado.\n\nVamos mostrar-lhe uma lista de palavras para escrever numa folha de papel e manter em segurança.</string>
   <!-- button label -->
   <string name="StartPaperPhrase.buttonTitle">Escrever Chave de Papel</string>
   <!-- Argument is date -->
   <string name="StartPaperPhrase.date">A última vez que escreveu a sua chave de papel foi em %1$s</string>
   <!-- Start view message -->
-  <string name="StartViewController.message">A forma mais protegida e segura de utilizar a Bifrost.</string>
+  <string name="StartViewController.message">A forma mais protegida e segura de utilizar a Wagerr.</string>
   <!-- Syncing view connectiong state header text -->
   <string name="SyncingView.connecting">Conectando</string>
   <!-- Syncing view header text -->
@@ -549,14 +549,14 @@
   <!-- Fingerprint Is Not Setup -->
   <string name="TouchIdSettings.disabledWarning.title.android">Autenticação por Impressão Digital não Ativada</string>
   <!-- Touch Id screen label -->
-  <string name="TouchIdSettings.label">Utilize a impressão digital para desbloquear a sua Bifrost e enviar dinheiro até um limite definido.</string>
+  <string name="TouchIdSettings.label">Utilize a impressão digital para desbloquear a sua Wagerr e enviar dinheiro até um limite definido.</string>
   <!-- Link Text (see TouchIdSettings.customizeText) -->
   <string name="TouchIdSettings.linkText">Ecrã de limite dos gastos do Touch ID</string>
   <!-- Spending Limit: b100,000 ($100) -->
   <string name="TouchIdSettings.spendingLimit">Limite de Gastos: %1$s (%2$s)</string>
   <!-- Touch id switch label. -->
-  <string name="TouchIdSettings.switchLabel">Ativar Touch ID para a Bifrost</string>
-  <!-- Enable fingerprint for this wallet called Bifrost -->
+  <string name="TouchIdSettings.switchLabel">Ativar Touch ID para a Wagerr</string>
+  <!-- Enable fingerprint for this wallet called Wagerr -->
   <string name="TouchIdSettings.switchLabel.android">Ativar a Autenticação por Impressão Digital</string>
   <!-- Touch ID settings view title -->
   <string name="TouchIdSettings.title">Touch ID</string>
@@ -633,7 +633,7 @@
   <!-- "Sent [$5] to [address]" => This is the "to [address]" part. -->
   <string name="TransactionDetails.to">para %1$s</string>
   <!-- Transaction ID header -->
-  <string name="TransactionDetails.txHashHeader">ID da Transação de Bifrost</string>
+  <string name="TransactionDetails.txHashHeader">ID da Transação de Wagerr</string>
   <!-- (this transaction was) Received at this address: -->
   <string name="TransactionDirection.address">Recebida neste endereço</string>
   <!-- (this transaction was) Sent to this address: -->
@@ -651,7 +651,7 @@
   <!-- Instruction to touch the sensor for fingerprint authentication -->
   <string name="UnlockScreen.touchIdInstructions.android">Sensor de Toque</string>
   <!-- TouchID prompt text -->
-  <string name="UnlockScreen.touchIdPrompt">Desbloqueie a sua Bifrost.</string>
+  <string name="UnlockScreen.touchIdPrompt">Desbloqueie a sua Wagerr.</string>
   <!-- Device authentication body -->
   <string name="UnlockScreen.touchIdPrompt.android">Desbloqueie o seu dispositivo Android para continuar.</string>
   <!-- Unlock with TouchID accessibility label -->
@@ -661,9 +661,9 @@
   <!-- Wallet unlocked message -->
   <string name="UnlockScreen.unlocked">Carteira Desbloqueada</string>
   <!-- Update PIN caption text -->
-  <string name="UpdatePin.caption">Lembre-se deste PIN. Se o esquecer, não será capaz de aceder às suas Bifrost.</string>
+  <string name="UpdatePin.caption">Lembre-se deste PIN. Se o esquecer, não será capaz de aceder às suas Wagerr.</string>
   <!-- PIN creation info. -->
-  <string name="UpdatePin.createInstruction">O seu PIN será usado para desbloquear a sua Bifrost e para enviar dinheiro.</string>
+  <string name="UpdatePin.createInstruction">O seu PIN será usado para desbloquear a sua Wagerr e para enviar dinheiro.</string>
   <!-- Update PIN title -->
   <string name="UpdatePin.createTitle">Definir PIN</string>
   <!-- Update PIN title -->
@@ -697,7 +697,7 @@
   <!-- Authorize transaction with touch id message -->
   <string name="VerifyPin.touchIdMessage">Autorizar esta transação</string>
   <!-- 'No wallet' warning for watch app -->
-  <string name="Watch.noWalletWarning">Abra a aplicação Bifrost para iPhone para configurar a sua carteira.</string>
+  <string name="Watch.noWalletWarning">Abra a aplicação Wagerr para iPhone para configurar a sua carteira.</string>
   <!-- Dismiss button label -->
   <string name="Webview.dismiss">Ignorar</string>
   <!-- Webview loading error message -->
@@ -705,9 +705,9 @@
   <!-- Updating webview message -->
   <string name="Webview.updating">A Atualizar...</string>
   <!-- Welcome screen text. (?) will be replaced with the help icon users should look for. -->
-  <string name="Welcome.body">As Breadwallets mudaram de nome para Bifrost, com um visual completamente novo e algumas características novas. \n\nSe precisar de ajuda, procure o (?) no canto superior direito da maioria das telas.</string>
+  <string name="Welcome.body">As Breadwallets mudaram de nome para Wagerr, com um visual completamente novo e algumas características novas. \n\nSe precisar de ajuda, procure o (?) no canto superior direito da maioria das telas.</string>
   <!-- Top title of welcome screen -->
-  <string name="Welcome.title">Bem-vindo ao Bifrost!</string>
+  <string name="Welcome.title">Bem-vindo ao Wagerr!</string>
   <!-- Wipe wallet alert message -->
   <string name="WipeWallet.alertMessage">Tem a certeza de que quer eliminar esta carteira?</string>
   <!-- Wipe wallet alert title -->
@@ -719,7 +719,7 @@
   <!-- Enter phrase to wipe wallet instruction. -->
   <string name="WipeWallet.instruction">Introduza a frase de recuperação desta carteira, a fim de limpar a mesma e iniciar ou recuperar outra. O seu saldo atual permanece nesta frase.</string>
   <!-- Start wipe wallet view message -->
-  <string name="WipeWallet.startMessage">Começar ou recuperar outra carteira permite-lhe entrar e administrar uma carteira diferente da Bifrost neste dispositivo.</string>
+  <string name="WipeWallet.startMessage">Começar ou recuperar outra carteira permite-lhe entrar e administrar uma carteira diferente da Wagerr neste dispositivo.</string>
   <!-- Start wipe wallet view warning -->
   <string name="WipeWallet.startWarning">Não poderá mais aceder à sua Breadwallet a partir deste dispositivo. O saldo permanecerá na frase.</string>
   <!-- Wipe wallet navigation item title. -->
