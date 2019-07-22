@@ -236,8 +236,8 @@ public class BRApiManager {
 
         try {
             JSONObject object = new JSONObject(jsonString1);
-            JSONObject objectTicker = object.getJSONObject("Tickers");
-            price1 = (1 / (float)object.getDouble("Last"));
+            JSONArray objectTicker = object.getJSONArray("Tickers");
+            price1 = (1 / (float)((JSONObject)objectTicker.get(0)).getDouble("Last"));
         } catch (JSONException ignored) {
         }
 
