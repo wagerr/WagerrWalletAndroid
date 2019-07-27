@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <!-- App name -->
-  <string name="About.appName.android">Bifrost</string>
+  <string name="About.appName.android">Wagerr</string>
   <!-- About screen blog label -->
   <string name="About.blog">블로그</string>
   <!-- About screen footer -->
@@ -23,13 +23,13 @@
   <!-- Loading Wallet Message -->
   <string name="Account.loadingMessage">지갑 로딩</string>
   <!-- Default wallet name -->
-  <string name="AccountHeader.defaultWalletName">나의 Bifrost</string>
+  <string name="AccountHeader.defaultWalletName">나의 Wagerr</string>
   <!-- Third party keyboard warning -->
   <string name="Alert.customKeyboard.android">제3자가 제공한 키보드를 사용하고 계신 것 같습니다, 귀하의 입력을 기록하고 귀하의 페이퍼 키가 도난 당할 수 있습니다. 추가적인 보호를 위해 기본 안드로이드 키보드로 전환해 주세요.</string>
   <!-- Error alert title -->
   <string name="Alert.error">오류</string>
   <!-- Keystore error -->
-  <string name="Alert.keystore.generic.android">귀하의 안드로이드 OS 키스토어에 문제가 있습니다, support@bifrostcoin.io로 연락해 주세요</string>
+  <string name="Alert.keystore.generic.android">귀하의 안드로이드 OS 키스토어에 문제가 있습니다, support@wagerr.com로 연락해 주세요</string>
   <!-- KeyStore error, keys are invalidated -->
   <string name="Alert.keystore.invalidated.android">귀하의 안드로이드 잠금 화면이 꺼져서 귀하의 암호화 된 데이터가 최근 무효화 되었습니다.</string>
   <!-- Keystore error title -->
@@ -137,7 +137,7 @@
   <!-- Word label eg. Word #1, Word #2 -->
   <string name="ConfirmPaperPhrase.word">단어 #%1$s</string>
   <!-- Bitcoin denomination picker label -->
-  <string name="DefaultCurrency.bitcoinLabel">Bifrost Display Unit</string>
+  <string name="DefaultCurrency.bitcoinLabel">Wagerr Display Unit</string>
   <!-- Exchange rate label -->
   <string name="DefaultCurrency.rateLabel">환율</string>
   <!-- Email unavailable alert title -->
@@ -187,13 +187,13 @@
   <!-- Caption for graphics -->
   <string name="Import.leftCaption">불러오기 할 지갑</string>
   <!-- Import wallet intro screen message -->
-  <string name="Import.message">지갑 불러오기는 단일 거래를 사용하여 귀하의 다른 지갑으로부터 귀하의 Bifrost 지갑으로 모든 돈을 송금합니다.</string>
+  <string name="Import.message">지갑 불러오기는 단일 거래를 사용하여 귀하의 다른 지갑으로부터 귀하의 Wagerr 지갑으로 모든 돈을 송금합니다.</string>
   <!-- Enter password alert view title -->
   <string name="Import.password">이 개인 열쇠는 비밀번호로 보호됩니다.</string>
   <!-- password textfield placeholder -->
   <string name="Import.passwordPlaceholder">비밀번호</string>
   <!-- Caption for graphics -->
-  <string name="Import.rightCaption">귀하의 Bifrost 지갑</string>
+  <string name="Import.rightCaption">귀하의 Wagerr 지갑</string>
   <!-- Scan Private key button label -->
   <string name="Import.scan">개인 열쇠 스캔</string>
   <!-- Import wallet success alert title -->
@@ -375,7 +375,7 @@
   <!-- Alert message title -->
   <string name="ReScan.alertTitle">블록체인과 동기화하겠습니까?</string>
   <!-- extimated time -->
-  <string name="ReScan.body1">3-5분</string>
+  <string name="ReScan.body1">15-20분</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body2">거래가 비트코인 네트워크에는 완료된 것으로 표시되지만, 브레드에는 표시되지 않는 경우.</string>
   <!-- Syncing explanation -->
@@ -423,7 +423,7 @@
   <!-- Balance: $4.00 -->
   <string name="Send.balance">잔액: %1$s</string>
   <!-- Instructions how to allow the camera access for the app -->
-  <string name="Send.cameraUnavailabeMessage.android">\"설정\" &gt; \"앱\" &gt; \"Bifrost\" &gt; \"허용\"에서 카메라 접속을 허용해 주세요</string>
+  <string name="Send.cameraUnavailabeMessage.android">\"설정\" &gt; \"앱\" &gt; \"Wagerr\" &gt; \"허용\"에서 카메라 접속을 허용해 주세요</string>
   <!-- Permission required to access camera -->
   <string name="Send.cameraUnavailabeTitle.android">BRD의 카메라 접속이 허용되지 않았습니다</string>
   <!-- Camera not allowed message -->
@@ -556,7 +556,7 @@
   <string name="TouchIdSettings.spendingLimit">지불 한도: %1$s (%2$s)</string>
   <!-- Touch id switch label. -->
   <string name="TouchIdSettings.switchLabel">브레드에서</string>
-  <!-- Enable fingerprint for this wallet called Bifrost -->
+  <!-- Enable fingerprint for this wallet called Wagerr -->
   <string name="TouchIdSettings.switchLabel.android">지문 본인확인 켜기</string>
   <!-- Touch ID settings view title -->
   <string name="TouchIdSettings.title">터치 ID</string>
@@ -633,7 +633,7 @@
   <!-- "Sent [$5] to [address]" => This is the "to [address]" part. -->
   <string name="TransactionDetails.to">%1$s에게</string>
   <!-- Transaction ID header -->
-  <string name="TransactionDetails.txHashHeader">Bifrost Transaction ID</string>
+  <string name="TransactionDetails.txHashHeader">Wagerr Transaction ID</string>
   <!-- (this transaction was) Received at this address: -->
   <string name="TransactionDirection.address">이 주소에서 받음</string>
   <!-- (this transaction was) Sent to this address: -->
@@ -697,7 +697,7 @@
   <!-- Authorize transaction with touch id message -->
   <string name="VerifyPin.touchIdMessage">이 거래 승인</string>
   <!-- 'No wallet' warning for watch app -->
-  <string name="Watch.noWalletWarning">귀하의 월렛을 설정하려면 Bifrost 앱을 열어 주세요.</string>
+  <string name="Watch.noWalletWarning">귀하의 월렛을 설정하려면 Wagerr 앱을 열어 주세요.</string>
   <!-- Dismiss button label -->
   <string name="Webview.dismiss">무시</string>
   <!-- Webview loading error message -->
@@ -719,9 +719,9 @@
   <!-- Enter phrase to wipe wallet instruction. -->
   <string name="WipeWallet.instruction">월렛을 초기화하고 다른 월렛을 시작하거나 복원하려면 이 월렛의 초기화 문구를 입력해 주세요. 현재 잔액은 이 문구에 그대로 보관됩니다.</string>
   <!-- Start wipe wallet view message -->
-  <string name="WipeWallet.startMessage">다른 지갑을 만들거나 복구하면 이 장치에서 다른 Bifrost 지갑을 이용하고 관리할 수 있습니다.</string>
+  <string name="WipeWallet.startMessage">다른 지갑을 만들거나 복구하면 이 장치에서 다른 Wagerr 지갑을 이용하고 관리할 수 있습니다.</string>
   <!-- Start wipe wallet view warning -->
-  <string name="WipeWallet.startWarning">이장치에서 현재 Bifrost 지갑을 더는 이용할 수 없게 됩니다. 잔고는 남아 있게 됩니다.</string>
+  <string name="WipeWallet.startWarning">이장치에서 현재 Wagerr 지갑을 더는 이용할 수 없게 됩니다. 잔고는 남아 있게 됩니다.</string>
   <!-- Wipe wallet navigation item title. -->
   <string name="WipeWallet.title">다른 월렛을 시작 또는 복원</string>
   <!-- Wipe wallet button title -->

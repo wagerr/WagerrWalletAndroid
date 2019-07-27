@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <!-- App name -->
-  <string name="About.appName.android">Bifrost</string>
+  <string name="About.appName.android">Wagerr</string>
   <!-- About screen blog label -->
   <string name="About.blog">Blog</string>
   <!-- About screen footer -->
@@ -23,15 +23,15 @@
   <!-- Loading Wallet Message -->
   <string name="Account.loadingMessage">Indlæser pung</string>
   <!-- Default wallet name -->
-  <string name="AccountHeader.defaultWalletName">Mit Bifrost</string>
+  <string name="AccountHeader.defaultWalletName">Mit Wagerr</string>
   <!-- Third party keyboard warning -->
   <string name="Alert.customKeyboard.android">Det ser ud til at du bruger et tastatur fra en tredjepart, som kan optage det du skriver og stjæle din Paper Key. Skift til standard Android-tastaturet for ekstra beskyttelse.</string>
   <!-- Error alert title -->
   <string name="Alert.error">Fejl</string>
   <!-- Keystore error -->
-  <string name="Alert.keystore.generic.android">Der er et problem med din Android OS keystore, kontakt venligst support@bifrostcoin.io</string>
+  <string name="Alert.keystore.generic.android">Der er et problem med din Android OS keystore, kontakt venligst support@wagerr.com</string>
   <!-- KeyStore error, keys are invalidated -->
-  <string name="Alert.keystore.invalidated.android">Dine Bifrost-krypterede data blev for nyligt ugyldiggjort, eftersom din Android skærmlås blev deaktiveret.</string>
+  <string name="Alert.keystore.invalidated.android">Dine Wagerr-krypterede data blev for nyligt ugyldiggjort, eftersom din Android skærmlås blev deaktiveret.</string>
   <!-- Keystore error title -->
   <string name="Alert.keystore.title.android">Android KeyStore fejl</string>
   <!-- No internet alert message -->
@@ -137,7 +137,7 @@
   <!-- Word label eg. Word #1, Word #2 -->
   <string name="ConfirmPaperPhrase.word">Ord #%1$s</string>
   <!-- Bitcoin denomination picker label -->
-  <string name="DefaultCurrency.bitcoinLabel">Bifrost visningsenhed</string>
+  <string name="DefaultCurrency.bitcoinLabel">Wagerr visningsenhed</string>
   <!-- Exchange rate label -->
   <string name="DefaultCurrency.rateLabel">Valutakurs</string>
   <!-- Email unavailable alert title -->
@@ -145,7 +145,7 @@
   <!-- Email unavailable alert title -->
   <string name="ErrorMessages.emailUnavailableTitle">E-mail utilgængelig</string>
   <!-- Message that gets shown when we've detected the user has encountered the looping lock-screen bug. (preserve [ ] characters) -->
-  <string name="ErrorMessages.loopingLockScreen.android">Bifrost kan ikke godkendes grundet en fejl i din version af Android. [Tryk her for flere oplysninger.]</string>
+  <string name="ErrorMessages.loopingLockScreen.android">Wagerr kan ikke godkendes grundet en fejl i din version af Android. [Tryk her for flere oplysninger.]</string>
   <!-- Messaging unavailable alert title -->
   <string name="ErrorMessages.messagingUnavailableMessage">Denne enhed er ikke konfigureret til at sende beskeder.</string>
   <!-- Messaging unavailable alert title -->
@@ -187,13 +187,13 @@
   <!-- Caption for graphics -->
   <string name="Import.leftCaption">Pung bliver importeret</string>
   <!-- Import wallet intro screen message -->
-  <string name="Import.message">Import af en pung overfører alle pengene fra din anden pung til din Bifrost pung, via en enkelt overførsel.</string>
+  <string name="Import.message">Import af en pung overfører alle pengene fra din anden pung til din Wagerr pung, via en enkelt overførsel.</string>
   <!-- Enter password alert view title -->
   <string name="Import.password">Denne private nøgle er beskyttet med et kodeord.</string>
   <!-- password textfield placeholder -->
   <string name="Import.passwordPlaceholder">adgangskode</string>
   <!-- Caption for graphics -->
-  <string name="Import.rightCaption">Din Bifrost pung</string>
+  <string name="Import.rightCaption">Din Wagerr pung</string>
   <!-- Scan Private key button label -->
   <string name="Import.scan">Scan privat nøgle</string>
   <!-- Import wallet success alert title -->
@@ -215,7 +215,7 @@
   <!-- Jailbreak warning message -->
   <string name="JailbreakWarnings.messageWithBalance">ENHEDENS SIKKERHED ER KOMPROMITTERET\n Enhver \'jailbreak\' app kan få adgang til BRDs nøgledata og stjæle dine bitcoin! Ryd straks denne pung og gendan på en sikker enhed.</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithoutBalance">ENHEDENS SIKKERHED ER KOMPROMITTERET\n Enhver \'jailbreak\' app kan få adgang til BRDs nøgledata og stjæle dine bitcoin. Brug kun Bifrost på en ikke jailbreaket enhed.</string>
+  <string name="JailbreakWarnings.messageWithoutBalance">ENHEDENS SIKKERHED ER KOMPROMITTERET\n Enhver \'jailbreak\' app kan få adgang til BRDs nøgledata og stjæle dine bitcoin. Brug kun Wagerr på en ikke jailbreaket enhed.</string>
   <!-- Jailbreak warning title -->
   <string name="JailbreakWarnings.title">ADVARSEL</string>
   <!-- Wipe wallet button -->
@@ -223,7 +223,7 @@
   <!-- Location services disabled error -->
   <string name="LocationPlugin.disabled">Placeringstjenester er deaktiveret.</string>
   <!-- No permissions for location services -->
-  <string name="LocationPlugin.notAuthorized">Bifrost har ikke adgang til placeringstjenester.</string>
+  <string name="LocationPlugin.notAuthorized">Wagerr har ikke adgang til placeringstjenester.</string>
   <!-- Wallet creation date prefix -->
   <string name="ManageWallet.creationDatePrefix">Du lavede din pung den %1$s</string>
   <!-- Manage wallet description text -->
@@ -265,7 +265,7 @@
   <!-- Node status label -->
   <string name="NodeSelector.statusLabel">Node forbindelsesstatus</string>
   <!-- Node Selector view title -->
-  <string name="NodeSelector.title">Bifrost-nodes</string>
+  <string name="NodeSelector.title">Wagerr-nodes</string>
   <!-- Bad Payment request alert title -->
   <string name="PaymentProtocol.Errors.badPaymentRequest">Dårlig betalingsanmodning</string>
   <!-- Error opening payment protocol file message -->
@@ -277,9 +277,9 @@
   <!-- Payment too small alert title -->
   <string name="PaymentProtocol.Errors.smallOutputError">Kunne ikke foretage betaling</string>
   <!-- Amount too small error message -->
-  <string name="PaymentProtocol.Errors.smallPayment">Bifrost betalinger kan ikke være mindre end %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallPayment">Wagerr betalinger kan ikke være mindre end %1$s.</string>
   <!-- Output too small error message. -->
-  <string name="PaymentProtocol.Errors.smallTransaction">Bifrost transaktionsoutput kan ikke være mindre end %1$s.</string>
+  <string name="PaymentProtocol.Errors.smallTransaction">Wagerr transaktionsoutput kan ikke være mindre end %1$s.</string>
   <!-- Unsupported signature type payment protocol error message -->
   <string name="PaymentProtocol.Errors.unsupportedSignatureType">ikke understøttet signaturtype</string>
   <!-- Untrusted certificate payment protocol error message -->
@@ -301,7 +301,7 @@
   <!-- Transaction rejected prompt title -->
   <string name="Prompts.RecommendRescan.title">Transaktion afvist</string>
   <!-- Share data prompt body -->
-  <string name="Prompts.ShareData.body">Hjælp med at forbedre Bifrost ved at dele dine anonyme data med os</string>
+  <string name="Prompts.ShareData.body">Hjælp med at forbedre Wagerr ved at dele dine anonyme data med os</string>
   <!-- Share data prompt title -->
   <string name="Prompts.ShareData.title">Del anonyme data</string>
   <!-- Enable touch ID prompt body -->
@@ -315,11 +315,11 @@
   <!-- Button on fingerprint prompt so the user can enter their PIN instead -->
   <string name="Prompts.TouchId.usePin.android">PIN</string>
   <!-- Upgrade PIN prompt body. -->
-  <string name="Prompts.UpgradePin.body">Bifrost er blevet opgraderet til at bruge en 6-cifret PIN. Tryk her for at opgradere.</string>
+  <string name="Prompts.UpgradePin.body">Wagerr er blevet opgraderet til at bruge en 6-cifret PIN. Tryk her for at opgradere.</string>
   <!-- Upgrade PIN prompt title. -->
   <string name="Prompts.UpgradePin.title">Opgader PIN</string>
   <!-- Notifications will be added later but users can set their preferences now, which is why we specify "in the future". -->
-  <string name="PushNotifications.body">Slå notifikationer til for at modtage særlige meddelelser fra Bifrost i fremtiden.</string>
+  <string name="PushNotifications.body">Slå notifikationer til for at modtage særlige meddelelser fra Wagerr i fremtiden.</string>
   <!-- Push notifications toggle switch label -->
   <string name="PushNotifications.label">Push notifikationer</string>
   <!-- Push notifications are off label -->
@@ -349,7 +349,7 @@
   <!-- Enter paper key instruction -->
   <string name="RecoverWallet.instruction">Indtast paper key</string>
   <!-- Recover wallet intro -->
-  <string name="RecoverWallet.intro">Gendan dit Bifrost med din paper key.</string>
+  <string name="RecoverWallet.intro">Gendan dit Wagerr med din paper key.</string>
   <!-- Invalid paper key message -->
   <string name="RecoverWallet.invalid">Den paper key du indtastede er ugyldig. Dobbelttjek hvert ord og prøv igen.</string>
   <!-- Previous button accessibility label -->
@@ -375,9 +375,9 @@
   <!-- Alert message title -->
   <string name="ReScan.alertTitle">Synkroniser med blokkæde?</string>
   <!-- extimated time -->
-  <string name="ReScan.body1">3-5 minutter</string>
+  <string name="ReScan.body1">15-20 minutter</string>
   <!-- Syncing explanation -->
-  <string name="ReScan.body2">Hvis en transaktion vises som gennemført i Bifrost netværket, men ikke i dit Bifrost.</string>
+  <string name="ReScan.body2">Hvis en transaktion vises som gennemført i Wagerr netværket, men ikke i dit Wagerr.</string>
   <!-- Syncing explanation -->
   <string name="ReScan.body3">Du modtager gentagne gange en fejlmeddelelse om at din transaktion er blevet afvist.</string>
   <!-- Start Sync button label -->
@@ -403,11 +403,11 @@
   <!-- Security Center Info -->
   <string name="SecurityCenter.info">Aktiver alle sikkerhedsfunktioner for maksimal beskyttelse.</string>
   <!-- Paper Key button description -->
-  <string name="SecurityCenter.paperKeyDescription">Den eneste måde at få adgang til dine Bifrost på, hvis du mister eller opgraderer din telefon.</string>
+  <string name="SecurityCenter.paperKeyDescription">Den eneste måde at få adgang til dine Wagerr på, hvis du mister eller opgraderer din telefon.</string>
   <!-- Paper Key button title -->
   <string name="SecurityCenter.paperKeyTitle">Paper key</string>
   <!-- PIN button description -->
-  <string name="SecurityCenter.pinDescription">Beskytter dit Bifrost mod uberettigede brugere.</string>
+  <string name="SecurityCenter.pinDescription">Beskytter dit Wagerr mod uberettigede brugere.</string>
   <!-- PIN button title -->
   <string name="SecurityCenter.pinTitle">6-cifret PIN</string>
   <!-- Security Center Title -->
@@ -423,13 +423,13 @@
   <!-- Balance: $4.00 -->
   <string name="Send.balance">Balance: %1$s</string>
   <!-- Instructions how to allow the camera access for the app -->
-  <string name="Send.cameraUnavailabeMessage.android">Tillad adgang under \"Indstillinger\" &gt; \"Apps\" &gt; \"Bifrost\" &gt; \"Tilladelser\"</string>
+  <string name="Send.cameraUnavailabeMessage.android">Tillad adgang under \"Indstillinger\" &gt; \"Apps\" &gt; \"Wagerr\" &gt; \"Tilladelser\"</string>
   <!-- Permission required to access camera -->
-  <string name="Send.cameraUnavailabeTitle.android">Bifrost har ikke tilladelse til at få adgang til kameraet</string>
+  <string name="Send.cameraUnavailabeTitle.android">Wagerr har ikke tilladelse til at få adgang til kameraet</string>
   <!-- Camera not allowed message -->
   <string name="Send.cameraunavailableMessage">Gå til Indstillinger og giv adgang til kamera.</string>
   <!-- Camera not allowed alert title -->
-  <string name="Send.cameraUnavailableTitle">Bifrost har ikke adgang til kameraet</string>
+  <string name="Send.cameraUnavailableTitle">Wagerr har ikke adgang til kameraet</string>
   <!-- Warning when sending to self. -->
   <string name="Send.containsAddress">Destinationen er din egen adresse. Du kan ikke sende til dig selv.</string>
   <!-- Could not create transaction alert title -->
@@ -443,9 +443,9 @@
   <!-- Payee identity not certified alert title. -->
   <string name="Send.identityNotCertified">Betalingsmodtagerens identitet er ikke bekræftet.</string>
   <!-- Invalid address alert message -->
-  <string name="Send.invalidAddressMessage">Modtageradressen er ikke en gyldig Bifrost-adresse.</string>
+  <string name="Send.invalidAddressMessage">Modtageradressen er ikke en gyldig Wagerr-adresse.</string>
   <!-- Invalid address on pasteboard message -->
-  <string name="Send.invalidAddressOnPasteboard">Tegnebord indeholder ikke en gyldig Bifrost adresse.</string>
+  <string name="Send.invalidAddressOnPasteboard">Tegnebord indeholder ikke en gyldig Wagerr adresse.</string>
   <!-- Invalid address alert title -->
   <string name="Send.invalidAddressTitle">Ugyldig adresse</string>
   <!-- Is rescanning error message -->
@@ -485,7 +485,7 @@
   <!-- Join Early access label -->
   <string name="Settings.earlyAccess">Tilmeld dig Early Access</string>
   <!-- Are you enjoying bread alert message body -->
-  <string name="Settings.enjoying">Nyder du Bifrost?</string>
+  <string name="Settings.enjoying">Nyder du Wagerr?</string>
   <!-- Import wallet label -->
   <string name="Settings.importTitle">Importer pung</string>
   <!-- Manage settings section header -->
@@ -509,7 +509,7 @@
   <!-- Start or recover another wallet menu label. -->
   <string name="Settings.wipe">Start/gendan en anden wallet</string>
   <!-- Share data view body -->
-  <string name="ShareData.body">Hjælp med at forbedre Bifrost ved at dele dine anonyme data med os. Dette inkluderer ikke finansielle oplysninger. Vi respekterer dit finansielle privatliv.</string>
+  <string name="ShareData.body">Hjælp med at forbedre Wagerr ved at dele dine anonyme data med os. Dette inkluderer ikke finansielle oplysninger. Vi respekterer dit finansielle privatliv.</string>
   <!-- Share data header -->
   <string name="ShareData.header">Del data?</string>
   <!-- Share data switch label. -->
@@ -517,13 +517,13 @@
   <!-- button label -->
   <string name="StartPaperPhrase.againButtonTitle">Skriv paper key ned igen</string>
   <!-- Paper key explanation text. -->
-  <string name="StartPaperPhrase.body">Din paper key er den eneste måde at gendanne dit Bifrost på, hvis din telefon mistes, stjæles, går i stykker eller opgraderes.\n\nVi viser dig en liste over word du skal skrive ned på et papir, og holde sikkert.</string>
+  <string name="StartPaperPhrase.body">Din paper key er den eneste måde at gendanne dit Wagerr på, hvis din telefon mistes, stjæles, går i stykker eller opgraderes.\n\nVi viser dig en liste over word du skal skrive ned på et papir, og holde sikkert.</string>
   <!-- button label -->
   <string name="StartPaperPhrase.buttonTitle">Skriv paper key ned</string>
   <!-- Argument is date -->
   <string name="StartPaperPhrase.date">Du skrev sidst din paper key ned den %1$s</string>
   <!-- Start view message -->
-  <string name="StartViewController.message">Den mest sikre og trygge måde at bruge Bifrost på.</string>
+  <string name="StartViewController.message">Den mest sikre og trygge måde at bruge Wagerr på.</string>
   <!-- Syncing view connectiong state header text -->
   <string name="SyncingView.connecting">Tilslutter</string>
   <!-- Syncing view header text -->
@@ -549,14 +549,14 @@
   <!-- Fingerprint Is Not Setup -->
   <string name="TouchIdSettings.disabledWarning.title.android">Autentificering via fingeraftryk ikke aktiveret</string>
   <!-- Touch Id screen label -->
-  <string name="TouchIdSettings.label">Brug dit fingeraftryk til at låse op for dit Bifrost og sende penge op til en vis grænse.</string>
+  <string name="TouchIdSettings.label">Brug dit fingeraftryk til at låse op for dit Wagerr og sende penge op til en vis grænse.</string>
   <!-- Link Text (see TouchIdSettings.customizeText) -->
   <string name="TouchIdSettings.linkText">Touch ID forbrugsgrænseside</string>
   <!-- Spending Limit: b100,000 ($100) -->
   <string name="TouchIdSettings.spendingLimit">Brugsgrænse: %1$s (%2$s)</string>
   <!-- Touch id switch label. -->
-  <string name="TouchIdSettings.switchLabel">Aktiver Touch ID til Bifrost</string>
-  <!-- Enable fingerprint for this wallet called Bifrost -->
+  <string name="TouchIdSettings.switchLabel">Aktiver Touch ID til Wagerr</string>
+  <!-- Enable fingerprint for this wallet called Wagerr -->
   <string name="TouchIdSettings.switchLabel.android">Aktiver autentificering via fingeraftryk</string>
   <!-- Touch ID settings view title -->
   <string name="TouchIdSettings.title">Touch ID</string>
@@ -633,7 +633,7 @@
   <!-- "Sent [$5] to [address]" => This is the "to [address]" part. -->
   <string name="TransactionDetails.to">til %1$s</string>
   <!-- Transaction ID header -->
-  <string name="TransactionDetails.txHashHeader">Bifrost transaktions-ID</string>
+  <string name="TransactionDetails.txHashHeader">Wagerr transaktions-ID</string>
   <!-- (this transaction was) Received at this address: -->
   <string name="TransactionDirection.address">Modtaget på denne adresse</string>
   <!-- (this transaction was) Sent to this address: -->
@@ -651,7 +651,7 @@
   <!-- Instruction to touch the sensor for fingerprint authentication -->
   <string name="UnlockScreen.touchIdInstructions.android">Touch sensor</string>
   <!-- TouchID prompt text -->
-  <string name="UnlockScreen.touchIdPrompt">Lås op for dit Bifrost.</string>
+  <string name="UnlockScreen.touchIdPrompt">Lås op for dit Wagerr.</string>
   <!-- Device authentication body -->
   <string name="UnlockScreen.touchIdPrompt.android">Lås op for din Android enhed for at fortsætte</string>
   <!-- Unlock with TouchID accessibility label -->
@@ -661,9 +661,9 @@
   <!-- Wallet unlocked message -->
   <string name="UnlockScreen.unlocked">Pung låst op</string>
   <!-- Update PIN caption text -->
-  <string name="UpdatePin.caption">Husk denne PIN. Hvis du glemmer den, vil du ikke kunne få adgang til dine Bifrost.</string>
+  <string name="UpdatePin.caption">Husk denne PIN. Hvis du glemmer den, vil du ikke kunne få adgang til dine Wagerr.</string>
   <!-- PIN creation info. -->
-  <string name="UpdatePin.createInstruction">Din PIN bliver brugt til at låse op for dit Bifrost og sende penge.</string>
+  <string name="UpdatePin.createInstruction">Din PIN bliver brugt til at låse op for dit Wagerr og sende penge.</string>
   <!-- Update PIN title -->
   <string name="UpdatePin.createTitle">Indstil PIN</string>
   <!-- Update PIN title -->
@@ -697,7 +697,7 @@
   <!-- Authorize transaction with touch id message -->
   <string name="VerifyPin.touchIdMessage">Godkend denne transaktion</string>
   <!-- 'No wallet' warning for watch app -->
-  <string name="Watch.noWalletWarning">Åben Bifrost iPhone appen for at konfigurere din pung.</string>
+  <string name="Watch.noWalletWarning">Åben Wagerr iPhone appen for at konfigurere din pung.</string>
   <!-- Dismiss button label -->
   <string name="Webview.dismiss">Afvis</string>
   <!-- Webview loading error message -->
@@ -705,9 +705,9 @@
   <!-- Updating webview message -->
   <string name="Webview.updating">Opdaterer...</string>
   <!-- Welcome screen text. (?) will be replaced with the help icon users should look for. -->
-  <string name="Welcome.body">Breadwallet har skiftet navn til Bifrost med et helt nyt look og nogle nye funktioner.\n\nHvis du har brug for hjælp, led efter (?) øverst til højre på de fleste skærme.</string>
+  <string name="Welcome.body">Breadwallet har skiftet navn til Wagerr med et helt nyt look og nogle nye funktioner.\n\nHvis du har brug for hjælp, led efter (?) øverst til højre på de fleste skærme.</string>
   <!-- Top title of welcome screen -->
-  <string name="Welcome.title">Velkommen til Bifrost!</string>
+  <string name="Welcome.title">Velkommen til Wagerr!</string>
   <!-- Wipe wallet alert message -->
   <string name="WipeWallet.alertMessage">Er du sikker på at du vil slette denne wallet?</string>
   <!-- Wipe wallet alert title -->
@@ -719,9 +719,9 @@
   <!-- Enter phrase to wipe wallet instruction. -->
   <string name="WipeWallet.instruction">Indtast denne wallets gendannelsessætning for at slette den og starte eller gendanne en anden. Din nuværende saldo forbliver med denne sætning.</string>
   <!-- Start wipe wallet view message -->
-  <string name="WipeWallet.startMessage">Påbegyndelse eller gendannelse af en anden tegnebog giver mulighed for at få adgang samt administrere en Bifrost tegnebog på denne enhed.</string>
+  <string name="WipeWallet.startMessage">Påbegyndelse eller gendannelse af en anden tegnebog giver mulighed for at få adgang samt administrere en Wagerr tegnebog på denne enhed.</string>
   <!-- Start wipe wallet view warning -->
-  <string name="WipeWallet.startWarning">Du vil ikke længere være i stand til at få adgang til din nuværende Bifrost tegnebog fra denne enhed. Saldoen vil forblive på frasen.</string>
+  <string name="WipeWallet.startWarning">Du vil ikke længere være i stand til at få adgang til din nuværende Wagerr tegnebog fra denne enhed. Saldoen vil forblive på frasen.</string>
   <!-- Wipe wallet navigation item title. -->
   <string name="WipeWallet.title">Start eller gendan en anden wallet.</string>
   <!-- Wipe wallet button title -->
