@@ -767,6 +767,8 @@
   <string name="Dialog.screenAlteringTitle">"Screen Altering App Detected</string>
   <string name="Dialog.screenAlteringMessage">"Wagerr will not function properly unless screen altering apps(such as Twilight) are disabled. </string>
   <string name="About.footerBBP">Adapted to Wagerr by MIP</string>
+  <string name="NodeSelector.CurrentHeight">Current Height</string>
+  <string name="NodeSelector.LastBlockHash">Last block hash</string>
 
 
 </resources>

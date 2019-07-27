@@ -159,7 +159,7 @@ public class BRAnimator {
 
     public static void showSupportFragment(Activity app, String articleId) {
 
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/pQ2BtKM"));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/Wagerrpublictest"));
         app.startActivity(browserIntent);
         app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
 
