@@ -98,7 +98,7 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
      * betUpdateOddsTxTable
      */
 
-    // betMappingTxTable
+    // betMappingTxTable TYPE 01
     public static final String BMTX_TABLE_NAME = "betMappingTxTable";
     public static final String BMTX_COLUMN_ID = "_id";
     public static final String BMTX_TYPE = "type";
@@ -121,7 +121,7 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
             BMTX_TIMESTAMP + " integer, " +
             BMTX_ISO + " text DEFAULT 'WGR' );";
 
-    //  betEventTxTable
+    //  betEventTxTable 02 06 09 0a
     public static final String BETX_TABLE_NAME = "betEventTxTable";
     public static final String BETX_COLUMN_ID = "_id";
     public static final String BETX_TYPE = "type";
@@ -168,7 +168,7 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
             BETX_TIMESTAMP + " integer, " +
             BETX_ISO + " text DEFAULT 'WGR' );";
 
-    //  betResultTxTable
+    //  betResultTxTable TYPE 04 08
     public static final String BRTX_TABLE_NAME = "betResultTxTable";
     public static final String BRTX_COLUMN_ID = "_id";
     public static final String BRTX_TYPE = "type";
@@ -193,7 +193,7 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
             BRTX_TIMESTAMP + " integer, " +
             BRTX_ISO + " text DEFAULT 'WGR' );";
 
-    //  betUpdateOddsTxTable
+    //  betUpdateOddsTxTable TYPE 05
     public static final String BUTX_TABLE_NAME = "betUpdateOddsTxTable";
     public static final String BUTX_COLUMN_ID = "_id";
     public static final String BUTX_TYPE = "type";
@@ -218,7 +218,7 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
             BUTX_TIMESTAMP + " integer, " +
             BUTX_ISO + " text DEFAULT 'WGR' );";
 
-    //  betTransactionTable
+    //  betTransactionTable  TYPE 03 07
     public static final String BTX_TABLE_NAME = "betTransactionTable";
     public static final String BTX_COLUMN_ID = "_id";
     public static final String BTX_TYPE = "type";
@@ -232,12 +232,14 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
 
     private static final String BTX_DATABASE_CREATE = "create table if not exists " + BTX_TABLE_NAME + " (" +
             BTX_COLUMN_ID + " text, " +
+            BTX_TYPE + " integer, " +
+            BTX_VERSION + " integer, " +
             BTX_EVENTID + " integer, " +
             BTX_OUTCOME + " integer, " +
             BTX_AMOUNT + " integer, " +
             BTX_BLOCK_HEIGHT + " integer, " +
             BTX_TIME_STAMP + " integer, " +
-            BTX_ISO + " text DEFAULT 'BTC' );";
+            BTX_ISO + " text DEFAULT 'WGR' );";
 
     /**
      * Peer table
