@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.wagerrwallet.core.BRCoreMerkleBlock;
 import com.wagerrwallet.presenter.entities.BRMerkleBlockEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.tools.manager.BRReportsManager;
@@ -132,6 +133,33 @@ public class MerkleBlockDataSource implements BRDataSourceInterface {
             if (cursor != null) cursor.close();
         }
         return merkleBlocks;
+    }
+
+    public BRCoreMerkleBlock getMerkleBlockAtHeight(Context app, String iso, long nHeight) {
+        BRMerkleBlockEntity merkleBlockEntity = null;
+        BRCoreMerkleBlock merkleBlock = null;
+        Cursor cursor = null;
+        try {
+            database = openDatabase();
+
+            cursor = database.query(BRSQLiteHelper.MB_TABLE_NAME,
+                    allColumns, BRSQLiteHelper.MB_ISO + "=? AND " + BRSQLiteHelper.MB_HEIGHT + " = ?", new String[]{iso.toUpperCase(),String.valueOf(nHeight)},
+                    null, null, null);
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                merkleBlockEntity = cursorToMerkleBlock(cursor);
+                merkleBlock = new BRCoreMerkleBlock(merkleBlockEntity.getBuff(), merkleBlockEntity.getBlockHeight());
+                cursor.moveToNext();
+            }
+            Log.e(TAG, "getMerkleBlockAtHeight: " + merkleBlockEntity.getBlockHeight());
+            // make sure to close the cursor
+
+        } finally {
+            closeDatabase();
+            if (cursor != null) cursor.close();
+        }
+        return merkleBlock;
     }
 
     private BRMerkleBlockEntity cursorToMerkleBlock(Cursor cursor) {

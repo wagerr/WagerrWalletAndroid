@@ -18,10 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wagerrwallet.R;
+import com.wagerrwallet.core.BRCoreKey;
+import com.wagerrwallet.core.BRCoreMerkleBlock;
 import com.wagerrwallet.core.BRCorePeer;
 import com.wagerrwallet.presenter.activities.util.BRActivity;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
+import com.wagerrwallet.tools.sqlite.MerkleBlockDataSource;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.TrustedNode;
 import com.wagerrwallet.tools.util.Utils;
@@ -33,6 +36,8 @@ public class NodesActivity extends BRActivity {
     private Button switchButton;
     private TextView nodeStatus;
     private TextView trustNode;
+    private TextView currentHeight;
+    private TextView blockHash;
     public static boolean appVisible = false;
     AlertDialog mDialog;
     private int mInterval = 3000;
@@ -76,6 +81,8 @@ public class NodesActivity extends BRActivity {
 
         nodeStatus = findViewById(R.id.node_status);
         trustNode = findViewById(R.id.node_text);
+        currentHeight = findViewById(R.id.node_height);
+        blockHash = findViewById(R.id.node_hash);
 
         switchButton = findViewById(R.id.button_switch);
         switchButton.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +131,11 @@ public class NodesActivity extends BRActivity {
             switchButton.setText(getString(R.string.NodeSelector_automaticButton));
         }
         nodeStatus.setText(wm.getPeerManager().getConnectStatus() == BRCorePeer.ConnectStatus.Connected ? getString(R.string.NodeSelector_connected) : getString(R.string.NodeSelector_notConnected));
+        long nCurrentHeight = BRSharedPrefs.getLastBlockHeight(this, wm.getIso(this));
+        currentHeight.setText(wm.getPeerManager().getConnectStatus() == BRCorePeer.ConnectStatus.Connected ? String.valueOf(nCurrentHeight) : getString(R.string.NodeSelector_notConnected));
+        BRCoreMerkleBlock block = MerkleBlockDataSource.getInstance(app).getMerkleBlockAtHeight(this,wm.getIso(this), nCurrentHeight);
+        blockHash.setText( (block!=null) ? BRCoreKey.encodeHexRev(block.getBlockHash()):  getString(R.string.SyncingView_header));
+        block.disposeNative();
         if (trustNode != null)
             trustNode.setText(wm.getPeerManager().getCurrentPeerName());
     }
