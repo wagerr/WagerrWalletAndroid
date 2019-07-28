@@ -32,7 +32,9 @@ import com.wagerrwallet.presenter.activities.camera.ScanQRActivity;
 import com.wagerrwallet.presenter.activities.intro.IntroActivity;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.entities.CryptoRequest;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.presenter.fragments.FragmentEventDetails;
 import com.wagerrwallet.presenter.fragments.FragmentGreetings;
 import com.wagerrwallet.presenter.fragments.FragmentMenu;
 import com.wagerrwallet.presenter.fragments.FragmentSignal;
@@ -246,6 +248,21 @@ public class BRAnimator {
         }
 
         txDetails = new FragmentTxDetails();
+        txDetails.setTransaction(item);
+        txDetails.show(app.getFragmentManager(), "txDetails");
+
+    }
+
+    public static void showEventDetails(Activity app, EventTxUiHolder item, int position){
+        FragmentEventDetails txDetails = (FragmentEventDetails) app.getFragmentManager().findFragmentByTag(FragmentEventDetails.class.getName());
+
+        if(txDetails != null && txDetails.isAdded()){
+            Log.e(TAG, "showTransactionDetails: Already showing");
+
+            return;
+        }
+
+        txDetails = new FragmentEventDetails();
         txDetails.setTransaction(item);
         txDetails.show(app.getFragmentManager(), "txDetails");
 

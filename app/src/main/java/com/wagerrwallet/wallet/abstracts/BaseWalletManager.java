@@ -10,6 +10,7 @@ import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.core.BRCoreWallet;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.wallet.wallets.configs.WalletUiConfiguration;
 
 import java.math.BigDecimal;
@@ -77,6 +78,9 @@ public interface BaseWalletManager {
 
     //get a list of all the transactions UI holders sorted by timestamp
     List<TxUiHolder> getTxUiHolders();
+
+    //get a list of all the transactions UI holders sorted by timestamp
+    List<EventTxUiHolder> getEventTxUiHolders();
 
     //generate the wallet if needed
     boolean generateWallet(Context app);

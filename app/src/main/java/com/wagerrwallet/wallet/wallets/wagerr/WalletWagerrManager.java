@@ -28,6 +28,7 @@ import com.wagerrwallet.presenter.entities.BRPeerEntity;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.PeerEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
@@ -55,6 +56,7 @@ import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.abstracts.OnBalanceChangedListener;
 import com.wagerrwallet.wallet.abstracts.OnTxListModified;
+import com.wagerrwallet.wallet.abstracts.OnEventTxListModified;
 import com.wagerrwallet.wallet.abstracts.OnTxStatusUpdatedListener;
 import com.wagerrwallet.wallet.abstracts.SyncListener;
 import com.wagerrwallet.wallet.wallets.configs.WalletUiConfiguration;
@@ -125,6 +127,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     private List<OnTxStatusUpdatedListener> txStatusUpdatedListeners = new ArrayList<>();
     private List<SyncListener> syncListeners = new ArrayList<>();
     private List<OnTxListModified> txModifiedListeners = new ArrayList<>();
+    private List<OnEventTxListModified> eventTxModifiedListeners = new ArrayList<>();
 
     private Executor listenerExecutor = Executors.newSingleThreadExecutor();
 
@@ -250,6 +253,24 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         for (int i = txs.length - 1; i >= 0; i--) { //revere order
             BRCoreTransaction tx = txs[i];
             uiTxs.add(new TxUiHolder(tx.getTimestamp(), (int) tx.getBlockHeight(), tx.getHash(),
+                    tx.getReverseHash(), getWallet().getTransactionAmountSent(tx),
+                    getWallet().getTransactionAmountReceived(tx), getWallet().getTransactionFee(tx),
+                    tx.getOutputAddresses(), tx.getInputAddresses(),
+                    getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
+                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)));
+        }
+
+        return uiTxs;
+    }
+
+    @Override
+    public List<EventTxUiHolder> getEventTxUiHolders() {
+        BRCoreTransaction txs[] = getWallet().getTransactions();
+        if (txs == null || txs.length <= 0) return null;
+        List<EventTxUiHolder> uiTxs = new ArrayList<>();
+        for (int i = txs.length - 1; i >= 0; i--) { //revere order
+            BRCoreTransaction tx = txs[i];
+            uiTxs.add(new EventTxUiHolder(tx.getTimestamp(), (int) tx.getBlockHeight(), tx.getHash(),
                     tx.getReverseHash(), getWallet().getTransactionAmountSent(tx),
                     getWallet().getTransactionAmountReceived(tx), getWallet().getTransactionFee(tx),
                     tx.getOutputAddresses(), tx.getInputAddresses(),
@@ -547,6 +568,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             txModifiedListeners.add(list);
     }
 
+    public void addEventTxListModifiedListener(OnEventTxListModified list) {
+        if (list != null && !eventTxModifiedListeners.contains(list))
+            eventTxModifiedListeners.add(list);
+    }
 
     @Override
     public void txPublished(final String error) {
