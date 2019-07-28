@@ -193,31 +193,6 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
             BRTX_TIMESTAMP + " integer, " +
             BRTX_ISO + " text DEFAULT 'WGR' );";
 
-    //  betUpdateOddsTxTable TYPE 05
-    public static final String BUTX_TABLE_NAME = "betUpdateOddsTxTable";
-    public static final String BUTX_COLUMN_ID = "_id";
-    public static final String BUTX_TYPE = "type";
-    public static final String BUTX_VERSION = "version";
-    public static final String BUTX_BLOCK_HEIGHT = "transactionBlockHeight";
-    public static final String BUTX_TIMESTAMP = "transactionTimeStamp";
-    public static final String BUTX_ISO = "transactionISO";
-    public static final String BUTX_EVENTID = "eventId";
-    public static final String BUTX_HOME_ODDS = "homeOdds";
-    public static final String BUTX_AWAY_ODDS = "awayOdds";
-    public static final String BUTX_DRAW_ODDS = "drawOdds";
-
-    private static final String BUTX_DATABASE_CREATE = "create table if not exists " + BUTX_TABLE_NAME + " (" +
-            BUTX_COLUMN_ID + " text, " +
-            BUTX_TYPE + " integer, " +
-            BUTX_VERSION + " integer, " +
-            BUTX_EVENTID + " integer, " +
-            BUTX_HOME_ODDS + " integer, " +
-            BUTX_AWAY_ODDS + " integer, " +
-            BUTX_DRAW_ODDS + " integer, " +
-            BUTX_BLOCK_HEIGHT + " integer, " +
-            BUTX_TIMESTAMP + " integer, " +
-            BUTX_ISO + " text DEFAULT 'WGR' );";
-
     //  betTransactionTable  TYPE 03 07
     public static final String BTX_TABLE_NAME = "betTransactionTable";
     public static final String BTX_COLUMN_ID = "_id";
@@ -297,12 +272,10 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
         Log.e(TAG, "onCreate: " + BETX_DATABASE_CREATE);
         Log.e(TAG, "onCreate: " + BMTX_DATABASE_CREATE);
         Log.e(TAG, "onCreate: " + BRTX_DATABASE_CREATE);
-        Log.e(TAG, "onCreate: " + BUTX_DATABASE_CREATE);
         database.execSQL(BTX_DATABASE_CREATE);
         database.execSQL(BETX_DATABASE_CREATE);
         database.execSQL(BMTX_DATABASE_CREATE);
         database.execSQL(BRTX_DATABASE_CREATE);
-        database.execSQL(BUTX_DATABASE_CREATE);
 
 //        printTableStructures(database, MB_TABLE_NAME);
 //        printTableStructures(database, TX_TABLE_NAME);

@@ -32,6 +32,29 @@ package com.wagerrwallet.presenter.entities;
 public class BetMappingEntity {
     public static final String TAG = BetMappingEntity.class.getName();
 
+    public enum MappingNamespaceType {
+        SPORT(0x01),
+        ROUNDS(0x02),
+        TEAM_NAME(0x03),
+        TOURNAMENT(0x04),
+        UNKNOWN(-1);
+
+        private int type;
+        MappingNamespaceType(int type) {
+            this.type = type;
+        }
+
+        public int getNumber()    {return type;}
+
+        public static MappingNamespaceType fromValue (int value) {
+            // Just a linear search - easy, quick-enough.
+            for (MappingNamespaceType namespaceType : MappingNamespaceType.values())
+                if (namespaceType.type == value)
+                    return namespaceType;
+            return UNKNOWN;
+        }
+    }
+
     private long blockheight;
     private long timestamp;
     private String txHash;

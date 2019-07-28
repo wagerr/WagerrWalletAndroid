@@ -34,7 +34,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.wagerrwallet.presenter.entities.BRTransactionEntity;
+import com.wagerrwallet.presenter.entities.BetEntity;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.util.BRConstants;
@@ -42,68 +42,67 @@ import com.wagerrwallet.tools.util.BRConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BetMappingTxDataStore implements BRDataSourceInterface {
-    private static final String TAG = BetMappingTxDataStore.class.getName();
+public class BetTxDataStore implements BRDataSourceInterface {
+    private static final String TAG = BetTxDataStore.class.getName();
 
     // Database fields
     private SQLiteDatabase database;
     private final BRSQLiteHelper dbHelper;
     public static final String[] allColumns = {
-            BRSQLiteHelper.BMTX_COLUMN_ID,
-            BRSQLiteHelper.BMTX_TYPE,
-            BRSQLiteHelper.BMTX_VERSION,
-            BRSQLiteHelper.BMTX_NAMESPACEID,
-            BRSQLiteHelper.BMTX_MAPPINGID,
-            BRSQLiteHelper.BMTX_STRING,
-            BRSQLiteHelper.BMTX_BLOCK_HEIGHT,
-            BRSQLiteHelper.BMTX_TIMESTAMP,
-            BRSQLiteHelper.BMTX_ISO
+            BRSQLiteHelper.BTX_COLUMN_ID,
+            BRSQLiteHelper.BTX_TYPE,
+            BRSQLiteHelper.BTX_VERSION,
+            BRSQLiteHelper.BTX_EVENTID,
+            BRSQLiteHelper.BTX_OUTCOME,
+            BRSQLiteHelper.BTX_AMOUNT,
+            BRSQLiteHelper.BTX_BLOCK_HEIGHT,
+            BRSQLiteHelper.BTX_TIME_STAMP,
+            BRSQLiteHelper.BTX_ISO
     };
 
-    private static BetMappingTxDataStore instance;
+    private static BetTxDataStore instance;
 
-    public static BetMappingTxDataStore getInstance(Context context) {
+    public static BetTxDataStore getInstance(Context context) {
         if (instance == null) {
-            instance = new BetMappingTxDataStore(context);
+            instance = new BetTxDataStore(context);
         }
         return instance;
     }
 
-    private BetMappingTxDataStore(Context context) {
+    private BetTxDataStore(Context context) {
         dbHelper = BRSQLiteHelper.getInstance(context);
 
     }
 
-    public BetMappingEntity putTransaction(Context app, String iso, BetMappingEntity transactionEntity) {
+    public BetEntity putTransaction(Context app, String iso, BetEntity transactionEntity) {
 
         Log.e(TAG, "putTransaction: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
         Cursor cursor = null;
         try {
             database = openDatabase();
             ContentValues values = new ContentValues();
-            values.put(BRSQLiteHelper.BMTX_COLUMN_ID, transactionEntity.getTxHash());
-            values.put(BRSQLiteHelper.BMTX_TYPE, transactionEntity.getType());
-            values.put(BRSQLiteHelper.BMTX_VERSION, transactionEntity.getVersion());
-            values.put(BRSQLiteHelper.BMTX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
-            values.put(BRSQLiteHelper.BMTX_ISO, iso.toUpperCase());
-            values.put(BRSQLiteHelper.BMTX_TIMESTAMP, transactionEntity.getTimestamp());
-            values.put(BRSQLiteHelper.BMTX_NAMESPACEID, transactionEntity.getNamespaceID());
-            values.put(BRSQLiteHelper.BMTX_MAPPINGID, transactionEntity.getMappingID());
-            values.put(BRSQLiteHelper.BMTX_STRING, transactionEntity.getDescription());
-            values.put(BRSQLiteHelper.BMTX_TIMESTAMP, transactionEntity.getTimestamp());
+            values.put(BRSQLiteHelper.BTX_COLUMN_ID, transactionEntity.getTxHash());
+            values.put(BRSQLiteHelper.BTX_TYPE, transactionEntity.getType().getNumber());
+            values.put(BRSQLiteHelper.BTX_VERSION, transactionEntity.getVersion());
+            values.put(BRSQLiteHelper.BTX_EVENTID, transactionEntity.getEventID());
+            values.put(BRSQLiteHelper.BTX_OUTCOME, transactionEntity.getOutcome().getNumber());
+            values.put(BRSQLiteHelper.BTX_AMOUNT, transactionEntity.getAmount());
+            values.put(BRSQLiteHelper.BTX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
+            values.put(BRSQLiteHelper.BTX_TIME_STAMP, transactionEntity.getTimestamp());
+            values.put(BRSQLiteHelper.BTX_ISO, iso.toUpperCase());
 
             database.beginTransaction();
-            database.insert(BRSQLiteHelper.BMTX_TABLE_NAME, null, values);
-            cursor = database.query(BRSQLiteHelper.BMTX_TABLE_NAME,
+            database.insert(BRSQLiteHelper.BTX_TABLE_NAME, null, values);
+            cursor = database.query(BRSQLiteHelper.BTX_TABLE_NAME,
                     allColumns, null, null, null, null, null);
             cursor.moveToFirst();
-            BetMappingEntity transactionEntity1 = cursorToTransaction(app, iso.toUpperCase(), cursor);
+            BetEntity transactionEntity1 = cursorToTransaction(app, iso.toUpperCase(), cursor);
 
             database.setTransactionSuccessful();
             return transactionEntity1;
         } catch (Exception ex) {
             BRReportsManager.reportBug(ex);
-            Log.e(TAG, "Error inserting Mapping tx into SQLite", ex);
+            Log.e(TAG, "Error inserting bet tx into SQLite", ex);
             //Error in between database transaction
         } finally {
             database.endTransaction();
@@ -119,24 +118,24 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         try {
             database = openDatabase();
 
-            database.delete(BRSQLiteHelper.BMTX_TABLE_NAME, BRSQLiteHelper.TX_ISO + "=?", new String[]{iso.toUpperCase()});
+            database.delete(BRSQLiteHelper.BTX_TABLE_NAME, BRSQLiteHelper.TX_ISO + "=?", new String[]{iso.toUpperCase()});
         } finally {
             closeDatabase();
         }
     }
 
-    public List<BetMappingEntity> getAllTransactions(Context app, String iso) {
-        List<BetMappingEntity> transactions = new ArrayList<>();
+    public List<BetEntity> getAllTransactions(Context app, String iso) {
+        List<BetEntity> transactions = new ArrayList<>();
         Cursor cursor = null;
         try {
             database = openDatabase();
 
-            cursor = database.query(BRSQLiteHelper.BMTX_TABLE_NAME,
+            cursor = database.query(BRSQLiteHelper.BTX_TABLE_NAME,
                     allColumns, BRSQLiteHelper.TX_ISO + "=?", new String[]{iso.toUpperCase()}, null, null, null);
 
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                BetEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
                 transactions.add(transactionEntity);
                 cursor.moveToNext();
             }
@@ -151,10 +150,10 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
     }
 
 
-    public static BetMappingEntity cursorToTransaction(Context app, String iso, Cursor cursor) {
+    public static BetEntity cursorToTransaction(Context app, String iso, Cursor cursor) {
 
-        return new BetMappingEntity(cursor.getString(0), cursor.getLong(1), cursor.getLong(2),
-                    cursor.getLong(3), cursor.getLong(4), cursor.getString(5),
+        return new BetEntity(cursor.getString(0), BetEntity.BetTxType.fromValue(cursor.getInt(1)), cursor.getLong(2),
+                    cursor.getLong(3), BetEntity.BetOutcome.fromValue(cursor.getInt(4)), cursor.getLong(5),
                     cursor.getLong(6), cursor.getLong(7), cursor.getString(8));
     }
 
@@ -162,7 +161,7 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         try {
             database = openDatabase();
             Log.e(TAG, "mapping transaction deleted with id: " + hash);
-            database.delete(BRSQLiteHelper.BMTX_TABLE_NAME,
+            database.delete(BRSQLiteHelper.BTX_TABLE_NAME,
                     "_id=? AND " + BRSQLiteHelper.TX_ISO + "=?", new String[]{hash, iso.toUpperCase()});
         } finally {
             closeDatabase();
@@ -189,13 +188,14 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             database = openDatabase();
             StringBuilder builder = new StringBuilder();
 
-            cursor = database.query(BRSQLiteHelper.BMTX_TABLE_NAME,
+            cursor = database.query(BRSQLiteHelper.BTX_TABLE_NAME,
                     allColumns, null, null, null, null, null);
             builder.append("Total: " + cursor.getCount() + "\n");
             cursor.moveToFirst();
             if (!cursor.isAfterLast()) {
-                BetMappingEntity ent = cursorToTransaction(app, iso.toUpperCase(), cursor);
-                builder.append("ISO:" + ent.getTxISO() + ", Hash:" + ent.getTxHash() + ", blockHeight:" + ent.getBlockheight() + ", timeStamp:" + ent.getTimestamp() + ", namespaceID:" + ent.getNamespaceID() + ", mappingID:" + ent.getMappingID() + ", description:" + ent.getDescription()  + "\n");
+                BetEntity ent = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                builder.append("ISO:" + ent.getTxISO() + ", Hash:" + ent.getTxHash() + ", blockHeight:" + ent.getBlockheight() + ", timeStamp:" + ent.getTimestamp()
+                        + ", eventID:" + ent.getEventID() + ", outcome:" + ent.getOutcome().getNumber() + ", amount:" + ent.getAmount()  + "\n");
             }
             Log.e(TAG, "printTest: " + builder.toString());
         } finally {

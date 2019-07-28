@@ -137,6 +137,29 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
 
     }
 
+    public boolean updateOdds(Context app, String iso, BetEventEntity tx) {
+        Log.e(TAG, "updateOdds: " + tx.getTxISO() + ":" + tx.getTxHash() + ", eventID:" + tx.getEventID() + ", b:" + tx.getBlockheight() + ", t:" + tx.getTimestamp());
+
+        try {
+            database = openDatabase();
+            ContentValues args = new ContentValues();
+            args.put(BRSQLiteHelper.BETX_HOME_ODDS, tx.getHomeOdds());
+            args.put(BRSQLiteHelper.BETX_AWAY_ODDS, tx.getAwayOdds());
+            args.put(BRSQLiteHelper.BETX_DRAW_ODDS, tx.getDrawOdds());
+
+//            Log.e(TAG, "updateTransaction: size before updating: " + getAllTransactions().size());
+            int r = database.update(BRSQLiteHelper.BETX_TABLE_NAME, args, "_id=? AND " + BRSQLiteHelper.TX_ISO + "=?", new String[]{String.valueOf(tx.getEventID()), iso.toUpperCase()});
+//            Log.e(TAG, "updateTransaction: size after updating: " + getAllTransactions().size());
+            if (r > 0)
+                Log.e(TAG, "event updated with id: " + tx.getEventID());
+            else Log.e(TAG, "updateOdds: Warning: r:" + r);
+
+            return true;
+        } finally {
+            closeDatabase();
+        }
+
+    }
     public void deleteAllTransactions(Context app, String iso) {
         try {
             database = openDatabase();
@@ -175,7 +198,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
 
     public static BetEventEntity cursorToTransaction(Context app, String iso, Cursor cursor) {
 
-        return new BetEventEntity(cursor.getString(0), BetEventEntity.BetEventType.fromValue(cursor.getInt(1)), cursor.getLong(2),
+        return new BetEventEntity(cursor.getString(0), BetEventEntity.BetTxType.fromValue(cursor.getInt(1)), cursor.getLong(2),
                     cursor.getLong(3), cursor.getLong(4), cursor.getLong(5),
                     cursor.getLong(6), cursor.getLong(7), cursor.getLong(8),
                     cursor.getLong(9), cursor.getLong(10), cursor.getLong(11),
@@ -215,7 +238,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
             database = openDatabase();
             StringBuilder builder = new StringBuilder();
 
-            cursor = database.query(BRSQLiteHelper.TX_TABLE_NAME,
+            cursor = database.query(BRSQLiteHelper.BETX_TABLE_NAME,
                     allColumns, null, null, null, null, null);
             builder.append("Total: " + cursor.getCount() + "\n");
             cursor.moveToFirst();

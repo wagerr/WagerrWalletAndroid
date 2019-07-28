@@ -32,7 +32,7 @@ package com.wagerrwallet.presenter.entities;
 public class BetEventEntity {
     public static final String TAG = BetEventEntity.class.getName();
 
-    public enum BetEventType {
+    public enum BetTxType {
         PEERLESS(0x02),
         CHAIN_LOTTO(0x06),
         PEERLESS_SPREAD(0x09),
@@ -40,51 +40,58 @@ public class BetEventEntity {
         UNKNOWN(-1);
 
         private int type;
-        BetEventType(int type) {
+        BetTxType(int type) {
             this.type = type;
         }
 
         public int getNumber()    {return type;}
 
-        public static BetEventType fromValue (int value) {
+        public static BetTxType fromValue (int value) {
             // Just a linear search - easy, quick-enough.
-            for (BetEventType eventType : BetEventType.values())
+            for (BetTxType eventType : BetTxType.values())
                 if (eventType.type == value)
                     return eventType;
             return UNKNOWN;
         }
     }
 
+    // table data
     protected long blockheight;
     protected long timestamp;
     protected String txHash;
     protected String txISO;
     protected long version;
-    protected BetEventType type;
+    protected BetTxType type;
     protected long eventID;
     protected long eventTimestamp;
     protected long sportID;
     protected long tournamentID;
     protected long roundID;
-    protected String txSport;
-    protected String txTournament;
-    protected String txRound;
     protected long homeTeamID;
-    protected String txHomeTeam;
     protected long awayTeamID;
-    protected String txAwayTeam;
     protected long homeOdds;
     protected long awayOdds;
     protected long drawOdds;
-    protected String txEvent;
     protected long entryPrice;
     protected long spreadPoints;
     protected long totalPoints;
     protected long overOdds;
     protected long underOdds;
 
+    // mappings
+    protected String txSport;
+    protected String txTournament;
+    protected String txRound;
+    protected String txHomeTeam;
+    protected String txAwayTeam;
+
+    // results
+    protected BetResultEntity.BetResultType resultType;
+    protected long homeScore;
+    protected long awayScore;
+
     // constructor for DB
-    public BetEventEntity(String txHash, BetEventType type, long version,
+    public BetEventEntity(String txHash, BetTxType type, long version,
                           long eventID, long eventTimestamp, long sportID, long tournamentID, long roundID,
                           long homeTeamID, long awayTeamID, long homeOdds, long awayOdds, long drawOdds,
                           long entryPrice, long spreadPoints, long totalPoints, long overOdds, long underOdds,
@@ -112,27 +119,43 @@ public class BetEventEntity {
     }
 
     // extended constructor with support text for UI
-    public BetEventEntity(String txHash, BetEventType type, long version,
+    public BetEventEntity(String txHash, BetTxType type, long version,
                           long eventID, long eventTimestamp, long sportID, long tournamentID, long roundID,
                           long homeTeamID, long awayTeamID, long homeOdds, long awayOdds, long drawOdds,
                           long entryPrice, long spreadPoints, long totalPoints, long overOdds, long underOdds,
                           long blockheight, long timestamp, String iso,
-                          String txEvent, String txSport, String txTournament, String txRound, String txHomeTeam, String txAwayTeam) {
+                          String txSport, String txTournament, String txRound, String txHomeTeam, String txAwayTeam,    // mappings
+                          BetResultEntity.BetResultType resultType, long homeScore, long awayScore) {
 
         this( txHash, type, version, eventID, eventTimestamp, sportID, tournamentID, roundID,
                 homeTeamID,  awayTeamID, homeOdds, awayOdds, drawOdds,
                 entryPrice,  spreadPoints, totalPoints, overOdds, underOdds,
                 blockheight, timestamp, iso );
 
-        this.txEvent = txEvent;
         this.txSport = txSport;
         this.txTournament = txTournament;
         this.txRound = txRound;
         this.txHomeTeam = txHomeTeam;
         this.txAwayTeam = txAwayTeam;
+
+        this.resultType = resultType;
+        this.homeScore = homeScore;
+        this.awayScore = awayScore;
     }
 
     protected BetEventEntity() {
+    }
+
+    public long getBlockheight() {
+        return blockheight;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public String getTxHash() {
+        return txHash;
     }
 
     public String getTxISO() {
@@ -143,8 +166,16 @@ public class BetEventEntity {
         return version;
     }
 
-    public BetEventType getType() {
+    public BetTxType getType() {
         return type;
+    }
+
+    public long getEventID() {
+        return eventID;
+    }
+
+    public long getEventTimestamp() {
+        return eventTimestamp;
     }
 
     public long getSportID() {
@@ -159,28 +190,24 @@ public class BetEventEntity {
         return roundID;
     }
 
-    public String getTxSport() {
-        return txSport;
+    public long getHomeTeamID() {
+        return homeTeamID;
     }
 
-    public String getTxTournament() {
-        return txTournament;
+    public long getAwayTeamID() {
+        return awayTeamID;
     }
 
-    public String getTxRound() {
-        return txRound;
+    public long getHomeOdds() {
+        return homeOdds;
     }
 
-    public String getTxHomeTeam() {
-        return txHomeTeam;
+    public long getAwayOdds() {
+        return awayOdds;
     }
 
-    public String getTxAwayTeam() {
-        return txAwayTeam;
-    }
-
-    public String getTxEvent() {
-        return txEvent;
+    public long getDrawOdds() {
+        return drawOdds;
     }
 
     public long getEntryPrice() {
@@ -203,63 +230,23 @@ public class BetEventEntity {
         return underOdds;
     }
 
-    public long getBlockheight() {
-        return blockheight;
+    public String getTxSport() {
+        return txSport;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public String getTxTournament() {
+        return txTournament;
     }
 
-    public String getTxHash() {
-        return txHash;
-    }
-
-    public String getEventDescription() {
-        return txEvent;
-    }
-
-    public String getSportDescription(){ return txSport; }
-
-    public String getTournamentDescription() { return txTournament; }
-
-    public long getEventID() {
-        return eventID;
-    }
-
-    public long getEventTimestamp() {
-        return eventTimestamp;
-    }
-
-    public String getRoundDescription() {
+    public String getTxRound() {
         return txRound;
     }
 
-    public long getHomeTeamID() {
-        return homeTeamID;
-    }
-
-    public String getHomeTeamDescription() {
+    public String getTxHomeTeam() {
         return txHomeTeam;
     }
 
-    public long getAwayTeamID() {
-        return awayTeamID;
-    }
-
-    public String getAwayTeamDescription() {
+    public String getTxAwayTeam() {
         return txAwayTeam;
-    }
-
-    public long getHomeOdds() {
-        return homeOdds;
-    }
-
-    public long getAwayOdds() {
-        return awayOdds;
-    }
-
-    public long getDrawOdds() {
-        return drawOdds;
     }
 }
