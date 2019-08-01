@@ -27,6 +27,7 @@ import com.wagerrwallet.presenter.entities.BRPeerEntity;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.PeerEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
@@ -253,6 +254,14 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
                     getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
                     getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)));
         }
+
+        return uiTxs;
+    }
+
+    public List<EventTxUiHolder> getEventTxUiHolders() {
+        BRCoreTransaction txs[] = getWallet().getTransactions();
+        if (txs == null || txs.length <= 0) return null;
+        List<EventTxUiHolder> uiTxs = new ArrayList<>();
 
         return uiTxs;
     }

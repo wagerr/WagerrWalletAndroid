@@ -152,7 +152,10 @@ public class MerkleBlockDataSource implements BRDataSourceInterface {
                 merkleBlock = new BRCoreMerkleBlock(merkleBlockEntity.getBuff(), merkleBlockEntity.getBlockHeight());
                 cursor.moveToNext();
             }
-            Log.e(TAG, "getMerkleBlockAtHeight: " + merkleBlockEntity.getBlockHeight());
+            if (merkleBlockEntity!=null)
+                Log.e(TAG, "getMerkleBlockAtHeight: " + merkleBlockEntity.getBlockHeight());
+            else
+                Log.e(TAG, "getMerkleBlockAtHeight: not found at " + nHeight);
             // make sure to close the cursor
 
         } finally {

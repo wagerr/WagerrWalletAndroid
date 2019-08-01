@@ -82,12 +82,12 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             database = openDatabase();
             ContentValues values = new ContentValues();
             values.put(BRSQLiteHelper.BMTX_COLUMN_ID, transactionEntity.getTxHash());
-            values.put(BRSQLiteHelper.BMTX_TYPE, transactionEntity.getType());
+            values.put(BRSQLiteHelper.BMTX_TYPE, transactionEntity.getType().getNumber());
             values.put(BRSQLiteHelper.BMTX_VERSION, transactionEntity.getVersion());
             values.put(BRSQLiteHelper.BMTX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
             values.put(BRSQLiteHelper.BMTX_ISO, iso.toUpperCase());
             values.put(BRSQLiteHelper.BMTX_TIMESTAMP, transactionEntity.getTimestamp());
-            values.put(BRSQLiteHelper.BMTX_NAMESPACEID, transactionEntity.getNamespaceID());
+            values.put(BRSQLiteHelper.BMTX_NAMESPACEID, transactionEntity.getNamespaceID().getNumber());
             values.put(BRSQLiteHelper.BMTX_MAPPINGID, transactionEntity.getMappingID());
             values.put(BRSQLiteHelper.BMTX_STRING, transactionEntity.getDescription());
             values.put(BRSQLiteHelper.BMTX_TIMESTAMP, transactionEntity.getTimestamp());
@@ -153,8 +153,9 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
 
     public static BetMappingEntity cursorToTransaction(Context app, String iso, Cursor cursor) {
 
-        return new BetMappingEntity(cursor.getString(0), cursor.getLong(1), cursor.getLong(2),
-                    cursor.getLong(3), cursor.getLong(4), cursor.getString(5),
+        return new BetMappingEntity(cursor.getString(0), cursor.getLong(2),
+                    BetMappingEntity.MappingNamespaceType.fromValue(cursor.getInt(3)),
+                    cursor.getLong(4), cursor.getString(5),
                     cursor.getLong(6), cursor.getLong(7), cursor.getString(8));
     }
 

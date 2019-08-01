@@ -106,7 +106,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     private static final String TAG = WalletWagerrManager.class.getName();
 
-    private static String ISO = "WGR";
+    public static String ISO = "WGR";
 
     private static final String mName = "WAGERR";
     private static final long TIME_GENESIS = 1518743781;

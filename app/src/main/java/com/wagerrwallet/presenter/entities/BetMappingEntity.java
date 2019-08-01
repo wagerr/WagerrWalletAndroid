@@ -1,6 +1,8 @@
 package com.wagerrwallet.presenter.entities;
 
 
+import com.wagerrwallet.tools.crypto.WagerrOpCodeManager;
+
 /**
  * BreadWallet
  * <p>
@@ -61,12 +63,12 @@ public class BetMappingEntity {
     private String txISO;
 
     private long version;
-    private long type;
-    private long namespaceID;
+    private WagerrOpCodeManager.BetTransactionType type;
+    private MappingNamespaceType namespaceID;
     private long mappingID;
     private String description;
 
-    public BetMappingEntity(String txHash, long type,  long version, long namespaceID, long mappingID, String description,
+    public BetMappingEntity(String txHash, long version, MappingNamespaceType namespaceID, long mappingID, String description,
                             long blockheight, long timestamp,  String iso) {
         this.blockheight = blockheight;
         this.timestamp = timestamp;
@@ -74,7 +76,7 @@ public class BetMappingEntity {
         this.txISO = iso;
 
         this.version = version;
-        this.type = type;
+        this.type = WagerrOpCodeManager.BetTransactionType.MAPPING;
         this.namespaceID = namespaceID;
         this.mappingID = mappingID;
         this.description = description;
@@ -95,7 +97,7 @@ public class BetMappingEntity {
         return txHash;
     }
 
-    public long getNamespaceID() {
+    public MappingNamespaceType getNamespaceID() {
         return namespaceID;
     }
 
@@ -115,7 +117,7 @@ public class BetMappingEntity {
         return version;
     }
 
-    public long getType() {
+    public WagerrOpCodeManager.BetTransactionType getType() {
         return type;
     }
 }

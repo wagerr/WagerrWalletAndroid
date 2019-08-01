@@ -148,7 +148,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
             args.put(BRSQLiteHelper.BETX_DRAW_ODDS, tx.getDrawOdds());
 
 //            Log.e(TAG, "updateTransaction: size before updating: " + getAllTransactions().size());
-            int r = database.update(BRSQLiteHelper.BETX_TABLE_NAME, args, "_id=? AND " + BRSQLiteHelper.TX_ISO + "=?", new String[]{String.valueOf(tx.getEventID()), iso.toUpperCase()});
+            int r = database.update(BRSQLiteHelper.BETX_TABLE_NAME, args, "_id=? AND " + BRSQLiteHelper.TX_ISO + "=?", new String[]{tx.getTxHash(), iso.toUpperCase()});
 //            Log.e(TAG, "updateTransaction: size after updating: " + getAllTransactions().size());
             if (r > 0)
                 Log.e(TAG, "event updated with id: " + tx.getEventID());
