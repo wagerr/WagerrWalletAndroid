@@ -80,6 +80,7 @@ public class WagerrOpCodeManager {
             int test = script[SMOKE_TEST_POS] & 0xFF;
             if (opcode==OP_RETURN && test==SMOKE_TEST)  {       // found wagerr bet tx!
                 betOutput = output;
+                isBetTx=true;
             }
             else {      // else accumulate bet amount
                 betAmount += output.getAmount();

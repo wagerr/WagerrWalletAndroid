@@ -844,5 +844,20 @@ public class WalletBitcoinManager extends BRCoreWalletManager implements BaseWal
             if (list != null) list.txListModified(hash);
     }
 
+    @Override
+    public void onBetTxUpdated(BRCoreTransaction transaction) {
+        super.onBetTxUpdated(transaction);
+        /*Log.d(TAG, "onTxUpdated: " + String.format("hash: %s, blockHeight: %d, timestamp: %d", hash, blockHeight, timeStamp));
+        Context ctx = WagerrApp.getBreadContext();
+        if (ctx != null) {
+            TransactionStorageManager.updateTransaction(ctx, getIso(ctx), new BRTransactionEntity(null, blockHeight, timeStamp, hash, getIso(ctx)));
+
+        } else {
+            Log.e(TAG, "onTxUpdated: Failed, ctx is null");
+        }
+        for (OnTxListModified list : txModifiedListeners)
+            if (list != null) list.txListModified(hash);
+        */
+    }
 
 }

@@ -8,6 +8,7 @@ import com.wagerrwallet.core.BRCorePeer;
 import com.wagerrwallet.core.BRCorePeerManager;
 import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.core.BRCoreWallet;
+import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
@@ -142,6 +143,8 @@ public interface BaseWalletManager {
     void onTxDeleted(String hash, int notifyUser, int recommendRescan);
 
     void onTxUpdated(String hash, int blockHeight, int timeStamp);
+
+    void onBetTxUpdated(BRCoreTransaction transaction);
 
     void txPublished(final String error);
 

@@ -34,6 +34,8 @@ import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
+import com.wagerrwallet.tools.crypto.WagerrOpCodeManager;
+import com.wagerrwallet.tools.exceptions.WagerrTransactionException;
 import com.wagerrwallet.tools.manager.BRApiManager;
 import com.wagerrwallet.tools.manager.BREventManager;
 import com.wagerrwallet.tools.manager.BRNotificationManager;
@@ -773,51 +775,58 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         final Context ctx = WagerrApp.getBreadContext();
         final WalletsMaster master = WalletsMaster.getInstance(ctx);
 
-        TxMetaData metaData = KVStoreManager.getInstance().createMetadata(ctx, this, transaction);
-        KVStoreManager.getInstance().putTxMetaData(ctx, metaData, transaction.getHash());
-
-        final long amount = getWallet().getTransactionAmount(transaction);
-        if (amount > 0) {
-            BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
-                @Override
-                public void run() {
-                    String am = CurrencyUtils.getFormattedAmount(ctx, getIso(ctx),  new BigDecimal(amount) );       // getFormattedAmount already calculates getCryptoForSmallestCrypto no need to do it twice
-                    BigDecimal bigAmount = master.getCurrentWallet(ctx).getFiatForSmallestCrypto(ctx, new BigDecimal(amount), null);
-                    String amCur = CurrencyUtils.getFormattedAmount(ctx, BRSharedPrefs.getPreferredFiatIso(ctx), bigAmount == null ? new BigDecimal(0) : bigAmount);
-                    String formatted = String.format("%s (%s)", am, amCur);
-                    final String strToShow = String.format(ctx.getString(R.string.TransactionDetails_received), formatted);
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!BRToast.isToastShown()) {
-                                if (Utils.isEmulatorOrDebug(ctx))
-                                    BRToast.showCustomToast(ctx, strToShow,
-                                            WagerrApp.DISPLAY_HEIGHT_PX / 2, Toast.LENGTH_LONG, R.drawable.toast_layout_black);
-                                AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-                                if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                    final MediaPlayer mp = MediaPlayer.create(ctx, R.raw.coinflip);
-                                    if (mp != null) try {
-                                        mp.start();
-                                    } catch (IllegalArgumentException ex) {
-                                        Log.e(TAG, "run: ", ex);
-                                    }
-                                }
-                                BRNotificationManager.sendNotification((Activity) ctx, R.drawable.notification_icon, ctx.getString(R.string.app_name), strToShow, 1);
-                            }
-                        }
-                    }, 1000);
-
-
-                }
-            });
+        if (ctx != null && WagerrOpCodeManager.DecodeBetTransaction(ctx, transaction))
+        {
+            for (OnTxListModified list : txModifiedListeners)
+                if (list != null) list.txListModified(transaction.getReverseHash());
         }
-        if (ctx != null)
-            TransactionStorageManager.putTransaction(ctx, getIso(ctx), new BRTransactionEntity(transaction.serialize(), transaction.getBlockHeight(), transaction.getTimestamp(), BRCoreKey.encodeHex(transaction.getHash()), getIso(ctx)));
-        else
-            Log.e(TAG, "onTxAdded: ctx is null!");
-        for (OnTxListModified list : txModifiedListeners)
-            if (list != null) list.txListModified(transaction.getReverseHash());
+        else {
+            TxMetaData metaData = KVStoreManager.getInstance().createMetadata(ctx, this, transaction);
+            KVStoreManager.getInstance().putTxMetaData(ctx, metaData, transaction.getHash());
+
+            final long amount = getWallet().getTransactionAmount(transaction);
+            if (amount > 0) {
+                BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        String am = CurrencyUtils.getFormattedAmount(ctx, getIso(ctx), new BigDecimal(amount));       // getFormattedAmount already calculates getCryptoForSmallestCrypto no need to do it twice
+                        BigDecimal bigAmount = master.getCurrentWallet(ctx).getFiatForSmallestCrypto(ctx, new BigDecimal(amount), null);
+                        String amCur = CurrencyUtils.getFormattedAmount(ctx, BRSharedPrefs.getPreferredFiatIso(ctx), bigAmount == null ? new BigDecimal(0) : bigAmount);
+                        String formatted = String.format("%s (%s)", am, amCur);
+                        final String strToShow = String.format(ctx.getString(R.string.TransactionDetails_received), formatted);
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!BRToast.isToastShown()) {
+                                    if (Utils.isEmulatorOrDebug(ctx))
+                                        BRToast.showCustomToast(ctx, strToShow,
+                                                WagerrApp.DISPLAY_HEIGHT_PX / 2, Toast.LENGTH_LONG, R.drawable.toast_layout_black);
+                                    AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+                                    if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                        final MediaPlayer mp = MediaPlayer.create(ctx, R.raw.coinflip);
+                                        if (mp != null) try {
+                                            mp.start();
+                                        } catch (IllegalArgumentException ex) {
+                                            Log.e(TAG, "run: ", ex);
+                                        }
+                                    }
+                                    BRNotificationManager.sendNotification((Activity) ctx, R.drawable.notification_icon, ctx.getString(R.string.app_name), strToShow, 1);
+                                }
+                            }
+                        }, 1000);
+
+
+                    }
+                });
+            }
+            if (ctx != null)
+                TransactionStorageManager.putTransaction(ctx, getIso(ctx), new BRTransactionEntity(transaction.serialize(), transaction.getBlockHeight(), transaction.getTimestamp(), BRCoreKey.encodeHex(transaction.getHash()), getIso(ctx)));
+            else
+                Log.e(TAG, "onTxAdded: ctx is null!");
+            for (OnTxListModified list : txModifiedListeners)
+                if (list != null) list.txListModified(transaction.getReverseHash());
+        }
     }
 
     @Override
@@ -858,5 +867,21 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             if (list != null) list.txListModified(hash);
     }
 
+    @Override
+    public void onBetTxUpdated(BRCoreTransaction transaction) {
+        super.onBetTxUpdated(transaction);
+        Context ctx = WagerrApp.getBreadContext();
+        WagerrOpCodeManager.DecodeBetTransaction(ctx, transaction);
+        /*Log.d(TAG, "onTxUpdated: " + String.format("hash: %s, blockHeight: %d, timestamp: %d", hash, blockHeight, timeStamp));
+        Context ctx = WagerrApp.getBreadContext();
+        if (ctx != null) {
+            TransactionStorageManager.updateTransaction(ctx, getIso(ctx), new BRTransactionEntity(null, blockHeight, timeStamp, hash, getIso(ctx)));
 
+        } else {
+            Log.e(TAG, "onTxUpdated: Failed, ctx is null");
+        }
+        for (OnTxListModified list : txModifiedListeners)
+            if (list != null) list.txListModified(hash);
+        */
+    }
 }
