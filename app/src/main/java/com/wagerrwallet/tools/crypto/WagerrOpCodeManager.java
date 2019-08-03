@@ -17,6 +17,7 @@ import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
 import com.wagerrwallet.tools.sqlite.BetMappingTxDataStore;
 import com.wagerrwallet.tools.sqlite.BetResultTxDataStore;
 import com.wagerrwallet.tools.sqlite.BetTxDataStore;
+import com.wagerrwallet.tools.util.BytesUtil;
 import com.wagerrwallet.tools.util.PositionPointer;
 import com.wagerrwallet.tools.util.Utils;
 import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
@@ -93,6 +94,7 @@ public class WagerrOpCodeManager {
                 BetEventEntity betEventEntity = null;
                 BetEntity betEntity = null;
                 BetResultEntity betResultEntity = null;
+                boolean updateEntity = false;
 
                 byte[] script = betOutput.getScript();
                 int opLength = script[LENGHT_POS] & 0xFF;
@@ -118,6 +120,7 @@ public class WagerrOpCodeManager {
 
                         case UPDATE_PEERLESS:
                             betEventEntity = getPeerlessUpdateOddsEntity(tx, script);
+                            updateEntity = true;
                             break;
 
                         case EVENT_CHAIN_LOTTO:
@@ -150,7 +153,12 @@ public class WagerrOpCodeManager {
                 if (betEventEntity != null)
                 {
                     BetEventTxDataStore beds = BetEventTxDataStore.getInstance(app);
-                    beds.putTransaction( app, WalletWagerrManager.ISO, betEventEntity);
+                    if (updateEntity) {
+                        beds.updateOdds( app, WalletWagerrManager.ISO, betEventEntity);
+                    }
+                    else {
+                        beds.putTransaction( app, WalletWagerrManager.ISO, betEventEntity);
+                    }
                 }
 
                 if (betEntity != null)
@@ -210,19 +218,16 @@ public class WagerrOpCodeManager {
             throw new WagerrTransactionException("getMappingEntity " + txHash + ": wrong namespace");
 
         int mappingID = 0;
-        int from = 0, to = opLength+1;
-
-        ByteBuffer bb = ByteBuffer.allocate(3);
-        bb.order(getByteOrder(tx.getBlockHeight()));
-        bb.put(script[NAMESPACE_POS+1]);
-        bb.put(script[NAMESPACE_POS+2]);
-        from = NAMESPACE_POS + 2;
+        int from = NAMESPACE_POS + 2, to = opLength+1;
+        ByteOrder byteOrder = getByteOrder(tx.getBlockHeight());
+        PositionPointer pos = new PositionPointer(0);
+        byte[] mapBytes = new byte[] { script[NAMESPACE_POS+1], script[NAMESPACE_POS+2], 0, 0 };
         if ( namespaceType == BetMappingEntity.MappingNamespaceType.TEAM_NAME )
         {
-            bb.put(script[NAMESPACE_POS+3]);
+            mapBytes[2] = (byte)(script[NAMESPACE_POS+3] & 0xFF);
             from++;
         }
-        mappingID = bb.getInt();
+        mappingID = getBufferInt( mapBytes, pos, byteOrder );
         byte[] stringBytes = Arrays.copyOfRange(script, from, to);
         String description = new String(stringBytes);
         mappingEntity = new BetMappingEntity( txHash , version, namespaceType, mappingID, description,
@@ -482,30 +487,16 @@ public class WagerrOpCodeManager {
     protected static short getBufferShort( byte[] script, PositionPointer startPointer, ByteOrder byteOrder  )
     {
         int start = startPointer.getPos();
-        ByteBuffer bb = ByteBuffer.allocate(2);
-        bb.order(byteOrder);
-        bb.put(script[start]);
-        bb.put(script[start+1]);
-        short ret = bb.getShort();
-        bb.clear();
+        short ret = (byteOrder==ByteOrder.LITTLE_ENDIAN) ? BytesUtil.byteArrayToLeShort(script, start) : BytesUtil.byteArrayToGeShort(script, start);
         startPointer.Up(2);
-
         return ret;
     }
 
     protected static int getBufferInt( byte[] script, PositionPointer startPointer, ByteOrder byteOrder )
     {
         int start = startPointer.getPos();
-        ByteBuffer bb = ByteBuffer.allocate(4);
-        bb.order(byteOrder);
-        bb.put(script[start]);
-        bb.put(script[start+1]);
-        bb.put(script[start+2]);
-        bb.put(script[start+3]);
-        int ret = bb.getInt();
-        bb.clear();
+        int ret = (byteOrder==ByteOrder.LITTLE_ENDIAN) ? BytesUtil.byteArrayToLeInt(script, start) : BytesUtil.byteArrayToGeInt(script, start);
         startPointer.Up(4);
-
         return ret;
     }
 

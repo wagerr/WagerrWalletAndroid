@@ -872,6 +872,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         super.onBetTxUpdated(transaction);
         Context ctx = WagerrApp.getBreadContext();
         WagerrOpCodeManager.DecodeBetTransaction(ctx, transaction);
+
+
         /*Log.d(TAG, "onTxUpdated: " + String.format("hash: %s, blockHeight: %d, timestamp: %d", hash, blockHeight, timeStamp));
         Context ctx = WagerrApp.getBreadContext();
         if (ctx != null) {
@@ -883,5 +885,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         for (OnTxListModified list : txModifiedListeners)
             if (list != null) list.txListModified(hash);
         */
+
+        getWallet().removeBetTransaction(transaction);
     }
 }
