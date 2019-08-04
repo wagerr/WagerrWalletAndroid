@@ -147,7 +147,9 @@ public class WagerrOpCodeManager {
                 if (betMappingEntity != null)
                 {
                     BetMappingTxDataStore bmds = BetMappingTxDataStore.getInstance(app);
-                    bmds.putTransaction(app, WalletWagerrManager.ISO, betMappingEntity );
+                    Log.e(TAG, "storing bettx mapping :" + tx.getReverseHash() + ", " + tx.getBlockHeight() + "\n" + betMappingEntity );
+                    BetMappingEntity betMappingEntity1 = bmds.putTransaction(app, WalletWagerrManager.ISO, betMappingEntity );
+                    Log.e(TAG, "retrieving bettx mapping from DB: "  + tx.getReverseHash() + "\n" + betMappingEntity1 );
                 }
 
                 if (betEventEntity != null)
@@ -157,7 +159,9 @@ public class WagerrOpCodeManager {
                         beds.updateOdds( app, WalletWagerrManager.ISO, betEventEntity);
                     }
                     else {
-                        beds.putTransaction( app, WalletWagerrManager.ISO, betEventEntity);
+                        Log.e(TAG, "storing bettx event :" + tx.getReverseHash() + ", " + tx.getBlockHeight() + "\n" + betEventEntity );
+                        BetEventEntity betEventEntity1 = beds.putTransaction( app, WalletWagerrManager.ISO, betEventEntity);
+                        Log.e(TAG, "retrieving bettx event from DB: "  + tx.getReverseHash() + "\n" + betEventEntity1 );
                     }
                 }
 
@@ -170,7 +174,9 @@ public class WagerrOpCodeManager {
                 if (betResultEntity != null)
                 {
                     BetResultTxDataStore beds = BetResultTxDataStore.getInstance(app);
-                    beds.putTransaction( app, WalletWagerrManager.ISO, betResultEntity);
+                    Log.e(TAG, "storing bettx result :" + tx.getReverseHash() + ", " + tx.getBlockHeight() + "\n" + betResultEntity );
+                    BetResultEntity betResultEntity1 = beds.putTransaction( app, WalletWagerrManager.ISO, betResultEntity);
+                    Log.e(TAG, "retrieving bettx result from DB: "  + tx.getReverseHash() + "\n" + betResultEntity1 );
                 }
             }
             catch (WagerrTransactionException wEx) {
@@ -185,10 +191,10 @@ public class WagerrOpCodeManager {
     protected static ByteOrder getByteOrder(long height)
     {
         ByteOrder ret = ByteOrder.LITTLE_ENDIAN;
-        if (BuildConfig.BITCOIN_TESTNET) {
+        /*if (BuildConfig.BITCOIN_TESTNET) {
             if (height<100000)
                 ret = ByteOrder.BIG_ENDIAN;
-        }
+        }*/
         return ret;
     }
 
@@ -220,15 +226,15 @@ public class WagerrOpCodeManager {
         int mappingID = 0;
         int from = NAMESPACE_POS + 2, to = opLength+1;
         ByteOrder byteOrder = getByteOrder(tx.getBlockHeight());
-        PositionPointer pos = new PositionPointer(0);
-        byte[] mapBytes = new byte[] { script[NAMESPACE_POS+1], script[NAMESPACE_POS+2], 0, 0 };
+        PositionPointer pos = new PositionPointer(NAMESPACE_POS+1);
         if ( namespaceType == BetMappingEntity.MappingNamespaceType.TEAM_NAME )
         {
-            mapBytes[2] = (byte)(script[NAMESPACE_POS+3] & 0xFF);
-            from++;
+            mappingID = getBufferInt( script, pos, byteOrder );
         }
-        mappingID = getBufferInt( mapBytes, pos, byteOrder );
-        byte[] stringBytes = Arrays.copyOfRange(script, from, to);
+        else {
+            mappingID = getBufferShort( script, pos, byteOrder );
+        }
+        byte[] stringBytes = Arrays.copyOfRange(script, pos.getPos(), to);
         String description = new String(stringBytes);
         mappingEntity = new BetMappingEntity( txHash , version, namespaceType, mappingID, description,
                                             tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
@@ -344,7 +350,7 @@ public class WagerrOpCodeManager {
         int awayOddsID = getBufferInt( script, pos, byteOrder);
         int drawOddsID = getBufferInt( script, pos, byteOrder);
 
-        eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.PEERLESS, version, eventID, 0,
+        eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.UPDATEODDS, version, eventID, 0,
                 0, 0, 0, 0, 0, homeOddsID, awayOddsID, drawOddsID,
                 0,0,0,0,0,
                 tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
@@ -370,7 +376,7 @@ public class WagerrOpCodeManager {
         short eventID = getBufferShort( script, pos, byteOrder);
         short entryPrice = getBufferShort(script, pos, byteOrder);
 
-        eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.PEERLESS, version, eventID, 0,
+        eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.CHAIN_LOTTO, version, eventID, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 entryPrice,0,0,0,0,
                 tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
@@ -420,7 +426,7 @@ public class WagerrOpCodeManager {
         PositionPointer pos = new PositionPointer(EVENTID_POS);
         int eventID = getBufferInt( script, pos, byteOrder);
 
-        betResultEntity = new BetResultEntity( txHash , BetResultEntity.BetTxType.PEERLESS, version, eventID, BetResultEntity.BetResultType.UNKNOWN,
+        betResultEntity = new BetResultEntity( txHash , BetResultEntity.BetTxType.CHAIN_LOTTO, version, eventID, BetResultEntity.BetResultType.UNKNOWN,
                 0, 0, tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
         return betResultEntity;
     }
@@ -446,7 +452,7 @@ public class WagerrOpCodeManager {
         int homeOdds = getBufferInt( script, pos, byteOrder);
         int awayOdds = getBufferInt( script, pos, byteOrder);
 
-        eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.PEERLESS, version, eventID, 0,
+        eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.PEERLESS_SPREAD, version, eventID, 0,
                 0, 0, 0, 0, 0, homeOdds, awayOdds, 0,
                 0,spreadPoints,0,0,0,
                 tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
@@ -474,7 +480,7 @@ public class WagerrOpCodeManager {
         int overOdds = getBufferInt( script, pos, byteOrder);
         int underOdds = getBufferInt( script, pos, byteOrder);
 
-        eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.PEERLESS, version, eventID, 0,
+        eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.PEERLESS_TOTAL, version, eventID, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0,0, totalPoints, overOdds, underOdds,
                 tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);

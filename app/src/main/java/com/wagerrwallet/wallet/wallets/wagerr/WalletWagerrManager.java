@@ -26,6 +26,8 @@ import com.wagerrwallet.presenter.customviews.BRToast;
 import com.wagerrwallet.presenter.entities.BRMerkleBlockEntity;
 import com.wagerrwallet.presenter.entities.BRPeerEntity;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
+import com.wagerrwallet.presenter.entities.BetEventEntity;
+import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
@@ -43,6 +45,10 @@ import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.InternetManager;
 import com.wagerrwallet.tools.security.BRKeyStore;
+import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetMappingTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetResultTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetTxDataStore;
 import com.wagerrwallet.tools.sqlite.BtcBchTransactionDataStore;
 import com.wagerrwallet.tools.sqlite.CurrencyDataSource;
 import com.wagerrwallet.tools.sqlite.MerkleBlockDataSource;
@@ -266,18 +272,19 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     }
 
     @Override
-    public List<EventTxUiHolder> getEventTxUiHolders() {
-        BRCoreTransaction txs[] = getWallet().getTransactions();
-        if (txs == null || txs.length <= 0) return null;
+    public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
+        List<BetEventEntity> txs = BetEventTxDataStore.getInstance(app).getAllTransactions(app,ISO);
+        if (txs == null || txs.size() <= 0) return null;
         List<EventTxUiHolder> uiTxs = new ArrayList<>();
-        for (int i = txs.length - 1; i >= 0; i--) { //revere order
-            BRCoreTransaction tx = txs[i];
-            uiTxs.add(new EventTxUiHolder(tx.getTimestamp(), (int) tx.getBlockHeight(), tx.getHash(),
-                    tx.getReverseHash(), getWallet().getTransactionAmountSent(tx),
+        for (BetEventEntity tx : txs) {
+            /*
+            uiTxs.add(new EventTxUiHolder(tx.getTimestamp(), (int) tx.getBlockheight(), tx.getTxHash(),
+                    Utils.reverseHex(tx.getTxHash()), getWallet().getTransactionAmountSent(tx),
                     getWallet().getTransactionAmountReceived(tx), getWallet().getTransactionFee(tx),
                     tx.getOutputAddresses(), tx.getInputAddresses(),
                     getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
                     getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)));
+            */
         }
 
         return uiTxs;
@@ -397,6 +404,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     @Override
     public void wipeData(Context app) {
         BtcBchTransactionDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
+        BetEventTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
+        BetResultTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
+        BetTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
+        BetMappingTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
         MerkleBlockDataSource.getInstance(app).deleteAllBlocks(app, getIso(app));
         PeerDataSource.getInstance(app).deleteAllPeers(app, getIso(app));
         BRSharedPrefs.clearAllPrefs(app);
@@ -886,6 +897,6 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             if (list != null) list.txListModified(hash);
         */
 
-        getWallet().removeBetTransaction(transaction);
+        //getWallet().removeBetTransaction(transaction);
     }
 }

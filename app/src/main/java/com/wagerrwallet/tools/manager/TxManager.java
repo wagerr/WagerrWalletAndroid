@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.WalletActivity;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.tools.adapter.TransactionListAdapter;
 import com.wagerrwallet.tools.animation.BRAnimator;
@@ -98,6 +99,8 @@ public class TxManager {
             return;
         }
         final List<TxUiHolder> items = wallet.getTxUiHolders();
+        final List<EventTxUiHolder> betItems = wallet.getEventTxUiHolders(app);
+
 
         long took = (System.currentTimeMillis() - start);
         if (took > 500)

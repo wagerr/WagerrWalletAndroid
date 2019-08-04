@@ -258,9 +258,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
         return uiTxs;
     }
 
-    public List<EventTxUiHolder> getEventTxUiHolders() {
-        BRCoreTransaction txs[] = getWallet().getTransactions();
-        if (txs == null || txs.length <= 0) return null;
+    public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
         List<EventTxUiHolder> uiTxs = new ArrayList<>();
 
         return uiTxs;

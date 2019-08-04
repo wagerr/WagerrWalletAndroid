@@ -101,7 +101,7 @@ public class EventTxManager {
             Log.e(TAG, "updateTxList: wallet is null");
             return;
         }
-        final List<EventTxUiHolder> items = wallet.getEventTxUiHolders();
+        final List<EventTxUiHolder> items = wallet.getEventTxUiHolders(app);
 
         long took = (System.currentTimeMillis() - start);
         if (took > 500)

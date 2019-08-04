@@ -34,6 +34,7 @@ public class BetEventEntity {
 
     public enum BetTxType {
         PEERLESS(0x02),
+        UPDATEODDS(0x05),
         CHAIN_LOTTO(0x06),
         PEERLESS_SPREAD(0x09),
         PEERLESS_TOTAL(0x0a),
@@ -104,6 +105,9 @@ public class BetEventEntity {
         this.version = version;
         this.type = type;
         this.eventID = eventID;
+        this.sportID = sportID;
+        this.roundID = roundID;
+        this.tournamentID = tournamentID;
 
         this.eventTimestamp = eventTimestamp;
         this.homeTeamID = homeTeamID;
