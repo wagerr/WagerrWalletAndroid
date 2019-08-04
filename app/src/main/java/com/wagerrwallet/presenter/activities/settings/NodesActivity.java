@@ -134,8 +134,7 @@ public class NodesActivity extends BRActivity {
         long nCurrentHeight = BRSharedPrefs.getLastBlockHeight(this, wm.getIso(this));
         currentHeight.setText(wm.getPeerManager().getConnectStatus() == BRCorePeer.ConnectStatus.Connected ? String.valueOf(nCurrentHeight) : getString(R.string.NodeSelector_notConnected));
         BRCoreMerkleBlock block = MerkleBlockDataSource.getInstance(app).getMerkleBlockAtHeight(this,wm.getIso(this), nCurrentHeight);
-        blockHash.setText( (block!=null) ? BRCoreKey.encodeHexRev(block.getBlockHash()):  getString(R.string.SyncingView_header));
-        block.disposeNative();
+        blockHash.setText( (block!=null) ? Utils.reverseHex(Utils.bytesToHex(block.getBlockHash())):  getString(R.string.SyncingView_header));
         if (trustNode != null)
             trustNode.setText(wm.getPeerManager().getCurrentPeerName());
     }
