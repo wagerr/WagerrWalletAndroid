@@ -60,7 +60,8 @@ public class WagerrApp extends Application {
     FingerprintManager mFingerprintManager;
     // host is the server(s) on which the API is hosted
     public static String HOST = "api.breadwallet.com";
-    public static String HOST_UTXO = "http://explorer2.wagerr.io";
+    public static String HOST_UTXO = "https://chainz.cryptoid.info/";
+    public static String HOST_UTXO_KEY = "552651714eae";
     private static List<OnAppBackgrounded> listeners;
     private static Timer isBackgroundChecker;
     public static AtomicInteger activityCounter = new AtomicInteger();
