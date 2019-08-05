@@ -8,8 +8,10 @@ import com.wagerrwallet.core.BRCorePeer;
 import com.wagerrwallet.core.BRCorePeerManager;
 import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.core.BRCoreWallet;
+import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.wallet.wallets.configs.WalletUiConfiguration;
 
 import java.math.BigDecimal;
@@ -78,6 +80,9 @@ public interface BaseWalletManager {
     //get a list of all the transactions UI holders sorted by timestamp
     List<TxUiHolder> getTxUiHolders();
 
+    //get a list of all the transactions UI holders sorted by timestamp
+    List<EventTxUiHolder> getEventTxUiHolders(Context app);
+
     //generate the wallet if needed
     boolean generateWallet(Context app);
 
@@ -138,6 +143,8 @@ public interface BaseWalletManager {
     void onTxDeleted(String hash, int notifyUser, int recommendRescan);
 
     void onTxUpdated(String hash, int blockHeight, int timeStamp);
+
+    void onBetTxUpdated(BRCoreTransaction transaction);
 
     void txPublished(final String error);
 

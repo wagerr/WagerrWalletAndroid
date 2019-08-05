@@ -65,4 +65,32 @@ public class BytesUtil {
         return byteBuffer.toByteArray();
 
     }
+
+    public static int byteArrayToLeInt(byte[] encodedValue, int start ) {
+        int value = ((encodedValue[start+3] & 0xFF) << (Byte.SIZE * 3));
+        value |= (encodedValue[start+2] & 0xFF) << (Byte.SIZE * 2);
+        value |= (encodedValue[start+1] & 0xFF) << (Byte.SIZE * 1);
+        value |= (encodedValue[start] & 0xFF);
+        return value;
+    }
+
+    public static int byteArrayToGeInt(byte[] encodedValue, int start ) {
+        int value = ((encodedValue[start] & 0xFF) << (Byte.SIZE * 3));
+        value |= (encodedValue[start+1] & 0xFF) << (Byte.SIZE * 2);
+        value |= (encodedValue[start+2] & 0xFF) << (Byte.SIZE * 1);
+        value |= (encodedValue[start+3] & 0xFF);
+        return value;
+    }
+
+    public static short byteArrayToLeShort(byte[] encodedValue, int start ) {
+        int value = ((encodedValue[start+1] & 0xFF) << (Byte.SIZE * 1));
+        value |= (encodedValue[start] & 0xFF);
+        return (short)value;
+    }
+
+    public static short byteArrayToGeShort(byte[] encodedValue, int start ) {
+        int value = ((encodedValue[start] & 0xFF) << (Byte.SIZE * 1));
+        value |= (encodedValue[start+1] & 0xFF);
+        return (short)value;
+    }
 }

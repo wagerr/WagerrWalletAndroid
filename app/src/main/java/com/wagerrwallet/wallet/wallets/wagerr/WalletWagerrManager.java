@@ -26,13 +26,18 @@ import com.wagerrwallet.presenter.customviews.BRToast;
 import com.wagerrwallet.presenter.entities.BRMerkleBlockEntity;
 import com.wagerrwallet.presenter.entities.BRPeerEntity;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
+import com.wagerrwallet.presenter.entities.BetEventEntity;
+import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.PeerEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
+import com.wagerrwallet.tools.crypto.WagerrOpCodeManager;
+import com.wagerrwallet.tools.exceptions.WagerrTransactionException;
 import com.wagerrwallet.tools.manager.BRApiManager;
 import com.wagerrwallet.tools.manager.BREventManager;
 import com.wagerrwallet.tools.manager.BRNotificationManager;
@@ -40,6 +45,10 @@ import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.InternetManager;
 import com.wagerrwallet.tools.security.BRKeyStore;
+import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetMappingTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetResultTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetTxDataStore;
 import com.wagerrwallet.tools.sqlite.BtcBchTransactionDataStore;
 import com.wagerrwallet.tools.sqlite.CurrencyDataSource;
 import com.wagerrwallet.tools.sqlite.MerkleBlockDataSource;
@@ -55,6 +64,7 @@ import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.abstracts.OnBalanceChangedListener;
 import com.wagerrwallet.wallet.abstracts.OnTxListModified;
+import com.wagerrwallet.wallet.abstracts.OnEventTxListModified;
 import com.wagerrwallet.wallet.abstracts.OnTxStatusUpdatedListener;
 import com.wagerrwallet.wallet.abstracts.SyncListener;
 import com.wagerrwallet.wallet.wallets.configs.WalletUiConfiguration;
@@ -104,7 +114,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     private static final String TAG = WalletWagerrManager.class.getName();
 
-    private static String ISO = "WGR";
+    public static String ISO = "WGR";
 
     private static final String mName = "WAGERR";
     private static final long TIME_GENESIS = 1518743781;
@@ -125,6 +135,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     private List<OnTxStatusUpdatedListener> txStatusUpdatedListeners = new ArrayList<>();
     private List<SyncListener> syncListeners = new ArrayList<>();
     private List<OnTxListModified> txModifiedListeners = new ArrayList<>();
+    private List<OnEventTxListModified> eventTxModifiedListeners = new ArrayList<>();
 
     private Executor listenerExecutor = Executors.newSingleThreadExecutor();
 
@@ -261,6 +272,25 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     }
 
     @Override
+    public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
+        List<BetEventEntity> txs = BetEventTxDataStore.getInstance(app).getAllTransactions(app,ISO);
+        if (txs == null || txs.size() <= 0) return null;
+        List<EventTxUiHolder> uiTxs = new ArrayList<>();
+        for (BetEventEntity tx : txs) {
+            /*
+            uiTxs.add(new EventTxUiHolder(tx.getTimestamp(), (int) tx.getBlockheight(), tx.getTxHash(),
+                    Utils.reverseHex(tx.getTxHash()), getWallet().getTransactionAmountSent(tx),
+                    getWallet().getTransactionAmountReceived(tx), getWallet().getTransactionFee(tx),
+                    tx.getOutputAddresses(), tx.getInputAddresses(),
+                    getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
+                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)));
+            */
+        }
+
+        return uiTxs;
+    }
+
+    @Override
     public boolean generateWallet(Context app) {
         //no need, one key for all wallets so far
         return true;
@@ -374,6 +404,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     @Override
     public void wipeData(Context app) {
         BtcBchTransactionDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
+        BetEventTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
+        BetResultTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
+        BetTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
+        BetMappingTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
         MerkleBlockDataSource.getInstance(app).deleteAllBlocks(app, getIso(app));
         PeerDataSource.getInstance(app).deleteAllPeers(app, getIso(app));
         BRSharedPrefs.clearAllPrefs(app);
@@ -547,6 +581,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             txModifiedListeners.add(list);
     }
 
+    public void addEventTxListModifiedListener(OnEventTxListModified list) {
+        if (list != null && !eventTxModifiedListeners.contains(list))
+            eventTxModifiedListeners.add(list);
+    }
 
     @Override
     public void txPublished(final String error) {
@@ -748,51 +786,58 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         final Context ctx = WagerrApp.getBreadContext();
         final WalletsMaster master = WalletsMaster.getInstance(ctx);
 
-        TxMetaData metaData = KVStoreManager.getInstance().createMetadata(ctx, this, transaction);
-        KVStoreManager.getInstance().putTxMetaData(ctx, metaData, transaction.getHash());
-
-        final long amount = getWallet().getTransactionAmount(transaction);
-        if (amount > 0) {
-            BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
-                @Override
-                public void run() {
-                    String am = CurrencyUtils.getFormattedAmount(ctx, getIso(ctx),  new BigDecimal(amount) );       // getFormattedAmount already calculates getCryptoForSmallestCrypto no need to do it twice
-                    BigDecimal bigAmount = master.getCurrentWallet(ctx).getFiatForSmallestCrypto(ctx, new BigDecimal(amount), null);
-                    String amCur = CurrencyUtils.getFormattedAmount(ctx, BRSharedPrefs.getPreferredFiatIso(ctx), bigAmount == null ? new BigDecimal(0) : bigAmount);
-                    String formatted = String.format("%s (%s)", am, amCur);
-                    final String strToShow = String.format(ctx.getString(R.string.TransactionDetails_received), formatted);
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!BRToast.isToastShown()) {
-                                if (Utils.isEmulatorOrDebug(ctx))
-                                    BRToast.showCustomToast(ctx, strToShow,
-                                            WagerrApp.DISPLAY_HEIGHT_PX / 2, Toast.LENGTH_LONG, R.drawable.toast_layout_black);
-                                AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-                                if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                    final MediaPlayer mp = MediaPlayer.create(ctx, R.raw.coinflip);
-                                    if (mp != null) try {
-                                        mp.start();
-                                    } catch (IllegalArgumentException ex) {
-                                        Log.e(TAG, "run: ", ex);
-                                    }
-                                }
-                                BRNotificationManager.sendNotification((Activity) ctx, R.drawable.notification_icon, ctx.getString(R.string.app_name), strToShow, 1);
-                            }
-                        }
-                    }, 1000);
-
-
-                }
-            });
+        if (ctx != null && WagerrOpCodeManager.DecodeBetTransaction(ctx, transaction))
+        {
+            for (OnTxListModified list : txModifiedListeners)
+                if (list != null) list.txListModified(transaction.getReverseHash());
         }
-        if (ctx != null)
-            TransactionStorageManager.putTransaction(ctx, getIso(ctx), new BRTransactionEntity(transaction.serialize(), transaction.getBlockHeight(), transaction.getTimestamp(), BRCoreKey.encodeHex(transaction.getHash()), getIso(ctx)));
-        else
-            Log.e(TAG, "onTxAdded: ctx is null!");
-        for (OnTxListModified list : txModifiedListeners)
-            if (list != null) list.txListModified(transaction.getReverseHash());
+        else {
+            TxMetaData metaData = KVStoreManager.getInstance().createMetadata(ctx, this, transaction);
+            KVStoreManager.getInstance().putTxMetaData(ctx, metaData, transaction.getHash());
+
+            final long amount = getWallet().getTransactionAmount(transaction);
+            if (amount > 0) {
+                BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        String am = CurrencyUtils.getFormattedAmount(ctx, getIso(ctx), new BigDecimal(amount));       // getFormattedAmount already calculates getCryptoForSmallestCrypto no need to do it twice
+                        BigDecimal bigAmount = master.getCurrentWallet(ctx).getFiatForSmallestCrypto(ctx, new BigDecimal(amount), null);
+                        String amCur = CurrencyUtils.getFormattedAmount(ctx, BRSharedPrefs.getPreferredFiatIso(ctx), bigAmount == null ? new BigDecimal(0) : bigAmount);
+                        String formatted = String.format("%s (%s)", am, amCur);
+                        final String strToShow = String.format(ctx.getString(R.string.TransactionDetails_received), formatted);
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!BRToast.isToastShown()) {
+                                    if (Utils.isEmulatorOrDebug(ctx))
+                                        BRToast.showCustomToast(ctx, strToShow,
+                                                WagerrApp.DISPLAY_HEIGHT_PX / 2, Toast.LENGTH_LONG, R.drawable.toast_layout_black);
+                                    AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+                                    if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                        final MediaPlayer mp = MediaPlayer.create(ctx, R.raw.coinflip);
+                                        if (mp != null) try {
+                                            mp.start();
+                                        } catch (IllegalArgumentException ex) {
+                                            Log.e(TAG, "run: ", ex);
+                                        }
+                                    }
+                                    BRNotificationManager.sendNotification((Activity) ctx, R.drawable.notification_icon, ctx.getString(R.string.app_name), strToShow, 1);
+                                }
+                            }
+                        }, 1000);
+
+
+                    }
+                });
+            }
+            if (ctx != null)
+                TransactionStorageManager.putTransaction(ctx, getIso(ctx), new BRTransactionEntity(transaction.serialize(), transaction.getBlockHeight(), transaction.getTimestamp(), BRCoreKey.encodeHex(transaction.getHash()), getIso(ctx)));
+            else
+                Log.e(TAG, "onTxAdded: ctx is null!");
+            for (OnTxListModified list : txModifiedListeners)
+                if (list != null) list.txListModified(transaction.getReverseHash());
+        }
     }
 
     @Override
@@ -833,5 +878,25 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             if (list != null) list.txListModified(hash);
     }
 
+    @Override
+    public void onBetTxUpdated(BRCoreTransaction transaction) {
+        super.onBetTxUpdated(transaction);
+        Context ctx = WagerrApp.getBreadContext();
+        WagerrOpCodeManager.DecodeBetTransaction(ctx, transaction);
 
+
+        /*Log.d(TAG, "onTxUpdated: " + String.format("hash: %s, blockHeight: %d, timestamp: %d", hash, blockHeight, timeStamp));
+        Context ctx = WagerrApp.getBreadContext();
+        if (ctx != null) {
+            TransactionStorageManager.updateTransaction(ctx, getIso(ctx), new BRTransactionEntity(null, blockHeight, timeStamp, hash, getIso(ctx)));
+
+        } else {
+            Log.e(TAG, "onTxUpdated: Failed, ctx is null");
+        }
+        for (OnTxListModified list : txModifiedListeners)
+            if (list != null) list.txListModified(hash);
+        */
+
+        //getWallet().removeBetTransaction(transaction);
+    }
 }

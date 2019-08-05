@@ -14,6 +14,7 @@ import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.WalletActivity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.tools.adapter.EventListAdapter;
 import com.wagerrwallet.tools.adapter.TransactionListAdapter;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.listeners.RecyclerItemClickListener;
@@ -29,6 +30,9 @@ import java.util.List;
  * Created by Mihail Gutan on <mihail@breadwallet.com> 7/19/17.
  * Copyright (c) 2017 breadwallet LLC
  * <p/>
+ *
+ * (c) Wagerr Betting platform 2019
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -47,15 +51,15 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-public class TxManager {
+public class EventTxManager {
 
-    private static final String TAG = TxManager.class.getName();
-    private static TxManager instance;
+    private static final String TAG = EventTxManager.class.getName();
+    private static EventTxManager instance;
     private RecyclerView txList;
-    public TransactionListAdapter adapter;
+    public EventListAdapter adapter;
 
-    public static TxManager getInstance() {
-        if (instance == null) instance = new TxManager();
+    public static EventTxManager getInstance() {
+        if (instance == null) instance = new EventTxManager();
         return instance;
     }
 
@@ -66,9 +70,8 @@ public class TxManager {
                 txList, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, float x, float y) {
-
-                TxUiHolder item = adapter.getItems().get(position);
-                BRAnimator.showTransactionDetails(app, item, position);
+                EventTxUiHolder item = adapter.getItems().get(position);
+                BRAnimator.showEventDetails(app, item, position);
             }
 
             @Override
@@ -77,13 +80,13 @@ public class TxManager {
             }
         }));
         if (adapter == null)
-            adapter = new TransactionListAdapter(app, null);
+            adapter = new EventListAdapter(app, null);
         txList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         //setupSwipe(app);
     }
 
-    private TxManager() {
+    private EventTxManager() {
     }
 
     public void onResume(final Activity app) {
@@ -98,13 +101,11 @@ public class TxManager {
             Log.e(TAG, "updateTxList: wallet is null");
             return;
         }
-        final List<TxUiHolder> items = wallet.getTxUiHolders();
-        final List<EventTxUiHolder> betItems = wallet.getEventTxUiHolders(app);
-
+        final List<EventTxUiHolder> items = wallet.getEventTxUiHolders(app);
 
         long took = (System.currentTimeMillis() - start);
         if (took > 500)
-            Log.e(TAG, "updateTxList: took: " + took);
+            Log.e(TAG, "updateEventList: took: " + took);
         if (adapter != null) {
             ((Activity) app).runOnUiThread(new Runnable() {
                 @Override

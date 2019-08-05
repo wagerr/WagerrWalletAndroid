@@ -28,6 +28,7 @@ import com.wagerrwallet.presenter.entities.BRPeerEntity;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.PeerEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
@@ -256,6 +257,13 @@ public class WalletBitcoinManager extends BRCoreWalletManager implements BaseWal
                     getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
                     getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)));
         }
+
+        return uiTxs;
+    }
+
+    public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
+
+        List<EventTxUiHolder> uiTxs = new ArrayList<>();
 
         return uiTxs;
     }
@@ -835,5 +843,20 @@ public class WalletBitcoinManager extends BRCoreWalletManager implements BaseWal
             if (list != null) list.txListModified(hash);
     }
 
+    @Override
+    public void onBetTxUpdated(BRCoreTransaction transaction) {
+        super.onBetTxUpdated(transaction);
+        /*Log.d(TAG, "onTxUpdated: " + String.format("hash: %s, blockHeight: %d, timestamp: %d", hash, blockHeight, timeStamp));
+        Context ctx = WagerrApp.getBreadContext();
+        if (ctx != null) {
+            TransactionStorageManager.updateTransaction(ctx, getIso(ctx), new BRTransactionEntity(null, blockHeight, timeStamp, hash, getIso(ctx)));
+
+        } else {
+            Log.e(TAG, "onTxUpdated: Failed, ctx is null");
+        }
+        for (OnTxListModified list : txModifiedListeners)
+            if (list != null) list.txListModified(hash);
+        */
+    }
 
 }
