@@ -108,9 +108,6 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 EventTxUiHolder item;
                 for (int i = 0; i < newItems.size(); i++) {
                     item = newItems.get(i);
-                    item.metaData = KVStoreManager.getInstance().getTxMetaData(mContext, item.getTxHash());
-                    item.txReversed = Utils.reverseHex(Utils.bytesToHex(item.getTxHash()));
-
                 }
                 backUpFeed = newItems;
                 String log = String.format("newItems: %d, took: %d", newItems.size(), (System.currentTimeMillis() - s));
@@ -160,27 +157,13 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void setTexts(final EventHolder convertView, int position) {
         BaseWalletManager wallet = WalletsMaster.getInstance(mContext).getCurrentWallet(mContext);
         EventTxUiHolder item = itemFeed.get(position);
-        item.metaData = KVStoreManager.getInstance().getTxMetaData(mContext, item.getTxHash());
 
         String commentString = "";
-        if (item.metaData != null) {
-            if (item.metaData.comment != null) {
-                commentString = item.metaData.comment;
-            }
-        }
+        boolean received = false;
 
-        boolean received = item.getSent() == 0;
+        convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.transaction_amount_received_color, null));
 
-        if (received)
-            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.transaction_amount_received_color, null));
-        else
-            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.total_assets_usd_color, null));
-
-        // If this transaction failed, show the "FAILED" indicator in the cell
-        if (!item.isValid())
-            showTransactionFailed(convertView, item, received);
-
-        BigDecimal cryptoAmount = new BigDecimal(item.getAmount());
+        BigDecimal cryptoAmount = new BigDecimal(0);
         Log.e(TAG, "setTexts: crypto:" + cryptoAmount);
         boolean isCryptoPreferred = BRSharedPrefs.isCryptoPreferred(mContext);
         String preferredIso = isCryptoPreferred ? wallet.getIso(mContext) : BRSharedPrefs.getPreferredFiatIso(mContext);
@@ -190,65 +173,13 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         convertView.transactionAmount.setText(CurrencyUtils.getFormattedAmount(mContext, preferredIso, amount));
 
-        int blockHeight = item.getBlockHeight();
+        int blockHeight = (int)item.getBlockheight();
         int confirms = blockHeight == Integer.MAX_VALUE ? 0 : BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext)) - blockHeight + 1;
 
-        int level = 0;
-        if (confirms <= 0) {
-            long relayCount = wallet.getPeerManager().getRelayCount(item.getTxHash());
-            if (relayCount <= 0)
-                level = 0;
-            else if (relayCount == 1)
-                level = 1;
-            else
-                level = 2;
-        } else {
-            if (confirms == 1)
-                level = 3;
-            else if (confirms == 2)
-                level = 4;
-            else if (confirms == 3)
-                level = 5;
-            else
-                level = 6;
-        }
-        switch (level) {
-            case 0:
-                showTransactionProgress(convertView, 0);
-                break;
-            case 1:
-                showTransactionProgress(convertView, 20);
-
-                break;
-            case 2:
-
-                showTransactionProgress(convertView, 40);
-                break;
-            case 3:
-
-                showTransactionProgress(convertView, 60);
-                break;
-            case 4:
-
-                showTransactionProgress(convertView, 80);
-                break;
-            case 5:
-
-                //showTransactionProgress(convertView, 100);
-                break;
-        }
-
-        Log.d(TAG, "Level -> " + level);
-
-        if (level > 4) {
-            convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getTo()[0]));
-        } else {
-            convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, item.getTo()[0]));
-
-        }
+        convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") );
 
         //if it's 0 we use the current time.
-        long timeStamp = item.getTimeStamp() == 0 ? System.currentTimeMillis() : item.getTimeStamp() * 1000;
+        long timeStamp = item.getTimestamp() == 0 ? System.currentTimeMillis() : item.getTimestamp() * 1000;
 
         String shortDate = BRDateUtil.getShortDate(timeStamp);
 
@@ -290,10 +221,8 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         params.setMargins(16, 0, 0, 0);
         params.addRule(RelativeLayout.CENTER_VERTICAL, holder.transactionFailed.getId());
         holder.transactionDetail.setLayoutParams(params);
+        holder.transactionDetail.setText("sending to ");
 
-        if (!received) {
-            holder.transactionDetail.setText("sending to " + tx.getTo()[0]);
-        }
     }
 
     public void filterBy(String query, boolean[] switches) {
@@ -317,9 +246,12 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         EventTxUiHolder item;
         for (int i = 0; i < backUpFeed.size(); i++) {
             item = backUpFeed.get(i);
-            boolean matchesHash = item.getTxHashHexReversed() != null && item.getTxHashHexReversed().contains(lowerQuery);
-            boolean matchesAddress = item.getFrom()[0].contains(lowerQuery) || item.getTo()[0].contains(lowerQuery);
-            boolean matchesMemo = item.metaData != null && item.metaData.comment != null && item.metaData.comment.toLowerCase().contains(lowerQuery);
+            boolean matchesHash = item.getTxHash() != null && item.getTxHash().contains(lowerQuery);
+            // replace with "matchesEventType" etc.
+            //boolean matchesAddress = item.getFrom()[0].contains(lowerQuery) || item.getTo()[0].contains(lowerQuery);
+            //boolean matchesMemo = item.metaData != null && item.metaData.comment != null && item.metaData.comment.toLowerCase().contains(lowerQuery);
+            // add own wagerr filtering stuff
+            /*
             if (matchesHash || matchesAddress || matchesMemo) {
                 if (switchesON == 0) {
                     filteredList.add(item);
@@ -352,7 +284,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
 
             }
-
+            */
         }
         itemFeed = filteredList;
         notifyDataSetChanged();
@@ -360,6 +292,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Log.e(TAG, "filter: " + query + " took: " + (System.currentTimeMillis() - start));
     }
 
+    // wagerr: change for Event row UI items
     private class EventHolder extends RecyclerView.ViewHolder {
         public RelativeLayout mainLayout;
         public ConstraintLayout constraintLayout;

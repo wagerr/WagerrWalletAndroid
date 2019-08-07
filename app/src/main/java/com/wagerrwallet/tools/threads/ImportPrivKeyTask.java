@@ -111,8 +111,8 @@ public class ImportPrivKeyTask extends AsyncTask<String, String, String> {
         String decoratedAddress = wm.decorateAddress(app, tmpAddress);
 
         //automatically uses testnet if x-testnet is true
-        String fullUrl = String.format("%s/ext/getutxos/%s", WagerrApp.HOST_UTXO, decoratedAddress);
-
+        String fullUrl = String.format("%s/%s/api.dws?key=%s&q=unspent&active=%s"
+                , WagerrApp.HOST_UTXO, iso.toLowerCase(), WagerrApp.HOST_UTXO_KEY, decoratedAddress);
         mTransaction = createSweepingTx(app, fullUrl);
         if (mTransaction == null) {
             app.runOnUiThread(new Runnable() {
@@ -235,15 +235,16 @@ public class ImportPrivKeyTask extends AsyncTask<String, String, String> {
         long totalAmount = 0;
 
         try {
-            JSONArray jsonArray = new JSONArray(jsonString);
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONArray jsonArray = jsonObject.getJSONArray("unspent_outputs");
             int length = jsonArray.length();
 
             for (int i = 0; i < length; i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                byte[] txid = TypesConverter.hexToBytesReverse(obj.getString("txid"));
-                int vout = obj.getInt("vout");
-                byte[] scriptPubKey = TypesConverter.hexToBytes(obj.getString("scriptPubKey"));
-                long amount = obj.getLong("satoshis");
+                byte[] txid = TypesConverter.hexToBytesReverse(obj.getString("tx_hash"));
+                int vout = obj.getInt("tx_ouput_n");
+                byte[] scriptPubKey = TypesConverter.hexToBytes(obj.getString("script"));
+                long amount = obj.getLong("value");
                 totalAmount += amount;
                 BRCoreTransactionInput in = new BRCoreTransactionInput(txid, vout, amount, scriptPubKey, new byte[]{}, -1);
                 transaction.addInput(in);

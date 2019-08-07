@@ -831,7 +831,7 @@ public class APIClient {
         //sync the kv stores
         RemoteKVStore remoteKVStore = RemoteKVStore.getInstance(client);
         ReplicatedKVStore kvStore = ReplicatedKVStore.getInstance(ctx, remoteKVStore);
-        kvStore.syncAllKeys();
+        //kvStore.syncAllKeys();
     }
 
     //returns the resource at bundles/path, if path is null then the bundle folder

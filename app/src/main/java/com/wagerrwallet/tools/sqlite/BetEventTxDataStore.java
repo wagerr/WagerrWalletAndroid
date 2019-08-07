@@ -37,6 +37,7 @@ import android.util.Log;
 import com.wagerrwallet.presenter.entities.BetEventEntity;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.presenter.entities.BetResultEntity;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.util.BRConstants;
 
@@ -184,8 +185,8 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         }
     }
 
-    public List<BetEventEntity> getAllTransactions(Context app, String iso) {
-        List<BetEventEntity> transactions = new ArrayList<>();
+    public List<EventTxUiHolder> getAllTransactions(Context app, String iso) {
+        List<EventTxUiHolder> transactions = new ArrayList<>();
         Cursor cursor = null;
         try {
             database = openDatabase();
@@ -241,7 +242,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
             cursor = database.rawQuery(QUERY,  new String[]{iso.toUpperCase()});
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                BetEventEntity transactionEntity = cursorToFullEvent(app, iso.toUpperCase(), cursor);
+                EventTxUiHolder transactionEntity = cursorToUIEvent(app, iso.toUpperCase(), cursor);
                 transactions.add(transactionEntity);
                 cursor.moveToNext();
             }
@@ -267,9 +268,9 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                     cursor.getLong(18), cursor.getLong(19), cursor.getString(20));
     }
 
-    public static BetEventEntity cursorToFullEvent(Context app, String iso, Cursor cursor) {
+    public static EventTxUiHolder cursorToUIEvent(Context app, String iso, Cursor cursor) {
 
-        return new BetEventEntity(cursor.getString(0), BetEventEntity.BetTxType.fromValue(cursor.getInt(1)), cursor.getLong(2),
+        return new EventTxUiHolder(cursor.getString(0), BetEventEntity.BetTxType.fromValue(cursor.getInt(1)), cursor.getLong(2),
                 cursor.getLong(3), cursor.getLong(4), cursor.getLong(5),
                 cursor.getLong(6), cursor.getLong(7), cursor.getLong(8),
                 cursor.getLong(9), cursor.getLong(10), cursor.getLong(11),

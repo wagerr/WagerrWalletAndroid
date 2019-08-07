@@ -122,31 +122,6 @@ public class BetEventEntity {
         this.underOdds = underOdds;
     }
 
-    // extended constructor with support text for UI
-    public BetEventEntity(String txHash, BetTxType type, long version,
-                          long eventID, long eventTimestamp, long sportID, long tournamentID, long roundID,
-                          long homeTeamID, long awayTeamID, long homeOdds, long awayOdds, long drawOdds,
-                          long entryPrice, long spreadPoints, long totalPoints, long overOdds, long underOdds,
-                          long blockheight, long timestamp, String iso,
-                          String txSport, String txTournament, String txRound, String txHomeTeam, String txAwayTeam,    // mappings
-                          BetResultEntity.BetResultType resultType, long homeScore, long awayScore) {
-
-        this( txHash, type, version, eventID, eventTimestamp, sportID, tournamentID, roundID,
-                homeTeamID,  awayTeamID, homeOdds, awayOdds, drawOdds,
-                entryPrice,  spreadPoints, totalPoints, overOdds, underOdds,
-                blockheight, timestamp, iso );
-
-        this.txSport = txSport;
-        this.txTournament = txTournament;
-        this.txRound = txRound;
-        this.txHomeTeam = txHomeTeam;
-        this.txAwayTeam = txAwayTeam;
-
-        this.resultType = resultType;
-        this.homeScore = homeScore;
-        this.awayScore = awayScore;
-    }
-
     protected BetEventEntity() {
     }
 

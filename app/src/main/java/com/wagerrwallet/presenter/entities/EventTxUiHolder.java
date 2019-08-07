@@ -30,98 +30,36 @@ import com.platform.entities.TxMetaData;
  * THE SOFTWARE.
  */
 
-public class EventTxUiHolder {
+// BetEventEntity was created as DB entity and as UI holder entity
+public class EventTxUiHolder extends BetEventEntity {
     public static final String TAG = EventTxUiHolder.class.getName();
-    private long timeStamp;
-    private int blockHeight;
-    private byte[] txHash;
-    private long sent;
-    private long received;
-    private long fee;
-    private String to[];
-    private String from[];
-    public String txReversed;
-    private long balanceAfterTx;
-    private long amount;
-    private boolean isValid;
-    private int txSize;
-    public TxMetaData metaData;
 
     private EventTxUiHolder() {
     }
 
-    public EventTxUiHolder(long timeStamp, int blockHeight, byte[] hash, String txReversed, long sent,
-                           long received, long fee, String to[], String from[],
-                           long balanceAfterTx, int txSize, long amount, boolean isValid) {
-        this.timeStamp = timeStamp;
-        this.blockHeight = blockHeight;
-        this.txReversed = txReversed;
-        this.txHash = hash;
-        this.sent = sent;
-        this.received = received;
-        this.fee = fee;
-        this.to = to;
-        this.from = from;
-        this.balanceAfterTx = balanceAfterTx;
-        this.amount = amount;
-        this.isValid = isValid;
-        this.txSize = txSize;
-    }
+    // extended constructor with support text for UI
+    public EventTxUiHolder(String txHash, BetTxType type, long version,
+                          long eventID, long eventTimestamp, long sportID, long tournamentID, long roundID,
+                          long homeTeamID, long awayTeamID, long homeOdds, long awayOdds, long drawOdds,
+                          long entryPrice, long spreadPoints, long totalPoints, long overOdds, long underOdds,
+                          long blockheight, long timestamp, String iso,
+                          String txSport, String txTournament, String txRound, String txHomeTeam, String txAwayTeam,    // mappings
+                          BetResultEntity.BetResultType resultType, long homeScore, long awayScore) {
 
-    public int getBlockHeight() {
-        return blockHeight;
-    }
+        super( txHash, type, version, eventID, eventTimestamp, sportID, tournamentID, roundID,
+                homeTeamID,  awayTeamID, homeOdds, awayOdds, drawOdds,
+                entryPrice,  spreadPoints, totalPoints, overOdds, underOdds,
+                blockheight, timestamp, iso );
 
-    public long getFee() {
-        return fee;
-    }
+        this.txSport = txSport;
+        this.txTournament = txTournament;
+        this.txRound = txRound;
+        this.txHomeTeam = txHomeTeam;
+        this.txAwayTeam = txAwayTeam;
 
-    public int getTxSize() {
-        return txSize;
-    }
-
-    public String[] getFrom() {
-        return from;
-    }
-
-    public byte[] getTxHash() {
-        return txHash;
-    }
-
-    public String getTxHashHexReversed() {
-        return txReversed;
-    }
-
-    public long getReceived() {
-        return received;
-    }
-
-    public long getSent() {
-        return sent;
-    }
-
-    public static String getTAG() {
-        return TAG;
-    }
-
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public String[] getTo() {
-        return to;
-    }
-
-    public long getBalanceAfterTx() {
-        return balanceAfterTx;
-    }
-
-    public long getAmount() {
-        return amount;
-    }
-
-    public boolean isValid() {
-        return isValid;
+        this.resultType = resultType;
+        this.homeScore = homeScore;
+        this.awayScore = awayScore;
     }
 
 }

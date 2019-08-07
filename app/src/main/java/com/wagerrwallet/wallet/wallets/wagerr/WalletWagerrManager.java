@@ -273,21 +273,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     @Override
     public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
-        List<BetEventEntity> txs = BetEventTxDataStore.getInstance(app).getAllTransactions(app,ISO);
+        List<EventTxUiHolder> txs = BetEventTxDataStore.getInstance(app).getAllTransactions(app,ISO);
         if (txs == null || txs.size() <= 0) return null;
-        List<EventTxUiHolder> uiTxs = new ArrayList<>();
-        for (BetEventEntity tx : txs) {
-            /*
-            uiTxs.add(new EventTxUiHolder(tx.getTimestamp(), (int) tx.getBlockheight(), tx.getTxHash(),
-                    Utils.reverseHex(tx.getTxHash()), getWallet().getTransactionAmountSent(tx),
-                    getWallet().getTransactionAmountReceived(tx), getWallet().getTransactionFee(tx),
-                    tx.getOutputAddresses(), tx.getInputAddresses(),
-                    getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
-                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)));
-            */
-        }
 
-        return uiTxs;
+        return txs;
     }
 
     @Override
@@ -786,58 +775,51 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         final Context ctx = WagerrApp.getBreadContext();
         final WalletsMaster master = WalletsMaster.getInstance(ctx);
 
-        if (ctx != null && WagerrOpCodeManager.DecodeBetTransaction(ctx, transaction))
-        {
-            for (OnTxListModified list : txModifiedListeners)
-                if (list != null) list.txListModified(transaction.getReverseHash());
-        }
-        else {
-            TxMetaData metaData = KVStoreManager.getInstance().createMetadata(ctx, this, transaction);
-            KVStoreManager.getInstance().putTxMetaData(ctx, metaData, transaction.getHash());
+        TxMetaData metaData = KVStoreManager.getInstance().createMetadata(ctx, this, transaction);
+        KVStoreManager.getInstance().putTxMetaData(ctx, metaData, transaction.getHash());
 
-            final long amount = getWallet().getTransactionAmount(transaction);
-            if (amount > 0) {
-                BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        String am = CurrencyUtils.getFormattedAmount(ctx, getIso(ctx), new BigDecimal(amount));       // getFormattedAmount already calculates getCryptoForSmallestCrypto no need to do it twice
-                        BigDecimal bigAmount = master.getCurrentWallet(ctx).getFiatForSmallestCrypto(ctx, new BigDecimal(amount), null);
-                        String amCur = CurrencyUtils.getFormattedAmount(ctx, BRSharedPrefs.getPreferredFiatIso(ctx), bigAmount == null ? new BigDecimal(0) : bigAmount);
-                        String formatted = String.format("%s (%s)", am, amCur);
-                        final String strToShow = String.format(ctx.getString(R.string.TransactionDetails_received), formatted);
+        final long amount = getWallet().getTransactionAmount(transaction);
+        if (amount > 0) {
+            BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
+                @Override
+                public void run() {
+                    String am = CurrencyUtils.getFormattedAmount(ctx, getIso(ctx), new BigDecimal(amount));       // getFormattedAmount already calculates getCryptoForSmallestCrypto no need to do it twice
+                    BigDecimal bigAmount = master.getCurrentWallet(ctx).getFiatForSmallestCrypto(ctx, new BigDecimal(amount), null);
+                    String amCur = CurrencyUtils.getFormattedAmount(ctx, BRSharedPrefs.getPreferredFiatIso(ctx), bigAmount == null ? new BigDecimal(0) : bigAmount);
+                    String formatted = String.format("%s (%s)", am, amCur);
+                    final String strToShow = String.format(ctx.getString(R.string.TransactionDetails_received), formatted);
 
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!BRToast.isToastShown()) {
-                                    if (Utils.isEmulatorOrDebug(ctx))
-                                        BRToast.showCustomToast(ctx, strToShow,
-                                                WagerrApp.DISPLAY_HEIGHT_PX / 2, Toast.LENGTH_LONG, R.drawable.toast_layout_black);
-                                    AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-                                    if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                        final MediaPlayer mp = MediaPlayer.create(ctx, R.raw.coinflip);
-                                        if (mp != null) try {
-                                            mp.start();
-                                        } catch (IllegalArgumentException ex) {
-                                            Log.e(TAG, "run: ", ex);
-                                        }
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!BRToast.isToastShown()) {
+                                if (Utils.isEmulatorOrDebug(ctx))
+                                    BRToast.showCustomToast(ctx, strToShow,
+                                            WagerrApp.DISPLAY_HEIGHT_PX / 2, Toast.LENGTH_LONG, R.drawable.toast_layout_black);
+                                AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+                                if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                    final MediaPlayer mp = MediaPlayer.create(ctx, R.raw.coinflip);
+                                    if (mp != null) try {
+                                        mp.start();
+                                    } catch (IllegalArgumentException ex) {
+                                        Log.e(TAG, "run: ", ex);
                                     }
-                                    BRNotificationManager.sendNotification((Activity) ctx, R.drawable.notification_icon, ctx.getString(R.string.app_name), strToShow, 1);
                                 }
+                                BRNotificationManager.sendNotification((Activity) ctx, R.drawable.notification_icon, ctx.getString(R.string.app_name), strToShow, 1);
                             }
-                        }, 1000);
+                        }
+                    }, 1000);
 
 
-                    }
-                });
-            }
-            if (ctx != null)
-                TransactionStorageManager.putTransaction(ctx, getIso(ctx), new BRTransactionEntity(transaction.serialize(), transaction.getBlockHeight(), transaction.getTimestamp(), BRCoreKey.encodeHex(transaction.getHash()), getIso(ctx)));
-            else
-                Log.e(TAG, "onTxAdded: ctx is null!");
-            for (OnTxListModified list : txModifiedListeners)
-                if (list != null) list.txListModified(transaction.getReverseHash());
+                }
+            });
         }
+        if (ctx != null)
+            TransactionStorageManager.putTransaction(ctx, getIso(ctx), new BRTransactionEntity(transaction.serialize(), transaction.getBlockHeight(), transaction.getTimestamp(), BRCoreKey.encodeHex(transaction.getHash()), getIso(ctx)));
+        else
+            Log.e(TAG, "onTxAdded: ctx is null!");
+        for (OnTxListModified list : txModifiedListeners)
+            if (list != null) list.txListModified(transaction.getReverseHash());
     }
 
     @Override

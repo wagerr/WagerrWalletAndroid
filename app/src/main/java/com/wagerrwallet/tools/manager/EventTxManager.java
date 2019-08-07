@@ -101,7 +101,7 @@ public class EventTxManager {
             Log.e(TAG, "updateTxList: wallet is null");
             return;
         }
-        final List<EventTxUiHolder> items = wallet.getEventTxUiHolders(app);
+        final List<EventTxUiHolder> betItems = wallet.getEventTxUiHolders(app);
 
         long took = (System.currentTimeMillis() - start);
         if (took > 500)
@@ -110,7 +110,7 @@ public class EventTxManager {
             ((Activity) app).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.setItems(items);
+                    adapter.setItems(betItems);
                     txList.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
