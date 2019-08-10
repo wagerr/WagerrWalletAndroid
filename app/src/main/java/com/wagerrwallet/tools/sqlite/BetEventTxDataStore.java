@@ -113,6 +113,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         values.put(BRSQLiteHelper.BETX_UNDER_ODDS, transactionEntity.getUnderOdds());
         values.put(BRSQLiteHelper.BETX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
         values.put(BRSQLiteHelper.BETX_TIMESTAMP, transactionEntity.getTimestamp());
+        //values.put(BRSQLiteHelper.BETX_LASTUPDATED, transactionEntity.getTimestamp());
         values.put(BRSQLiteHelper.BETX_ISO, iso.toUpperCase());
 
         return insertOrUpdate(app,iso,transactionEntity.getEventID(), values);
@@ -166,6 +167,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
 
         ContentValues args = new ContentValues();
+        //args.put(BRSQLiteHelper.BETX_LASTUPDATED, transactionEntity.getLastUpdated());
         args.put(BRSQLiteHelper.BETX_HOME_ODDS, transactionEntity.getHomeOdds());
         args.put(BRSQLiteHelper.BETX_AWAY_ODDS, transactionEntity.getAwayOdds());
         args.put(BRSQLiteHelper.BETX_DRAW_ODDS, transactionEntity.getDrawOdds());
@@ -221,6 +223,8 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                                 + ", o." + BRSQLiteHelper.BRTX_RESULTS_TYPE
                                 + ", o." + BRSQLiteHelper.BRTX_HOME_TEAM_SCORE
                                 + ", o." + BRSQLiteHelper.BRTX_AWAY_TEAM_SCORE
+                                // event last update
+                                //+ ", a." + BRSQLiteHelper.BETX_LASTUPDATED
 
                     + " FROM "+BRSQLiteHelper.BETX_TABLE_NAME+" a "
                     // sport (s), tournament (t), round (r)
@@ -265,7 +269,8 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                     cursor.getLong(9), cursor.getLong(10), cursor.getLong(11),
                     cursor.getLong(12), cursor.getLong(13), cursor.getLong(14),
                     cursor.getLong(15), cursor.getLong(16), cursor.getLong(17),
-                    cursor.getLong(18), cursor.getLong(19), cursor.getString(20));
+                    cursor.getLong(18), cursor.getLong(19), cursor.getString(20),
+                    cursor.getLong(19));
     }
 
     public static EventTxUiHolder cursorToUIEvent(Context app, String iso, Cursor cursor) {
@@ -277,9 +282,13 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                 cursor.getLong(12), cursor.getLong(13), cursor.getLong(14),
                 cursor.getLong(15), cursor.getLong(16), cursor.getLong(17),
                 cursor.getLong(18), cursor.getLong(19), cursor.getString(20),
+                cursor.getLong(19),
                 cursor.getString(21), cursor.getString(22), cursor.getString(23),
-                cursor.getString(24), cursor.getString(25),
-                BetResultEntity.BetResultType.fromValue(cursor.getInt(26)), cursor.getLong(27), cursor.getLong(28));
+                cursor.isNull(24)?"N/A":cursor.getString(24),
+                cursor.isNull(25)?"N/A":cursor.getString(25),
+                BetResultEntity.BetResultType.fromValue(cursor.getInt(26)),
+                cursor.isNull(27)?-1:cursor.getLong(27),
+                cursor.isNull(28)?-1:cursor.getLong(28));
     }
 
     public void deleteTxByHash(Context app, String iso, String hash) {

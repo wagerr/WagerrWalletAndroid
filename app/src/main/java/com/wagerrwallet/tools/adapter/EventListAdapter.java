@@ -77,7 +77,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //    private boolean updatingMetadata;
 
     public EventListAdapter(Context mContext, List<EventTxUiHolder> items) {
-        this.txResId = R.layout.tx_item;
+        this.txResId = R.layout.eventtx_item;
         this.promptResId = R.layout.prompt_item;
         this.mContext = mContext;
         items = new ArrayList<>();
@@ -161,8 +161,6 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         String commentString = "";
         boolean received = false;
 
-        convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.transaction_amount_received_color, null));
-
         BigDecimal cryptoAmount = new BigDecimal(0);
         Log.e(TAG, "setTexts: crypto:" + cryptoAmount);
         boolean isCryptoPreferred = BRSharedPrefs.isCryptoPreferred(mContext);
@@ -171,20 +169,28 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         BigDecimal amount = isCryptoPreferred ? cryptoAmount : wallet.getFiatForSmallestCrypto(mContext, cryptoAmount, null);
         Log.e(TAG, "setTexts: amount:" + amount);
 
-        convertView.transactionAmount.setText(CurrencyUtils.getFormattedAmount(mContext, preferredIso, amount));
-
         int blockHeight = (int)item.getBlockheight();
         int confirms = blockHeight == Integer.MAX_VALUE ? 0 : BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext)) - blockHeight + 1;
-
-        convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") );
 
         //if it's 0 we use the current time.
         long timeStamp = item.getTimestamp() == 0 ? System.currentTimeMillis() : item.getTimestamp() * 1000;
 
         String shortDate = BRDateUtil.getShortDate(timeStamp);
 
-        convertView.transactionDate.setText(shortDate);
+        convertView.transactionHomeTeam.setText( (item.getTxHomeTeam()!=null)?item.getTxHomeTeam():"Home Team N/A" );
+        convertView.transactionAwayTeam.setText( (item.getTxAwayTeam()!=null)?item.getTxAwayTeam():"Away Team N/A" );
+        convertView.transactionHomeOdds.setText( (item.getTxHomeOdds()!=null)?item.getTxHomeOdds():"N/A" );
+        convertView.transactionDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"N/A" );
+        convertView.transactionAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"N/A" );
 
+        String homeScore = (item.getHomeScore()!=-1)?String.valueOf(item.getHomeScore()):"";
+        convertView.transactionHomeResult.setText( homeScore );
+
+        String awayScore = (item.getAwayScore()!=-1)?String.valueOf(item.getAwayScore()):"";
+        convertView.transactionAwayResult.setText( awayScore );
+
+        convertView.transactionHeader.setText(item.getTxEventHeader());
+        convertView.transactionEventDate.setText( item.getTxEventDate() );
     }
 
     private void showTransactionProgress(EventHolder holder, int progress) {
@@ -192,36 +198,32 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if (progress < 100) {
             holder.transactionProgress.setVisibility(View.VISIBLE);
-            holder.transactionDate.setVisibility(View.GONE);
             holder.transactionProgress.setProgress(progress);
 
             RelativeLayout.LayoutParams detailParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             detailParams.addRule(RelativeLayout.RIGHT_OF, holder.transactionProgress.getId());
             detailParams.addRule(RelativeLayout.CENTER_VERTICAL);
             detailParams.setMargins(Utils.getPixelsFromDps(mContext, 16), Utils.getPixelsFromDps(mContext, 36), 0, 0);
-            holder.transactionDetail.setLayoutParams(detailParams);
+            //holder.transactionDetail.setLayoutParams(detailParams);
         } else {
             holder.transactionProgress.setVisibility(View.INVISIBLE);
-            holder.transactionDate.setVisibility(View.VISIBLE);
             RelativeLayout.LayoutParams startingParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             startingParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             startingParams.addRule(RelativeLayout.CENTER_VERTICAL);
             startingParams.setMargins(Utils.getPixelsFromDps(mContext, 16), 0, 0, 0);
-            holder.transactionDetail.setLayoutParams(startingParams);
+            //holder.transactionDetail.setLayoutParams(startingParams);
             holder.setIsRecyclable(true);
         }
     }
 
     private void showTransactionFailed(EventHolder holder, EventTxUiHolder tx, boolean received) {
 
-        holder.transactionDate.setVisibility(View.INVISIBLE);
-
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.RIGHT_OF, holder.transactionFailed.getId());
         params.setMargins(16, 0, 0, 0);
         params.addRule(RelativeLayout.CENTER_VERTICAL, holder.transactionFailed.getId());
-        holder.transactionDetail.setLayoutParams(params);
-        holder.transactionDetail.setText("sending to ");
+        //holder.transactionDetail.setLayoutParams(params);
+        //holder.transactionDetail.setText("sending to ");
 
     }
 
@@ -296,7 +298,6 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private class EventHolder extends RecyclerView.ViewHolder {
         public RelativeLayout mainLayout;
         public ConstraintLayout constraintLayout;
-        public TextView sentReceived;
         public TextView amount;
         public TextView account;
         public TextView status;
@@ -305,9 +306,15 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public TextView comment;
         public ImageView arrowIcon;
 
-        public BRText transactionDate;
-        public BRText transactionAmount;
-        public BRText transactionDetail;
+        public BRText transactionHeader;        // sport - tournament - round
+        public BRText transactionEventDate;
+        public BRText transactionHomeTeam;
+        public BRText transactionHomeResult;
+        public BRText transactionAwayTeam;
+        public BRText transactionAwayResult;
+        public BRText transactionHomeOdds;
+        public BRText transactionAwayOdds;
+        public BRText transactionDrawOdds;
         public Button transactionFailed;
         public ProgressBar transactionProgress;
 
@@ -315,9 +322,15 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public EventHolder(View view) {
             super(view);
 
-            transactionDate = view.findViewById(R.id.tx_date);
-            transactionAmount = view.findViewById(R.id.tx_amount);
-            transactionDetail = view.findViewById(R.id.tx_description);
+            transactionHeader = view.findViewById(R.id.tx_eventheader);
+            transactionEventDate = view.findViewById(R.id.tx_eventdate);
+            transactionHomeTeam = view.findViewById(R.id.tx_home);
+            transactionAwayTeam = view.findViewById(R.id.tx_away);
+            transactionHomeResult = view.findViewById(R.id.tx_home_result);
+            transactionAwayResult = view.findViewById(R.id.tx_away_result);
+            transactionHomeOdds = view.findViewById(R.id.tx_home_odds);
+            transactionAwayOdds = view.findViewById(R.id.tx_away_odds);
+            transactionDrawOdds = view.findViewById(R.id.tx_draw_odds);
             transactionFailed = view.findViewById(R.id.tx_failed_button);
             transactionProgress = view.findViewById(R.id.tx_progress);
 

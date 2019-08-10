@@ -44,10 +44,21 @@ public class FragmentEventDetails extends DialogFragment {
 
     private EventTxUiHolder mTransaction;
 
-    private BRText mTxAction;
+    private BRText mTxEventHeader;
+    private BRText mTxEventDate;
+    private BRText mTxHomeTeam;
+    private BRText mTxAwayTeam;
+    private BRText mTxHomeResult;
+    private BRText mTxAwayResult;
+    private BRText mTxHomeOdds;
+    private BRText mTxDrawOdds;
+    private BRText mTxAwayOdds;
+
     private BRText mTxAmount;
     private BRText mTxStatus;
     private BRText mTxDate;
+    private BRText mTxLastUpdated;
+    private BRText mTxLastDate;
     private BRText mToFrom;
     private BRText mToFromAddress;
     private BRText mMemoText;
@@ -82,15 +93,26 @@ public class FragmentEventDetails extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.transaction_details, container, false);
+        View rootView = inflater.inflate(R.layout.event_details, container, false);
+
+        mTxEventHeader = rootView.findViewById(R.id.tx_eventheader);
+        mTxEventDate= rootView.findViewById(R.id.tx_eventdate);
+        mTxHomeTeam = rootView.findViewById(R.id.tx_home);
+        mTxAwayTeam= rootView.findViewById(R.id.tx_away);
+        mTxHomeResult = rootView.findViewById(R.id.tx_home_result);
+        mTxAwayResult= rootView.findViewById(R.id.tx_away_result);
+        mTxHomeOdds = rootView.findViewById(R.id.tx_home_odds);
+        mTxDrawOdds= rootView.findViewById(R.id.tx_draw_odds);
+        mTxAwayOdds= rootView.findViewById(R.id.tx_away_odds);
 
         mAmountNow = rootView.findViewById(R.id.amount_now);
         mAmountWhenSent = rootView.findViewById(R.id.amount_when_sent);
-        mTxAction = rootView.findViewById(R.id.tx_action);
         mTxAmount = rootView.findViewById(R.id.tx_amount);
 
         mTxStatus = rootView.findViewById(R.id.tx_status);
         mTxDate = rootView.findViewById(R.id.tx_date);
+        mTxLastUpdated = rootView.findViewById(R.id.tx_last_updated);
+        mTxLastDate = rootView.findViewById(R.id.tx_last_date);
         mToFrom = rootView.findViewById(R.id.tx_to_from);
         mToFromAddress = rootView.findViewById(R.id.tx_to_from_address);
         mMemoText = rootView.findViewById(R.id.memo);
@@ -150,11 +172,8 @@ public class FragmentEventDetails extends DialogFragment {
             String amountWhenSent;
             String amountNow;
             String exchangeRateFormatted;
-/*
-            if (!mTransaction.isValid()) {
-                mTxStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            }
- */
+
+            /*
             //user prefers crypto (or fiat)
             boolean isCryptoPreferred = BRSharedPrefs.isCryptoPreferred(getActivity());
             String cryptoIso = walletManager.getIso(getActivity());
@@ -183,8 +202,56 @@ public class FragmentEventDetails extends DialogFragment {
 
             //mStartingBalance.setText(CurrencyUtils.getFormattedAmount(getActivity(), iso, startingBalance == null ? null : startingBalance.abs()));
             //mEndingBalance.setText(CurrencyUtils.getFormattedAmount(getActivity(), iso, endingBalance == null ? null : endingBalance.abs()));
+*/
+            EventTxUiHolder item = mTransaction;
+            mTxHomeTeam.setText( (item.getTxHomeTeam()!=null)?item.getTxHomeTeam():"Home N/A" );
+            mTxAwayTeam.setText( (item.getTxAwayTeam()!=null)?item.getTxAwayTeam():"Away N/A" );
+            mTxHomeOdds.setText( (item.getTxHomeOdds()!=null)?item.getTxHomeOdds():"H odd" );
+            mTxDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"D odd" );
+            mTxAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"A odd" );
 
-            mTxAction.setText(sent ? "Sent" : "Received");
+            String homeScore = (item.getHomeScore()!=-1)?String.valueOf(item.getHomeScore()):"";
+            mTxHomeResult.setText( homeScore );
+
+            String awayScore = (item.getAwayScore()!=-1)?String.valueOf(item.getAwayScore()):"";
+            mTxAwayResult.setText( awayScore );
+
+            mTxEventHeader.setText(item.getTxEventHeader());
+            mTxEventDate.setText( item.getTxEventDate() );
+
+            // timestamp is 0 if it's not confirmed in a block yet so make it now
+            mTxDate.setText(BRDateUtil.getLongDate(mTransaction.getTimestamp() == 0 ? System.currentTimeMillis() : (mTransaction.getTimestamp() * 1000)));
+            mTxLastDate.setText(BRDateUtil.getLongDate(mTransaction.getLastUpdated() == 0 ? System.currentTimeMillis() : (mTransaction.getLastUpdated() * 1000)));
+
+            // Set the transaction id
+            mTransactionId.setText(mTransaction.getTxHash());
+
+            // Allow the transaction id to be copy-able
+            mTransactionId.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // Get the default color based on theme
+                    final int color = mTransactionId.getCurrentTextColor();
+
+                    mTransactionId.setTextColor(getContext().getColor(R.color.light_gray));
+                    String id = mTransaction.getTxHash();
+                    BRClipboardManager.putClipboard(getContext(), id);
+                    Toast.makeText(getContext(), getString(R.string.Receive_copied), Toast.LENGTH_LONG).show();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mTransactionId.setTextColor(color);
+
+                        }
+                    }, 200);
+                }
+            });
+
+            // Set the transaction block number
+            mConfirmedInBlock.setText(String.valueOf(mTransaction.getBlockheight()));
+/*
             mToFrom.setText(sent ? "To " : "Via ");
 
             mToFromAddress.setText("to"); //showing only the destination address
@@ -223,35 +290,8 @@ public class FragmentEventDetails extends DialogFragment {
             // timestamp is 0 if it's not confirmed in a block yet so make it now
             mTxDate.setText(BRDateUtil.getLongDate(mTransaction.getTimestamp() == 0 ? System.currentTimeMillis() : (mTransaction.getTimestamp() * 1000)));
 
-            // Set the transaction id
-            mTransactionId.setText(mTransaction.getTxHash());
 
-            // Allow the transaction id to be copy-able
-            mTransactionId.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    // Get the default color based on theme
-                    final int color = mTransactionId.getCurrentTextColor();
-
-                    mTransactionId.setTextColor(getContext().getColor(R.color.light_gray));
-                    String id = mTransaction.getTxHash();
-                    BRClipboardManager.putClipboard(getContext(), id);
-                    Toast.makeText(getContext(), getString(R.string.Receive_copied), Toast.LENGTH_LONG).show();
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mTransactionId.setTextColor(color);
-
-                        }
-                    }, 200);
-                }
-            });
-
-            // Set the transaction block number
-            mConfirmedInBlock.setText(String.valueOf(mTransaction.getBlockheight()));
-
+*/
         } else {
 
             Toast.makeText(getContext(), "Error getting transaction data", Toast.LENGTH_SHORT).show();

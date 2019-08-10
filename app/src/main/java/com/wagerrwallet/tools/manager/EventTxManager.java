@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.wagerrwallet.R;
+import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.activities.WalletActivity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
@@ -63,7 +64,7 @@ public class EventTxManager {
         return instance;
     }
 
-    public void init(final WalletActivity app) {
+    public void init(final EventsActivity app) {
         txList = app.findViewById(R.id.tx_list);
         txList.setLayoutManager(new CustomLinearLayoutManager(app));
         txList.addOnItemTouchListener(new RecyclerItemClickListener(app,

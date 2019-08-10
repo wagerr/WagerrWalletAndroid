@@ -51,6 +51,7 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
     private RecyclerView mWalletRecycler;
     private WalletListAdapter mAdapter;
     private BRText mFiatTotal;
+    private RelativeLayout mEvents;
     private RelativeLayout mSettings;
     private RelativeLayout mSecurity;
     private RelativeLayout mSupport;
@@ -85,6 +86,7 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
         mWalletRecycler = findViewById(R.id.rv_wallet_list);
         mFiatTotal = findViewById(R.id.total_assets_usd);
 
+        mEvents = findViewById(R.id.events_row);
         mSettings = findViewById(R.id.settings_row);
         mSecurity = findViewById(R.id.security_row);
         mSupport = findViewById(R.id.support_row);
@@ -119,6 +121,15 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
             }
         }));
 
+        mEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, EventsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+            }
+        });
+
         mSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,32 +156,6 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
 
         onConnectionChanged(InternetManager.getInstance().isConnected(this));
 
-/*
-        if (!BRSharedPrefs.wasBchDialogShown(this)) {
-            BRDialog.showHelpDialog(this, getString(R.string.Dialog_welcomeBchTitle), getString(R.string.Dialog_welcomeBchMessage), getString(R.string.Dialog_Home), getString(R.string.Dialog_Dismiss), new BRDialogView.BROnClickListener() {
-                @Override
-                public void onClick(BRDialogView brDialogView) {
-                    brDialogView.dismissWithAnimation();
-                }
-            }, new BRDialogView.BROnClickListener() {
-
-                @Override
-                public void onClick(BRDialogView brDialogView) {
-                    getFragmentManager().popBackStack();
-                }
-            }, new BRDialogView.BROnClickListener() {
-                @Override
-                public void onClick(BRDialogView brDialogView) {
-                    Log.d(TAG, "help clicked!");
-                    brDialogView.dismissWithAnimation();
-                    BRAnimator.showSupportFragment(HomeActivity.this, BRConstants.bchFaq);
-
-                }
-            });
-
-            BRSharedPrefs.putBchDialogShown(HomeActivity.this, true);
-        }
-*/
         mPromptDismiss.setColor(Color.parseColor("#b3c0c8"));
         mPromptDismiss.setOnClickListener(new View.OnClickListener() {
             @Override

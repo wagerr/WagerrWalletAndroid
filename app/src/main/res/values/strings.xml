@@ -769,6 +769,10 @@
   <string name="About.footerBBP">Adapted to Wagerr by MIP</string>
   <string name="NodeSelector.CurrentHeight">Current Height</string>
   <string name="NodeSelector.LastBlockHash">Last block hash</string>
+  <string name="MenuButton.Events">Events</string>
+  <string name="Events.Sport">Sport</string>
+  <string name="Events.Tournament">Tournament</string>
+  <string name="Events.Round">Round</string>
 
 
 </resources>

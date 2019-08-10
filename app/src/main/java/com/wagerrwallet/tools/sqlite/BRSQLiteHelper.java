@@ -128,6 +128,7 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
     public static final String BETX_VERSION = "version";
     public static final String BETX_BLOCK_HEIGHT = "transactionBlockHeight";
     public static final String BETX_TIMESTAMP = "transactionTimeStamp";
+    public static final String BETX_LASTUPDATED = "lastUpdatedTimeStamp";
     public static final String BETX_ISO = "transactionISO";
     public static final String BETX_EVENTID = "eventId";
     public static final String BETX_EVENT_TIMESTAMP = "eventTimestamp";
@@ -166,6 +167,7 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
             BETX_UNDER_ODDS + " integer, " +
             BETX_BLOCK_HEIGHT + " integer, " +
             BETX_TIMESTAMP + " integer, " +
+            BETX_LASTUPDATED + " integer, " +
             BETX_ISO + " text DEFAULT 'WGR' );";
 
     //  betResultTxTable TYPE 04 08

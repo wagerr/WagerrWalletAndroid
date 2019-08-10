@@ -24,6 +24,47 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true">
 
+            <RelativeLayout
+                android:id="@+id/events_row"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_below="@id/admin_label"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/event_menu_shape">
+
+
+                <com.wagerrwallet.presenter.customviews.BRText
+                    android:id="@+id/betting_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="22dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="false"
+                    android:drawableLeft="@drawable/ic_check_mark_white"
+                    android:drawablePadding="8dp"
+                    android:focusable="false"
+                    android:paddingBottom="4dp"
+                    android:text="@string/MenuButton.Events"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    app:customTFont="CircularPro-Book.otf" />
+
+
+                <ImageButton
+                    android:id="@+id/betting_arrow_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/ic_chevron_right"
+                    android:clickable="false"
+                    android:focusable="false" />
+            </RelativeLayout>
+
             <ImageView
                 android:layout_width="185dp"
                 android:layout_height="45dp"
@@ -185,8 +226,8 @@
                 android:layout_height="54dp"
                 android:layout_below="@id/admin_label"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="85dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/admin_card_shape">
 
 
@@ -225,8 +266,8 @@
                 android:layout_height="54dp"
                 android:layout_below="@id/settings_row"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="12dp"
                 android:background="@drawable/admin_card_shape">
 
 
@@ -264,10 +305,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_below="@id/security_row"
-                android:layout_marginBottom="30dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginBottom="30dp"
                 android:background="@drawable/admin_card_shape">
 
 

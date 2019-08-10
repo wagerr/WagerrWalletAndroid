@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.wagerrwallet.R;
+import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.activities.HomeActivity;
 import com.wagerrwallet.presenter.activities.WalletActivity;
 import com.wagerrwallet.presenter.activities.util.BRActivity;
@@ -86,10 +87,10 @@ public class BRNotificationBar extends android.support.v7.widget.Toolbar {
                     ((WalletActivity) activity).resetFlipper();
                 } else if (activity instanceof HomeActivity) {
                     ((HomeActivity) activity).closeNotificationBar();
+                } else if (activity instanceof EventsActivity) {
+                    ((EventsActivity) activity).resetFlipper();
                 }
             }
         });
-
     }
-
 }

@@ -2,6 +2,7 @@ package com.wagerrwallet.presenter.entities;
 
 
 import com.platform.entities.TxMetaData;
+import com.wagerrwallet.tools.util.BRDateUtil;
 
 /**
  * BreadWallet
@@ -42,14 +43,14 @@ public class EventTxUiHolder extends BetEventEntity {
                           long eventID, long eventTimestamp, long sportID, long tournamentID, long roundID,
                           long homeTeamID, long awayTeamID, long homeOdds, long awayOdds, long drawOdds,
                           long entryPrice, long spreadPoints, long totalPoints, long overOdds, long underOdds,
-                          long blockheight, long timestamp, String iso,
+                          long blockheight, long timestamp, String iso, long lastUpdated,
                           String txSport, String txTournament, String txRound, String txHomeTeam, String txAwayTeam,    // mappings
                           BetResultEntity.BetResultType resultType, long homeScore, long awayScore) {
 
         super( txHash, type, version, eventID, eventTimestamp, sportID, tournamentID, roundID,
                 homeTeamID,  awayTeamID, homeOdds, awayOdds, drawOdds,
                 entryPrice,  spreadPoints, totalPoints, overOdds, underOdds,
-                blockheight, timestamp, iso );
+                blockheight, timestamp, iso, lastUpdated );
 
         this.txSport = txSport;
         this.txTournament = txTournament;
@@ -60,6 +61,37 @@ public class EventTxUiHolder extends BetEventEntity {
         this.resultType = resultType;
         this.homeScore = homeScore;
         this.awayScore = awayScore;
+    }
+
+    public String getTxEventHeader()
+    {
+        String ret = "";
+        String sport = getTxSport(), tournament =  getTxTournament(), round = getTxRound();
+        if (sport!=null) {
+            ret += sport;
+        }
+        if (ret!="" && tournament!=null) {
+            ret += " - ";
+        }
+        if (tournament!=null) {
+            ret += tournament;
+        }
+        if (ret!="" && round!=null) {
+            ret += " - ";
+        }
+        if (round!=null) {
+            ret += round;
+        }
+
+        return ret;
+    }
+
+    public String getTxEventDate()
+    {
+        long eventTS = getEventTimestamp() == 0 ? System.currentTimeMillis() : getEventTimestamp() * 1000;
+        String eventDate = BRDateUtil.getLongDate(eventTS);
+
+        return eventDate;
     }
 
 }

@@ -55,6 +55,7 @@ import com.wagerrwallet.tools.util.Utils;
 import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.abstracts.OnBalanceChangedListener;
+import com.wagerrwallet.wallet.abstracts.OnEventTxListModified;
 import com.wagerrwallet.wallet.abstracts.OnTxListModified;
 import com.wagerrwallet.wallet.abstracts.OnTxStatusUpdatedListener;
 import com.wagerrwallet.wallet.abstracts.SyncListener;
@@ -555,6 +556,9 @@ public class WalletBitcoinManager extends BRCoreWalletManager implements BaseWal
             txModifiedListeners.add(list);
     }
 
+    public void addEventTxListModifiedListener(OnEventTxListModified list) {
+        return;
+    }
 
     @Override
     public void txPublished(final String error) {

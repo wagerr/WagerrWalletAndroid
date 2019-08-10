@@ -69,6 +69,8 @@ public interface BaseWalletManager {
 
     void addTxListModifiedListener(OnTxListModified list);
 
+    void addEventTxListModifiedListener(OnEventTxListModified list);
+
     //get a list of all the transactions sorted by timestamp
     BRCoreTransaction[] getTransactions();
 

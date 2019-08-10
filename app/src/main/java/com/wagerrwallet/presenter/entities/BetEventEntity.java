@@ -31,6 +31,7 @@ package com.wagerrwallet.presenter.entities;
 
 public class BetEventEntity {
     public static final String TAG = BetEventEntity.class.getName();
+    public static final long ODDS_MULTIPLIER = 10000;
 
     public enum BetTxType {
         PEERLESS(0x02),
@@ -59,6 +60,7 @@ public class BetEventEntity {
     // table data
     protected long blockheight;
     protected long timestamp;
+    protected long lastUpdated;
     protected String txHash;
     protected String txISO;
     protected long version;
@@ -96,9 +98,10 @@ public class BetEventEntity {
                           long eventID, long eventTimestamp, long sportID, long tournamentID, long roundID,
                           long homeTeamID, long awayTeamID, long homeOdds, long awayOdds, long drawOdds,
                           long entryPrice, long spreadPoints, long totalPoints, long overOdds, long underOdds,
-                          long blockheight, long timestamp, String iso) {
+                          long blockheight, long timestamp, String iso, long lastUpdated) {
         this.blockheight = blockheight;
         this.timestamp = timestamp;
+        this.lastUpdated = lastUpdated;
         this.txHash = txHash;
         this.txISO = iso;
 
@@ -177,6 +180,18 @@ public class BetEventEntity {
         return awayTeamID;
     }
 
+    public String getTxHomeOdds() {
+        return String.valueOf((float)homeOdds/ODDS_MULTIPLIER);
+    }
+
+    public String getTxAwayOdds() {
+        return String.valueOf((float)awayOdds/ODDS_MULTIPLIER);
+    }
+
+    public String getTxDrawOdds() {
+        return String.valueOf((float)drawOdds/ODDS_MULTIPLIER);
+    }
+
     public long getHomeOdds() {
         return homeOdds;
     }
@@ -221,11 +236,27 @@ public class BetEventEntity {
         return txRound;
     }
 
+    public BetResultEntity.BetResultType getResultType() {
+        return resultType;
+    }
+
+    public long getHomeScore() {
+        return homeScore;
+    }
+
+    public long getAwayScore() {
+        return awayScore;
+    }
+
     public String getTxHomeTeam() {
         return txHomeTeam;
     }
 
     public String getTxAwayTeam() {
         return txAwayTeam;
+    }
+
+    public long getLastUpdated() {
+        return lastUpdated;
     }
 }

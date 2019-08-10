@@ -99,8 +99,6 @@ public class TxManager {
             return;
         }
         final List<TxUiHolder> items = wallet.getTxUiHolders();
-        final List<EventTxUiHolder> betItems = wallet.getEventTxUiHolders(app);
-
 
         long took = (System.currentTimeMillis() - start);
         if (took > 500)

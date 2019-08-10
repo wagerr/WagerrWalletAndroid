@@ -224,7 +224,7 @@ public class WagerrOpCodeManager {
             throw new WagerrTransactionException("getMappingEntity " + txHash + ": wrong namespace");
 
         int mappingID = 0;
-        int from = NAMESPACE_POS + 2, to = opLength+1;
+        int to = opLength+2;
         ByteOrder byteOrder = getByteOrder(tx.getBlockHeight());
         PositionPointer pos = new PositionPointer(NAMESPACE_POS+1);
         if ( namespaceType == BetMappingEntity.MappingNamespaceType.TEAM_NAME )
@@ -272,7 +272,7 @@ public class WagerrOpCodeManager {
         eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.PEERLESS, version, eventID, eventTimestamp,
                 sportID, tournamentID, roundID, homeTeamID, awayTeamID, homeOdds, awayOdds, drawOdds,
                 0,0,0,0,0,
-                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
+                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO, tx.getTimestamp());
         return eventEntity;
     }
 
@@ -353,7 +353,7 @@ public class WagerrOpCodeManager {
         eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.UPDATEODDS, version, eventID, 0,
                 0, 0, 0, 0, 0, homeOddsID, awayOddsID, drawOddsID,
                 0,0,0,0,0,
-                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
+                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO, tx.getTimestamp());
         return eventEntity;
     }
 
@@ -379,7 +379,7 @@ public class WagerrOpCodeManager {
         eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.CHAIN_LOTTO, version, eventID, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 entryPrice,0,0,0,0,
-                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
+                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO, tx.getTimestamp());
         return eventEntity;
     }
 
@@ -455,7 +455,7 @@ public class WagerrOpCodeManager {
         eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.PEERLESS_SPREAD, version, eventID, 0,
                 0, 0, 0, 0, 0, homeOdds, awayOdds, 0,
                 0,spreadPoints,0,0,0,
-                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
+                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO, tx.getTimestamp());
         return eventEntity;
     }
 
@@ -483,7 +483,7 @@ public class WagerrOpCodeManager {
         eventEntity = new BetEventEntity( txHash , BetEventEntity.BetTxType.PEERLESS_TOTAL, version, eventID, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0,0, totalPoints, overOdds, underOdds,
-                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
+                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO, tx.getTimestamp());
 
         return eventEntity;
     }
