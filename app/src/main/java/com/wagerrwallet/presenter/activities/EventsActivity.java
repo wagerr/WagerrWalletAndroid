@@ -81,9 +81,9 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
     BRText mBalanceSecondary;
     Toolbar mToolbar;
     ImageButton mBackButton;
-    BRButton mSendButton;
-    BRButton mReceiveButton;
-    BRButton mBuyButton;
+    //BRButton mSendButton;
+    //BRButton mReceiveButton;
+    //BRButton mBuyButton;
     BRText mBalanceLabel;
     BRText mProgressLabel;
     ProgressBar mProgressBar;
@@ -118,9 +118,9 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         mBalanceSecondary = findViewById(R.id.balance_secondary);
         mToolbar = findViewById(R.id.bread_bar);
         mBackButton = findViewById(R.id.back_icon);
-        mSendButton = findViewById(R.id.send_button);
-        mReceiveButton = findViewById(R.id.receive_button);
-        mBuyButton = findViewById(R.id.buy_button);
+        //mSendButton = findViewById(R.id.send_button);
+        //mReceiveButton = findViewById(R.id.receive_button);
+        //mBuyButton = findViewById(R.id.buy_button);
         barFlipper = findViewById(R.id.tool_bar_flipper);
         searchBar = findViewById(R.id.search_bar);
         mSearchIcon = findViewById(R.id.search_icon);
@@ -147,7 +147,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         mBalancePrimary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);//make it the size it should be after animation to get the X
         mBalanceSecondary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);//make it the size it should be after animation to get the X
 
-
+/*
         mSendButton.setHasShadow(false);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +168,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
 
             }
         });
-
+*/
 //        BaseWalletManager wm = WalletsMaster.getInstance(this).getCurrentWallet(this);
 //        Log.d(TAG, "Current wallet ISO -> " + wm.getIso(this));
 
@@ -258,6 +258,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         }
 
         if (wallet.getUiConfiguration().buyVisible) {
+/*
             mBuyButton.setHasShadow(false);
             mBuyButton.setVisibility(View.VISIBLE);
             mBuyButton.setOnClickListener(new View.OnClickListener() {
@@ -270,7 +271,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
                     app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.fade_down);
                 }
             });
-
+*/
         } else {
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -287,9 +288,9 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             param.setMargins(Utils.getPixelsFromDps(this, 8), Utils.getPixelsFromDps(this, 8), Utils.getPixelsFromDps(this, 8), 0);
             param2.setMargins(0, Utils.getPixelsFromDps(this, 8), Utils.getPixelsFromDps(this, 8), 0);
 
-            mSendButton.setLayoutParams(param);
-            mReceiveButton.setLayoutParams(param2);
-            mBuyButton.setVisibility(View.GONE);
+            //mSendButton.setLayoutParams(param);
+            //mReceiveButton.setLayoutParams(param2);
+            //mBuyButton.setVisibility(View.GONE);
 
         }
 
@@ -305,9 +306,9 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         mBalancePrimary.setText(fiatBalance);
         mBalanceSecondary.setText(cryptoBalance);
         mToolbar.setBackgroundColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
-        mSendButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
-        mBuyButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
-        mReceiveButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
+        //mSendButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
+        //mBuyButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
+        //mReceiveButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
 
         EventTxManager.getInstance().updateTxList(EventsActivity.this);
     }
@@ -341,10 +342,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
 
 
             }
-
-
         }
-
 
         // Use the UsageStats API for sdk versions greater than Lollipop
         else {
@@ -362,15 +360,9 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
                     if (currentPackageName.equals(packageName)) {
                         return true;
                     }
-
-
                 }
-
-
             }
-
         }
-
 
         return false;
     }

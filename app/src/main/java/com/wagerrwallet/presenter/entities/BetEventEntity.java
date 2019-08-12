@@ -77,7 +77,10 @@ public class BetEventEntity {
     protected long drawOdds;
     protected long entryPrice;
     protected long spreadPoints;
+    protected long spreadHomeOdds;
+    protected long spreadAwayOdds;
     protected long totalPoints;
+
     protected long overOdds;
     protected long underOdds;
 
@@ -97,7 +100,8 @@ public class BetEventEntity {
     public BetEventEntity(String txHash, BetTxType type, long version,
                           long eventID, long eventTimestamp, long sportID, long tournamentID, long roundID,
                           long homeTeamID, long awayTeamID, long homeOdds, long awayOdds, long drawOdds,
-                          long entryPrice, long spreadPoints, long totalPoints, long overOdds, long underOdds,
+                          long entryPrice, long spreadPoints, long spreadHomeOdds, long spreadAwayOdds,
+                          long totalPoints, long overOdds, long underOdds,
                           long blockheight, long timestamp, String iso, long lastUpdated) {
         this.blockheight = blockheight;
         this.timestamp = timestamp;
@@ -120,6 +124,8 @@ public class BetEventEntity {
         this.drawOdds = drawOdds;
         this.entryPrice = entryPrice;
         this.spreadPoints = spreadPoints;
+        this.spreadHomeOdds = spreadHomeOdds;
+        this.spreadAwayOdds = spreadAwayOdds;
         this.totalPoints = totalPoints;
         this.overOdds = overOdds;
         this.underOdds = underOdds;
@@ -210,6 +216,14 @@ public class BetEventEntity {
 
     public long getSpreadPoints() {
         return spreadPoints;
+    }
+
+    public long getSpreadHomeOdds() {
+        return spreadHomeOdds;
+    }
+
+    public long getSpreadAwayOdds() {
+        return spreadAwayOdds;
     }
 
     public long getTotalPoints() {

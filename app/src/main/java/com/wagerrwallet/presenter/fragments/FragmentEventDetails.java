@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.platform.entities.TxMetaData;
@@ -53,6 +54,16 @@ public class FragmentEventDetails extends DialogFragment {
     private BRText mTxHomeOdds;
     private BRText mTxDrawOdds;
     private BRText mTxAwayOdds;
+
+    private SeekBar seekBar;
+
+    private BRText mTxSpreadPoints;
+    private BRText mTxSpreadHomeOdds;
+    private BRText mTxSpreadAwayOdds;
+
+    private BRText mTxTotalPoints;
+    private BRText mTxTotalOverOdds;
+    private BRText mTxTotalUnderOdds;
 
     private BRText mTxAmount;
     private BRText mTxStatus;
@@ -104,10 +115,42 @@ public class FragmentEventDetails extends DialogFragment {
         mTxHomeOdds = rootView.findViewById(R.id.tx_home_odds);
         mTxDrawOdds= rootView.findViewById(R.id.tx_draw_odds);
         mTxAwayOdds= rootView.findViewById(R.id.tx_away_odds);
+        mTxAmount = rootView.findViewById(R.id.tx_amount);
+
+        seekBar = rootView.findViewById(R.id.bet_seekBar);
+        seekBar.setMin(getContext().getResources().getInteger(R.integer.min_bet_amount));
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+               @Override
+               public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                   int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
+                   mTxAmount.setText("" + progress);
+                   mTxAmount.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
+                   //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
+
+               }
+               @Override
+               public void onStartTrackingTouch(SeekBar seekBar) {
+                   //Toast.makeText(getApplicationContext(), "Started tracking seekbar", Toast.LENGTH_SHORT).show();
+               }
+
+               @Override
+               public void onStopTrackingTouch(SeekBar seekBar) {
+                   //textView.setText("Covered: " + progress + "/" + seekBar.getMax());
+                   //Toast.makeText(getApplicationContext(), "Stopped tracking seekbar", Toast.LENGTH_SHORT).show();
+               }
+        });
+
+        mTxSpreadPoints= rootView.findViewById(R.id.tx_spread_points);
+        mTxSpreadHomeOdds = rootView.findViewById(R.id.tx_spreads_home_odds);
+        mTxSpreadAwayOdds= rootView.findViewById(R.id.tx_spreads_away_odds);
+
+        mTxTotalPoints = rootView.findViewById(R.id.tx_total_points);
+        mTxTotalOverOdds= rootView.findViewById(R.id.tx_over_odds);
+        mTxTotalUnderOdds= rootView.findViewById(R.id.tx_under_odds);
 
         mAmountNow = rootView.findViewById(R.id.amount_now);
         mAmountWhenSent = rootView.findViewById(R.id.amount_when_sent);
-        mTxAmount = rootView.findViewById(R.id.tx_amount);
 
         mTxStatus = rootView.findViewById(R.id.tx_status);
         mTxDate = rootView.findViewById(R.id.tx_date);
@@ -251,6 +294,11 @@ public class FragmentEventDetails extends DialogFragment {
 
             // Set the transaction block number
             mConfirmedInBlock.setText(String.valueOf(mTransaction.getBlockheight()));
+
+            int maxBetAmount = Math.min( (int)(walletManager.getWallet().getBalance()/100000000),
+                                         getContext().getResources().getInteger(R.integer.max_bet_amount));
+            seekBar.setMax(maxBetAmount);
+
 /*
             mToFrom.setText(sent ? "To " : "Via ");
 

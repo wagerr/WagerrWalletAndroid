@@ -304,6 +304,12 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public TextView status_2;
         public TextView timestamp;
         public TextView comment;
+        public TextView spread_points;
+        public TextView spread_home_odds;
+        public TextView spread_away_odds;
+        public TextView total_points;
+        public TextView total_over_odds;
+        public TextView total_under_odds;
         public ImageView arrowIcon;
 
         public BRText transactionHeader;        // sport - tournament - round

@@ -66,11 +66,14 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
             BRSQLiteHelper.BETX_DRAW_ODDS,
             BRSQLiteHelper.BETX_ENTRY_PRICE,
             BRSQLiteHelper.BETX_SPREAD_POINTS,
+            BRSQLiteHelper.BETX_SPREAD_HOME_ODDS,
+            BRSQLiteHelper.BETX_SPREAD_AWAY_ODDS,
             BRSQLiteHelper.BETX_TOTAL_POINTS,
             BRSQLiteHelper.BETX_OVER_ODDS,
             BRSQLiteHelper.BETX_UNDER_ODDS,
             BRSQLiteHelper.BETX_BLOCK_HEIGHT,
             BRSQLiteHelper.BETX_TIMESTAMP,
+            BRSQLiteHelper.BETX_LASTUPDATED,
             BRSQLiteHelper.BETX_ISO
     };
 
@@ -107,19 +110,15 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         values.put(BRSQLiteHelper.BETX_AWAY_ODDS, transactionEntity.getAwayOdds());
         values.put(BRSQLiteHelper.BETX_DRAW_ODDS, transactionEntity.getDrawOdds());
         values.put(BRSQLiteHelper.BETX_ENTRY_PRICE, transactionEntity.getEntryPrice());
-        values.put(BRSQLiteHelper.BETX_SPREAD_POINTS, transactionEntity.getSpreadPoints());
-        values.put(BRSQLiteHelper.BETX_TOTAL_POINTS, transactionEntity.getTotalPoints());
-        values.put(BRSQLiteHelper.BETX_OVER_ODDS, transactionEntity.getOverOdds());
-        values.put(BRSQLiteHelper.BETX_UNDER_ODDS, transactionEntity.getUnderOdds());
         values.put(BRSQLiteHelper.BETX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
         values.put(BRSQLiteHelper.BETX_TIMESTAMP, transactionEntity.getTimestamp());
-        //values.put(BRSQLiteHelper.BETX_LASTUPDATED, transactionEntity.getTimestamp());
+        values.put(BRSQLiteHelper.BETX_LASTUPDATED, transactionEntity.getLastUpdated());
         values.put(BRSQLiteHelper.BETX_ISO, iso.toUpperCase());
 
-        return insertOrUpdate(app,iso,transactionEntity.getEventID(), values);
+        return insertOrUpdate(app,iso,transactionEntity, values);
     }
 
-    protected BetEventEntity insertOrUpdate(Context app, String iso, long eventID, ContentValues values) {
+    protected BetEventEntity insertOrUpdate(Context app, String iso, BetEventEntity event, ContentValues values) {
         Cursor cursor = null;
         try {
             int r=0;
@@ -127,23 +126,26 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
 
             cursor = database.query(BRSQLiteHelper.BETX_TABLE_NAME,
                     allColumns,  BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
-                    new String[]{ String.valueOf(eventID), iso.toUpperCase()},null,null,null);
+                    new String[]{ String.valueOf(event.getEventID()), iso.toUpperCase()},null,null,null);
             database.beginTransaction();
             if (cursor.getCount()==0)   {
+                if ( !values.containsKey(BRSQLiteHelper.BETX_EVENTID) ) {
+                    values.put(BRSQLiteHelper.BETX_EVENTID, event.getEventID());
+                }
                 database.insert(BRSQLiteHelper.BETX_TABLE_NAME, null, values);
                 r = 1;
             }
             else {
                 r = database.update(BRSQLiteHelper.BETX_TABLE_NAME, values, BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
-                        new String[]{String.valueOf(eventID), iso.toUpperCase()});
+                        new String[]{String.valueOf(event.getEventID()), iso.toUpperCase()});
             }
             cursor.close();
             cursor = database.query(BRSQLiteHelper.BETX_TABLE_NAME,
                     allColumns,  BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
-                    new String[]{ String.valueOf(eventID), iso.toUpperCase()},null,null,null);
+                    new String[]{ String.valueOf(event.getEventID()), iso.toUpperCase()},null,null,null);
             BetEventEntity transactionEntity1 = null;
             if (cursor.getCount()==0 || r==0 )   {
-                Log.e(TAG, "event insert/update failed: " + eventID);
+                Log.e(TAG, "event insert/update failed: " + event.getEventID());
             }
             else {
                 cursor.moveToFirst();
@@ -167,15 +169,42 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
 
         ContentValues args = new ContentValues();
-        //args.put(BRSQLiteHelper.BETX_LASTUPDATED, transactionEntity.getLastUpdated());
+        args.put(BRSQLiteHelper.BETX_LASTUPDATED, transactionEntity.getLastUpdated());
         args.put(BRSQLiteHelper.BETX_HOME_ODDS, transactionEntity.getHomeOdds());
         args.put(BRSQLiteHelper.BETX_AWAY_ODDS, transactionEntity.getAwayOdds());
         args.put(BRSQLiteHelper.BETX_DRAW_ODDS, transactionEntity.getDrawOdds());
 
-        BetEventEntity transactionEntity1 = insertOrUpdate(app,iso,transactionEntity.getEventID(), args);
+        BetEventEntity transactionEntity1 = insertOrUpdate(app,iso,transactionEntity, args);
 
         return (transactionEntity1!=null);
     }
+
+    public boolean updateSpreadsMarket(Context app, String iso, BetEventEntity transactionEntity) {
+        Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
+
+        ContentValues args = new ContentValues();
+        args.put(BRSQLiteHelper.BETX_SPREAD_POINTS, transactionEntity.getSpreadPoints());
+        args.put(BRSQLiteHelper.BETX_SPREAD_HOME_ODDS, transactionEntity.getSpreadHomeOdds());
+        args.put(BRSQLiteHelper.BETX_SPREAD_AWAY_ODDS, transactionEntity.getSpreadAwayOdds());
+
+        BetEventEntity transactionEntity1 = insertOrUpdate(app,iso,transactionEntity, args);
+
+        return (transactionEntity1!=null);
+    }
+
+    public boolean updateTotalsMarket(Context app, String iso, BetEventEntity transactionEntity) {
+        Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
+
+        ContentValues args = new ContentValues();
+        args.put(BRSQLiteHelper.BETX_TOTAL_POINTS, transactionEntity.getHomeOdds());
+        args.put(BRSQLiteHelper.BETX_OVER_ODDS, transactionEntity.getAwayOdds());
+        args.put(BRSQLiteHelper.BETX_UNDER_ODDS, transactionEntity.getDrawOdds());
+
+        BetEventEntity transactionEntity1 = insertOrUpdate(app,iso,transactionEntity, args);
+
+        return (transactionEntity1!=null);
+    }
+
 
     public void deleteAllTransactions(Context app, String iso) {
         try {
@@ -207,11 +236,14 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                                 + ", a." + BRSQLiteHelper.BETX_DRAW_ODDS
                                 + ", a." + BRSQLiteHelper.BETX_ENTRY_PRICE
                                 + ", a." + BRSQLiteHelper.BETX_SPREAD_POINTS
+                                + ", a." + BRSQLiteHelper.BETX_SPREAD_HOME_ODDS
+                                + ", a." + BRSQLiteHelper.BETX_SPREAD_AWAY_ODDS
                                 + ", a." + BRSQLiteHelper.BETX_TOTAL_POINTS
                                 + ", a." + BRSQLiteHelper.BETX_OVER_ODDS
                                 + ", a." + BRSQLiteHelper.BETX_UNDER_ODDS
                                 + ", a." + BRSQLiteHelper.BETX_BLOCK_HEIGHT
                                 + ", a." + BRSQLiteHelper.BETX_TIMESTAMP
+                                + ", a." + BRSQLiteHelper.BETX_LASTUPDATED
                                 + ", a." + BRSQLiteHelper.TX_ISO
                                 // event mappings
                                 + ", s." + BRSQLiteHelper.BMTX_STRING
@@ -223,8 +255,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                                 + ", o." + BRSQLiteHelper.BRTX_RESULTS_TYPE
                                 + ", o." + BRSQLiteHelper.BRTX_HOME_TEAM_SCORE
                                 + ", o." + BRSQLiteHelper.BRTX_AWAY_TEAM_SCORE
-                                // event last update
-                                //+ ", a." + BRSQLiteHelper.BETX_LASTUPDATED
+
 
                     + " FROM "+BRSQLiteHelper.BETX_TABLE_NAME+" a "
                     // sport (s), tournament (t), round (r)
@@ -269,8 +300,9 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                     cursor.getLong(9), cursor.getLong(10), cursor.getLong(11),
                     cursor.getLong(12), cursor.getLong(13), cursor.getLong(14),
                     cursor.getLong(15), cursor.getLong(16), cursor.getLong(17),
-                    cursor.getLong(18), cursor.getLong(19), cursor.getString(20),
-                    cursor.getLong(19));
+                    cursor.getLong(18), cursor.getLong(19),
+                    cursor.getLong(20), cursor.getLong(21), cursor.getString(23),
+                    cursor.getLong(22));
     }
 
     public static EventTxUiHolder cursorToUIEvent(Context app, String iso, Cursor cursor) {
@@ -281,14 +313,15 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                 cursor.getLong(9), cursor.getLong(10), cursor.getLong(11),
                 cursor.getLong(12), cursor.getLong(13), cursor.getLong(14),
                 cursor.getLong(15), cursor.getLong(16), cursor.getLong(17),
-                cursor.getLong(18), cursor.getLong(19), cursor.getString(20),
-                cursor.getLong(19),
-                cursor.getString(21), cursor.getString(22), cursor.getString(23),
-                cursor.isNull(24)?"N/A":cursor.getString(24),
-                cursor.isNull(25)?"N/A":cursor.getString(25),
-                BetResultEntity.BetResultType.fromValue(cursor.getInt(26)),
-                cursor.isNull(27)?-1:cursor.getLong(27),
-                cursor.isNull(28)?-1:cursor.getLong(28));
+                cursor.getLong(18), cursor.getLong(19),
+                cursor.getLong(20), cursor.getLong(21), cursor.getString(23),
+                cursor.getLong(22),
+                cursor.getString(24), cursor.getString(25), cursor.getString(26),
+                cursor.isNull(27)?"N/A":cursor.getString(27),
+                cursor.isNull(28)?"N/A":cursor.getString(28),
+                BetResultEntity.BetResultType.fromValue(cursor.getInt(29)),
+                cursor.isNull(30)?-1:cursor.getLong(30),
+                cursor.isNull(31)?-1:cursor.getLong(31));
     }
 
     public void deleteTxByHash(Context app, String iso, String hash) {

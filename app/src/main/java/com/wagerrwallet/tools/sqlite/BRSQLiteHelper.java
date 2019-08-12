@@ -142,6 +142,8 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
     public static final String BETX_DRAW_ODDS = "drawOdds";
     public static final String BETX_ENTRY_PRICE = "entryPrice";
     public static final String BETX_SPREAD_POINTS = "spreadPoints";
+    public static final String BETX_SPREAD_HOME_ODDS = "spreadHomeOdds";
+    public static final String BETX_SPREAD_AWAY_ODDS = "spreadAwayOdds";
     public static final String BETX_TOTAL_POINTS = "totalPoints";
     public static final String BETX_OVER_ODDS = "overOdds";
     public static final String BETX_UNDER_ODDS = "underOdds";
@@ -162,6 +164,8 @@ public class BRSQLiteHelper extends SQLiteOpenHelper {
             BETX_DRAW_ODDS + " integer, " +
             BETX_ENTRY_PRICE + " integer, " +
             BETX_SPREAD_POINTS + " integer, " +
+            BETX_SPREAD_HOME_ODDS + " integer, " +
+            BETX_SPREAD_AWAY_ODDS + " integer, " +
             BETX_TOTAL_POINTS + " integer, " +
             BETX_OVER_ODDS + " integer, " +
             BETX_UNDER_ODDS + " integer, " +

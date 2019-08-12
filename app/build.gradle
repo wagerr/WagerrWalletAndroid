@@ -5,7 +5,7 @@ android {
     defaultConfig {
         testInstrumentationRunner = 'android.support.test.runner.AndroidJUnitRunner'
         applicationId = 'com.wagerrwallet'
-        minSdkVersion 23
+        minSdkVersion 27
         targetSdkVersion 28
         versionCode 220
         versionName "220"

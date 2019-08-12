@@ -82,6 +82,16 @@ public class BRDateUtil {
         return dateString;
     }
 
+    public static String getEventDate(long timestamp) {
+        //long millTimestamp = timestamp * 1000;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+
+        String dateString = new SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault()).format(calendar.getTimeInMillis());
+        return dateString;
+    }
+
     public static String getLongDate(long timestamp){
 
         Calendar calendar = Calendar.getInstance();
