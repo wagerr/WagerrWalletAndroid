@@ -18,12 +18,17 @@ import android.widget.Toast;
 import com.platform.entities.TxMetaData;
 import com.platform.tools.KVStoreManager;
 import com.wagerrwallet.R;
+import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.presenter.customviews.BRText;
+import com.wagerrwallet.presenter.entities.BetEntity;
+import com.wagerrwallet.presenter.entities.BetEventEntity;
+import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
+import com.wagerrwallet.tools.manager.SendManager;
 import com.wagerrwallet.tools.util.BRDateUtil;
 import com.wagerrwallet.tools.util.CurrencyUtils;
 import com.wagerrwallet.tools.util.Utils;
@@ -38,10 +43,13 @@ import java.math.BigDecimal;
  * Reusable dialog fragment that display details about a particular transaction
  */
 
-public class FragmentEventDetails extends DialogFragment {
+public class FragmentEventDetails extends DialogFragment implements View.OnClickListener {
 
     private static final String EXTRA_TX_ITEM = "event_item";
     private static final String TAG = "FragmentEventDetails";
+    private static final int NORMAL_SIZE = 24;
+    private static final int BIG_SIZE = 32;
+    private static final long UNIT_MULTIPLIER = 100000000L;     // so far in full WGR units
 
     private EventTxUiHolder mTransaction;
 
@@ -85,6 +93,10 @@ public class FragmentEventDetails extends DialogFragment {
 
     private ImageButton mCloseButton;
     private RelativeLayout mDetailsContainer;
+    private RelativeLayout mBetSliderContainer;
+    private ImageButton mAcceptBet;
+    private ImageButton mCancelBet;
+    private View mCurrentSelectedBetOption = null;
 
     boolean mDetailsShowing = false;
 
@@ -113,21 +125,26 @@ public class FragmentEventDetails extends DialogFragment {
         mTxHomeResult = rootView.findViewById(R.id.tx_home_result);
         mTxAwayResult= rootView.findViewById(R.id.tx_away_result);
         mTxHomeOdds = rootView.findViewById(R.id.tx_home_odds);
+        mTxHomeOdds.setOnClickListener(this);
         mTxDrawOdds= rootView.findViewById(R.id.tx_draw_odds);
+        mTxDrawOdds.setOnClickListener(this);
         mTxAwayOdds= rootView.findViewById(R.id.tx_away_odds);
+        mTxAwayOdds.setOnClickListener(this);
         mTxAmount = rootView.findViewById(R.id.tx_amount);
 
+        final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         seekBar = rootView.findViewById(R.id.bet_seekBar);
-        seekBar.setMin(getContext().getResources().getInteger(R.integer.min_bet_amount));
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                   int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
-                   mTxAmount.setText("" + progress);
-                   mTxAmount.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
+                   int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
+                   int max = Math.min( (int)(walletManager.getWallet().getBalance()/UNIT_MULTIPLIER),
+                           getContext().getResources().getInteger(R.integer.max_bet_amount));
+                   seekBar.setMax(max-min);
+                   int posX = seekBar.getThumb().getBounds().centerX();
+                   mTxAmount.setText("" + (progress + min));
+                   mTxAmount.setX(seekBar.getX() + posX);
                    //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
-
                }
                @Override
                public void onStartTrackingTouch(SeekBar seekBar) {
@@ -143,12 +160,15 @@ public class FragmentEventDetails extends DialogFragment {
 
         mTxSpreadPoints= rootView.findViewById(R.id.tx_spread_points);
         mTxSpreadHomeOdds = rootView.findViewById(R.id.tx_spreads_home_odds);
+        mTxSpreadHomeOdds.setOnClickListener(this);
         mTxSpreadAwayOdds= rootView.findViewById(R.id.tx_spreads_away_odds);
+        mTxSpreadAwayOdds.setOnClickListener(this);
 
         mTxTotalPoints = rootView.findViewById(R.id.tx_total_points);
         mTxTotalOverOdds= rootView.findViewById(R.id.tx_over_odds);
+        mTxTotalOverOdds.setOnClickListener(this);
         mTxTotalUnderOdds= rootView.findViewById(R.id.tx_under_odds);
-
+        mTxTotalUnderOdds.setOnClickListener(this);
         mAmountNow = rootView.findViewById(R.id.amount_now);
         mAmountWhenSent = rootView.findViewById(R.id.amount_when_sent);
 
@@ -167,11 +187,26 @@ public class FragmentEventDetails extends DialogFragment {
         mShowHide = rootView.findViewById(R.id.show_hide_details);
         mDetailsContainer = rootView.findViewById(R.id.details_container);
         mCloseButton = rootView.findViewById(R.id.close_button);
-
         mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
+            }
+        });
+
+        mBetSliderContainer = rootView.findViewById(R.id.bet_layout);
+        mAcceptBet = rootView.findViewById(R.id.bet_send);
+        mAcceptBet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AcceptBet();
+            }
+        });
+        mCancelBet= rootView.findViewById(R.id.bet_cancel);
+        mCancelBet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CancelBet();
             }
         });
 
@@ -192,6 +227,107 @@ public class FragmentEventDetails extends DialogFragment {
 
         updateUi();
         return rootView;
+    }
+
+    protected void AcceptBet()  {
+        int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
+        BetEntity.BetTxType betType = (mTransaction.getType()== BetEventEntity.BetTxType.PEERLESS)? BetEntity.BetTxType.PEERLESS:BetEntity.BetTxType.CHAIN_LOTTO;
+        long amount = (seekBar.getProgress() + min) * UNIT_MULTIPLIER;
+        amount = 1000000;   // 0.01 WGR for testing
+        final BaseWalletManager wallet = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+        BRCoreTransaction tx = wallet.getWallet().createBetTransaction(amount, betType.getNumber(), (int)mTransaction.getEventID(), getSelectedOutcome());
+
+        CryptoRequest item = new CryptoRequest(tx, null, false, "", "", new BigDecimal(amount));
+        SendManager.sendTransaction(getActivity(), item, wallet);
+    }
+
+    protected void CancelBet()  {
+        BRText txPrev = (mCurrentSelectedBetOption!=null)?(BRText) mCurrentSelectedBetOption:null;
+        if (txPrev!=null)   {
+            txPrev.setTextSize(NORMAL_SIZE);
+        }
+        mBetSliderContainer.setVisibility(View.GONE);
+        mCurrentSelectedBetOption = null;
+    }
+
+    protected int getSelectedOutcome() {
+        BetEntity.BetOutcome outcome = BetEntity.BetOutcome.UNKNOWN;
+        if (mCurrentSelectedBetOption!=null) {
+            switch (mCurrentSelectedBetOption.getId()) {
+                case R.id.tx_home_odds:
+                    outcome = BetEntity.BetOutcome.MONEY_LINE_HOME_WIN;
+                    break;
+
+                case R.id.tx_draw_odds:
+                    outcome = BetEntity.BetOutcome.MONEY_LINE_DRAW;
+                    break;
+
+                case R.id.tx_away_odds:
+                    outcome = BetEntity.BetOutcome.MONEY_LINE_AWAY_WIN;
+                    break;
+
+                case R.id.tx_spreads_home_odds:
+                    outcome = BetEntity.BetOutcome.SPREADS_HOME;
+                    break;
+
+                case R.id.tx_spreads_away_odds:
+                    outcome = BetEntity.BetOutcome.SPREADS_AWAY;
+                    break;
+
+                case R.id.tx_over_odds:
+                    outcome = BetEntity.BetOutcome.TOTAL_OVER;
+                    break;
+
+                case R.id.tx_under_odds:
+                    outcome = BetEntity.BetOutcome.TOTAL_UNDER;
+                    break;
+            }
+        }
+        return outcome.getNumber();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int idContainer = 0;
+        BRText txCur = (BRText)v;
+        BRText txPrev = (mCurrentSelectedBetOption!=null)?(BRText) mCurrentSelectedBetOption:null;
+
+        switch(v.getId()) {
+            case R.id.tx_home_odds:
+            case R.id.tx_draw_odds:
+            case R.id.tx_away_odds:
+                idContainer = R.id.odds_layout;
+                break;
+
+            case R.id.tx_spreads_home_odds:
+            case R.id.tx_spreads_away_odds:
+                idContainer = R.id.spreads_container;
+                break;
+
+            case R.id.tx_over_odds:
+            case R.id.tx_under_odds:
+                idContainer = R.id.totals_container;
+                break;
+        }
+
+        if (txPrev!=null)   {
+            txPrev.setTextSize(NORMAL_SIZE);
+        }
+
+        if ( txPrev==null || txCur.getId()!=txPrev.getId()) {
+            txCur.setTextSize(BIG_SIZE);
+            if (idContainer>0) {
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.BELOW, idContainer);
+                mBetSliderContainer.setLayoutParams(params);
+            }
+            mBetSliderContainer.setVisibility(View.VISIBLE);
+            mCurrentSelectedBetOption = v;
+        }
+        else {
+            mBetSliderContainer.setVisibility(View.GONE);
+            mCurrentSelectedBetOption = null;
+        }
     }
 
     @Override
@@ -295,9 +431,6 @@ public class FragmentEventDetails extends DialogFragment {
             // Set the transaction block number
             mConfirmedInBlock.setText(String.valueOf(mTransaction.getBlockheight()));
 
-            int maxBetAmount = Math.min( (int)(walletManager.getWallet().getBalance()/100000000),
-                                         getContext().getResources().getInteger(R.integer.max_bet_amount));
-            seekBar.setMax(maxBetAmount);
 
 /*
             mToFrom.setText(sent ? "To " : "Via ");

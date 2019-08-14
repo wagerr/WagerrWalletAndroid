@@ -127,27 +127,55 @@
             </RelativeLayout>
         </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/bet_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/odds_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        >
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/bet_seekBar"
+            android:layout_marginTop="10dp"
             android:text="25 WGR"
             android:visibility="visible"
+
             android:textColor="@color/total_assets_usd_color"
             android:textSize="24sp"
             app:customTFont="CircularPro-Book.otf" />
 
         <SeekBar
             android:id="@+id/bet_seekBar"
-            android:layout_width="280dp"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:layout_below="@id/odds_layout"
-            android:min="@integer/min_bet_amount"
-            android:max="@integer/max_bet_amount"
+            android:layout_below="@id/tx_amount"
             />
+
+        <ImageButton
+            android:id="@+id/bet_send"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginBottom="2dp"
+            android:layout_alignTop="@id/tx_amount"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/bet_seekBar"
+            android:background="@drawable/checkmark_circled"/>
+
+        <ImageButton
+            android:id="@+id/bet_cancel"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+
+            android:layout_toRightOf="@id/bet_seekBar"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/bet_send"
+            android:background="@drawable/redcross_circled"/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/odds_layout"
@@ -172,7 +200,7 @@
 
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_home_odds"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:layout_marginRight="18dp"
@@ -189,7 +217,7 @@
 
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_draw_odds"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/tx_home_odds"
             android:layout_marginRight="18dp"
@@ -206,7 +234,7 @@
 
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_away_odds"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tx_draw_odds"
             android:layout_marginLeft="0dp"
@@ -413,7 +441,7 @@
             android:layout_marginBottom="22dp"
             android:layout_above="@+id/tx_eventdate"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="30dp"
             android:background="@drawable/ic_close_light_grey"/>
 
         <View
@@ -587,16 +615,14 @@
             android:id="@+id/show_hide_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/details_container"
+            android:layout_below="@id/bet_layout"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="20dp"
             android:text="Show Details"
             android:textColor="@color/blue"/>
 
 
     </RelativeLayout>
-
-
 
 </android.support.v7.widget.CardView>
