@@ -112,7 +112,7 @@ public class ImportPrivKeyTask extends AsyncTask<String, String, String> {
 
         //automatically uses testnet if x-testnet is true
         String fullUrl = String.format("%s/%s/api.dws?key=%s&q=unspent&active=%s"
-                    , WagerrApp.HOST_UTXO, iso, WagerrApp.HOST_UTXO_KEY, decoratedAddress);
+                    , WagerrApp.HOST_UTXO, iso.toLowerCase(), WagerrApp.HOST_UTXO_KEY, decoratedAddress);
 
         mTransaction = createSweepingTx(app, fullUrl);
         if (mTransaction == null) {
