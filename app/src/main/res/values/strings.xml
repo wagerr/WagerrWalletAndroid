@@ -169,7 +169,7 @@
   <!-- Checking private key balance progress view text -->
   <string name="Import.checking">Checking private key balance...</string>
   <!-- Sweep private key confirmation message -->
-  <string name="Import.confirm">Send %1$s from this private key into your wallet? The bitcoin network will receive a fee of %2$s.</string>
+  <string name="Import.confirm">Send %1$s from this private key into your wallet? The wagerr network will receive a fee of %2$s.</string>
   <!-- Duplicate key error message -->
   <string name="Import.Error.duplicate">This private key is already in your wallet.</string>
   <!-- empty private key error message -->
@@ -213,9 +213,9 @@
   <!-- Ignore jailbreak warning button -->
   <string name="JailbreakWarnings.ignore">Ignore</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithBalance">DEVICE SECURITY COMPROMISED\n Any \'jailbreak\' app can access Wagerr\'s keychain data and steal your bitcoin! Wipe this wallet immediately and restore on a secure device.</string>
+  <string name="JailbreakWarnings.messageWithBalance">DEVICE SECURITY COMPROMISED\n Any \'jailbreak\' app can access Wagerr\'s keychain data and steal your Wagerr! Wipe this wallet immediately and restore on a secure device.</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithoutBalance">DEVICE SECURITY COMPROMISED\n Any \'jailbreak\' app can access Wagerr\'s keychain data and steal your bitcoin. Please only use Wagerr on a non-jailbroken device.</string>
+  <string name="JailbreakWarnings.messageWithoutBalance">DEVICE SECURITY COMPROMISED\n Any \'jailbreak\' app can access Wagerr\'s keychain data and steal your Wagerr. Please only use Wagerr on a non-jailbroken device.</string>
   <!-- Jailbreak warning title -->
   <string name="JailbreakWarnings.title">WARNING</string>
   <!-- Location services disabled error -->
