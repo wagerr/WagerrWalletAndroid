@@ -35,6 +35,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
+import com.wagerrwallet.presenter.entities.BetEventEntity;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.util.BRConstants;
@@ -168,6 +169,30 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         } finally {
             closeDatabase();
         }
+    }
+
+    private BetMappingEntity getById(Context app, String iso, BetMappingEntity.MappingNamespaceType ns, int mappingID) {
+        Cursor cursor = null;
+        BetMappingEntity mappingEntity = null;
+        try {
+            database = openDatabase();
+
+            cursor = database.query(BRSQLiteHelper.BMTX_TABLE_NAME,
+                    allColumns, BRSQLiteHelper.BMTX_NAMESPACEID + "=? AND " + BRSQLiteHelper.BMTX_MAPPINGID+ "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
+                    new String[]{ String.valueOf(ns.getNumber()), String.valueOf(mappingID), iso.toUpperCase()}, null, null, null);
+            if (cursor.getCount()==1)   {
+                cursor.moveToFirst();
+                mappingEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+            }
+            else if (cursor.getCount()>1) {     // should not happen
+                mappingEntity = new BetMappingEntity("", 0, BetMappingEntity.MappingNamespaceType.UNKNOWN,0,"",0,0,"WGR");
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+            closeDatabase();
+        }
+        return mappingEntity;
     }
 
     @Override

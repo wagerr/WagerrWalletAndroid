@@ -41,7 +41,7 @@
         android:maxLines="1"
         android:paddingBottom="4dp"
         android:text="home team"
-        android:textColor="@color/green_text"
+        android:textColor="@color/red"
         android:textSize="14sp"/>
 
     <com.wagerrwallet.presenter.customviews.BRText
@@ -56,7 +56,7 @@
         android:maxLines="1"
         android:paddingBottom="4dp"
         android:text="2"
-        android:textColor="@color/green_text"
+        android:textColor="@color/red"
         android:textStyle="bold"
         android:textSize="15dp"/>
 
@@ -73,7 +73,7 @@
         android:maxLines="1"
         android:paddingBottom="4dp"
         android:text="away team"
-        android:textColor="@color/dark_blue"
+        android:textColor="@color/black"
         android:textSize="14sp" />
 
     <com.wagerrwallet.presenter.customviews.BRText
@@ -90,7 +90,7 @@
         android:paddingBottom="4dp"
         android:text="1"
         android:textStyle="bold"
-        android:textColor="@color/dark_blue"
+        android:textColor="@color/black"
         android:textSize="15sp" />
 
     <com.wagerrwallet.presenter.customviews.BRText
@@ -105,7 +105,7 @@
         android:maxLines="1"
         android:paddingBottom="2dp"
         android:text="hodds"
-        android:textColor="@color/green_text"
+        android:textColor="@color/red"
         android:textSize="14sp" />
 
     <com.wagerrwallet.presenter.customviews.BRText
@@ -166,7 +166,7 @@
         android:maxLines="1"
         android:paddingBottom="4dp"
         android:text="aodds"
-        android:textColor="@color/dark_blue"
+        android:textColor="@color/black"
         android:textSize="14sp" />
 
     <ProgressBar

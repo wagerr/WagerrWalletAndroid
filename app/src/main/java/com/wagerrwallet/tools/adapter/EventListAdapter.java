@@ -18,6 +18,7 @@ import com.platform.tools.KVStoreManager;
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRDateUtil;
@@ -108,6 +109,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 EventTxUiHolder item;
                 for (int i = 0; i < newItems.size(); i++) {
                     item = newItems.get(i);
+                    BRAnimator.updateEventDetails(((Activity) mContext), item);
                 }
                 backUpFeed = newItems;
                 String log = String.format("newItems: %d, took: %d", newItems.size(), (System.currentTimeMillis() - s));

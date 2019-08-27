@@ -77,6 +77,7 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -117,6 +118,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     public static String ISO = "WGR";
 
     private static final String mName = "WAGERR";
+    private static final int DAYS_REMOVE_EVENTS = 1;
+
     private static final long TIME_GENESIS = 1518743781;
     public static final String BTC_SCHEME = "";
 
@@ -273,6 +276,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     @Override
     public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
+        Date date = new Date();
+        long timeStamp = date.getTime() - DAYS_REMOVE_EVENTS * 60*60*24;
+        BetResultTxDataStore.getInstance(app).deleteResultsOldEvents(app, ISO, timeStamp);
+        BetEventTxDataStore.getInstance(app).deleteTxByEventTimestamp (app,ISO, timeStamp );
         List<EventTxUiHolder> txs = BetEventTxDataStore.getInstance(app).getAllTransactions(app,ISO);
         if (txs == null || txs.size() <= 0) return null;
 
@@ -393,8 +400,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     @Override
     public void wipeData(Context app) {
         BtcBchTransactionDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
-        BetEventTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
         BetResultTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
+        BetEventTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
         BetTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
         BetMappingTxDataStore.getInstance(app).deleteAllTransactions(app, getIso(app));
         MerkleBlockDataSource.getInstance(app).deleteAllBlocks(app, getIso(app));

@@ -336,12 +336,14 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     }
 
     public void setTransaction(EventTxUiHolder item) {
-
         this.mTransaction = item;
-
     }
 
-    private void updateUi() {
+    public EventTxUiHolder getTransaction() {
+        return this.mTransaction;
+    }
+
+    public void updateUi() {
 
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         // Set mTransction fields

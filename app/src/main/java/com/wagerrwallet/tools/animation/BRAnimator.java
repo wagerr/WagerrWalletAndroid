@@ -257,7 +257,7 @@ public class BRAnimator {
         FragmentEventDetails txDetails = (FragmentEventDetails) app.getFragmentManager().findFragmentByTag(FragmentEventDetails.class.getName());
 
         if(txDetails != null && txDetails.isAdded()){
-            Log.e(TAG, "showTransactionDetails: Already showing");
+            Log.e(TAG, "showEventDetails: Already showing");
 
             return;
         }
@@ -266,6 +266,19 @@ public class BRAnimator {
         txDetails.setTransaction(item);
         txDetails.show(app.getFragmentManager(), "txDetails");
 
+    }
+
+    public static void updateEventDetails(Activity app, EventTxUiHolder item){
+        FragmentEventDetails txDetails = (FragmentEventDetails) app.getFragmentManager().findFragmentByTag(FragmentEventDetails.class.getName());
+
+        if(txDetails != null && txDetails.isAdded()){
+            EventTxUiHolder current = txDetails.getTransaction();
+            if (current.getEventID()==item.getEventID()) {
+                txDetails.setTransaction(item);
+                txDetails.updateUi();
+            }
+        }
+        return;
     }
 
     public static void openScanner(Activity app, int requestID) {

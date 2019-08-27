@@ -11,6 +11,10 @@ import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
+import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetMappingTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetResultTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetTxDataStore;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.wallet.WalletsMaster;
@@ -56,11 +60,19 @@ public class SyncBlockchainActivity extends BRActivity {
                             @Override
                             public void onClick(BRDialogView brDialogView) {
                                 brDialogView.dismissWithAnimation();
+                                final String iso = BRSharedPrefs.getCurrentWalletIso(SyncBlockchainActivity.this);
                                 BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
                                     @Override
                                     public void run() {
-                                        BRSharedPrefs.putStartHeight(SyncBlockchainActivity.this, BRSharedPrefs.getCurrentWalletIso(SyncBlockchainActivity.this), 0);
-                                        BRSharedPrefs.putAllowSpend(SyncBlockchainActivity.this, BRSharedPrefs.getCurrentWalletIso(SyncBlockchainActivity.this), false);
+                                        BRSharedPrefs.putStartHeight(SyncBlockchainActivity.this, iso, 0);
+                                        BRSharedPrefs.putAllowSpend(SyncBlockchainActivity.this, iso, false);
+
+                                        if (iso.toLowerCase()=="wgr") {
+                                            BetResultTxDataStore.getInstance(SyncBlockchainActivity.this).deleteAllTransactions(app, iso);
+                                            BetEventTxDataStore.getInstance(SyncBlockchainActivity.this).deleteAllTransactions(app, iso);
+                                            BetTxDataStore.getInstance(SyncBlockchainActivity.this).deleteAllTransactions(app, iso);
+                                            BetMappingTxDataStore.getInstance(SyncBlockchainActivity.this).deleteAllTransactions(app, iso);
+                                        }
                                         WalletsMaster.getInstance(SyncBlockchainActivity.this).getCurrentWallet(SyncBlockchainActivity.this).getPeerManager().rescan();
                                         BRAnimator.startBreadActivity(SyncBlockchainActivity.this, false);
 

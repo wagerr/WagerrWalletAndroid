@@ -168,6 +168,47 @@ public class BetResultTxDataStore implements BRDataSourceInterface {
         }
     }
 
+    public void deleteResultsOldEvents(Context app, String iso, long eventTimestamp) {
+        try {
+            database = openDatabase();
+            Log.e(TAG, "delete event results with older event timestamp: " + eventTimestamp);
+            database.delete(BRSQLiteHelper.BRTX_TABLE_NAME,
+                    BRSQLiteHelper.BRTX_EVENTID+" not in (SELECT "+BRSQLiteHelper.BETX_EVENTID +" from "+BRSQLiteHelper.BETX_TABLE_NAME+" where "+ BRSQLiteHelper.TX_ISO + "=?)", new String[]{iso.toUpperCase()});
+        } finally {
+            closeDatabase();
+        }
+    }
+
+    public BetResultEntity getById(Context app, String iso, int eventID)     {
+        Cursor cursor = null;
+        BetResultEntity resultEntity = null;
+        try {
+            int r=0;
+            database = openDatabase();
+
+            cursor = database.query(BRSQLiteHelper.BETX_TABLE_NAME,
+                    allColumns,  BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
+                    new String[]{ String.valueOf(eventID), iso.toUpperCase()},null,null,null);
+            if (cursor.getCount()==1)   {
+                cursor.moveToFirst();
+                resultEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+            }
+            else if (cursor.getCount()>1) {     // should not happen
+                resultEntity = new BetResultEntity("", BetResultEntity.BetTxType.UNKNOWN,0,0,BetResultEntity.BetResultType.UNKNOWN,0,0,0,0,"WGR");
+            }
+            cursor.close();
+            return resultEntity;
+        } catch (Exception ex) {
+            BRReportsManager.reportBug(ex);
+            Log.e(TAG, "Error getById Event tx into SQLite", ex);
+            //Error in between database transaction
+        } finally {
+            closeDatabase();
+            if (cursor != null) cursor.close();
+        }
+        return resultEntity;
+    }
+
     @Override
     public SQLiteDatabase openDatabase() {
         // Opening new database

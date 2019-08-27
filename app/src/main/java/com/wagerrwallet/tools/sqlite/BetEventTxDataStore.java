@@ -38,6 +38,7 @@ import com.wagerrwallet.presenter.entities.BetEventEntity;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.util.BRConstants;
 
@@ -205,6 +206,35 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         return (transactionEntity1!=null);
     }
 
+    public BetEventEntity getById(Context app, String iso, int eventID)     {
+        Cursor cursor = null;
+        BetEventEntity transactionEntity1 = null;
+        try {
+            int r=0;
+            database = openDatabase();
+
+            cursor = database.query(BRSQLiteHelper.BETX_TABLE_NAME,
+                    allColumns,  BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
+                    new String[]{ String.valueOf(eventID), iso.toUpperCase()},null,null,null);
+            if (cursor.getCount()==1)   {
+                cursor.moveToFirst();
+                transactionEntity1 = cursorToTransaction(app, iso.toUpperCase(), cursor);
+            }
+            else if (cursor.getCount()>1) {     // should not happen
+                transactionEntity1 = new BetEventEntity("", BetEventEntity.BetTxType.UNKNOWN,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"WGR",0);
+            }
+            cursor.close();
+            return transactionEntity1;
+        } catch (Exception ex) {
+            BRReportsManager.reportBug(ex);
+            Log.e(TAG, "Error getById Event tx into SQLite", ex);
+            //Error in between database transaction
+        } finally {
+            closeDatabase();
+            if (cursor != null) cursor.close();
+        }
+        return transactionEntity1;
+    }
 
     public void deleteAllTransactions(Context app, String iso) {
         try {
@@ -334,6 +364,18 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
             closeDatabase();
         }
     }
+
+    public void deleteTxByEventTimestamp(Context app, String iso, long eventTimestamp) {
+        try {
+            database = openDatabase();
+            Log.e(TAG, "delete events with older event timestamp: " + eventTimestamp);
+            database.delete(BRSQLiteHelper.BETX_TABLE_NAME,
+                    BRSQLiteHelper.BETX_EVENT_TIMESTAMP+"<="+ String.valueOf(eventTimestamp) +" AND " + BRSQLiteHelper.TX_ISO + "=?", new String[]{iso.toUpperCase()});
+        } finally {
+            closeDatabase();
+        }
+    }
+
 
     @Override
     public SQLiteDatabase openDatabase() {
