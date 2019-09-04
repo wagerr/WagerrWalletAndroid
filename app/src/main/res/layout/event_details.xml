@@ -17,7 +17,7 @@
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_eventheader"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="42dp"
             android:text="Sport - Tournament - Round"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tx_eventheader"
             android:layout_marginLeft="12dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="10dp"
             android:text="Event date"
             android:textColor="@color/total_assets_usd_color"
             android:textSize="18sp"
@@ -140,12 +140,13 @@
             android:id="@+id/tx_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:text="25 WGR"
             android:visibility="visible"
 
             android:textColor="@color/total_assets_usd_color"
-            android:textSize="24sp"
+            android:textSize="20sp"
             app:customTFont="CircularPro-Book.otf" />
 
         <SeekBar

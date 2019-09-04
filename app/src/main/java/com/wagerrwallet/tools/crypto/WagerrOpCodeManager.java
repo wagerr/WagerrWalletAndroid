@@ -69,10 +69,48 @@ public class WagerrOpCodeManager {
     private static final int VERSION_POS=3;
     private static final int BTX_POS=4;
 
+    public static BetEntity getEventIdFromCoreTx( BRCoreTransaction tx ) {
+        BetEntity ret = null;
+        BetTransactionType txType = null;
+        BetEntity betEntity = null;
+        long betAmount = 0;
+
+        BRCoreTransactionOutput betOutput = null;
+        for ( BRCoreTransactionOutput output : tx.getOutputs()) {
+            BRCoreAddress address = new BRCoreAddress (output.getAddress());
+            byte[] script = output.getScript();
+            int opcode = script[OPCODE_POS] & 0xFF;
+            int test = script[SMOKE_TEST_POS] & 0xFF;
+            try {
+                if (opcode == OP_RETURN && test == SMOKE_TEST) {       // found wagerr bet tx!
+                    int opType = script[BTX_POS] & 0xFF;
+                    txType = BetTransactionType.fromValue(opType);
+                    switch (txType) {
+                        case BET_PEERLESS:
+                            ret = getPeerlessBet(tx, script, betAmount);
+                            break;
+
+                        case BET_CHAIN_LOTTO:
+                            ret = getChainGamesBetEntity(tx, script, betAmount);
+                            break;
+                    }
+                }
+            }
+            catch (WagerrTransactionException wEx) {
+                Log.e(TAG, "Error processing bet tx " + wEx.getMessage());
+            } catch (Exception ex) {
+                Log.e(TAG, "Generic error processing the bet tx" + ex );
+            }
+        }
+        return ret;
+    }
+
     public static boolean DecodeBetTransaction(Context app,  BRCoreTransaction tx) {
         boolean isBetTx = false;
         long betAmount = 0;
         BetTransactionType txType = null;
+
+        //if (true) return isBetTx;
 
         BRCoreTransactionOutput betOutput = null;
         for ( BRCoreTransactionOutput output : tx.getOutputs()) {
@@ -159,7 +197,7 @@ public class WagerrOpCodeManager {
                     switch (txType) {
                         case EVENT_PEERLESS:
                         case EVENT_CHAIN_LOTTO:
-                            BetEventEntity betEventEntity1 = beds.putTransaction( app, WalletWagerrManager.ISO, betEventEntity);
+                            beds.putTransaction( app, WalletWagerrManager.ISO, betEventEntity);
                             break;
 
                         case UPDATE_PEERLESS:
@@ -174,6 +212,7 @@ public class WagerrOpCodeManager {
                             beds.updateTotalsMarket( app, WalletWagerrManager.ISO, betEventEntity);
                             break;
                     }
+                    Log.e(TAG, "storing betEvent: "  + tx.getReverseHash() + ", " + tx.getBlockHeight() + ", " + txType.toString() +  "\n" + betEventEntity );
                 }
 
                 if (betEntity != null)

@@ -15,9 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.wagerrwallet.R;
+import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.presenter.customviews.BRText;
+import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.tools.crypto.WagerrOpCodeManager;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.util.BRDateUtil;
@@ -247,9 +250,7 @@ public class FragmentTxDetails extends DialogFragment {
                 exchangeRateFormatted = CurrencyUtils.getFormattedAmount(getActivity(), metaIso, new BigDecimal(txMetaData.exchangeRate));
                 mExchangeRate.setText(exchangeRateFormatted);
             } else {
-                Log.d(TAG, "TxMetaData is null");
                 mMemoText.setText("");
-
             }
 
             // timestamp is 0 if it's not confirmed in a block yet so make it now
@@ -285,11 +286,8 @@ public class FragmentTxDetails extends DialogFragment {
             mConfirmedInBlock.setText(String.valueOf(mTransaction.getBlockHeight()));
 
         } else {
-
             Toast.makeText(getContext(), "Error getting transaction data", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     @Override

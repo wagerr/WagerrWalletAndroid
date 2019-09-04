@@ -109,6 +109,7 @@ public class BetResultTxDataStore implements BRDataSourceInterface {
         } finally {
             database.endTransaction();
             closeDatabase();
+            Log.e(TAG, "###event result insert/update end: " + transactionEntity.getEventID());
             if (cursor != null) cursor.close();
         }
         return null;
@@ -169,9 +170,15 @@ public class BetResultTxDataStore implements BRDataSourceInterface {
     }
 
     public void deleteResultsOldEvents(Context app, String iso, long eventTimestamp) {
+        Cursor cursor = null;
         try {
             database = openDatabase();
-            Log.e(TAG, "delete event results with older event timestamp: " + eventTimestamp);
+            cursor = database.query(BRSQLiteHelper.BRTX_TABLE_NAME,
+                    allColumns,  BRSQLiteHelper.BRTX_EVENTID+" not in (SELECT "+BRSQLiteHelper.BETX_EVENTID +" from "+BRSQLiteHelper.BETX_TABLE_NAME+" where "+ BRSQLiteHelper.TX_ISO + "=?)",
+                    new String[]{ iso.toUpperCase()},null,null,null);
+            String strNum = String.valueOf(cursor.getCount());
+            cursor.close();
+            Log.e(TAG, "delete "+strNum+" results with older event timestamp: " + eventTimestamp);
             database.delete(BRSQLiteHelper.BRTX_TABLE_NAME,
                     BRSQLiteHelper.BRTX_EVENTID+" not in (SELECT "+BRSQLiteHelper.BETX_EVENTID +" from "+BRSQLiteHelper.BETX_TABLE_NAME+" where "+ BRSQLiteHelper.TX_ISO + "=?)", new String[]{iso.toUpperCase()});
         } finally {

@@ -4,7 +4,7 @@ android {
     compileSdkVersion = 27
     defaultConfig {
         testInstrumentationRunner = 'android.support.test.runner.AndroidJUnitRunner'
-        applicationId = 'com.wagerrwallet'
+        applicationId = 'com.wagerrwallet2'
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 220
@@ -45,7 +45,7 @@ android {
     flavorDimensions "mode"
     productFlavors {
         wagerr {
-            applicationId = "com.wagerrwallet"
+            applicationId = "com.wagerrwallet2"
             dimension "mode"
             resValue "string", "app_name", "Wagerr"
             buildConfigField "boolean", "BITCOIN_TESTNET", "false"
@@ -60,7 +60,7 @@ android {
             }
         }
         brdTestnet {
-            applicationId = "com.wagerrtestnet"
+            applicationId = "com.wagerrtestnet2"
             dimension "mode"
             resValue "string", "app_name", "Wagerr-testnet"
             buildConfigField "boolean", "BITCOIN_TESTNET", "true"

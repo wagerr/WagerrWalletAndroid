@@ -310,7 +310,10 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         //mBuyButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
         //mReceiveButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
 
+        Log.e(TAG, "---MED2 WalletActivity UpdateUI");
+
         EventTxManager.getInstance().updateTxList(EventsActivity.this);
+        Log.e(TAG, "---END WalletActivity UpdateUI");
     }
 
     // This method checks if a screen altering app(such as Twightlight) is currently running
@@ -492,6 +495,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
                 });
             }
         });
+
         final BaseWalletManager wallet = WalletsMaster.getInstance(this).getCurrentWallet(this);
         wallet.addEventTxListModifiedListener(this);
         BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
@@ -516,6 +520,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
                     wallet.connectWallet(EventsActivity.this);
             }
         });
+
 
         /*
         wallet.addSyncListeners(new SyncListener() {

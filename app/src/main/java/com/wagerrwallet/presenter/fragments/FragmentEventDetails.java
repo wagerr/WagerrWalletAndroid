@@ -94,9 +94,13 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private ImageButton mCloseButton;
     private RelativeLayout mDetailsContainer;
     private RelativeLayout mBetSliderContainer;
+    private RelativeLayout mSpreadsContainer;
+    private RelativeLayout mTotalsContainer;
     private ImageButton mAcceptBet;
     private ImageButton mCancelBet;
     private View mCurrentSelectedBetOption = null;
+    private BigDecimal mFiatExchangeRate = new BigDecimal(1);
+    private int nLastContainerId = 0;       // for details positioning purposes
 
     boolean mDetailsShowing = false;
 
@@ -132,8 +136,11 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTxAwayOdds.setOnClickListener(this);
         mTxAmount = rootView.findViewById(R.id.tx_amount);
 
+        nLastContainerId = R.id.odds_layout;        // so far...
+
         final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         seekBar = rootView.findViewById(R.id.bet_seekBar);
+        updateSeekBar(getContext().getResources().getInteger(R.integer.min_bet_amount), 0);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -142,8 +149,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                            getContext().getResources().getInteger(R.integer.max_bet_amount));
                    seekBar.setMax(max-min);
                    int posX = seekBar.getThumb().getBounds().centerX();
-                   mTxAmount.setText("" + (progress + min));
-                   mTxAmount.setX(seekBar.getX() + posX);
+                   int coinAmount = progress + min;
+                   updateSeekBar(coinAmount, posX);
                    //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
                }
                @Override
@@ -158,12 +165,14 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                }
         });
 
+        mSpreadsContainer = rootView.findViewById(R.id.spreads_container);
         mTxSpreadPoints= rootView.findViewById(R.id.tx_spread_points);
         mTxSpreadHomeOdds = rootView.findViewById(R.id.tx_spreads_home_odds);
         mTxSpreadHomeOdds.setOnClickListener(this);
         mTxSpreadAwayOdds= rootView.findViewById(R.id.tx_spreads_away_odds);
         mTxSpreadAwayOdds.setOnClickListener(this);
 
+        mTotalsContainer = rootView.findViewById(R.id.totals_container);
         mTxTotalPoints = rootView.findViewById(R.id.tx_total_points);
         mTxTotalOverOdds= rootView.findViewById(R.id.tx_over_odds);
         mTxTotalOverOdds.setOnClickListener(this);
@@ -229,6 +238,16 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         return rootView;
     }
 
+    protected void updateSeekBar( int amount, int posX ) {
+        BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+        BigDecimal cryptoAmount = new BigDecimal((long)amount*UNIT_MULTIPLIER);
+        BigDecimal fiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), cryptoAmount.abs(), null);
+        String fiatAmountStr = CurrencyUtils.getFormattedAmount(getContext(), BRSharedPrefs.getPreferredFiatIso(getContext()), fiatAmount);
+
+        mTxAmount.setText("" + amount + "WGR (" + fiatAmountStr +")" );
+        //mTxAmount.setX(seekBar.getX() + posX);
+    }
+
     protected void AcceptBet()  {
         int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
         BetEntity.BetTxType betType = (mTransaction.getType()== BetEventEntity.BetTxType.PEERLESS)? BetEntity.BetTxType.PEERLESS:BetEntity.BetTxType.CHAIN_LOTTO;
@@ -239,6 +258,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
         CryptoRequest item = new CryptoRequest(tx, null, false, "", "", new BigDecimal(amount));
         SendManager.sendTransaction(getActivity(), item, wallet);
+        dismiss();  // close fragment
     }
 
     protected void CancelBet()  {
@@ -246,7 +266,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         if (txPrev!=null)   {
             txPrev.setTextSize(NORMAL_SIZE);
         }
-        mBetSliderContainer.setVisibility(View.GONE);
+        HideBetSlider();
         mCurrentSelectedBetOption = null;
     }
 
@@ -320,14 +340,24 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.BELOW, idContainer);
                 mBetSliderContainer.setLayoutParams(params);
+                RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params2.addRule(RelativeLayout.BELOW, R.id.bet_layout);
+                mDetailsContainer.setLayoutParams(params2);
             }
             mBetSliderContainer.setVisibility(View.VISIBLE);
             mCurrentSelectedBetOption = v;
         }
         else {
-            mBetSliderContainer.setVisibility(View.GONE);
+            HideBetSlider();
             mCurrentSelectedBetOption = null;
         }
+    }
+
+    protected void HideBetSlider()    {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.BELOW, nLastContainerId);
+        mDetailsContainer.setLayoutParams(params);
+        mBetSliderContainer.setVisibility(View.GONE);
     }
 
     @Override
@@ -391,10 +421,10 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             mTxDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"D odd" );
             mTxAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"A odd" );
 
-            String homeScore = (item.getHomeScore()!=-1)?String.valueOf(item.getHomeScore()):"";
+            String homeScore = (item.getHomeScore()!=-1)?String.valueOf(item.getHomeScore()):"---";
             mTxHomeResult.setText( homeScore );
 
-            String awayScore = (item.getAwayScore()!=-1)?String.valueOf(item.getAwayScore()):"";
+            String awayScore = (item.getAwayScore()!=-1)?String.valueOf(item.getAwayScore()):"---";
             mTxAwayResult.setText( awayScore );
 
             mTxEventHeader.setText(item.getTxEventHeader());

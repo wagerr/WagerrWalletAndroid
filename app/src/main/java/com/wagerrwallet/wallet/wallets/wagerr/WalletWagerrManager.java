@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -77,8 +78,11 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -126,7 +130,9 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     public static final long MAX_COIN = 200000000L;
 
-    private static WalletWagerrManager instance;
+    private static volatile WalletWagerrManager instance;
+    private static final Object mutex = new Object();
+
     private WalletUiConfiguration uiConfig;
 
     private int mSyncRetryCount = 0;
@@ -142,23 +148,27 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     private Executor listenerExecutor = Executors.newSingleThreadExecutor();
 
-    public synchronized static WalletWagerrManager getInstance(Context app) {
-        if (instance == null) {
-            byte[] rawPubKey = BRKeyStore.getMasterPublicKey(app);
-            if (Utils.isNullOrEmpty(rawPubKey)) {
-                Log.e(TAG, "getInstance: rawPubKey is null");
-                return null;
-            }
-            BRCoreMasterPubKey pubKey = new BRCoreMasterPubKey(rawPubKey, false);
-            long time = BRKeyStore.getWalletCreationTime(app);
-            if (time == 0L)
-            {
-                time = TIME_GENESIS;      // Genesis for Wagerr
-            }
-
-            instance = new WalletWagerrManager(app, pubKey, BuildConfig.BITCOIN_TESTNET ? BRCoreChainParams.testnetCoinChainParams : BRCoreChainParams.mainnetCoinChainParams, time);
+    public static WalletWagerrManager getInstance(Context app) {
+        WalletWagerrManager singleton = instance;
+        if (instance != null) {
+            return instance;
         }
-        return instance;
+        synchronized (mutex) {
+            if (instance == null) {
+                byte[] rawPubKey = BRKeyStore.getMasterPublicKey(app);
+                if (Utils.isNullOrEmpty(rawPubKey)) {
+                    Log.e(TAG, "getInstance: rawPubKey is null");
+                    return null;
+                }
+                BRCoreMasterPubKey pubKey = new BRCoreMasterPubKey(rawPubKey, false);
+                long time = BRKeyStore.getWalletCreationTime(app);
+                if (time == 0L) {
+                    time = TIME_GENESIS;      // Genesis for Wagerr
+                }
+                instance = new WalletWagerrManager(app, pubKey, BuildConfig.BITCOIN_TESTNET ? BRCoreChainParams.testnetCoinChainParams : BRCoreChainParams.mainnetCoinChainParams, time);
+            }
+            return instance;
+        }
     }
 
     private WalletWagerrManager(final Context app, BRCoreMasterPubKey masterPubKey,
@@ -277,10 +287,12 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     @Override
     public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
         Date date = new Date();
-        long timeStamp = date.getTime() - DAYS_REMOVE_EVENTS * 60*60*24;
-        BetResultTxDataStore.getInstance(app).deleteResultsOldEvents(app, ISO, timeStamp);
+        long timeStamp = (date.getTime()/1000) - (DAYS_REMOVE_EVENTS * 60*60*24);
         BetEventTxDataStore.getInstance(app).deleteTxByEventTimestamp (app,ISO, timeStamp );
+        BetResultTxDataStore.getInstance(app).deleteResultsOldEvents(app, ISO, timeStamp);
         List<EventTxUiHolder> txs = BetEventTxDataStore.getInstance(app).getAllTransactions(app,ISO);
+        //List<EventTxUiHolder> txs = new ArrayList<EventTxUiHolder>();
+
         if (txs == null || txs.size() <= 0) return null;
 
         return txs;
@@ -872,6 +884,9 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         super.onBetTxUpdated(transaction);
         Context ctx = WagerrApp.getBreadContext();
         WagerrOpCodeManager.DecodeBetTransaction(ctx, transaction);
+
+        // free transaction copy
+        //transaction.disposeNative();
 
 
         /*Log.d(TAG, "onTxUpdated: " + String.format("hash: %s, blockHeight: %d, timestamp: %d", hash, blockHeight, timeStamp));

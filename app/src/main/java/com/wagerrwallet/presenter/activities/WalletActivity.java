@@ -204,7 +204,9 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
 
         onConnectionChanged(InternetManager.getInstance().isConnected(this));
 
+        Log.e(TAG, "---START WalletActivity OnCreate UpdateUI");
         updateUi();
+        Log.e(TAG, "---END WalletActivity OnCreate UpdateUI");
 //        exchangeTest();
 
         boolean cryptoPreferred = BRSharedPrefs.isCryptoPreferred(this);
