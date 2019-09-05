@@ -252,7 +252,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
         BetEntity.BetTxType betType = (mTransaction.getType()== BetEventEntity.BetTxType.PEERLESS)? BetEntity.BetTxType.PEERLESS:BetEntity.BetTxType.CHAIN_LOTTO;
         long amount = (seekBar.getProgress() + min) * UNIT_MULTIPLIER;
-        amount = 1000000;   // 0.01 WGR for testing
+        //amount = 1000000;   // 0.01 WGR for testing
         final BaseWalletManager wallet = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         BRCoreTransaction tx = wallet.getWallet().createBetTransaction(amount, betType.getNumber(), (int)mTransaction.getEventID(), getSelectedOutcome());
 

@@ -4,7 +4,7 @@ android {
     compileSdkVersion = 27
     defaultConfig {
         testInstrumentationRunner = 'android.support.test.runner.AndroidJUnitRunner'
-        applicationId = 'com.wagerrwallet2'
+        applicationId = 'com.wagerrwallet'
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 220
@@ -45,9 +45,9 @@ android {
     flavorDimensions "mode"
     productFlavors {
         wagerr {
-            applicationId = "com.wagerrwallet2"
+            applicationId = "com.wagerrwallet"
             dimension "mode"
-            resValue "string", "app_name", "Wagerr"
+            resValue "string", "app_name", "Wagerr Bet"
             buildConfigField "boolean", "BITCOIN_TESTNET", "false"
             externalNativeBuild {
                 cmake {
@@ -60,9 +60,9 @@ android {
             }
         }
         brdTestnet {
-            applicationId = "com.wagerrtestnet2"
+            applicationId = "com.wagerrtestnet"
             dimension "mode"
-            resValue "string", "app_name", "Wagerr-testnet"
+            resValue "string", "app_name", "Wagerr-testnet Bet"
             buildConfigField "boolean", "BITCOIN_TESTNET", "true"
             externalNativeBuild {
                 cmake {
@@ -93,6 +93,7 @@ android {
 //        gitUpdateModules()
 //        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         release {
+            applicationIdSuffix ".betrelease"
             minifyEnabled = false
             debuggable = false
 
@@ -102,6 +103,7 @@ android {
             }
         }
         debug {
+            applicationIdSuffix ".betdebug"
             debuggable = true
             jniDebuggable = true
             minifyEnabled = false
