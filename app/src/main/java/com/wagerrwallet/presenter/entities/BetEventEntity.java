@@ -32,6 +32,8 @@ package com.wagerrwallet.presenter.entities;
 public class BetEventEntity {
     public static final String TAG = BetEventEntity.class.getName();
     public static final long ODDS_MULTIPLIER = 10000;
+    public static final long SPREAD_MULTIPLIER = 10;
+    public static final long TOTAL_MULTIPLIER = 10;
 
     public enum BetTxType {
         PEERLESS(0x02),
@@ -226,6 +228,18 @@ public class BetEventEntity {
         return spreadAwayOdds;
     }
 
+    public String getTxSpreadPoints() {
+        return String.valueOf((float)spreadPoints/SPREAD_MULTIPLIER);
+    }
+
+    public String getTxSpreadHomeOdds() {
+        return String.valueOf((float)spreadHomeOdds/ODDS_MULTIPLIER);
+    }
+
+    public String getTxSpreadAwayOdds() {
+        return String.valueOf((float)spreadAwayOdds/ODDS_MULTIPLIER);
+    }
+
     public long getTotalPoints() {
         return totalPoints;
     }
@@ -236,6 +250,18 @@ public class BetEventEntity {
 
     public long getUnderOdds() {
         return underOdds;
+    }
+
+    public String getTxTotalPoints() {
+        return String.valueOf((float)totalPoints/TOTAL_MULTIPLIER);
+    }
+
+    public String getTxOverOdds() {
+        return String.valueOf((float)overOdds/ODDS_MULTIPLIER);
+    }
+
+    public String getTxUnderOdds() {
+        return String.valueOf((float)underOdds/ODDS_MULTIPLIER);
     }
 
     public String getTxSport() {

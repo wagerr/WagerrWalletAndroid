@@ -31,8 +31,8 @@
             tools:context="com.wagerrwallet.presenter.activities.CurrencyActivity">
 
 
-            <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
-                                               android:id="@+id/bread_bar"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/bread_bar"
                                                android:layout_width="match_parent"
                                                android:layout_height="160dp"
                                                android:background="@color/currency_header_background"
@@ -64,16 +64,33 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
+                    <com.wagerrwallet.presenter.customviews.BRButton
+                        android:id="@+id/bet_filter"
+                        android:layout_width="145dp"
+                        android:layout_height="42dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:text="Betting History"
+                        android:textColor="@color/light_gray"
+                        android:textSize="@dimen/paragraph"
+                        app:buttonType="2"
+                        app:customBFont="CircularPro-Book.otf"
+                        app:isBreadButton="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/currency_usd_price" />
+
                     <ImageButton
                         android:id="@+id/back_icon"
                         android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_height="44dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="28dp"
-                        android:padding="10dp"
                         android:background="@drawable/ic_chevron_left_white_24dp"
+                        android:padding="10dp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <com.wagerrwallet.presenter.customviews.BRText
                         android:id="@+id/currency_usd_price"

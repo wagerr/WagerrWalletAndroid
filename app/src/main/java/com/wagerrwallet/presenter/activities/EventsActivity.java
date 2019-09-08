@@ -620,6 +620,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
 
     @Override
     public boolean onProgressUpdated(double progress) {
+        /* disabled here
         mProgressBar.setProgress((int) (progress * 100));
         if (progress == 1) {
             mProgressBar.setVisibility(View.GONE);
@@ -632,6 +633,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         mProgressLabel.setVisibility(View.VISIBLE);
         mBalanceLabel.setVisibility(View.GONE);
         mProgressBar.invalidate();
+        */
         return true;
     }
 

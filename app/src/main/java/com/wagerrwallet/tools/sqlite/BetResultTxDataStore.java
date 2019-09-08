@@ -81,26 +81,29 @@ public class BetResultTxDataStore implements BRDataSourceInterface {
         Cursor cursor = null;
         try {
             database = openDatabase();
-            ContentValues values = new ContentValues();
-            values.put(BRSQLiteHelper.BRTX_COLUMN_ID, transactionEntity.getTxHash());
-            values.put(BRSQLiteHelper.BRTX_TYPE, transactionEntity.getType().getNumber());
-            values.put(BRSQLiteHelper.BRTX_VERSION, transactionEntity.getVersion());
-            values.put(BRSQLiteHelper.BRTX_EVENTID, transactionEntity.getEventID());
-            values.put(BRSQLiteHelper.BRTX_RESULTS_TYPE, transactionEntity.getResultType().getNumber());
-            values.put(BRSQLiteHelper.BRTX_HOME_TEAM_SCORE, transactionEntity.getHomeScore());
-            values.put(BRSQLiteHelper.BRTX_AWAY_TEAM_SCORE, transactionEntity.getAwayScore());
-            values.put(BRSQLiteHelper.BRTX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
-            values.put(BRSQLiteHelper.BRTX_TIMESTAMP, transactionEntity.getTimestamp());
-            values.put(BRSQLiteHelper.BRTX_ISO, iso.toUpperCase());
+            BetResultEntity transactionEntity1 = getTxByHash(app,iso, transactionEntity.getTxHash());
+            if (transactionEntity1==null) {
+                ContentValues values = new ContentValues();
+                values.put(BRSQLiteHelper.BRTX_COLUMN_ID, transactionEntity.getTxHash());
+                values.put(BRSQLiteHelper.BRTX_TYPE, transactionEntity.getType().getNumber());
+                values.put(BRSQLiteHelper.BRTX_VERSION, transactionEntity.getVersion());
+                values.put(BRSQLiteHelper.BRTX_EVENTID, transactionEntity.getEventID());
+                values.put(BRSQLiteHelper.BRTX_RESULTS_TYPE, transactionEntity.getResultType().getNumber());
+                values.put(BRSQLiteHelper.BRTX_HOME_TEAM_SCORE, transactionEntity.getHomeScore());
+                values.put(BRSQLiteHelper.BRTX_AWAY_TEAM_SCORE, transactionEntity.getAwayScore());
+                values.put(BRSQLiteHelper.BRTX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
+                values.put(BRSQLiteHelper.BRTX_TIMESTAMP, transactionEntity.getTimestamp());
+                values.put(BRSQLiteHelper.BRTX_ISO, iso.toUpperCase());
 
-            database.beginTransaction();
-            database.insert(BRSQLiteHelper.BRTX_TABLE_NAME, null, values);
-            cursor = database.query(BRSQLiteHelper.BRTX_TABLE_NAME,
-                    allColumns, null, null, null, null, null);
-            cursor.moveToFirst();
-            BetResultEntity transactionEntity1 = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                database.beginTransaction();
+                database.insert(BRSQLiteHelper.BRTX_TABLE_NAME, null, values);
+                cursor = database.query(BRSQLiteHelper.BRTX_TABLE_NAME,
+                        allColumns, null, null, null, null, null);
+                cursor.moveToFirst();
+                transactionEntity1 = cursorToTransaction(app, iso.toUpperCase(), cursor);
 
-            database.setTransactionSuccessful();
+                database.setTransactionSuccessful();
+            }
             return transactionEntity1;
         } catch (Exception ex) {
             BRReportsManager.reportBug(ex);
@@ -193,8 +196,8 @@ public class BetResultTxDataStore implements BRDataSourceInterface {
             int r=0;
             database = openDatabase();
 
-            cursor = database.query(BRSQLiteHelper.BETX_TABLE_NAME,
-                    allColumns,  BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
+            cursor = database.query(BRSQLiteHelper.BRTX_TABLE_NAME,
+                    allColumns,  BRSQLiteHelper.BRTX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
                     new String[]{ String.valueOf(eventID), iso.toUpperCase()},null,null,null);
             if (cursor.getCount()==1)   {
                 cursor.moveToFirst();
@@ -215,6 +218,30 @@ public class BetResultTxDataStore implements BRDataSourceInterface {
         }
         return resultEntity;
     }
+
+    public BetResultEntity getTxByHash(Context app, String iso, String hash) {
+        Cursor cursor = null;
+        BetResultEntity resultEntity = null;
+        try {
+            database = openDatabase();
+            cursor = database.query(BRSQLiteHelper.BRTX_TABLE_NAME, allColumns,
+                    "_id=? AND " + BRSQLiteHelper.TX_ISO + "=?",
+                    new String[]{ hash, iso.toUpperCase()},null,null,null);
+            if (cursor.getCount()==1)   {
+                cursor.moveToFirst();
+                resultEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+            }
+            else if (cursor.getCount()>1) {     // should not happen, delete all and insert new
+                deleteTxByHash(app, iso, hash);
+            }
+            cursor.close();
+        } finally {
+            closeDatabase();
+            if (cursor != null) cursor.close();
+        }
+        return resultEntity;
+    }
+
 
     @Override
     public SQLiteDatabase openDatabase() {

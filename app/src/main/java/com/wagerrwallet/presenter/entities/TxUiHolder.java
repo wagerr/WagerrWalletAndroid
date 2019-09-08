@@ -44,6 +44,7 @@ public class TxUiHolder {
     private boolean isValid;
     private int txSize;
     public TxMetaData metaData;
+    private BetEntity betEntity;
 
     private TxUiHolder() {
     }
@@ -64,7 +65,11 @@ public class TxUiHolder {
         this.amount = amount;
         this.isValid = isValid;
         this.txSize = txSize;
+        betEntity = null;
     }
+
+    public BetEntity getBetEntity() {   return betEntity;}
+    public void setBetEntity( BetEntity be ) {   betEntity=be; }
 
     public int getBlockHeight() {
         return blockHeight;

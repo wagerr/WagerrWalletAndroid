@@ -28,7 +28,7 @@
                 android:id="@+id/events_row"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
-                android:layout_below="@id/admin_label"
+                android:layout_below="@id/bet_label"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
@@ -213,12 +213,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@id/rv_wallet_list"
+                android:layout_below="@id/events_row"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="16dp"
                 android:text="@string/Admin"
                 android:textColor="#788f9e" />
 
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/bet_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rv_wallet_list"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="6dp"
+                android:text="Betting"
+                android:textColor="#788f9e" />
 
             <RelativeLayout
                 android:id="@+id/settings_row"
@@ -226,7 +237,7 @@
                 android:layout_height="54dp"
                 android:layout_below="@id/admin_label"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="85dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/admin_card_shape">
 

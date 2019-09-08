@@ -66,13 +66,14 @@ public class SyncBlockchainActivity extends BRActivity {
                                     public void run() {
                                         BRSharedPrefs.putStartHeight(SyncBlockchainActivity.this, iso, 0);
                                         BRSharedPrefs.putAllowSpend(SyncBlockchainActivity.this, iso, false);
-
+/*
                                         if (iso.toLowerCase()=="wgr") {
                                             BetResultTxDataStore.getInstance(SyncBlockchainActivity.this).deleteAllTransactions(app, iso);
                                             BetEventTxDataStore.getInstance(SyncBlockchainActivity.this).deleteAllTransactions(app, iso);
                                             BetTxDataStore.getInstance(SyncBlockchainActivity.this).deleteAllTransactions(app, iso);
                                             BetMappingTxDataStore.getInstance(SyncBlockchainActivity.this).deleteAllTransactions(app, iso);
                                         }
+*/
                                         WalletsMaster.getInstance(SyncBlockchainActivity.this).getCurrentWallet(SyncBlockchainActivity.this).getPeerManager().rescan();
                                         BRAnimator.startBreadActivity(SyncBlockchainActivity.this, false);
 

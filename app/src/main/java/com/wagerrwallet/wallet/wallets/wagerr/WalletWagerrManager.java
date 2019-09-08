@@ -27,6 +27,7 @@ import com.wagerrwallet.presenter.customviews.BRToast;
 import com.wagerrwallet.presenter.entities.BRMerkleBlockEntity;
 import com.wagerrwallet.presenter.entities.BRPeerEntity;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
+import com.wagerrwallet.presenter.entities.BetEntity;
 import com.wagerrwallet.presenter.entities.BetEventEntity;
 import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
@@ -273,12 +274,16 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         List<TxUiHolder> uiTxs = new ArrayList<>();
         for (int i = txs.length - 1; i >= 0; i--) { //revere order
             BRCoreTransaction tx = txs[i];
-            uiTxs.add(new TxUiHolder(tx.getTimestamp(), (int) tx.getBlockHeight(), tx.getHash(),
+            TxUiHolder txUiHolder = new TxUiHolder(tx.getTimestamp(), (int) tx.getBlockHeight(), tx.getHash(),
                     tx.getReverseHash(), getWallet().getTransactionAmountSent(tx),
                     getWallet().getTransactionAmountReceived(tx), getWallet().getTransactionFee(tx),
                     tx.getOutputAddresses(), tx.getInputAddresses(),
                     getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
-                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)));
+                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx));
+
+            BetEntity be = WagerrOpCodeManager.getEventIdFromCoreTx(tx);
+            txUiHolder.setBetEntity(be);
+            uiTxs.add(txUiHolder);
         }
 
         return uiTxs;
@@ -288,9 +293,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
         Date date = new Date();
         long timeStamp = (date.getTime()/1000) - (DAYS_REMOVE_EVENTS * 60*60*24);
-        BetEventTxDataStore.getInstance(app).deleteTxByEventTimestamp (app,ISO, timeStamp );
-        BetResultTxDataStore.getInstance(app).deleteResultsOldEvents(app, ISO, timeStamp);
-        List<EventTxUiHolder> txs = BetEventTxDataStore.getInstance(app).getAllTransactions(app,ISO);
+        //BetEventTxDataStore.getInstance(app).deleteTxByEventTimestamp (app,ISO, timeStamp );
+        //BetResultTxDataStore.getInstance(app).deleteResultsOldEvents(app, ISO, timeStamp);
+        //List<BetEntity> bettxs = BetTxDataStore.getInstance(app).getAllTransactions(app,ISO);
+        List<EventTxUiHolder> txs = BetEventTxDataStore.getInstance(app).getAllTransactions(app,ISO,timeStamp);
         //List<EventTxUiHolder> txs = new ArrayList<EventTxUiHolder>();
 
         if (txs == null || txs.size() <= 0) return null;

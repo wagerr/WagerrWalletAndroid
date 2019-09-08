@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -57,8 +58,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private BRText mTxEventDate;
     private BRText mTxHomeTeam;
     private BRText mTxAwayTeam;
-    private BRText mTxHomeResult;
-    private BRText mTxAwayResult;
+    //private BRText mTxHomeResult;
+    //private BRText mTxAwayResult;
     private BRText mTxHomeOdds;
     private BRText mTxDrawOdds;
     private BRText mTxAwayOdds;
@@ -93,14 +94,31 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
     private ImageButton mCloseButton;
     private RelativeLayout mDetailsContainer;
+
+    private LinearLayout mMainLayout;
+
     private RelativeLayout mBetSliderContainer;
+    private LinearLayout mBetSliderLayout;
+    private RelativeLayout mMoneyLineContainer;
+    private LinearLayout mMoneyLineLayout;
+    private LinearLayout mSpreadsLayout;
+    private LinearLayout mTotalsLayout;
+    private LinearLayout mDetailsLayout;
     private RelativeLayout mSpreadsContainer;
     private RelativeLayout mTotalsContainer;
     private ImageButton mAcceptBet;
     private ImageButton mCancelBet;
     private View mCurrentSelectedBetOption = null;
-    private BigDecimal mFiatExchangeRate = new BigDecimal(1);
-    private int nLastContainerId = 0;       // for details positioning purposes
+    private BRText mPotentialReward;
+
+
+    // layout management
+    private boolean bHasMoneyLine = true;
+    private boolean bHasSpreads = false;
+    private boolean bHasTotals = false;
+    LinearLayout rlToPutBelowBetSlider = null;
+    LinearLayout rlToPutBelowPrevious = null;
+    RelativeLayout rlLastContainer = null;
 
     boolean mDetailsShowing = false;
 
@@ -122,23 +140,30 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
         View rootView = inflater.inflate(R.layout.event_details, container, false);
 
+        mMainLayout = rootView.findViewById(R.id.dynamic_container);
         mTxEventHeader = rootView.findViewById(R.id.tx_eventheader);
         mTxEventDate= rootView.findViewById(R.id.tx_eventdate);
         mTxHomeTeam = rootView.findViewById(R.id.tx_home);
         mTxAwayTeam= rootView.findViewById(R.id.tx_away);
-        mTxHomeResult = rootView.findViewById(R.id.tx_home_result);
-        mTxAwayResult= rootView.findViewById(R.id.tx_away_result);
+        //mTxHomeResult = rootView.findViewById(R.id.tx_home_result);
+        //mTxAwayResult= rootView.findViewById(R.id.tx_away_result);
         mTxHomeOdds = rootView.findViewById(R.id.tx_home_odds);
-        mTxHomeOdds.setOnClickListener(this);
         mTxDrawOdds= rootView.findViewById(R.id.tx_draw_odds);
-        mTxDrawOdds.setOnClickListener(this);
         mTxAwayOdds= rootView.findViewById(R.id.tx_away_odds);
-        mTxAwayOdds.setOnClickListener(this);
         mTxAmount = rootView.findViewById(R.id.tx_amount);
 
-        nLastContainerId = R.id.odds_layout;        // so far...
+        mMoneyLineContainer = rootView.findViewById(R.id.odds_container);
+        mMoneyLineLayout =  rootView.findViewById(R.id.odds_layout);
 
         final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+        boolean canBet = ((int)(walletManager.getWallet().getBalance()/UNIT_MULTIPLIER) > getContext().getResources().getInteger(R.integer.min_bet_amount));
+
+        if (canBet) {
+            mTxHomeOdds.setOnClickListener(this);
+            mTxDrawOdds.setOnClickListener(this);
+            mTxAwayOdds.setOnClickListener(this);
+        }
+
         seekBar = rootView.findViewById(R.id.bet_seekBar);
         updateSeekBar(getContext().getResources().getInteger(R.integer.min_bet_amount), 0);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -166,6 +191,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         });
 
         mSpreadsContainer = rootView.findViewById(R.id.spreads_container);
+        mSpreadsLayout = rootView.findViewById(R.id.spreads_layout);
         mTxSpreadPoints= rootView.findViewById(R.id.tx_spread_points);
         mTxSpreadHomeOdds = rootView.findViewById(R.id.tx_spreads_home_odds);
         mTxSpreadHomeOdds.setOnClickListener(this);
@@ -173,6 +199,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTxSpreadAwayOdds.setOnClickListener(this);
 
         mTotalsContainer = rootView.findViewById(R.id.totals_container);
+        mTotalsLayout = rootView.findViewById(R.id.totals_layout);
         mTxTotalPoints = rootView.findViewById(R.id.tx_total_points);
         mTxTotalOverOdds= rootView.findViewById(R.id.tx_over_odds);
         mTxTotalOverOdds.setOnClickListener(this);
@@ -195,6 +222,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTransactionId = rootView.findViewById(R.id.transaction_id);
         mShowHide = rootView.findViewById(R.id.show_hide_details);
         mDetailsContainer = rootView.findViewById(R.id.details_container);
+        mDetailsLayout = rootView.findViewById(R.id.details_layout);
         mCloseButton = rootView.findViewById(R.id.close_button);
         mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +231,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             }
         });
 
-        mBetSliderContainer = rootView.findViewById(R.id.bet_layout);
+        mBetSliderContainer = rootView.findViewById(R.id.bet_container);
+        mBetSliderLayout = rootView.findViewById(R.id.bet_layout);
         mAcceptBet = rootView.findViewById(R.id.bet_send);
         mAcceptBet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,6 +247,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 CancelBet();
             }
         });
+        mPotentialReward = rootView.findViewById(R.id.tx_potential);
 
         mShowHide.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,7 +274,25 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         BigDecimal fiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), cryptoAmount.abs(), null);
         String fiatAmountStr = CurrencyUtils.getFormattedAmount(getContext(), BRSharedPrefs.getPreferredFiatIso(getContext()), fiatAmount);
 
-        mTxAmount.setText("" + amount + "WGR (" + fiatAmountStr +")" );
+        if (mCurrentSelectedBetOption!=null) {
+            String oddTx = ((BRText)mCurrentSelectedBetOption).getText().toString();
+            long stake;
+            Float odds;
+            try {
+                odds = Float.parseFloat( oddTx );
+                stake = amount;
+                long rewardAmount = stake + (long)((stake * (odds - 1)) * 0.94);
+                BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
+                BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
+                String rewardFiatAmountStr = CurrencyUtils.getFormattedAmount(getContext(), BRSharedPrefs.getPreferredFiatIso(getContext()), rewardFiatAmount);
+                mPotentialReward.setText("" + rewardAmount + "  WGR (" + rewardFiatAmountStr +")" );
+            }
+            catch (NumberFormatException e) {
+                mPotentialReward.setText("---");
+            }
+        }
+        mTxAmount.setText("" + amount + " WGR (" + fiatAmountStr +")" );
+
         //mTxAmount.setX(seekBar.getX() + posX);
     }
 
@@ -266,7 +314,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         if (txPrev!=null)   {
             txPrev.setTextSize(NORMAL_SIZE);
         }
-        HideBetSlider();
+        mBetSliderContainer.setVisibility(View.GONE);
         mCurrentSelectedBetOption = null;
     }
 
@@ -312,23 +360,38 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         BRText txCur = (BRText)v;
         BRText txPrev = (mCurrentSelectedBetOption!=null)?(BRText) mCurrentSelectedBetOption:null;
 
+        if ( txPrev==null || txCur.getId()!=txPrev.getId()) {
+            txCur.setTextSize(BIG_SIZE);
+            mBetSliderContainer.setVisibility(View.VISIBLE);
+        }
+
+        mMainLayout.removeAllViews();
+        mMainLayout.addView(mMoneyLineLayout);
+
         switch(v.getId()) {
             case R.id.tx_home_odds:
             case R.id.tx_draw_odds:
             case R.id.tx_away_odds:
-                idContainer = R.id.odds_layout;
+                mMainLayout.addView(mBetSliderLayout);
+                mMainLayout.addView(mSpreadsLayout);
+                mMainLayout.addView(mTotalsLayout);
                 break;
 
             case R.id.tx_spreads_home_odds:
             case R.id.tx_spreads_away_odds:
-                idContainer = R.id.spreads_container;
+                mMainLayout.addView(mSpreadsLayout);
+                mMainLayout.addView(mBetSliderLayout);
+                mMainLayout.addView(mTotalsLayout);
                 break;
 
             case R.id.tx_over_odds:
             case R.id.tx_under_odds:
-                idContainer = R.id.totals_container;
+                mMainLayout.addView(mSpreadsLayout);
+                mMainLayout.addView(mTotalsLayout);
+                mMainLayout.addView(mBetSliderLayout);
                 break;
         }
+        mMainLayout.addView(mDetailsLayout);
 
         if (txPrev!=null)   {
             txPrev.setTextSize(NORMAL_SIZE);
@@ -336,28 +399,27 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
         if ( txPrev==null || txCur.getId()!=txPrev.getId()) {
             txCur.setTextSize(BIG_SIZE);
+            /*
             if (idContainer>0) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.BELOW, idContainer);
                 mBetSliderContainer.setLayoutParams(params);
-                RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params2.addRule(RelativeLayout.BELOW, R.id.bet_layout);
-                mDetailsContainer.setLayoutParams(params2);
+                if (rlToPutBelowBetSlider!=null) {
+                    RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params2.addRule(RelativeLayout.BELOW, R.id.bet_layout);
+                    rlToPutBelowBetSlider.setLayoutParams(params2);
+                }
             }
-            mBetSliderContainer.setVisibility(View.VISIBLE);
+            */
             mCurrentSelectedBetOption = v;
+            int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
+            int coinAmount = seekBar.getProgress()+min;
+            updateSeekBar(coinAmount,0);
         }
         else {
-            HideBetSlider();
+            mBetSliderContainer.setVisibility(View.GONE);
             mCurrentSelectedBetOption = null;
         }
-    }
-
-    protected void HideBetSlider()    {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.BELOW, nLastContainerId);
-        mDetailsContainer.setLayoutParams(params);
-        mBetSliderContainer.setVisibility(View.GONE);
     }
 
     @Override
@@ -420,12 +482,37 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             mTxHomeOdds.setText( (item.getTxHomeOdds()!=null)?item.getTxHomeOdds():"H odd" );
             mTxDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"D odd" );
             mTxAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"A odd" );
+            rlLastContainer = mMoneyLineContainer;      // default...
 
-            String homeScore = (item.getHomeScore()!=-1)?String.valueOf(item.getHomeScore()):"---";
-            mTxHomeResult.setText( homeScore );
+            bHasSpreads = (item.getSpreadPoints()>0);
+            if (bHasSpreads) {
+                String txSpreadFormat = (item.getHomeOdds()>item.getAwayOdds())?"+%s/-%s":"-%s/+%s";
+                String txSpreadPoints = String.format(txSpreadFormat, item.getTxSpreadPoints(), item.getTxSpreadPoints() );
+                mTxSpreadPoints.setText(txSpreadPoints);
+                mTxSpreadHomeOdds.setText((item.getSpreadHomeOdds() > 0) ? item.getTxSpreadHomeOdds() : "---");
+                mTxSpreadAwayOdds.setText((item.getSpreadAwayOdds() > 0) ? item.getTxSpreadAwayOdds() : "---");
+                mSpreadsContainer.setVisibility(View.VISIBLE);
+                rlLastContainer = mSpreadsContainer;
+            }
 
-            String awayScore = (item.getAwayScore()!=-1)?String.valueOf(item.getAwayScore()):"---";
-            mTxAwayResult.setText( awayScore );
+            bHasTotals = (item.getTotalPoints()>0);
+            if (bHasTotals) {
+                mTxTotalPoints.setText(item.getTxTotalPoints());
+                mTxTotalOverOdds.setText((item.getOverOdds() > 0) ? item.getTxOverOdds() : "---");
+                mTxTotalUnderOdds.setText((item.getUnderOdds() > 0) ? item.getTxUnderOdds() : "---");
+                mTotalsContainer.setVisibility(View.VISIBLE);
+                rlLastContainer = mTotalsContainer;
+            }
+/*
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.BELOW, rlLastContainer.getId());
+            mShowHide.setLayoutParams(params);
+*/
+            //String homeScore = (item.getHomeScore()!=-1)?String.valueOf(item.getHomeScore()):"---";
+            //mTxHomeResult.setText( homeScore );
+
+            //String awayScore = (item.getAwayScore()!=-1)?String.valueOf(item.getAwayScore()):"---";
+            //mTxAwayResult.setText( awayScore );
 
             mTxEventHeader.setText(item.getTxEventHeader());
             mTxEventDate.setText( item.getTxEventDate() );

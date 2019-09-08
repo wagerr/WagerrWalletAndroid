@@ -65,6 +65,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private List<TxUiHolder> backUpFeed;
     private List<TxUiHolder> itemFeed;
     //    private Map<String, TxMetaData> mds;
+    public boolean[] filterSwitches; // = new boolean[1];
 
     private final int txType = 0;
     private final int promptType = 1;
@@ -92,7 +93,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (backUpFeed == null) backUpFeed = new ArrayList<>();
         this.itemFeed = items;
         this.backUpFeed = items;
-
+        if (filterSwitches!=null)   {
+            filterBetHistory(filterSwitches, false);
+        }
     }
 
     public void updateData() {
@@ -295,6 +298,31 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void filterBy(String query, boolean[] switches) {
         filter(query, switches);
+    }
+
+    public void filterBetHistory(boolean[] switches, boolean bNotify) {
+        long start = System.currentTimeMillis();
+        int switchesON = 0;
+        for (boolean i : switches) if (i) switchesON++;
+
+        final List<TxUiHolder> filteredList = new ArrayList<>();
+        TxUiHolder item;
+        for (int i = 0; i < backUpFeed.size(); i++) {
+            item = backUpFeed.get(i);
+            if (switches[0] )  {
+                if (item.getBetEntity()!=null) {
+                    filteredList.add(item);
+                }
+            }
+            else {
+                filteredList.add(item);
+            }
+        }
+        filterSwitches = switches;
+        itemFeed = filteredList;
+        if (bNotify)    notifyDataSetChanged();
+
+        Log.e(TAG, "filter bet history took: " + (System.currentTimeMillis() - start));
     }
 
     public void resetFilter() {
