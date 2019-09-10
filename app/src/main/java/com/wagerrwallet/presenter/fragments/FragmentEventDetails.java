@@ -20,6 +20,7 @@ import com.platform.entities.TxMetaData;
 import com.platform.tools.KVStoreManager;
 import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCoreTransaction;
+import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BetEntity;
 import com.wagerrwallet.presenter.entities.BetEventEntity;
@@ -27,6 +28,7 @@ import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.SendManager;
@@ -35,8 +37,10 @@ import com.wagerrwallet.tools.util.CurrencyUtils;
 import com.wagerrwallet.tools.util.Utils;
 import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
+import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by byfieldj on 2/26/18.
@@ -91,6 +95,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private BRText mShowHide;
     private BRText mAmountWhenSent;
     private BRText mAmountNow;
+    private BRText mTxNoBetBalance;
 
     private ImageButton mCloseButton;
     private RelativeLayout mDetailsContainer;
@@ -156,13 +161,6 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mMoneyLineLayout =  rootView.findViewById(R.id.odds_layout);
 
         final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
-        boolean canBet = ((int)(walletManager.getWallet().getBalance()/UNIT_MULTIPLIER) > getContext().getResources().getInteger(R.integer.min_bet_amount));
-
-        if (canBet) {
-            mTxHomeOdds.setOnClickListener(this);
-            mTxDrawOdds.setOnClickListener(this);
-            mTxAwayOdds.setOnClickListener(this);
-        }
 
         seekBar = rootView.findViewById(R.id.bet_seekBar);
         updateSeekBar(getContext().getResources().getInteger(R.integer.min_bet_amount), 0);
@@ -194,20 +192,33 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mSpreadsLayout = rootView.findViewById(R.id.spreads_layout);
         mTxSpreadPoints= rootView.findViewById(R.id.tx_spread_points);
         mTxSpreadHomeOdds = rootView.findViewById(R.id.tx_spreads_home_odds);
-        mTxSpreadHomeOdds.setOnClickListener(this);
         mTxSpreadAwayOdds= rootView.findViewById(R.id.tx_spreads_away_odds);
-        mTxSpreadAwayOdds.setOnClickListener(this);
+
 
         mTotalsContainer = rootView.findViewById(R.id.totals_container);
         mTotalsLayout = rootView.findViewById(R.id.totals_layout);
         mTxTotalPoints = rootView.findViewById(R.id.tx_total_points);
         mTxTotalOverOdds= rootView.findViewById(R.id.tx_over_odds);
-        mTxTotalOverOdds.setOnClickListener(this);
         mTxTotalUnderOdds= rootView.findViewById(R.id.tx_under_odds);
-        mTxTotalUnderOdds.setOnClickListener(this);
         mAmountNow = rootView.findViewById(R.id.amount_now);
         mAmountWhenSent = rootView.findViewById(R.id.amount_when_sent);
 
+        mTxNoBetBalance = rootView.findViewById(R.id.tx_no_bet_balance);
+        boolean canBet = ((int)(walletManager.getWallet().getBalance()/UNIT_MULTIPLIER) > getContext().getResources().getInteger(R.integer.min_bet_amount));
+
+        if (canBet) {
+            mTxHomeOdds.setOnClickListener(this);
+            mTxDrawOdds.setOnClickListener(this);
+            mTxAwayOdds.setOnClickListener(this);
+            mTxSpreadHomeOdds.setOnClickListener(this);
+            mTxSpreadAwayOdds.setOnClickListener(this);
+            mTxTotalOverOdds.setOnClickListener(this);
+            mTxTotalUnderOdds.setOnClickListener(this);
+        }
+        else {
+            mTxNoBetBalance.setVisibility(View.VISIBLE);
+            mTxNoBetBalance.setText(String.format("Minimum bet is %d", getContext().getResources().getInteger(R.integer.min_bet_amount)));
+        }
         mTxStatus = rootView.findViewById(R.id.tx_status);
         mTxDate = rootView.findViewById(R.id.tx_date);
         mTxLastUpdated = rootView.findViewById(R.id.tx_last_updated);
@@ -301,11 +312,23 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         BetEntity.BetTxType betType = (mTransaction.getType()== BetEventEntity.BetTxType.PEERLESS)? BetEntity.BetTxType.PEERLESS:BetEntity.BetTxType.CHAIN_LOTTO;
         long amount = (seekBar.getProgress() + min) * UNIT_MULTIPLIER;
         //amount = 1000000;   // 0.01 WGR for testing
-        final BaseWalletManager wallet = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
-        BRCoreTransaction tx = wallet.getWallet().createBetTransaction(amount, betType.getNumber(), (int)mTransaction.getEventID(), getSelectedOutcome());
+        Date date = new Date();
+        long timeStampLimit = (date.getTime()/1000) - WalletWagerrManager.BET_CUTTOFF_SECONDS;
+        if (mTransaction.getEventTimestamp()<timeStampLimit)    {
+            BRDialog.showCustomDialog(getContext(), "Error", "Event is closed for betting", getContext().getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                @Override
+                public void onClick(BRDialogView brDialogView) {
+                    brDialogView.dismiss();
+                }
+            }, null, null, 0);
+        }
+        else {
+            final BaseWalletManager wallet = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+            BRCoreTransaction tx = wallet.getWallet().createBetTransaction(amount, betType.getNumber(), (int) mTransaction.getEventID(), getSelectedOutcome());
 
-        CryptoRequest item = new CryptoRequest(tx, null, false, "", "", new BigDecimal(amount));
-        SendManager.sendTransaction(getActivity(), item, wallet);
+            CryptoRequest item = new CryptoRequest(tx, null, false, "", "", new BigDecimal(amount));
+            SendManager.sendTransaction(getActivity(), item, wallet);
+        }
         dismiss();  // close fragment
     }
 

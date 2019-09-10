@@ -123,7 +123,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     public static String ISO = "WGR";
 
     private static final String mName = "WAGERR";
-    private static final int DAYS_REMOVE_EVENTS = 1;
+    public static final int BET_CUTTOFF_SECONDS = 12*60;
 
     private static final long TIME_GENESIS = 1518743781;
     public static final String BTC_SCHEME = "";
@@ -292,7 +292,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     @Override
     public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
         Date date = new Date();
-        long timeStamp = (date.getTime()/1000) - (DAYS_REMOVE_EVENTS * 60*60*24);
+        long timeStamp = (date.getTime()/1000) - BET_CUTTOFF_SECONDS;
         //BetEventTxDataStore.getInstance(app).deleteTxByEventTimestamp (app,ISO, timeStamp );
         //BetResultTxDataStore.getInstance(app).deleteResultsOldEvents(app, ISO, timeStamp);
         //List<BetEntity> bettxs = BetTxDataStore.getInstance(app).getAllTransactions(app,ISO);

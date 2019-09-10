@@ -102,6 +102,20 @@
 
             </RelativeLayout>
 
+    <com.wagerrwallet.presenter.customviews.BRText
+        android:id="@+id/tx_no_bet_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/away_layout"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="2dp"
+        android:text="Minimum bet is ..."
+        android:textColor="@color/light_gray"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:customTFont="CircularPro-Book.otf" />
+
     <LinearLayout
         android:id="@+id/dynamic_container"
         android:layout_width="match_parent"
@@ -322,8 +336,11 @@
 
                 <SeekBar
                     android:id="@+id/bet_seekBar"
-                    android:layout_width="260dp"
+                    android:layout_width="160dp"
                     android:layout_height="wrap_content"
+                    android:scaleY="2"
+                    android:scaleX="2"
+                    android:layout_centerHorizontal="true"
                     android:layout_below="@id/tx_amount" />
 
                 <com.wagerrwallet.presenter.customviews.BRText
@@ -333,6 +350,7 @@
                     android:layout_alignLeft="@id/bet_seekBar"
                     android:layout_marginTop="0dp"
                     android:layout_below="@id/bet_seekBar"
+                    android:layout_alignParentLeft="true"
                     android:text="Potential reward:"
                     android:textColor="@color/total_assets_usd_color"
                     android:textSize="14sp"

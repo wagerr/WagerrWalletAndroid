@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.support.annotation.WorkerThread;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -111,9 +112,16 @@ public class EventTxManager {
             ((Activity) app).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.setItems(betItems);
-                    txList.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                    if (adapter!=null) {
+                        final List<EventTxUiHolder> currentItems = adapter.getItems();
+                        currentItems.clear();
+                        for (EventTxUiHolder item : betItems) {
+                            currentItems.add(item);
+                        }
+                        //adapter.setItems(betItems);
+                        //txList.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             });
         }
