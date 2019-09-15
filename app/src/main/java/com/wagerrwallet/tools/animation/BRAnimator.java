@@ -76,7 +76,7 @@ public class BRAnimator {
     private static final String TAG = BRAnimator.class.getName();
     private static FragmentSignal fragmentSignal;
     private static boolean clickAllowed = true;
-    public static int SLIDE_ANIMATION_DURATION = 300;
+    public static int SLIDE_ANIMATION_DURATION = 2000;
     public static float t1Size;
     public static float t2Size;
     public static boolean supportIsShowing;

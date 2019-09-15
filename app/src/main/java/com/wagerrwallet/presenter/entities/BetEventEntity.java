@@ -189,15 +189,18 @@ public class BetEventEntity {
     }
 
     public String getTxHomeOdds() {
-        return String.valueOf((float)homeOdds/ODDS_MULTIPLIER);
+        if (homeOdds==0)    return "N/A";
+        else                return String.valueOf((float)homeOdds/ODDS_MULTIPLIER);
     }
 
     public String getTxAwayOdds() {
-        return String.valueOf((float)awayOdds/ODDS_MULTIPLIER);
+        if (awayOdds==0)    return "N/A";
+        else                return String.valueOf((float)awayOdds/ODDS_MULTIPLIER);
     }
 
     public String getTxDrawOdds() {
-        return String.valueOf((float)drawOdds/ODDS_MULTIPLIER);
+        if (drawOdds==0)    return "N/A";
+        else                return String.valueOf((float)drawOdds/ODDS_MULTIPLIER);
     }
 
     public long getHomeOdds() {
@@ -233,11 +236,13 @@ public class BetEventEntity {
     }
 
     public String getTxSpreadHomeOdds() {
-        return String.valueOf((float)spreadHomeOdds/ODDS_MULTIPLIER);
+        if (spreadHomeOdds==0)      return "N/A";
+        else                        return String.valueOf((float)spreadHomeOdds/ODDS_MULTIPLIER);
     }
 
     public String getTxSpreadAwayOdds() {
-        return String.valueOf((float)spreadAwayOdds/ODDS_MULTIPLIER);
+        if (spreadAwayOdds==0)    return "N/A";
+        else                      return String.valueOf((float)spreadAwayOdds/ODDS_MULTIPLIER);
     }
 
     public long getTotalPoints() {
@@ -257,11 +262,13 @@ public class BetEventEntity {
     }
 
     public String getTxOverOdds() {
-        return String.valueOf((float)overOdds/ODDS_MULTIPLIER);
+        if (overOdds==0)    return "N/A";
+        else                return String.valueOf((float)overOdds/ODDS_MULTIPLIER);
     }
 
     public String getTxUnderOdds() {
-        return String.valueOf((float)underOdds/ODDS_MULTIPLIER);
+        if (underOdds==0)   return "N/A";
+        else                return String.valueOf((float)underOdds/ODDS_MULTIPLIER);
     }
 
     public String getTxSport() {

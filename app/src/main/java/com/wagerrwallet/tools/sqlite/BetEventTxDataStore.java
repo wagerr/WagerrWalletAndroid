@@ -310,60 +310,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         Cursor cursor = null;
         try {
             database = openDatabase();
-            String QUERY = "SELECT a." + BRSQLiteHelper.BETX_COLUMN_ID
-                                + ", a." + BRSQLiteHelper.BETX_TYPE
-                                + ", a." + BRSQLiteHelper.BETX_VERSION
-                                + ", a." + BRSQLiteHelper.BETX_EVENTID
-                                + ", a." + BRSQLiteHelper.BETX_EVENT_TIMESTAMP
-                                + ", a." + BRSQLiteHelper.BETX_SPORT
-                                + ", a." + BRSQLiteHelper.BETX_TOURNAMENT
-                                + ", a." + BRSQLiteHelper.BETX_ROUND
-                                + ", a." + BRSQLiteHelper.BETX_HOME_TEAM
-                                + ", a." + BRSQLiteHelper.BETX_AWAY_TEAM
-                                + ", a." + BRSQLiteHelper.BETX_HOME_ODDS
-                                + ", a." + BRSQLiteHelper.BETX_AWAY_ODDS
-                                + ", a." + BRSQLiteHelper.BETX_DRAW_ODDS
-                                + ", a." + BRSQLiteHelper.BETX_ENTRY_PRICE
-                                + ", a." + BRSQLiteHelper.BETX_SPREAD_POINTS
-                                + ", a." + BRSQLiteHelper.BETX_SPREAD_HOME_ODDS
-                                + ", a." + BRSQLiteHelper.BETX_SPREAD_AWAY_ODDS
-                                + ", a." + BRSQLiteHelper.BETX_TOTAL_POINTS
-                                + ", a." + BRSQLiteHelper.BETX_OVER_ODDS
-                                + ", a." + BRSQLiteHelper.BETX_UNDER_ODDS
-                                + ", a." + BRSQLiteHelper.BETX_BLOCK_HEIGHT
-                                + ", a." + BRSQLiteHelper.BETX_TIMESTAMP
-                                + ", a." + BRSQLiteHelper.BETX_LASTUPDATED
-                                + ", a." + BRSQLiteHelper.TX_ISO
-                                // event mappings
-                                + ", s." + BRSQLiteHelper.BMTX_STRING
-                                + ", t." + BRSQLiteHelper.BMTX_STRING
-                                + ", r." + BRSQLiteHelper.BMTX_STRING
-                                + ", b." + BRSQLiteHelper.BMTX_STRING
-                                + ", c." + BRSQLiteHelper.BMTX_STRING
-                                // event results
-                                + ", o." + BRSQLiteHelper.BRTX_RESULTS_TYPE
-                                + ", o." + BRSQLiteHelper.BRTX_HOME_TEAM_SCORE
-                                + ", o." + BRSQLiteHelper.BRTX_AWAY_TEAM_SCORE
-
-
-                    + " FROM "+BRSQLiteHelper.BETX_TABLE_NAME+" a "
-                    // sport (s), tournament (t), round (r)
-                    + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" s ON a."+BRSQLiteHelper.BETX_SPORT + "=s."+BRSQLiteHelper.BMTX_MAPPINGID
-                    +" AND s."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.SPORT.getNumber()
-                    + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" t ON a."+BRSQLiteHelper.BETX_TOURNAMENT+ "=t."+BRSQLiteHelper.BMTX_MAPPINGID
-                    +" AND t."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.TOURNAMENT.getNumber()
-                    + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" r ON a."+BRSQLiteHelper.BETX_ROUND + "=r."+BRSQLiteHelper.BMTX_MAPPINGID
-                    +" AND r."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.ROUNDS.getNumber()
-                    // home team (b), away team (c)
-                    + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" b ON a."+BRSQLiteHelper.BETX_HOME_TEAM + "=b."+BRSQLiteHelper.BMTX_MAPPINGID
-                            +" AND b."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.TEAM_NAME.getNumber()
-                    + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" c ON a."+BRSQLiteHelper.BETX_AWAY_TEAM + "=c."+BRSQLiteHelper.BMTX_MAPPINGID
-                            +" AND b."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.TEAM_NAME.getNumber()
-                    // result table (o)
-                    + " LEFT OUTER JOIN " + BRSQLiteHelper.BRTX_TABLE_NAME+" o ON a."+BRSQLiteHelper.BETX_EVENTID + "=o."+BRSQLiteHelper.BRTX_EVENTID
-                    + " WHERE a."+BRSQLiteHelper.TX_ISO+"=? AND a." +BRSQLiteHelper.BETX_EVENT_TIMESTAMP+"> " + String.valueOf(eventTimestamp)
-                    + " ORDER BY a." +BRSQLiteHelper.BETX_EVENT_TIMESTAMP+" desc ";
-
+            String QUERY = getQuery( 0, eventTimestamp );
             cursor = database.rawQuery(QUERY,  new String[]{iso.toUpperCase()});
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -371,7 +318,6 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                 transactions.add(transactionEntity);
                 cursor.moveToNext();
             }
-
         } finally {
             closeDatabase();
             if (cursor != null)
@@ -381,6 +327,88 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         return transactions;
     }
 
+    public EventTxUiHolder getTransactionByEventId(Context app, String iso, long eventID) {
+        EventTxUiHolder transactionEntity = null;
+        Cursor cursor = null;
+        try {
+            database = openDatabase();
+            String QUERY = getQuery( eventID, 0 );
+            cursor = database.rawQuery(QUERY,  new String[]{iso.toUpperCase()});
+            cursor.moveToFirst();
+            transactionEntity = cursorToUIEvent(app, iso.toUpperCase(), cursor);
+        } finally {
+            closeDatabase();
+            if (cursor != null)
+                cursor.close();
+            printTest(app, iso);
+        }
+        return transactionEntity;
+    }
+
+    private static String getQuery( long eventID, long eventTimestamp )    {
+        String QUERY = "SELECT a." + BRSQLiteHelper.BETX_COLUMN_ID
+                + ", a." + BRSQLiteHelper.BETX_TYPE
+                + ", a." + BRSQLiteHelper.BETX_VERSION
+                + ", a." + BRSQLiteHelper.BETX_EVENTID
+                + ", a." + BRSQLiteHelper.BETX_EVENT_TIMESTAMP
+                + ", a." + BRSQLiteHelper.BETX_SPORT
+                + ", a." + BRSQLiteHelper.BETX_TOURNAMENT
+                + ", a." + BRSQLiteHelper.BETX_ROUND
+                + ", a." + BRSQLiteHelper.BETX_HOME_TEAM
+                + ", a." + BRSQLiteHelper.BETX_AWAY_TEAM
+                + ", a." + BRSQLiteHelper.BETX_HOME_ODDS
+                + ", a." + BRSQLiteHelper.BETX_AWAY_ODDS
+                + ", a." + BRSQLiteHelper.BETX_DRAW_ODDS
+                + ", a." + BRSQLiteHelper.BETX_ENTRY_PRICE
+                + ", a." + BRSQLiteHelper.BETX_SPREAD_POINTS
+                + ", a." + BRSQLiteHelper.BETX_SPREAD_HOME_ODDS
+                + ", a." + BRSQLiteHelper.BETX_SPREAD_AWAY_ODDS
+                + ", a." + BRSQLiteHelper.BETX_TOTAL_POINTS
+                + ", a." + BRSQLiteHelper.BETX_OVER_ODDS
+                + ", a." + BRSQLiteHelper.BETX_UNDER_ODDS
+                + ", a." + BRSQLiteHelper.BETX_BLOCK_HEIGHT
+                + ", a." + BRSQLiteHelper.BETX_TIMESTAMP
+                + ", a." + BRSQLiteHelper.BETX_LASTUPDATED
+                + ", a." + BRSQLiteHelper.TX_ISO
+                // event mappings
+                + ", s." + BRSQLiteHelper.BMTX_STRING
+                + ", t." + BRSQLiteHelper.BMTX_STRING
+                + ", r." + BRSQLiteHelper.BMTX_STRING
+                + ", b." + BRSQLiteHelper.BMTX_STRING
+                + ", c." + BRSQLiteHelper.BMTX_STRING
+                // event results
+                + ", o." + BRSQLiteHelper.BRTX_RESULTS_TYPE
+                + ", o." + BRSQLiteHelper.BRTX_HOME_TEAM_SCORE
+                + ", o." + BRSQLiteHelper.BRTX_AWAY_TEAM_SCORE
+
+                + " FROM "+BRSQLiteHelper.BETX_TABLE_NAME+" a "
+                // sport (s), tournament (t), round (r)
+                + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" s ON a."+BRSQLiteHelper.BETX_SPORT + "=s."+BRSQLiteHelper.BMTX_MAPPINGID
+                +" AND s."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.SPORT.getNumber()
+                + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" t ON a."+BRSQLiteHelper.BETX_TOURNAMENT+ "=t."+BRSQLiteHelper.BMTX_MAPPINGID
+                +" AND t."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.TOURNAMENT.getNumber()
+                + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" r ON a."+BRSQLiteHelper.BETX_ROUND + "=r."+BRSQLiteHelper.BMTX_MAPPINGID
+                +" AND r."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.ROUNDS.getNumber()
+                // home team (b), away team (c)
+                + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" b ON a."+BRSQLiteHelper.BETX_HOME_TEAM + "=b."+BRSQLiteHelper.BMTX_MAPPINGID
+                +" AND b."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.TEAM_NAME.getNumber()
+                + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" c ON a."+BRSQLiteHelper.BETX_AWAY_TEAM + "=c."+BRSQLiteHelper.BMTX_MAPPINGID
+                +" AND b."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.TEAM_NAME.getNumber()
+                // result table (o)
+                + " LEFT OUTER JOIN " + BRSQLiteHelper.BRTX_TABLE_NAME+" o ON a."+BRSQLiteHelper.BETX_EVENTID + "=o."+BRSQLiteHelper.BRTX_EVENTID
+                + " WHERE a."+BRSQLiteHelper.TX_ISO+"=? ";
+
+            if (eventID>0)  {
+                QUERY += " AND a." +BRSQLiteHelper.BETX_EVENTID+" = " + String.valueOf(eventID);
+            }
+
+            if (eventTimestamp>0)   {
+                QUERY += " AND a." +BRSQLiteHelper.BETX_EVENT_TIMESTAMP+"> " + String.valueOf(eventTimestamp);
+            }
+            QUERY += " ORDER BY a." +BRSQLiteHelper.BETX_EVENT_TIMESTAMP+"  ";
+
+        return QUERY;
+    }
 
     public static BetEventEntity cursorToTransaction(Context app, String iso, Cursor cursor) {
 

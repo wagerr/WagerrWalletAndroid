@@ -105,20 +105,20 @@ public class SpendLimitActivity extends BRActivity {
                 result = new BigDecimal(0);// 0 always require
                 break;
             case 1:
-                result = new BigDecimal(ONE_BITCOIN / 100);//   0.01 BTC
+                result = new BigDecimal(ONE_BITCOIN * 10);//   0.01 BTC
                 break;
             case 2:
-                result = new BigDecimal(ONE_BITCOIN / 10);//   0.1 BTC
+                result = new BigDecimal(ONE_BITCOIN * 100);//   0.1 BTC
                 break;
             case 3:
-                result = new BigDecimal(ONE_BITCOIN);//   1 BTC
+                result = new BigDecimal(ONE_BITCOIN * 1000 );//   1 BTC
                 break;
             case 4:
-                result = new BigDecimal(ONE_BITCOIN * 10);//   10 BTC
+                result = new BigDecimal(ONE_BITCOIN * 10000);//   10 BTC
                 break;
 
             default:
-                result = new BigDecimal(ONE_BITCOIN);//   1 BTC Default
+                result = new BigDecimal(ONE_BITCOIN*1000);//   1 BTC Default
                 break;
         }
         return result;
@@ -129,13 +129,13 @@ public class SpendLimitActivity extends BRActivity {
 
             case 0:
                 return 0;
-            case ONE_BITCOIN / 100:
+            case ONE_BITCOIN *10:
                 return 1;
-            case ONE_BITCOIN / 10:
+            case ONE_BITCOIN *100:
                 return 2;
-            case ONE_BITCOIN:
+            case ONE_BITCOIN*1000:
                 return 3;
-            case ONE_BITCOIN * 10:
+            case ONE_BITCOIN * 10000:
                 return 4;
             default:
                 return 2; //1 BTC Default

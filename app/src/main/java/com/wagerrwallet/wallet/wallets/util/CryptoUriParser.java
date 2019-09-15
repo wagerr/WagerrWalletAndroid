@@ -133,7 +133,7 @@ public class CryptoUriParser {
         Uri u = Uri.parse(tmp);
         String scheme = u.getScheme();
 
-        if (scheme == null) {
+        if (scheme == null || "".equals(scheme) ) {
             scheme = WalletWagerrManager.getInstance(app).getScheme(app);
             obj.iso = WalletWagerrManager.getInstance(app).getIso(app);
 

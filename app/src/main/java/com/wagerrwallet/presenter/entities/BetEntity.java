@@ -77,6 +77,34 @@ public class BetEntity {
                     return outcome;
             return UNKNOWN;
         }
+
+        public String toString()    {
+            String ret="Unknown";
+            switch (this)  {
+                case MONEY_LINE_HOME_WIN:
+                    ret = "M.L. home";
+                    break;
+                case MONEY_LINE_AWAY_WIN:
+                    ret = "M.L. away";
+                    break;
+                case MONEY_LINE_DRAW:
+                    ret = "M.L. draw";
+                    break;
+                case SPREADS_HOME:
+                    ret = "Sp. home";
+                    break;
+                case SPREADS_AWAY:
+                    ret = "Sp. away";
+                    break;
+                case TOTAL_OVER:
+                    ret = "Tot. Over";
+                    break;
+                case TOTAL_UNDER:
+                    ret = "Tot. under";
+                    break;
+            }
+            return ret;
+        }
     }
 
     protected long blockheight;

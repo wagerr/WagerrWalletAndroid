@@ -86,6 +86,21 @@ public class EventTxUiHolder extends BetEventEntity {
         return ret;
     }
 
+    public String getEventDateForBet( BetEntity.BetOutcome outcome )   {
+        return String.format("%s - %s", outcome.toString(), getTxEventDate());
+    }
+    public String getEventDescriptionForBet( BetEntity.BetOutcome outcome )   {
+        return String.format("%s - %s", getTxHomeTeam(), getTxAwayTeam());
+    }
+
+    protected String TrimIfLonger(String inp, int max)     {
+        String ret=inp;
+        if (inp.length()>max)   {
+            ret = inp.substring(0,max)+"...";
+        }
+        return ret;
+    }
+
     public String getTxEventDate()
     {
         long eventTS = getEventTimestamp() == 0 ? System.currentTimeMillis() : getEventTimestamp() * 1000;

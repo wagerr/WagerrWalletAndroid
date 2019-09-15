@@ -74,7 +74,7 @@ public class CryptoRequest {
 
     public boolean isSmallerThanMin(Context app, BaseWalletManager walletManager) {
         long minAmount = walletManager.getWallet().getMinOutputAmount();
-        long amount = Math.abs(walletManager.getWallet().getTransactionAmount(tx));
+        long amount =  Math.abs(walletManager.getWallet().getTransactionAmount(tx));
         Log.e(TAG, "isSmallerThanMin: " + amount);
         return amount < minAmount;
     }

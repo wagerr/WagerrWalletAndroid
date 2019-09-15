@@ -25,6 +25,7 @@ public class AboutActivity extends BRActivity {
     private ImageView redditShare;
     private ImageView twitterShare;
     private ImageView blogShare;
+    private ImageView telegramShare;
     private static AboutActivity app;
 
     public static AboutActivity getApp() {
@@ -59,6 +60,7 @@ public class AboutActivity extends BRActivity {
         redditShare = (ImageView) findViewById(R.id.reddit_share_button);
         twitterShare = (ImageView) findViewById(R.id.twitter_share_button);
         blogShare = (ImageView) findViewById(R.id.blog_share_button);
+        telegramShare = (ImageView) findViewById(R.id.telegram_share_button);
 
         redditShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +83,14 @@ public class AboutActivity extends BRActivity {
             @Override
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.wagerr.com/"));
+                startActivity(browserIntent);
+                app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+            }
+        });
+        telegramShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/wagerrcoin"));
                 startActivity(browserIntent);
                 app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
             }

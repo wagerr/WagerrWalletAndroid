@@ -7,13 +7,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.platform.entities.TxMetaData;
@@ -78,7 +84,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private BRText mTxTotalOverOdds;
     private BRText mTxTotalUnderOdds;
 
-    private BRText mTxAmount;
+    private EditText mTxAmount;
+    private BRText mTxCurrency;
     private BRText mTxStatus;
     private BRText mTxDate;
     private BRText mTxLastUpdated;
@@ -155,7 +162,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTxHomeOdds = rootView.findViewById(R.id.tx_home_odds);
         mTxDrawOdds= rootView.findViewById(R.id.tx_draw_odds);
         mTxAwayOdds= rootView.findViewById(R.id.tx_away_odds);
-        mTxAmount = rootView.findViewById(R.id.tx_amount);
+        mTxAmount = (EditText) rootView.findViewById(R.id.tx_amount);
+        mTxCurrency = rootView.findViewById(R.id.tx_currency);
 
         mMoneyLineContainer = rootView.findViewById(R.id.odds_container);
         mMoneyLineLayout =  rootView.findViewById(R.id.odds_layout);
@@ -173,7 +181,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                    seekBar.setMax(max-min);
                    int posX = seekBar.getThumb().getBounds().centerX();
                    int coinAmount = progress + min;
-                   updateSeekBar(coinAmount, posX);
+                   updateSeekBar(coinAmount, 0);
                    //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
                }
                @Override
@@ -186,6 +194,38 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                    //textView.setText("Covered: " + progress + "/" + seekBar.getMax());
                    //Toast.makeText(getApplicationContext(), "Stopped tracking seekbar", Toast.LENGTH_SHORT).show();
                }
+        });
+
+        mTxAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                int value = getContext().getResources().getInteger(R.integer.min_bet_amount);
+                int minvalue = value;
+                Float fValue = 0.0f;
+                if (!hasFocus) {
+                    try {
+                        fValue = Float.parseFloat(mTxAmount.getText().toString());
+                        value = Math.max( minvalue, fValue.intValue() - minvalue);
+                        mTxAmount.setText(String.valueOf(value));
+                    }
+                    catch (NumberFormatException e)     {
+                    }
+                    seekBar.setProgress(value);
+                }
+            }
+        });
+
+        mTxAmount.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    mTxAmount.clearFocus();
+                    InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
         });
 
         mSpreadsContainer = rootView.findViewById(R.id.spreads_container);
@@ -302,7 +342,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 mPotentialReward.setText("---");
             }
         }
-        mTxAmount.setText("" + amount + " WGR (" + fiatAmountStr +")" );
+        mTxAmount.setText("" + amount);
+        mTxCurrency.setText(" WGR (" + fiatAmountStr +")" );
 
         //mTxAmount.setX(seekBar.getX() + posX);
     }
@@ -422,18 +463,6 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
         if ( txPrev==null || txCur.getId()!=txPrev.getId()) {
             txCur.setTextSize(BIG_SIZE);
-            /*
-            if (idContainer>0) {
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.BELOW, idContainer);
-                mBetSliderContainer.setLayoutParams(params);
-                if (rlToPutBelowBetSlider!=null) {
-                    RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params2.addRule(RelativeLayout.BELOW, R.id.bet_layout);
-                    rlToPutBelowBetSlider.setLayoutParams(params2);
-                }
-            }
-            */
             mCurrentSelectedBetOption = v;
             int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
             int coinAmount = seekBar.getProgress()+min;
@@ -502,9 +531,9 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             EventTxUiHolder item = mTransaction;
             mTxHomeTeam.setText( (item.getTxHomeTeam()!=null)?item.getTxHomeTeam():"Home N/A" );
             mTxAwayTeam.setText( (item.getTxAwayTeam()!=null)?item.getTxAwayTeam():"Away N/A" );
-            mTxHomeOdds.setText( (item.getTxHomeOdds()!=null)?item.getTxHomeOdds():"H odd" );
-            mTxDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"D odd" );
-            mTxAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"A odd" );
+            mTxHomeOdds.setText( (item.getTxHomeOdds()!=null)?item.getTxHomeOdds():"N/A" );
+            mTxDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"N/A" );
+            mTxAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"N/A" );
             rlLastContainer = mMoneyLineContainer;      // default...
 
             bHasSpreads = (item.getSpreadPoints()>0);
@@ -512,8 +541,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 String txSpreadFormat = (item.getHomeOdds()>item.getAwayOdds())?"+%s/-%s":"-%s/+%s";
                 String txSpreadPoints = String.format(txSpreadFormat, item.getTxSpreadPoints(), item.getTxSpreadPoints() );
                 mTxSpreadPoints.setText(txSpreadPoints);
-                mTxSpreadHomeOdds.setText((item.getSpreadHomeOdds() > 0) ? item.getTxSpreadHomeOdds() : "---");
-                mTxSpreadAwayOdds.setText((item.getSpreadAwayOdds() > 0) ? item.getTxSpreadAwayOdds() : "---");
+                mTxSpreadHomeOdds.setText((item.getSpreadHomeOdds() > 0) ? item.getTxSpreadHomeOdds() : "N/A");
+                mTxSpreadAwayOdds.setText((item.getSpreadAwayOdds() > 0) ? item.getTxSpreadAwayOdds() : "N/A");
                 mSpreadsContainer.setVisibility(View.VISIBLE);
                 rlLastContainer = mSpreadsContainer;
             }
@@ -521,8 +550,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             bHasTotals = (item.getTotalPoints()>0);
             if (bHasTotals) {
                 mTxTotalPoints.setText(item.getTxTotalPoints());
-                mTxTotalOverOdds.setText((item.getOverOdds() > 0) ? item.getTxOverOdds() : "---");
-                mTxTotalUnderOdds.setText((item.getUnderOdds() > 0) ? item.getTxUnderOdds() : "---");
+                mTxTotalOverOdds.setText((item.getOverOdds() > 0) ? item.getTxOverOdds() : "N/A");
+                mTxTotalUnderOdds.setText((item.getUnderOdds() > 0) ? item.getTxUnderOdds() : "N/A");
                 mTotalsContainer.setVisibility(View.VISIBLE);
                 rlLastContainer = mTotalsContainer;
             }
@@ -541,8 +570,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             mTxEventDate.setText( item.getTxEventDate() );
 
             // timestamp is 0 if it's not confirmed in a block yet so make it now
-            mTxDate.setText(BRDateUtil.getLongDate(mTransaction.getTimestamp() == 0 ? System.currentTimeMillis() : (mTransaction.getTimestamp() * 1000)));
-            mTxLastDate.setText(BRDateUtil.getLongDate(mTransaction.getLastUpdated() == 0 ? System.currentTimeMillis() : (mTransaction.getLastUpdated() * 1000)));
+            mTxDate.setText(BRDateUtil.getEventDate(mTransaction.getTimestamp() == 0 ? System.currentTimeMillis() : (mTransaction.getTimestamp() * 1000)));
+            mTxLastDate.setText(BRDateUtil.getEventDate(mTransaction.getLastUpdated() == 0 ? System.currentTimeMillis() : (mTransaction.getLastUpdated() * 1000)));
 
             // Set the transaction id
             mTransactionId.setText(mTransaction.getTxHash());

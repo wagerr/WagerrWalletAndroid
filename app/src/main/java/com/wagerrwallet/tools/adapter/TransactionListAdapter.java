@@ -16,8 +16,10 @@ import android.widget.TextView;
 
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.customviews.BRText;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
+import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRDateUtil;
 import com.wagerrwallet.tools.util.CurrencyUtils;
@@ -240,20 +242,25 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         Log.d(TAG, "Level -> " + level);
 
-        if (level > 4) {
-            convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getTo()[0]));
-        } else {
-            convertView.transactionDetail.setText(!commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, item.getTo()[0]));
-
-        }
-
-        //if it's 0 we use the current time.
         long timeStamp = item.getTimeStamp() == 0 ? System.currentTimeMillis() : item.getTimeStamp() * 1000;
-
         String shortDate = BRDateUtil.getShortDate(timeStamp);
-
-        convertView.transactionDate.setText(shortDate);
-
+        String txDescription = "", txDate = "";
+        if (item.getBetEntity()!=null)  {
+            EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", item.getBetEntity().getEventID());
+            if (ev!=null)  {
+                txDescription = ev.getEventDescriptionForBet( item.getBetEntity().getOutcome() );
+                txDate = ev.getEventDateForBet( item.getBetEntity().getOutcome() );
+            }
+        }
+        else {
+            if (level > 4) {
+                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getTo()[0]);
+            } else {
+                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, item.getTo()[0]);
+            }
+        }
+        convertView.transactionDetail.setText(txDescription);
+        convertView.transactionDate.setText(shortDate + " " + txDate);
     }
 
     private void showTransactionProgress(TxHolder holder, int progress) {

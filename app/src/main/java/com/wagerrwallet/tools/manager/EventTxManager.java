@@ -112,7 +112,7 @@ public class EventTxManager {
             ((Activity) app).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (adapter!=null) {
+                    if (adapter!=null && betItems!=null) {
                         final List<EventTxUiHolder> currentItems = adapter.getItems();
                         currentItems.clear();
                         for (EventTxUiHolder item : betItems) {

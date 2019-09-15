@@ -126,7 +126,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     public static final int BET_CUTTOFF_SECONDS = 12*60;
 
     private static final long TIME_GENESIS = 1518743781;
-    public static final String BTC_SCHEME = "";
+    public static final String BTC_SCHEME = "wagerr";
 
 
     public static final long MAX_COIN = 200000000L;

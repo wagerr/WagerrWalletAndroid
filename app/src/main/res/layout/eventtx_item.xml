@@ -97,16 +97,16 @@
 
     <com.wagerrwallet.presenter.customviews.BRText
         android:id="@+id/tx_home_odds"
-        android:layout_width="35dp"
+        android:layout_width="wrap_content"
         android:layout_toLeftOf="@id/tx_odds_separator1"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/tx_away"
         android:layout_marginTop="0dp"
         android:ellipsize="end"
-        android:maxLength="10"
+        android:maxLength="7"
         android:maxLines="1"
         android:paddingBottom="2dp"
-        android:text="hodds"
+        android:text="dodds"
         android:textColor="@color/red"
         android:textSize="14sp" />
 
@@ -128,13 +128,13 @@
 
     <com.wagerrwallet.presenter.customviews.BRText
         android:id="@+id/tx_draw_odds"
-        android:layout_width="35dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/tx_home_odds"
         android:layout_marginLeft="-1dp"
         android:layout_toLeftOf="@id/tx_odds_separator2"
         android:ellipsize="end"
-        android:maxLength="20"
+        android:maxLength="7"
         android:maxLines="1"
         android:paddingBottom="2dp"
         android:text="dodds"
@@ -158,13 +158,13 @@
 
     <com.wagerrwallet.presenter.customviews.BRText
         android:id="@+id/tx_away_odds"
-        android:layout_width="35dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="12dp"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/tx_home_odds"
         android:ellipsize="end"
-        android:maxLength="20"
+        android:maxLength="7"
         android:maxLines="1"
         android:paddingBottom="4dp"
         android:text="aodds"

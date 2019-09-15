@@ -79,6 +79,8 @@ public class WagerrOpCodeManager {
         for ( BRCoreTransactionOutput output : tx.getOutputs()) {
             BRCoreAddress address = new BRCoreAddress (output.getAddress());
             byte[] script = output.getScript();
+            if (script.length<=BTX_POS)   continue;    // prevent crash
+
             int opcode = script[OPCODE_POS] & 0xFF;
             int test = script[SMOKE_TEST_POS] & 0xFF;
             try {
