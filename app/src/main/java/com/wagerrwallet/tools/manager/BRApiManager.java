@@ -16,6 +16,7 @@ import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.wallets.bitcoin.WalletBitcoinManager;
 import com.platform.APIClient;
+import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,7 +116,8 @@ public class BRApiManager {
                 coin.name="WAGERR";
                 coin.code="WGR";
                 coin.rate= fetchRatesCoin( context, walletManager );
-
+                if (walletManager instanceof WalletWagerrManager)
+                    ((WalletWagerrManager) walletManager).setCoinRate(coin.rate);
                 set.add(coin);
 
             } else {

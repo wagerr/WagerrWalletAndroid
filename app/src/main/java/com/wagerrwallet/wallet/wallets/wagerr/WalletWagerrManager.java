@@ -114,6 +114,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     public static final long MAX_COIN = 200000000L;
 
     private static WalletWagerrManager instance;
+    private static float coinRate = 1;
+
     private WalletUiConfiguration uiConfig;
 
     private int mSyncRetryCount = 0;
@@ -145,6 +147,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             instance = new WalletWagerrManager(app, pubKey, BuildConfig.BITCOIN_TESTNET ? BRCoreChainParams.testnetCoinChainParams : BRCoreChainParams.mainnetCoinChainParams, time);
         }
         return instance;
+    }
+
+    public synchronized static void setCoinRate(float pCoinRate) {
+        coinRate = pCoinRate;
     }
 
     private WalletWagerrManager(final Context app, BRCoreMasterPubKey masterPubKey,
@@ -513,7 +519,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             Log.e(TAG, "getSmallestCryptoForFiat: no exchange rate data!");
             return amount;
         }
-        double rate = ent.rate;
+
+        double rate = ent.rate / WalletWagerrManager.coinRate;
         //convert c to $.
         return amount.divide(new BigDecimal(rate), 8, ROUNDING_MODE).multiply(new BigDecimal("100000000"));
     }
