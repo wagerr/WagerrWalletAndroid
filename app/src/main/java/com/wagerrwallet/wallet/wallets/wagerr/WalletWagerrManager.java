@@ -133,6 +133,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     private static volatile WalletWagerrManager instance;
     private static final Object mutex = new Object();
+    private static float coinRate = 1;
 
     private WalletUiConfiguration uiConfig;
 
@@ -170,6 +171,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             }
             return instance;
         }
+    }
+
+    public synchronized static void setCoinRate(float pCoinRate) {
+        coinRate = pCoinRate;
     }
 
     private WalletWagerrManager(final Context app, BRCoreMasterPubKey masterPubKey,
@@ -557,11 +562,12 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         if (amount.doubleValue() == 0) return amount;
         String iso = BRSharedPrefs.getPreferredFiatIso(app);
         CurrencyEntity ent = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, getIso(app), iso);
+
         if (ent == null) {
             Log.e(TAG, "getSmallestCryptoForFiat: no exchange rate data!");
             return amount;
         }
-        double rate = ent.rate;
+        double rate = ent.rate / WalletWagerrManager.coinRate;
         //convert c to $.
         return amount.divide(new BigDecimal(rate), 8, ROUNDING_MODE).multiply(new BigDecimal("100000000"));
     }
