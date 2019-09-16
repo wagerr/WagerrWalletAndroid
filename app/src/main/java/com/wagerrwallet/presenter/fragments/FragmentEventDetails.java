@@ -424,7 +424,11 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         BRText txCur = (BRText)v;
         BRText txPrev = (mCurrentSelectedBetOption!=null)?(BRText) mCurrentSelectedBetOption:null;
 
-        if ( txPrev==null || txCur.getId()!=txPrev.getId()) {
+        if ("N/A".equals(txCur.getText().toString()) )    {
+            return;
+        }
+
+        if ( (txPrev==null || txCur.getId()!=txPrev.getId()) ) {
             txCur.setTextSize(BIG_SIZE);
             mBetSliderContainer.setVisibility(View.VISIBLE);
         }
@@ -462,7 +466,6 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         }
 
         if ( txPrev==null || txCur.getId()!=txPrev.getId()) {
-            txCur.setTextSize(BIG_SIZE);
             mCurrentSelectedBetOption = v;
             int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
             int coinAmount = seekBar.getProgress()+min;
