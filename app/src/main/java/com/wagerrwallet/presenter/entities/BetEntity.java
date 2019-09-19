@@ -82,25 +82,25 @@ public class BetEntity {
             String ret="Unknown";
             switch (this)  {
                 case MONEY_LINE_HOME_WIN:
-                    ret = "M.L. home";
+                    ret = "M.Line home";
                     break;
                 case MONEY_LINE_AWAY_WIN:
-                    ret = "M.L. away";
+                    ret = "M.Line away";
                     break;
                 case MONEY_LINE_DRAW:
-                    ret = "M.L. draw";
+                    ret = "M.Line draw";
                     break;
                 case SPREADS_HOME:
-                    ret = "Sp. home";
+                    ret = "SPD. home";
                     break;
                 case SPREADS_AWAY:
-                    ret = "Sp. away";
+                    ret = "SPD. away";
                     break;
                 case TOTAL_OVER:
-                    ret = "Tot. Over";
+                    ret = "Totals O";
                     break;
                 case TOTAL_UNDER:
-                    ret = "Tot. under";
+                    ret = "Totals U";
                     break;
             }
             return ret;

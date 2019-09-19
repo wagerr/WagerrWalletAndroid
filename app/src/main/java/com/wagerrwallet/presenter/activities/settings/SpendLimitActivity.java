@@ -27,6 +27,7 @@ import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,12 +68,12 @@ public class SpendLimitActivity extends BRActivity {
         listView = findViewById(R.id.limit_list);
         listView.setFooterDividersEnabled(true);
         adapter = new LimitAdaptor(this);
-        List<Integer> items = new ArrayList<>();
-        items.add(getAmountByStep(0).intValue());
-        items.add(getAmountByStep(1).intValue());
-        items.add(getAmountByStep(2).intValue());
-        items.add(getAmountByStep(3).intValue());
-        items.add(getAmountByStep(4).intValue());
+        List<BigInteger> items = new ArrayList<>();
+        items.add(getAmountByStep(0));
+        items.add(getAmountByStep(1));
+        items.add(getAmountByStep(2));
+        items.add(getAmountByStep(3));
+        items.add(getAmountByStep(4));
 
         adapter.addAll(items);
 
@@ -80,9 +81,9 @@ public class SpendLimitActivity extends BRActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                int limit = adapter.getItem(position);
+                BigInteger limit = adapter.getItem(position);
                 Log.e(TAG, "limit chosen: " + limit);
-                BRKeyStore.putSpendLimit(limit, app);
+                BRKeyStore.putSpendLimit(limit.longValue(), app);
                 long totalSent = 0;
                 List<BaseWalletManager> wallets = WalletsMaster.getInstance(app).getAllWallets();
                 for (BaseWalletManager w : wallets)
@@ -90,7 +91,6 @@ public class SpendLimitActivity extends BRActivity {
                 AuthManager.getInstance().setTotalLimit(app, totalSent + BRKeyStore.getSpendLimit(app));
                 adapter.notifyDataSetChanged();
             }
-
         });
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -98,48 +98,50 @@ public class SpendLimitActivity extends BRActivity {
     }
 
     //satoshis
-    private BigDecimal getAmountByStep(int step) {
-        BigDecimal result;
+    private BigInteger getAmountByStep(int step) {
+        BigInteger result;
         switch (step) {
             case 0:
-                result = new BigDecimal(0);// 0 always require
+                result = BigInteger.valueOf(0L);// 0 always require
                 break;
             case 1:
-                result = new BigDecimal(ONE_BITCOIN * 10);//   0.01 BTC
+                result = BigInteger.valueOf((long)ONE_BITCOIN * 10);//   0.01 BTC
                 break;
             case 2:
-                result = new BigDecimal(ONE_BITCOIN * 100);//   0.1 BTC
+                result = BigInteger.valueOf((long)ONE_BITCOIN * 100);//   0.1 BTC
                 break;
             case 3:
-                result = new BigDecimal(ONE_BITCOIN * 1000 );//   1 BTC
+                result = BigInteger.valueOf((long)ONE_BITCOIN * 1000 );//   1 BTC
                 break;
             case 4:
-                result = new BigDecimal(ONE_BITCOIN * 10000);//   10 BTC
+                result = BigInteger.valueOf((long)ONE_BITCOIN * 10000);//   10 BTC
                 break;
 
             default:
-                result = new BigDecimal(ONE_BITCOIN*1000);//   1 BTC Default
+                result = BigInteger.valueOf((long)ONE_BITCOIN*1000);//   1 BTC Default
                 break;
         }
         return result;
     }
 
     private int getStepFromLimit(long limit) {
-        switch ((int) limit) {
-
-            case 0:
-                return 0;
-            case ONE_BITCOIN *10:
-                return 1;
-            case ONE_BITCOIN *100:
-                return 2;
-            case ONE_BITCOIN*1000:
-                return 3;
-            case ONE_BITCOIN * 10000:
-                return 4;
-            default:
-                return 2; //1 BTC Default
+        int ret = 0;
+        if (limit==0L ) {
+            ret = 0;
         }
+        else if (limit==ONE_BITCOIN *10 ) {
+            ret = 1;
+        }
+        else if (limit==ONE_BITCOIN *100 ) {
+            ret = 2;
+        }
+        else if (limit==ONE_BITCOIN *1000 ) {
+            ret = 3;
+        }
+        else if (limit==ONE_BITCOIN *10000 ) {
+            ret = 4;
+        }
+        return ret;
     }
 
     @Override
@@ -162,7 +164,7 @@ public class SpendLimitActivity extends BRActivity {
         overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
     }
 
-    public class LimitAdaptor extends ArrayAdapter<Integer> {
+    public class LimitAdaptor extends ArrayAdapter<BigInteger> {
 
         private final Context mContext;
         private final int layoutResourceId;
@@ -187,12 +189,12 @@ public class SpendLimitActivity extends BRActivity {
             }
             // get the TextView and then set the text (item name) and tag (item ID) values
             textViewItem = convertView.findViewById(R.id.currency_item_text);
-            Integer item = getItem(position);
+            BigInteger item = getItem(position);
             BaseWalletManager walletManager = WalletWagerrManager.getInstance(app); //use the bitcoin wallet to show the limits
 
             String cryptoAmount = CurrencyUtils.getFormattedAmount(app, walletManager.getIso(app), new BigDecimal(item));
 
-            String text = String.format(item == 0 ? app.getString(R.string.TouchIdSpendingLimit) : "%s", cryptoAmount);
+            String text = String.format(item.longValue() == 0 ? app.getString(R.string.TouchIdSpendingLimit) : "%s", cryptoAmount);
             textViewItem.setText(text);
             ImageView checkMark = convertView.findViewById(R.id.currency_checkmark);
 

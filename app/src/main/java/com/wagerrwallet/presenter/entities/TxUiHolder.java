@@ -1,7 +1,12 @@
 package com.wagerrwallet.presenter.entities;
 
 
+import android.app.Activity;
+import android.util.Log;
+
 import com.platform.entities.TxMetaData;
+import com.wagerrwallet.core.BRCoreAddress;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
 
 /**
  * BreadWallet

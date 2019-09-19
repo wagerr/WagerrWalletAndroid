@@ -3,6 +3,8 @@ package com.wagerrwallet.presenter.fragments;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
+import com.wagerrwallet.presenter.entities.BetEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
@@ -55,6 +58,7 @@ public class FragmentTxDetails extends DialogFragment {
     private BRText mToFrom;
     private BRText mToFromAddress;
     private BRText mToFromAddress2;
+    private BRText mToFromAddress3;
     private BRText mMemoText;
 
     private BRText mStartingBalance;
@@ -99,6 +103,7 @@ public class FragmentTxDetails extends DialogFragment {
         mToFrom = rootView.findViewById(R.id.tx_to_from);
         mToFromAddress = rootView.findViewById(R.id.tx_to_from_address);
         mToFromAddress2 = rootView.findViewById(R.id.tx_to_from_address2);
+        mToFromAddress3 = rootView.findViewById(R.id.tx_to_from_address3);
         mMemoText = rootView.findViewById(R.id.memo);
         mStartingBalance = rootView.findViewById(R.id.tx_starting_balance);
         mEndingBalance = rootView.findViewById(R.id.tx_ending_balance);
@@ -198,11 +203,12 @@ public class FragmentTxDetails extends DialogFragment {
             mStartingBalance.setText(CurrencyUtils.getFormattedAmount(getActivity(), iso, startingBalance == null ? null : startingBalance.abs()));
             mEndingBalance.setText(CurrencyUtils.getFormattedAmount(getActivity(), iso, endingBalance == null ? null : endingBalance.abs()));
 
-            mTxAction.setText(sent ? "Sent" : "Received");
-
-            String txToLabel = "", txToAddressLabel = "", txToAddressLabel2="";
+            String txSent = "", txToLabel = "", txToAddressLabel = "", txToAddressLabel2="", txToAddressLabel3="";
+            long eventID = 0;
             if (mTransaction.getBetEntity()==null)  {
+                txSent = sent ? "Sent" : "Received";
                 txToLabel = sent ? "To " : "Via ";
+                eventID = 0;
                 txToAddressLabel = walletManager.decorateAddress(getActivity(), mTransaction.getTo()[0]);
                 // Allow the to/from address to be copyable
                 mToFromAddress.setOnClickListener(new View.OnClickListener() {
@@ -232,15 +238,34 @@ public class FragmentTxDetails extends DialogFragment {
             else {
                 EventTxUiHolder ev = BetEventTxDataStore.getInstance(getContext()).getTransactionByEventId(getContext(), "wgr", mTransaction.getBetEntity().getEventID());
                 if (ev!=null) {
-                    txToLabel = ev.getTxEventDate();
-                    txToAddressLabel = String.format("%s - %s", ev.getTxHomeTeam(), ev.getTxAwayTeam());
-                    txToAddressLabel2 = String.format("%s / %s", mTransaction.getBetEntity().getOutcome().toString().toUpperCase(), ev.getTxEventDate());
+                    BetEntity.BetOutcome outcome = mTransaction.getBetEntity().getOutcome();
+                    String sTotals = ( outcome == BetEntity.BetOutcome.TOTAL_UNDER || outcome == BetEntity.BetOutcome.TOTAL_OVER)?ev.getTxTotalPoints():"";
+                    txToLabel = "";
+                    eventID = ev.getEventID();
+
+                    String txResult = (ev.getHomeScore()<0)?"Pending":String.format("%s - %s", ev.getTxHomeScore(), ev.getTxAwayScore());
+                    String txWin =
+                    txSent = String.format("BET: %s%s", outcome.toString(), sTotals);
+                    txToAddressLabel = String.format("%s : %s vs %s", ev.getTxEventShortDate(), ev.getTxHomeTeam(), ev.getTxAwayTeam());
+                    txToAddressLabel2 = String.format("Result: %s ", (ev.getHomeScore()<0)?"Pending":txResult);
+                    txToAddressLabel3 = String.format("Event #%s", String.valueOf(ev.getEventID()));
                 }
             }
 
+            mTxAction.setText(txSent);
             mToFrom.setText(txToLabel);
             mToFromAddress.setText(txToAddressLabel);
             mToFromAddress2.setText(txToAddressLabel2);
+            mToFromAddress3.setText(txToAddressLabel3);
+            final long evID = eventID;
+            mToFromAddress3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://explorer.wagerr.com/#/bet/event/%d", evID)));
+                    startActivity(browserIntent);
+                    getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+                }
+            });
 
             mTxAmount.setText(CurrencyUtils.getFormattedAmount(getActivity(), walletManager.getIso(getActivity()), cryptoAmount));//this is always crypto amount
 
@@ -271,7 +296,7 @@ public class FragmentTxDetails extends DialogFragment {
             }
 
             // timestamp is 0 if it's not confirmed in a block yet so make it now
-            mTxDate.setText(BRDateUtil.getLongDate(mTransaction.getTimeStamp() == 0 ? System.currentTimeMillis() : (mTransaction.getTimeStamp() * 1000)));
+            mTxDate.setText(BRDateUtil.getMidDate(mTransaction.getTimeStamp() == 0 ? System.currentTimeMillis() : (mTransaction.getTimeStamp() * 1000)));
 
             // Set the transaction id
             mTransactionId.setText(mTransaction.getTxHashHexReversed());

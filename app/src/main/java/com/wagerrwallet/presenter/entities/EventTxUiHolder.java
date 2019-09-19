@@ -87,10 +87,26 @@ public class EventTxUiHolder extends BetEventEntity {
     }
 
     public String getEventDateForBet( BetEntity.BetOutcome outcome )   {
-        return String.format("%s - %s", outcome.toString(), getTxEventDate());
+        return String.format("BET %s : %s", outcome.toString(), getTxEventShortDate());
     }
     public String getEventDescriptionForBet( BetEntity.BetOutcome outcome )   {
-        return String.format("%s - %s", getTxHomeTeam(), getTxAwayTeam());
+        String ret = "";
+        switch (outcome)     {
+            case MONEY_LINE_HOME_WIN:
+            case SPREADS_HOME:
+                ret = String.format("%s", getTxHomeTeam());
+                break;
+            case MONEY_LINE_AWAY_WIN:
+            case SPREADS_AWAY:
+                ret = String.format("%s", getTxAwayTeam());
+                break;
+            case MONEY_LINE_DRAW:
+            case TOTAL_OVER:
+            case TOTAL_UNDER:
+                ret = String.format("%s - %s", getTxHomeTeam(), getTxAwayTeam());
+                break;
+        }
+        return ret;
     }
 
     protected String TrimIfLonger(String inp, int max)     {
@@ -109,4 +125,11 @@ public class EventTxUiHolder extends BetEventEntity {
         return eventDate;
     }
 
+    public String getTxEventShortDate()
+    {
+        long eventTS = getEventTimestamp() == 0 ? System.currentTimeMillis() : getEventTimestamp() * 1000;
+        String eventDate = BRDateUtil.getShortDate(eventTS);
+
+        return eventDate;
+    }
 }

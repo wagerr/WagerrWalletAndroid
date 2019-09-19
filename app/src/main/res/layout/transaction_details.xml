@@ -175,17 +175,33 @@
 
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_to_from_address2"
-            android:layout_width="wrap_content"
+            android:layout_width="287dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/divider2"
-            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@id/tx_to_from_address3"
             android:layout_marginTop="34dp"
-            android:layout_toEndOf="@+id/tx_to_from"
             android:ellipsize="middle"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:singleLine="true"
             android:text=""
+            android:textSize="12sp"
+            app:customTFont="CircularPro-Book.otf" />
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_to_from_address3"
+            android:layout_width="87dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider2"
+            android:layout_alignLeft="@id/tx_to_from_address"
+            android:layout_marginTop="34dp"
+            android:layout_toEndOf="@+id/tx_to_from"
+            android:ellipsize="middle"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:singleLine="true"
+            android:text="Event #77777"
+            android:textColor="@color/blue"
             android:textSize="12sp"
             app:customTFont="CircularPro-Book.otf" />
 

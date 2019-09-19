@@ -29,6 +29,7 @@ import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.platform.entities.TxMetaData;
 import com.platform.tools.BRBitId;
 import com.platform.tools.KVStoreManager;
+import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
 import java.util.Arrays;
 
@@ -222,7 +223,7 @@ public class PostAuth {
                         TxMetaData txMetaData = new TxMetaData();
                         txMetaData.comment = mCryptoRequest.message;
                         txMetaData.exchangeCurrency = BRSharedPrefs.getPreferredFiatIso(app);
-                        txMetaData.exchangeRate = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, walletManager.getIso(app), txMetaData.exchangeCurrency).rate;
+                        txMetaData.exchangeRate = CurrencyDataSource.getInstance(app).getCurrencyByCode(app, walletManager.getIso(app), txMetaData.exchangeCurrency).rate / WalletWagerrManager.coinRate;
                         txMetaData.fee = walletManager.getWallet().getTransactionFee(mCryptoRequest.tx);
                         txMetaData.txSize = (int) mCryptoRequest.tx.getSize();
                         txMetaData.blockHeight = BRSharedPrefs.getLastBlockHeight(app, walletManager.getIso(app));

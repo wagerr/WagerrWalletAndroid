@@ -34,6 +34,8 @@ public class BetEventEntity {
     public static final long ODDS_MULTIPLIER = 10000;
     public static final long SPREAD_MULTIPLIER = 10;
     public static final long TOTAL_MULTIPLIER = 10;
+    public static final long RESULT_MULTIPLIER = 10;
+
 
     public enum BetTxType {
         PEERLESS(0x02),
@@ -293,6 +295,14 @@ public class BetEventEntity {
 
     public long getAwayScore() {
         return awayScore;
+    }
+
+    public String getTxAwayScore() {
+        return (awayScore<0)?"N/A":String.valueOf(awayScore/RESULT_MULTIPLIER);
+    }
+
+    public String getTxHomeScore() {
+        return (homeScore<0)?"N/A":String.valueOf(homeScore/RESULT_MULTIPLIER);
     }
 
     public String getTxHomeTeam() {

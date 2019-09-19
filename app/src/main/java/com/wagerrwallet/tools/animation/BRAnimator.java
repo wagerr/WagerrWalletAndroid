@@ -144,7 +144,9 @@ public class BRAnimator {
             fragmentSend.setCryptoObject(request);
             return;
         }
+        final int slideAnimation = SLIDE_ANIMATION_DURATION;
         try {
+            SLIDE_ANIMATION_DURATION = 300;
             fragmentSend = new FragmentSend();
             if (request != null && !request.address.isEmpty()) {
                 fragmentSend.setCryptoObject(request);
@@ -154,7 +156,12 @@ public class BRAnimator {
                     .add(android.R.id.content, fragmentSend, FragmentSend.class.getName())
                     .addToBackStack(FragmentSend.class.getName()).commit();
         } finally {
-
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    SLIDE_ANIMATION_DURATION = slideAnimation;
+                }
+            }, 800);
         }
 
     }

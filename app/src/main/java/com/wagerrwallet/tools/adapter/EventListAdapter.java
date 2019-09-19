@@ -185,10 +185,10 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         convertView.transactionDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"N/A" );
         convertView.transactionAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"N/A" );
 
-        String homeScore = (item.getHomeScore()!=-1)?String.valueOf(item.getHomeScore()):"---";
+        String homeScore = item.getTxHomeScore();
         convertView.transactionHomeResult.setText( homeScore );
 
-        String awayScore = (item.getAwayScore()!=-1)?String.valueOf(item.getAwayScore()):"---";
+        String awayScore = item.getTxAwayScore();
         convertView.transactionAwayResult.setText( awayScore );
 
         convertView.transactionHeader.setText(item.getTxEventHeader());

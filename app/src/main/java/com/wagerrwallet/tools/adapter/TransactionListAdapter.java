@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wagerrwallet.R;
+import com.wagerrwallet.core.BRCoreAddress;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
@@ -253,14 +254,32 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         }
         else {
+
             if (level > 4) {
-                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getTo()[0]);
+                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, getToRecipient(item.getTo(), received));
             } else {
-                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, item.getTo()[0]);
+                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, getToRecipient(item.getTo(), received));
             }
         }
         convertView.transactionDetail.setText(txDescription);
         convertView.transactionDate.setText(shortDate + " " + txDate);
+    }
+
+    public String getToRecipient( String[] strArr, boolean received ) {
+        String ret = "";
+        final BaseWalletManager wm = WalletsMaster.getInstance(mContext).getCurrentWallet(mContext);
+
+        for (final String s : strArr) {
+            final BRCoreAddress address = new BRCoreAddress(s);
+            if (address.isValid()) {
+                boolean bInWallet = wm.getWallet().containsAddress(address);
+                if ( (received && bInWallet) || (!received && !bInWallet) ) {
+                    ret = s;
+                    break;
+                }
+            }
+        }
+        return ret;
     }
 
     private void showTransactionProgress(TxHolder holder, int progress) {

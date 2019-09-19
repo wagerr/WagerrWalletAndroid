@@ -133,7 +133,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     private static volatile WalletWagerrManager instance;
     private static final Object mutex = new Object();
-    private static float coinRate = 1;
+    public static float coinRate = 1;
 
     private WalletUiConfiguration uiConfig;
 

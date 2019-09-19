@@ -92,6 +92,10 @@ public class BRDateUtil {
         return dateString;
     }
 
+    public static String getMidDate(long timestamp) {
+        return getEventDate( timestamp );
+    }
+
     public static String getLongDate(long timestamp){
 
         Calendar calendar = Calendar.getInstance();
