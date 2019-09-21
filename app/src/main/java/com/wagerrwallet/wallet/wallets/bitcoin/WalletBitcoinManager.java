@@ -256,7 +256,7 @@ public class WalletBitcoinManager extends BRCoreWalletManager implements BaseWal
                     getWallet().getTransactionAmountReceived(tx), getWallet().getTransactionFee(tx),
                     tx.getOutputAddresses(), tx.getInputAddresses(),
                     getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
-                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)));
+                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx), false));
         }
 
         return uiTxs;

@@ -219,6 +219,36 @@ public class BetResultTxDataStore implements BRDataSourceInterface {
         return resultEntity;
     }
 
+    public BetResultEntity getByBlockHeight(Context app, String iso, int height)     {
+        Cursor cursor = null;
+        BetResultEntity resultEntity = null;
+        try {
+            int r=0;
+            database = openDatabase();
+
+            cursor = database.query(BRSQLiteHelper.BRTX_TABLE_NAME,
+                    allColumns,  BRSQLiteHelper.BRTX_BLOCK_HEIGHT + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
+                    new String[]{ String.valueOf(height), iso.toUpperCase()},null,null,null);
+            if (cursor.getCount()==1)   {
+                cursor.moveToFirst();
+                resultEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+            }
+            else if (cursor.getCount()>1) {     // should not happen
+                resultEntity = new BetResultEntity("", BetResultEntity.BetTxType.UNKNOWN,0,0,BetResultEntity.BetResultType.UNKNOWN,0,0,0,0,"WGR");
+            }
+            cursor.close();
+            return resultEntity;
+        } catch (Exception ex) {
+            BRReportsManager.reportBug(ex);
+            Log.e(TAG, "Error getById Event tx into SQLite", ex);
+            //Error in between database transaction
+        } finally {
+            closeDatabase();
+            if (cursor != null) cursor.close();
+        }
+        return resultEntity;
+    }
+
     public BetResultEntity getTxByHash(Context app, String iso, String hash) {
         Cursor cursor = null;
         BetResultEntity resultEntity = null;

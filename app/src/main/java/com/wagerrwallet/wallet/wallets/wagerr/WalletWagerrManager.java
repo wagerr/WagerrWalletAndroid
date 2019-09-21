@@ -284,7 +284,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
                     getWallet().getTransactionAmountReceived(tx), getWallet().getTransactionFee(tx),
                     tx.getOutputAddresses(), tx.getInputAddresses(),
                     getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
-                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx));
+                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)
+                    , (tx.getInputAddresses().length==1 && "".equals(tx.getInputAddresses()[0])));      // is coinbase or POS
 
             BetEntity be = WagerrOpCodeManager.getEventIdFromCoreTx(tx);
             txUiHolder.setBetEntity(be);

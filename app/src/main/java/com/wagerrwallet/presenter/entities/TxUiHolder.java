@@ -49,6 +49,7 @@ public class TxUiHolder {
     private long balanceAfterTx;
     private long amount;
     private boolean isValid;
+    private boolean isCoinbase;
     private int txSize;
     public TxMetaData metaData;
     private BetEntity betEntity;
@@ -58,7 +59,7 @@ public class TxUiHolder {
 
     public TxUiHolder(long timeStamp, int blockHeight, byte[] hash, String txReversed, long sent,
                       long received, long fee, String to[], String from[],
-                      long balanceAfterTx, int txSize, long amount, boolean isValid) {
+                      long balanceAfterTx, int txSize, long amount, boolean isValid, boolean isCoinbase ) {
         this.timeStamp = timeStamp;
         this.blockHeight = blockHeight;
         this.txReversed = txReversed;
@@ -72,6 +73,7 @@ public class TxUiHolder {
         this.amount = amount;
         this.isValid = isValid;
         this.txSize = txSize;
+        this.isCoinbase = isCoinbase;
         betEntity = null;
     }
 
@@ -132,6 +134,10 @@ public class TxUiHolder {
 
     public boolean isValid() {
         return isValid;
+    }
+
+    public boolean isCoinbase() {
+        return isCoinbase;
     }
 
     public String getToRecipient( BaseWalletManager wm, boolean received ) {

@@ -253,7 +253,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
                     getWallet().getTransactionAmountReceived(tx), getWallet().getTransactionFee(tx),
                     tx.getOutputAddresses(), tx.getInputAddresses(),
                     getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
-                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)));
+                    getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx), false));
         }
 
         return uiTxs;

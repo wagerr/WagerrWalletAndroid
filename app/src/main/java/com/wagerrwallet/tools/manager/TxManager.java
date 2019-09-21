@@ -104,12 +104,21 @@ public class TxManager {
         if (took > 500)
             Log.e(TAG, "updateTxList: took: " + took);
         if (adapter != null) {
-            ((Activity) app).runOnUiThread(new Runnable() {
+            ((WalletActivity) app).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.setItems(items);
-                    txList.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                    if (adapter!=null && items!=null) {
+                        final List<TxUiHolder> currentItems = adapter.getItems();
+                        currentItems.clear();
+                        for (TxUiHolder item : items) {
+                            if (adapter.FilterItem(item, ((WalletActivity) app).filterSwitches)) {
+                                currentItems.add(item);
+                            }
+                        }
+                        //adapter.setItems(betItems);
+                        //txList.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             });
         }

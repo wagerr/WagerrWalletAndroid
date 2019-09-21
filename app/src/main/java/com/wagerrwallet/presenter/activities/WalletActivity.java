@@ -86,7 +86,8 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
     BRText mProgressLabel;
     ProgressBar mProgressBar;
     private BRButton betHistoryFilter;
-    public boolean[] filterSwitches = new boolean[1];
+    private BRButton rewardsFilter;
+    public boolean[] filterSwitches = new boolean[2];
 
 
     public ViewFlipper barFlipper;
@@ -139,7 +140,14 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
                 updateFilterButtonsUI(filterSwitches);
             }
         });
-
+        rewardsFilter = findViewById(R.id.reward_filter);
+        rewardsFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterSwitches[1] = !filterSwitches[1];
+                updateFilterButtonsUI(filterSwitches);
+            }
+        });
 
         if (Utils.isEmulatorOrDebug(this)) {
             if (logger != null) logger.interrupt();
@@ -241,6 +249,7 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
 
     private void updateFilterButtonsUI(boolean[] switches) {
         betHistoryFilter.setType(switches[0] ? 3 : 2);
+        rewardsFilter.setType(switches[1] ? 3 : 2);
         if (TxManager.getInstance().adapter != null)
             TxManager.getInstance().adapter.filterBetHistory( filterSwitches, true);
     }

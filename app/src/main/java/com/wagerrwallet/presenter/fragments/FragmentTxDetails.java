@@ -21,6 +21,7 @@ import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.BetEntity;
+import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
@@ -28,6 +29,7 @@ import com.wagerrwallet.tools.crypto.WagerrOpCodeManager;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetResultTxDataStore;
 import com.wagerrwallet.tools.util.BRDateUtil;
 import com.wagerrwallet.tools.util.CurrencyUtils;
 import com.wagerrwallet.tools.util.Utils;
@@ -206,34 +208,56 @@ public class FragmentTxDetails extends DialogFragment {
             String txSent = "", txToLabel = "", txToAddressLabel = "", txToAddressLabel2="", txToAddressLabel3="";
             long eventID = 0;
             if (mTransaction.getBetEntity()==null)  {
-                txSent = sent ? "Sent" : "Received";
-                txToLabel = sent ? "To " : "Via ";
-                eventID = 0;
-                txToAddressLabel = walletManager.decorateAddress(getActivity(), mTransaction.getToRecipient(walletManager, !sent));
-                // Allow the to/from address to be copyable
-                mToFromAddress.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        // Get the default color based on theme
-                        final int color = mToFromAddress.getCurrentTextColor();
-
-                        mToFromAddress.setTextColor(getContext().getColor(R.color.light_gray));
-                        String address = mToFromAddress.getText().toString();
-                        BRClipboardManager.putClipboard(getContext(), address);
-                        Toast.makeText(getContext(), getString(R.string.Receive_copied), Toast.LENGTH_LONG).show();
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mToFromAddress.setTextColor(color);
-
-                            }
-                        }, 200);
-
-
+                if (mTransaction.isCoinbase() && mTransaction.getBlockHeight() != Integer.MAX_VALUE) {       //  payout reward
+                    BetResultTxDataStore brds = BetResultTxDataStore.getInstance(getContext());
+                    BetResultEntity br = brds.getByBlockHeight(getContext(), walletManager.getIso(getContext()), mTransaction.getBlockHeight() - 1);
+                    if (br != null) {
+                        eventID = br.getEventID();
+                        EventTxUiHolder ev = BetEventTxDataStore.getInstance(getContext()).getTransactionByEventId(getContext(), "wgr", eventID);
+                        if (ev != null) {
+                            String txResult = (ev.getHomeScore()<0)?"Pending":String.format("%s - %s", ev.getTxHomeScore(), ev.getTxAwayScore());
+                            txToAddressLabel = String.format("%s - %s", ev.getTxHomeTeam(), ev.getTxAwayTeam());
+                            txToAddressLabel2 = String.format("Result: %s ", (ev.getHomeScore()<0)?"Pending":txResult);
+                            txToAddressLabel3 = String.format("Event #%s", String.valueOf(ev.getEventID()));
+                        } else {
+                            txToAddressLabel = String.format("Event #%d: info not avalable", eventID);
+                        }
+                        txSent = String.format("PAYOUT Event #%d", eventID);
+                    } else {
+                        txToAddressLabel = String.format("Result not avalable at height %d", mTransaction.getBlockHeight() - 1);
+                        txSent = "PAYOUT";
                     }
-                });
+                }
+                else {      // normal tx
+                    txSent = sent ? "Sent" : "Received";
+                    txToLabel = sent ? "To " : "Via ";
+                    eventID = 0;
+                    txToAddressLabel = walletManager.decorateAddress(getActivity(), mTransaction.getToRecipient(walletManager, !sent));
+                    // Allow the to/from address to be copyable
+                    mToFromAddress.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            // Get the default color based on theme
+                            final int color = mToFromAddress.getCurrentTextColor();
+
+                            mToFromAddress.setTextColor(getContext().getColor(R.color.light_gray));
+                            String address = mToFromAddress.getText().toString();
+                            BRClipboardManager.putClipboard(getContext(), address);
+                            Toast.makeText(getContext(), getString(R.string.Receive_copied), Toast.LENGTH_LONG).show();
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mToFromAddress.setTextColor(color);
+
+                                }
+                            }, 200);
+
+
+                        }
+                    });
+                }
             }
             else {
                 EventTxUiHolder ev = BetEventTxDataStore.getInstance(getContext()).getTransactionByEventId(getContext(), "wgr", mTransaction.getBetEntity().getEventID());

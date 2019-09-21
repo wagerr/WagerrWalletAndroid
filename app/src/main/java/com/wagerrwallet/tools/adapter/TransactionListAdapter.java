@@ -17,10 +17,13 @@ import android.widget.TextView;
 import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCoreAddress;
 import com.wagerrwallet.presenter.customviews.BRText;
+import com.wagerrwallet.presenter.entities.BetEntity;
+import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
+import com.wagerrwallet.tools.sqlite.BetResultTxDataStore;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRDateUtil;
 import com.wagerrwallet.tools.util.CurrencyUtils;
@@ -246,18 +249,37 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         long timeStamp = item.getTimeStamp() == 0 ? System.currentTimeMillis() : item.getTimeStamp() * 1000;
         String shortDate = BRDateUtil.getShortDate(timeStamp);
         String txDescription = "", txDate = "";
-        if (item.getBetEntity()!=null)  {
-            EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", item.getBetEntity().getEventID());
-            if (ev!=null)  {
-                txDescription = ev.getEventDescriptionForBet( item.getBetEntity().getOutcome() );
-                txDate = ev.getEventDateForBet( item.getBetEntity().getOutcome() );
+        long eventID = 0;
+
+        if (item.isCoinbase() && item.getBlockHeight() != Integer.MAX_VALUE) {       // then payout reward
+            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.transaction_amount_payout_color, null));
+            BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
+            BetResultEntity br = brds.getByBlockHeight(mContext, wallet.getIso(mContext), item.getBlockHeight() - 1);
+            if (br != null) {
+                eventID = br.getEventID();
+                EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
+                if (ev != null) {
+                    txDescription = String.format("%s - %s", ev.getTxHomeTeam(), ev.getTxAwayTeam());
+                } else {
+                    txDescription = String.format("Event #%d: info not avalable", eventID);
+                }
+                txDate = String.format("PAYOUT Event #%d", eventID);
+            } else {
+                txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
+                txDate = "PAYOUT";
             }
-            else {
-                txDescription = String.format("Event #%d: info not avalable", item.getBetEntity().getEventID() );
+        } else if (item.getBetEntity()!=null) {        // outgoing bet
+            eventID = item.getBetEntity().getEventID();
+            EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
+            if (ev != null) {
+                txDescription = ev.getEventDescriptionForBet(item.getBetEntity().getOutcome());
+                txDate = ev.getEventDateForBet(item.getBetEntity().getOutcome());
+            } else {
+                txDescription = String.format("Event #%d: info not avalable", eventID);
                 txDate = String.format("BET %s", item.getBetEntity().getOutcome().toString());
             }
         }
-        else {
+        else {      // regular tx
             if (level > 4) {
                 txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
             } else {
@@ -320,6 +342,12 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         filter(query, switches);
     }
 
+    public boolean FilterItem( TxUiHolder item, boolean[] switches) {
+        return ( (switches[0] && item.getBetEntity()!=null)
+            ||   (switches[1] && item.isCoinbase())
+            ||   (!switches[0] && !switches[1]) ) ;
+    }
+
     public void filterBetHistory(boolean[] switches, boolean bNotify) {
         long start = System.currentTimeMillis();
         int switchesON = 0;
@@ -329,12 +357,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         TxUiHolder item;
         for (int i = 0; i < backUpFeed.size(); i++) {
             item = backUpFeed.get(i);
-            if (switches[0] )  {
-                if (item.getBetEntity()!=null) {
-                    filteredList.add(item);
-                }
-            }
-            else {
+            if (FilterItem(item, switches)) {
                 filteredList.add(item);
             }
         }

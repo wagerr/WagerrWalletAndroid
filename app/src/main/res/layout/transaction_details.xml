@@ -61,22 +61,11 @@
             app:customTFont="CircularPro-Bold.otf"/>
 
         <com.wagerrwallet.presenter.customviews.BRText
-            android:id="@+id/label_when_sent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tx_amount"
-            android:layout_toEndOf="@+id/amount_when_sent"
-            android:text=" when sent"
-            android:textColor="@color/settings_chevron_right"
-            app:customTFont="CircularPro-Book.otf"/>
-
-        <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/amount_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tx_amount"
-            android:layout_marginLeft="2dp"
-            android:layout_toRightOf="@id/label_when_sent"
+            android:layout_marginLeft="60dp"
             android:text="X"
             android:textColor="@color/settings_chevron_right"
             app:customTFont="CircularPro-Bold.otf"/>
@@ -90,7 +79,7 @@
             android:layout_toRightOf="@id/amount_now"
             android:text=" now"
             android:textColor="@color/settings_chevron_right"
-            app:customTFont="CircularPro-Book.otf"/>
+            app:customTFont="CircularPro-Book.otf" />
 
 
         <View
