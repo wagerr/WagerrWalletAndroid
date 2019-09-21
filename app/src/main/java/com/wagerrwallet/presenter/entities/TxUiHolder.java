@@ -7,6 +7,8 @@ import android.util.Log;
 import com.platform.entities.TxMetaData;
 import com.wagerrwallet.core.BRCoreAddress;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
+import com.wagerrwallet.wallet.WalletsMaster;
+import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 
 /**
  * BreadWallet
@@ -130,6 +132,22 @@ public class TxUiHolder {
 
     public boolean isValid() {
         return isValid;
+    }
+
+    public String getToRecipient( BaseWalletManager wm, boolean received ) {
+        String ret = "";
+
+        for (final String s : getTo()) {
+            final BRCoreAddress address = new BRCoreAddress(s);
+            if (address.isValid()) {
+                boolean bInWallet = wm.getWallet().containsAddress(address);
+                if ( (received && bInWallet) || (!received && !bInWallet) ) {
+                    ret = s;
+                    break;
+                }
+            }
+        }
+        return ret;
     }
 
 }

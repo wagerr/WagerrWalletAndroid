@@ -209,7 +209,7 @@ public class FragmentTxDetails extends DialogFragment {
                 txSent = sent ? "Sent" : "Received";
                 txToLabel = sent ? "To " : "Via ";
                 eventID = 0;
-                txToAddressLabel = walletManager.decorateAddress(getActivity(), mTransaction.getTo()[0]);
+                txToAddressLabel = walletManager.decorateAddress(getActivity(), mTransaction.getToRecipient(walletManager, !sent));
                 // Allow the to/from address to be copyable
                 mToFromAddress.setOnClickListener(new View.OnClickListener() {
                     @Override

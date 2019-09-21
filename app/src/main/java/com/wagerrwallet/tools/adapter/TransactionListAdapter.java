@@ -252,34 +252,20 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 txDescription = ev.getEventDescriptionForBet( item.getBetEntity().getOutcome() );
                 txDate = ev.getEventDateForBet( item.getBetEntity().getOutcome() );
             }
+            else {
+                txDescription = String.format("Event #%d: info not avalable", item.getBetEntity().getEventID() );
+                txDate = String.format("BET %s", item.getBetEntity().getOutcome().toString());
+            }
         }
         else {
-
             if (level > 4) {
-                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, getToRecipient(item.getTo(), received));
+                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
             } else {
-                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, getToRecipient(item.getTo(), received));
+                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
             }
         }
         convertView.transactionDetail.setText(txDescription);
         convertView.transactionDate.setText(shortDate + " " + txDate);
-    }
-
-    public String getToRecipient( String[] strArr, boolean received ) {
-        String ret = "";
-        final BaseWalletManager wm = WalletsMaster.getInstance(mContext).getCurrentWallet(mContext);
-
-        for (final String s : strArr) {
-            final BRCoreAddress address = new BRCoreAddress(s);
-            if (address.isValid()) {
-                boolean bInWallet = wm.getWallet().containsAddress(address);
-                if ( (received && bInWallet) || (!received && !bInWallet) ) {
-                    ret = s;
-                    break;
-                }
-            }
-        }
-        return ret;
     }
 
     private void showTransactionProgress(TxHolder holder, int progress) {
@@ -291,18 +277,26 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             holder.transactionProgress.setProgress(progress);
 
             RelativeLayout.LayoutParams detailParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            detailParams.addRule(RelativeLayout.RIGHT_OF, holder.transactionProgress.getId());
-            detailParams.addRule(RelativeLayout.CENTER_VERTICAL);
-            detailParams.setMargins(Utils.getPixelsFromDps(mContext, 16), Utils.getPixelsFromDps(mContext, 36), 0, 0);
+            detailParams.addRule(RelativeLayout.BELOW, holder.transactionProgress.getId());
+            detailParams.addRule(RelativeLayout.ALIGN_LEFT, holder.transactionProgress.getId());
+            detailParams.addRule(RelativeLayout.LEFT_OF, holder.transactionAmount.getId());
+            //detailParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            //detailParams.setMargins(Utils.getPixelsFromDps(mContext, 16), Utils.getPixelsFromDps(mContext, 36), 0, 0);
             holder.transactionDetail.setLayoutParams(detailParams);
+
         } else {
             holder.transactionProgress.setVisibility(View.INVISIBLE);
             holder.transactionDate.setVisibility(View.VISIBLE);
+
             RelativeLayout.LayoutParams startingParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            startingParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            startingParams.addRule(RelativeLayout.CENTER_VERTICAL);
-            startingParams.setMargins(Utils.getPixelsFromDps(mContext, 16), 0, 0, 0);
+            //startingParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            startingParams.addRule(RelativeLayout.BELOW, holder.transactionDate.getId());
+            startingParams.addRule(RelativeLayout.LEFT_OF, holder.transactionAmount.getId());
+            startingParams.addRule(RelativeLayout.ALIGN_LEFT, holder.transactionDate.getId());
+            //startingParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            //startingParams.setMargins(Utils.getPixelsFromDps(mContext, 16), 0, 0, 0);
             holder.transactionDetail.setLayoutParams(startingParams);
+
             holder.setIsRecyclable(true);
         }
     }

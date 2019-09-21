@@ -255,9 +255,9 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
 
         ContentValues args = new ContentValues();
-        args.put(BRSQLiteHelper.BETX_TOTAL_POINTS, transactionEntity.getHomeOdds());
-        args.put(BRSQLiteHelper.BETX_OVER_ODDS, transactionEntity.getAwayOdds());
-        args.put(BRSQLiteHelper.BETX_UNDER_ODDS, transactionEntity.getDrawOdds());
+        args.put(BRSQLiteHelper.BETX_TOTAL_POINTS, transactionEntity.getTotalPoints());
+        args.put(BRSQLiteHelper.BETX_OVER_ODDS, transactionEntity.getOverOdds());
+        args.put(BRSQLiteHelper.BETX_UNDER_ODDS, transactionEntity.getUnderOdds());
 
         //BetEventEntity transactionEntity1 = insertOrUpdate(app,iso,transactionEntity, args);
         //return (transactionEntity1!=null);
@@ -335,7 +335,9 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
             String QUERY = getQuery( eventID, 0 );
             cursor = database.rawQuery(QUERY,  new String[]{iso.toUpperCase()});
             cursor.moveToFirst();
-            transactionEntity = cursorToUIEvent(app, iso.toUpperCase(), cursor);
+            if (cursor.getCount()>0) {
+                transactionEntity = cursorToUIEvent(app, iso.toUpperCase(), cursor);
+            }
         } finally {
             closeDatabase();
             if (cursor != null)

@@ -297,7 +297,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     @Override
     public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
         Date date = new Date();
-        long timeStamp = (date.getTime()/1000) - BET_CUTTOFF_SECONDS;
+        long timeStamp = (date.getTime()/1000) + BET_CUTTOFF_SECONDS;
         //BetEventTxDataStore.getInstance(app).deleteTxByEventTimestamp (app,ISO, timeStamp );
         //BetResultTxDataStore.getInstance(app).deleteResultsOldEvents(app, ISO, timeStamp);
         //List<BetEntity> bettxs = BetTxDataStore.getInstance(app).getAllTransactions(app,ISO);
