@@ -54,7 +54,7 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
     private BRButton cancelButton;
     private EventsActivity breadActivity;
 
-    public boolean[] filterSwitches = new boolean[4];
+    public long[] filterSwitches = new long[4];
 
     public BREventSearchBar(Context context) {
         super(context);
@@ -106,13 +106,15 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
 
     }
 
-    private void updateFilterButtonsUI(boolean[] switches) {
-        sentFilter.setType(switches[0] ? 3 : 2);
+    private void updateFilterButtonsUI(long[] switches) {
+        /*sentFilter.setType(switches[0] ? 3 : 2);
         receivedFilter.setType(switches[1] ? 3 : 2);
         pendingFilter.setType(switches[2] ? 3 : 2);
         completedFilter.setType(switches[3] ? 3 : 2);
+
         if (EventTxManager.getInstance().adapter != null)
             EventTxManager.getInstance().adapter.filterBy(searchEdit.getText().toString(), filterSwitches);
+            */
     }
 
     private void setListeners() {
@@ -164,7 +166,7 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
                 return false;
             }
         });
-
+/*
         sentFilter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,13 +203,15 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
                 updateFilterButtonsUI(filterSwitches);
             }
         });
+        */
     }
 
     public void clearSwitches() {
-        filterSwitches[0] = false;
+       /* filterSwitches[0] = false;
         filterSwitches[1] = false;
         filterSwitches[2] = false;
         filterSwitches[3] = false;
+        */
     }
 
     public void onShow(boolean b) {

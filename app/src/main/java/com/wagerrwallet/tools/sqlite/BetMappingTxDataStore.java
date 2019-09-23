@@ -39,6 +39,7 @@ import com.wagerrwallet.presenter.entities.BetEventEntity;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.util.BRConstants;
+import com.wagerrwallet.wallet.wallets.util.CryptoUriParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,14 +153,15 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         }
     }
 
-    public List<BetMappingEntity> getAllTransactions(Context app, String iso) {
+    public List<BetMappingEntity> getAllTransactions(Context app, String iso, BetMappingEntity.MappingNamespaceType type ) {
         List<BetMappingEntity> transactions = new ArrayList<>();
         Cursor cursor = null;
         try {
             database = openDatabase();
 
             cursor = database.query(BRSQLiteHelper.BMTX_TABLE_NAME,
-                    allColumns, BRSQLiteHelper.TX_ISO + "=?", new String[]{iso.toUpperCase()}, null, null, null);
+                    allColumns, BRSQLiteHelper.TX_ISO + "=? AND "+ BRSQLiteHelper.BMTX_NAMESPACEID + "=?"
+                    , new String[]{iso.toUpperCase(), String.valueOf(type.getNumber())}, null, null, null);
 
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -177,6 +179,44 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         return transactions;
     }
 
+    public List<BetMappingEntity> getAllTournaments(Context app, String iso, long sportID, long eventTimestamp ) {
+        List<BetMappingEntity> transactions = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            database = openDatabase();
+            String QUERY = "SELECT * FROM " + BRSQLiteHelper.BMTX_TABLE_NAME
+                    + " WHERE " + BRSQLiteHelper.BMTX_NAMESPACEID + "="+ BetMappingEntity.MappingNamespaceType.TOURNAMENT.getNumber()
+                    + " AND " + BRSQLiteHelper.BMTX_MAPPINGID + " IN "
+                    + "( SELECT DISTINCT "+ BRSQLiteHelper.BETX_TOURNAMENT + " FROM " + BRSQLiteHelper.BETX_TABLE_NAME;
+
+            if (sportID>-1) {
+                QUERY += " WHERE " + BRSQLiteHelper.BETX_SPORT + "=" + sportID
+                        + " AND " +BRSQLiteHelper.BETX_EVENT_TIMESTAMP+"> " + String.valueOf(eventTimestamp)
+                        + "  ) ";
+            }
+            else {
+                QUERY += " ) ";
+            }
+            QUERY += " ORDER BY " + BRSQLiteHelper.BMTX_STRING;
+
+            cursor = database.rawQuery(QUERY, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                transactions.add(transactionEntity);
+                cursor.moveToNext();
+            }
+        } catch (Exception ex) {
+            BRReportsManager.reportBug(ex);
+            Log.e(TAG, "Error reading Mapping tx into SQLite", ex);
+        } finally {
+            closeDatabase();
+            if (cursor != null)
+                cursor.close();
+            printTest(app, iso);
+        }
+        return transactions;
+    }
 
     public static BetMappingEntity cursorToTransaction(Context app, String iso, Cursor cursor) {
 

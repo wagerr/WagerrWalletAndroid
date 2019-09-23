@@ -82,6 +82,11 @@ public class BetMappingEntity {
         this.description = description;
     }
 
+    @Override
+    public String toString() {
+        return getDescription();
+    }
+
     private BetMappingEntity() {
     }
 

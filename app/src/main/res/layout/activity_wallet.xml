@@ -89,7 +89,7 @@
                         android:layout_marginTop="8dp"
                         android:paddingTop="4dp"
                         android:paddingBottom="4dp"
-                        android:text="Rewards"
+                        android:text="Payouts"
                         android:textColor="@color/light_gray"
                         android:textSize="@dimen/paragraph"
                         app:buttonType="2"

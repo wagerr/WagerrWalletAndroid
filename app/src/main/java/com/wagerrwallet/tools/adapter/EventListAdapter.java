@@ -69,6 +69,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private List<EventTxUiHolder> backUpFeed;
     private List<EventTxUiHolder> itemFeed;
     //    private Map<String, TxMetaData> mds;
+    public long[] filterSwitches = new long[2];
 
     private final int txType = 0;
     private final int promptType = 1;
@@ -229,8 +230,8 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    public void filterBy(String query, boolean[] switches) {
-        filter(query, switches);
+    public void filterBy(String query, long[] switches) {
+        filter(switches, true);
     }
 
     public void resetFilter() {
@@ -238,62 +239,25 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         notifyDataSetChanged();
     }
 
-    private void filter(final String query, final boolean[] switches) {
+    public void filter(final long[] switches, boolean bNotify) {
         long start = System.currentTimeMillis();
-        String lowerQuery = query.toLowerCase().trim();
-        if (Utils.isNullOrEmpty(lowerQuery) && !switches[0] && !switches[1] && !switches[2] && !switches[3])
-            return;
         int switchesON = 0;
-        for (boolean i : switches) if (i) switchesON++;
+        for (long i : switches) if (i>0) switchesON++;
 
         final List<EventTxUiHolder> filteredList = new ArrayList<>();
         EventTxUiHolder item;
         for (int i = 0; i < backUpFeed.size(); i++) {
             item = backUpFeed.get(i);
-            boolean matchesHash = item.getTxHash() != null && item.getTxHash().contains(lowerQuery);
-            // replace with "matchesEventType" etc.
-            //boolean matchesAddress = item.getFrom()[0].contains(lowerQuery) || item.getTo()[0].contains(lowerQuery);
-            //boolean matchesMemo = item.metaData != null && item.metaData.comment != null && item.metaData.comment.toLowerCase().contains(lowerQuery);
-            // add own wagerr filtering stuff
-            /*
-            if (matchesHash || matchesAddress || matchesMemo) {
-                if (switchesON == 0) {
-                    filteredList.add(item);
-                } else {
-                    boolean willAdd = true;
-                    //filter by sent and this is received
-                    if (switches[0] && (item.getAmount() <= 0)) {
-                        willAdd = false;
-                    }
-                    //filter by received and this is sent
-                    if (switches[1] && (item.getAmount() > 0)) {
-                        willAdd = false;
-                    }
-                    BaseWalletManager wallet = WalletsMaster.getInstance(mContext).getCurrentWallet(mContext);
-
-                    int confirms = item.getBlockHeight() ==
-                            Integer.MAX_VALUE ? 0
-                            : BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext)) - item.getBlockHeight() + 1;
-                    //complete
-                    if (switches[2] && confirms >= 6) {
-                        willAdd = false;
-                    }
-
-                    //pending
-                    if (switches[3] && confirms < 6) {
-                        willAdd = false;
-                    }
-
-                    if (willAdd) filteredList.add(item);
-                }
-
+            if (   (switches[0]==-1 || switches[0]==item.getSportID())
+                && (switches[1]==-1 || switches[1]==item.getTournamentID()) )    {
+                filteredList.add(item);
             }
-            */
         }
+        filterSwitches = switches;
         itemFeed = filteredList;
-        notifyDataSetChanged();
+        if (bNotify)    notifyDataSetChanged();
 
-        Log.e(TAG, "filter: " + query + " took: " + (System.currentTimeMillis() - start));
+        Log.e(TAG, "filter event list took: " + (System.currentTimeMillis() - start));
     }
 
     // wagerr: change for Event row UI items

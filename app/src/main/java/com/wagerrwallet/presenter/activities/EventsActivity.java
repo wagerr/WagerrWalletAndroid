@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
@@ -28,10 +29,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.platform.HTTPServer;
@@ -44,6 +49,7 @@ import com.wagerrwallet.presenter.customviews.BREventSearchBar;
 import com.wagerrwallet.presenter.customviews.BRNotificationBar;
 import com.wagerrwallet.presenter.customviews.BRSearchBar;
 import com.wagerrwallet.presenter.customviews.BRText;
+import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
@@ -51,6 +57,7 @@ import com.wagerrwallet.tools.manager.FontManager;
 import com.wagerrwallet.tools.manager.InternetManager;
 import com.wagerrwallet.tools.manager.SyncManager;
 import com.wagerrwallet.tools.manager.EventTxManager;
+import com.wagerrwallet.tools.sqlite.BetMappingTxDataStore;
 import com.wagerrwallet.tools.sqlite.CurrencyDataSource;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.CurrencyUtils;
@@ -61,8 +68,11 @@ import com.wagerrwallet.wallet.abstracts.OnEventTxListModified;
 import com.wagerrwallet.wallet.abstracts.OnTxListModified;
 import com.wagerrwallet.wallet.abstracts.SyncListener;
 import com.wagerrwallet.wallet.wallets.util.CryptoUriParser;
+import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -98,6 +108,10 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
     private ImageButton mSearchIcon;
     private ImageButton mSwap;
     private ConstraintLayout toolBarConstraintLayout;
+
+    private Spinner mSpinnerSport;
+    private Spinner mSpinnerTournament;
+    public long[] filterSwitches = new long[2];
 
     private BRNotificationBar mNotificationBar;
 
@@ -151,6 +165,46 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         BRAnimator.init(this);
         mBalancePrimary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);//make it the size it should be after animation to get the X
         mBalanceSecondary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);//make it the size it should be after animation to get the X
+
+        mSpinnerSport = findViewById(R.id.spinner_sport);
+        mSpinnerSport.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                BetMappingEntity bme = (BetMappingEntity)parent.getSelectedItem();
+                if (bme!=null) {
+                    filterSwitches[0] = bme.getMappingID();
+                }
+
+                if (EventTxManager.getInstance().adapter != null)
+                    EventTxManager.getInstance().adapter.filter( filterSwitches, true);
+
+                updateTournaments();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        mSpinnerTournament = findViewById(R.id.spinner_tournament);
+        mSpinnerTournament.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                BetMappingEntity bme = (BetMappingEntity)parent.getSelectedItem();
+                if (bme!=null) {
+                    filterSwitches[1] = bme.getMappingID();
+                }
+
+                if (EventTxManager.getInstance().adapter != null)
+                    EventTxManager.getInstance().adapter.filter( filterSwitches, true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 /*
         mSendButton.setHasShadow(false);
@@ -245,6 +299,100 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         handleUrlClickIfNeeded(intent);
     }
 
+    public void updateSports() {
+        BetMappingTxDataStore bmds = BetMappingTxDataStore.getInstance(this);
+        List<BetMappingEntity> sports = bmds.getAllTransactions(this, "wgr", BetMappingEntity.MappingNamespaceType.SPORT );
+        int currPosition = 0;
+        BetMappingEntity bmeS = (BetMappingEntity)mSpinnerSport.getSelectedItem();
+
+        // add item 0
+        sports.add(0, new BetMappingEntity("",0, BetMappingEntity.MappingNamespaceType.SPORT, -1, "<Sport>",0,0,"wgr"));
+        currPosition = findItemIndex( bmeS, sports);
+
+        ArrayAdapter<BetMappingEntity> dataAdapter = getDataAdapter(sports);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerSport.setAdapter(dataAdapter);
+        mSpinnerSport.setSelection(currPosition);
+    }
+
+    public void updateTournaments() {
+        Date date = new Date();
+        long timeStamp = (date.getTime()/1000) + WalletWagerrManager.BET_CUTTOFF_SECONDS;
+
+        BetMappingTxDataStore bmds = BetMappingTxDataStore.getInstance(this);
+        int currPosition = 0;
+        BetMappingEntity bmeS = (BetMappingEntity)mSpinnerSport.getSelectedItem();
+        BetMappingEntity bmeT = (BetMappingEntity)mSpinnerTournament.getSelectedItem();
+
+        List<BetMappingEntity> tournaments = new ArrayList<>();
+        long sportID = -1;
+        if (bmeS!=null && bmeS.getMappingID()!=-1 && bmeT!=null) {
+            sportID = bmeS.getMappingID();
+            tournaments = bmds.getAllTournaments(this, "wgr", sportID, timeStamp );
+            // add item 0
+            tournaments.add(0, new BetMappingEntity("",0, BetMappingEntity.MappingNamespaceType.TOURNAMENT, -1, "<Tournament>",0,0,"wgr"));
+            currPosition = findItemIndex( bmeT, tournaments);
+        }
+        else {
+            tournaments.add(0, new BetMappingEntity("",0, BetMappingEntity.MappingNamespaceType.TOURNAMENT, -1, "<Tournament>",0,0,"wgr"));
+        }
+
+        ArrayAdapter<BetMappingEntity> dataAdapter = getDataAdapter(tournaments);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerTournament.setAdapter(dataAdapter);
+        mSpinnerTournament.setSelection(currPosition);
+    }
+
+    protected int findItemIndex( BetMappingEntity item, List<BetMappingEntity> list )    {
+        int ret = 0, i = 0;
+
+        if (item==null)     return 0;
+
+        for(BetMappingEntity obj : list)   {
+            if (item.getMappingID()==obj.getMappingID())    {
+                ret = i;
+                break;
+            }
+            i++;
+        }
+        return ret;
+    }
+
+    public ArrayAdapter<BetMappingEntity> getDataAdapter(List<BetMappingEntity> list) {
+        ArrayAdapter<BetMappingEntity> dataAdapter = new ArrayAdapter<BetMappingEntity>(this,
+                android.R.layout.simple_spinner_item, list)
+        {
+            public View getView(int position, View convertView, ViewGroup parent)
+            {
+                View v = null;
+                if ( position < super.getCount() ) {
+                    v = super.getView(position, convertView, parent);
+                    ((TextView) v).setTypeface(sTypeFace(getApplicationContext()));//Typeface for normal view
+                    ((TextView) v).setTextColor(Color.parseColor("#c20c23"));
+                    ((TextView) v).setBackgroundColor(Color.parseColor("#fafafa"));
+                }
+                return v;
+            }
+            public View getDropDownView(int position, View convertView, ViewGroup parent)
+            {
+                View v = null;
+                if ( position < super.getCount() ) {
+                    v = super.getDropDownView(position, convertView, parent);
+                    ((TextView) v).setTypeface(sTypeFace(getApplicationContext()));//Typeface for dropdown view
+                    ((TextView) v).setBackgroundColor(Color.parseColor("#fafafa"));
+                    ((TextView) v).setTextColor(Color.parseColor("#c20c23"));
+                }
+                return v;
+            }
+        };
+        return dataAdapter;
+    }
+
+    public static Typeface sTypeFace(Context mCnxt) {
+        Typeface mtypeface = FontManager.get(mCnxt,"CircularPro-Book.otf");
+        return mtypeface;
+    }
+
     private void handleUrlClickIfNeeded(Intent intent) {
         Uri data = intent.getData();
         if (data != null && !data.toString().isEmpty()) {
@@ -260,43 +408,28 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             return;
         }
 
-        if (wallet.getUiConfiguration().buyVisible) {
-/*
-            mBuyButton.setHasShadow(false);
-            mBuyButton.setVisibility(View.VISIBLE);
-            mBuyButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(EventsActivity.this, WebViewActivity.class);
-                    intent.putExtra("url", HTTPServer.URL_BUY);
-                    Activity app = EventsActivity.this;
-                    app.startActivity(intent);
-                    app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.fade_down);
-                }
-            });
-*/
-        } else {
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    Utils.getPixelsFromDps(this, 65), 1.5f
-            );
+        // update spinners
+        updateSports();
+        updateTournaments();
 
-            LinearLayout.LayoutParams param2 = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    Utils.getPixelsFromDps(this, 65), 1.5f
-            );
-            param.gravity = Gravity.CENTER;
-            param2.gravity = Gravity.CENTER;
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                Utils.getPixelsFromDps(this, 65), 1.5f
+        );
 
-            param.setMargins(Utils.getPixelsFromDps(this, 8), Utils.getPixelsFromDps(this, 8), Utils.getPixelsFromDps(this, 8), 0);
-            param2.setMargins(0, Utils.getPixelsFromDps(this, 8), Utils.getPixelsFromDps(this, 8), 0);
+        LinearLayout.LayoutParams param2 = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                Utils.getPixelsFromDps(this, 65), 1.5f
+        );
+        param.gravity = Gravity.CENTER;
+        param2.gravity = Gravity.CENTER;
 
-            //mSendButton.setLayoutParams(param);
-            //mReceiveButton.setLayoutParams(param2);
-            //mBuyButton.setVisibility(View.GONE);
+        param.setMargins(Utils.getPixelsFromDps(this, 8), Utils.getPixelsFromDps(this, 8), Utils.getPixelsFromDps(this, 8), 0);
+        param2.setMargins(0, Utils.getPixelsFromDps(this, 8), Utils.getPixelsFromDps(this, 8), 0);
 
-        }
-
+        //mSendButton.setLayoutParams(param);
+        //mReceiveButton.setLayoutParams(param2);
+        //mBuyButton.setVisibility(View.GONE);
 
 //        String fiatIso = BRSharedPrefs.getPreferredFiatIso(this);
 
