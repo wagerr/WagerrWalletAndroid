@@ -165,12 +165,10 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         boolean received = false;
 
         BigDecimal cryptoAmount = new BigDecimal(0);
-        Log.e(TAG, "setTexts: crypto:" + cryptoAmount);
         boolean isCryptoPreferred = BRSharedPrefs.isCryptoPreferred(mContext);
         String preferredIso = isCryptoPreferred ? wallet.getIso(mContext) : BRSharedPrefs.getPreferredFiatIso(mContext);
 
         BigDecimal amount = isCryptoPreferred ? cryptoAmount : wallet.getFiatForSmallestCrypto(mContext, cryptoAmount, null);
-        Log.e(TAG, "setTexts: amount:" + amount);
 
         int blockHeight = (int)item.getBlockheight();
         int confirms = blockHeight == Integer.MAX_VALUE ? 0 : BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext)) - blockHeight + 1;

@@ -221,7 +221,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     @Override
     protected BRCoreWallet.Listener createWalletListener() {
-        return new WrappedExecutorWalletListener(
+        Log.e(TAG, "@@@WagerrWalletManager::createWalletListener");
+        return new BRCoreWalletManager.WrappedExecutorWalletListener(
                 super.createWalletListener(),
                 listenerExecutor);
     }

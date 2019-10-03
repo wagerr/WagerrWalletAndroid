@@ -68,6 +68,7 @@ public class EventTxManager {
     public void init(final EventsActivity app) {
         txList = app.findViewById(R.id.tx_list);
         txList.setLayoutManager(new CustomLinearLayoutManager(app));
+        //txList.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
         txList.addOnItemTouchListener(new RecyclerItemClickListener(app,
                 txList, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -118,6 +119,7 @@ public class EventTxManager {
                         for (EventTxUiHolder item : betItems) {
                             currentItems.add(item);
                         }
+                        adapter.setItems(currentItems);
                         //adapter.setItems(betItems);
                         //txList.setAdapter(adapter);
                         adapter.notifyDataSetChanged();

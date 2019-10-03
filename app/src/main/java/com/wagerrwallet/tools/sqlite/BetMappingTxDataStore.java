@@ -179,6 +179,41 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         return transactions;
     }
 
+    public List<BetMappingEntity> getAllSports(Context app, String iso, long eventTimestamp ) {
+        List<BetMappingEntity> transactions = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            database = openDatabase();
+            String QUERY = "SELECT * FROM " + BRSQLiteHelper.BMTX_TABLE_NAME
+                    + " WHERE " + BRSQLiteHelper.BMTX_NAMESPACEID + "="+ BetMappingEntity.MappingNamespaceType.SPORT.getNumber()
+                    + " AND " + BRSQLiteHelper.BMTX_MAPPINGID + " IN "
+                    + "( SELECT DISTINCT "+ BRSQLiteHelper.BETX_SPORT + " FROM " + BRSQLiteHelper.BETX_TABLE_NAME;
+
+
+            QUERY += " WHERE " + BRSQLiteHelper.BETX_EVENT_TIMESTAMP+"> " + String.valueOf(eventTimestamp)
+                    + "  ) ";
+            QUERY += " ORDER BY " + BRSQLiteHelper.BMTX_STRING;
+
+            cursor = database.rawQuery(QUERY, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                transactions.add(transactionEntity);
+                cursor.moveToNext();
+            }
+        } catch (Exception ex) {
+            BRReportsManager.reportBug(ex);
+            Log.e(TAG, "Error reading Mapping tx into SQLite", ex);
+        } finally {
+            closeDatabase();
+            if (cursor != null)
+                cursor.close();
+            printTest(app, iso);
+        }
+        return transactions;
+    }
+
+
     public List<BetMappingEntity> getAllTournaments(Context app, String iso, long sportID, long eventTimestamp ) {
         List<BetMappingEntity> transactions = new ArrayList<>();
         Cursor cursor = null;

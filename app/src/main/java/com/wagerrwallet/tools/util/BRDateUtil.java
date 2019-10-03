@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * BreadWallet
@@ -74,21 +75,17 @@ public class BRDateUtil {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
-        Log.d("BRDateUtil", "Timestamp -> " + timestamp);
 
         String dateString = new SimpleDateFormat("MMM dd", Locale.getDefault()).format(calendar.getTimeInMillis());
-        Log.d("BRDateUtil", "Transaction date string -> " + dateString);
-
         return dateString;
     }
 
     public static String getEventDate(long timestamp) {
-        //long millTimestamp = timestamp * 1000;
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
-
-        String dateString = new SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault()).format(calendar.getTimeInMillis());
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault() );
+//        df.setTimeZone(TimeZone.getDefault());
+        String dateString = df.format(calendar.getTimeInMillis());
         return dateString;
     }
 

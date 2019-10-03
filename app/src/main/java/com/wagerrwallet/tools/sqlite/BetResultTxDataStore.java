@@ -112,7 +112,6 @@ public class BetResultTxDataStore implements BRDataSourceInterface {
         } finally {
             database.endTransaction();
             closeDatabase();
-            Log.e(TAG, "###event result insert/update end: " + transactionEntity.getEventID());
             if (cursor != null) cursor.close();
         }
         return null;
