@@ -395,7 +395,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                 + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" b ON a."+BRSQLiteHelper.BETX_HOME_TEAM + "=b."+BRSQLiteHelper.BMTX_MAPPINGID
                 +" AND b."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.TEAM_NAME.getNumber()
                 + " LEFT OUTER JOIN " + BRSQLiteHelper.BMTX_TABLE_NAME+" c ON a."+BRSQLiteHelper.BETX_AWAY_TEAM + "=c."+BRSQLiteHelper.BMTX_MAPPINGID
-                +" AND b."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.TEAM_NAME.getNumber()
+                +" AND c."+BRSQLiteHelper.BMTX_NAMESPACEID+"="+ BetMappingEntity.MappingNamespaceType.TEAM_NAME.getNumber()
                 // result table (o)
                 + " LEFT OUTER JOIN " + BRSQLiteHelper.BRTX_TABLE_NAME+" o ON a."+BRSQLiteHelper.BETX_EVENTID + "=o."+BRSQLiteHelper.BRTX_EVENTID
                 + " WHERE a."+BRSQLiteHelper.TX_ISO+"=? ";
