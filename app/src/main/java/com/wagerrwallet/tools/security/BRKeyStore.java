@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
@@ -42,8 +43,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -95,6 +98,7 @@ public class BRKeyStore {
 
     private static final String KEY_STORE_PREFS_NAME = "keyStorePrefs";
     public static final String ANDROID_KEY_STORE = "AndroidKeyStore";
+    private static final String MANUFACTURER_GOOGLE = "Google";
 
     public static final String CIPHER_ALGORITHM = "AES/CBC/PKCS7Padding";
     public static final String PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7;
@@ -170,6 +174,66 @@ public class BRKeyStore {
 //        Assert.assertEquals(AUTH_DURATION_SEC, 300);
     }
 
+    public enum ValidityStatus {
+        VALID,
+        INVALID_WIPE,
+        INVALID_UNINSTALL;
+    }
+
+    /**
+     * Returns a value based on if Android key store is valid. We test if the paper key encryption key can no longer be
+     * used because it has been permanently invalidated which indicates if the Android key store is invalidated. If the
+     * Android key store has been invalidated, our entire app data should be wiped and the app should be
+     * re-initialized.  We cannot recover from this otherwise.
+     *
+     * We found on Google devices a wipe is sufficient to recover except on Android 8.1 which requires an uninstall.
+     * On non-Google devices a wipe is required on Android 6-7.1 and an uninstall is required on Android 8+.
+     *
+     * See {@link KeyPermanentlyInvalidatedException} for further details.
+     *
+     * @return A {@link ValidityStatus} based on the current status of the Android key store.
+     */
+    public static ValidityStatus getValidityStatus() {
+        try {
+            // Attempt to retrieve the key that protects the paper key and initialize an encryption cipher.
+            KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE);
+            keyStore.load(null);
+            Key key = keyStore.getKey(PHRASE_ALIAS, null);
+
+            // If there is no key, then it has not been initialized yet. The key store is still considered valid.
+            if (key != null) {
+                Cipher cipher = Cipher.getInstance(NEW_CIPHER_ALGORITHM);
+                cipher.init(Cipher.ENCRYPT_MODE, key);
+            }
+        } catch (KeyPermanentlyInvalidatedException | UnrecoverableKeyException e) {
+            // If KeyPermanentlyInvalidatedException
+            //  -> with no cause happens, then the password was disabled. See DROID-1019.
+            // If UnrecoverableKeyException
+            //  -> with cause "Key blob corrupted" happens then the password was disabled & re-enabled. See DROID-1207.
+            //  -> with cause "Key blob corrupted" happens then after DROID-1019 the app was opened again while password is on.
+            //  -> with cause "Key not found" happens then after DROID-1019 the app was opened again while password is off.
+            //  -> with cause "System error" (KeyStoreException) after app wipe on devices that need uninstall to recover.
+            // Note: These exceptions would happen before a UserNotAuthenticatedException, so we don't need to handle that.
+
+            boolean isGoogleDevice = MANUFACTURER_GOOGLE.equals(Build.MANUFACTURER);
+            if ((isGoogleDevice && android.os.Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.O_MR1)
+                    || (!isGoogleDevice && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)) {
+                Log.e(TAG, "The key store has been invalidated. Uninstall required. Manufacturer: "
+                        + Build.MANUFACTURER + "OS Version: " + Build.VERSION.RELEASE, e);
+                return ValidityStatus.INVALID_UNINSTALL;
+            } else {
+                Log.e(TAG, "The key store has been invalidated. Wipe required. Manufacturer: "
+                        + Build.MANUFACTURER + "OS Version: " + Build.VERSION.RELEASE, e);
+                return ValidityStatus.INVALID_WIPE;
+            }
+        } catch (GeneralSecurityException | IOException e) {
+            // We can safely ignore these exceptions, because we are only concerned with
+            // KeyPermanentlyInvalidatedException here.
+            Log.e(TAG, "Error while checking if key store is still valid. Ignoring. ", e);
+        }
+
+        return ValidityStatus.VALID;
+    }
 
     private synchronized static boolean _setData(Context context, byte[] data, String alias, String alias_file, String alias_iv,
                                                  int request_code, boolean auth_required) throws UserNotAuthenticatedException {

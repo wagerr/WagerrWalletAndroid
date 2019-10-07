@@ -301,9 +301,11 @@ public class WalletsMaster {
 
     public void startTheWalletIfExists(final Activity app) {
         final WalletsMaster m = WalletsMaster.getInstance(app);
-        if (!m.isPasscodeEnabled(app)) {
+        String dialogType = ((WagerrApp)app.getApplicationContext()).isDeviceStateValid();
+       // if (!m.isPasscodeEnabled(app)) {
+        if ( !"".equals(dialogType) ) {
             //Device passcode/password should be enabled for the app to work
-            BRDialog.showCustomDialog(app, app.getString(R.string.JailbreakWarnings_title), app.getString(R.string.Prompts_NoScreenLock_body_android),
+            BRDialog.showCustomDialog(app, app.getString(R.string.JailbreakWarnings_title), dialogType,
                     app.getString(R.string.AccessibilityLabels_close), null, new BRDialogView.BROnClickListener() {
                         @Override
                         public void onClick(BRDialogView brDialogView) {
@@ -315,12 +317,12 @@ public class WalletsMaster {
                             app.finish();
                         }
                     }, 0);
-        } else {
+        }
+       else {
             if (!m.noWallet(app)) {
                 BRAnimator.startBreadActivity(app, true);
             }
             //else just sit in the intro screen
-
         }
     }
 

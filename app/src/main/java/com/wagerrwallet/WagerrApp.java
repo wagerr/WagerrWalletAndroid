@@ -3,6 +3,7 @@ package com.wagerrwallet;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.Point;
@@ -16,6 +17,7 @@ import android.view.WindowManager;
 import com.wagerrwallet.presenter.activities.util.BRActivity;
 import com.wagerrwallet.tools.listeners.SyncReceiver;
 import com.wagerrwallet.tools.manager.InternetManager;
+import com.wagerrwallet.tools.security.BRKeyStore;
 import com.wagerrwallet.tools.util.Utils;
 import com.google.firebase.crash.FirebaseCrash;
 
@@ -115,6 +117,42 @@ public class WagerrApp extends Application {
 //            }
 //        });
 
+    }
+
+    /**
+     * Returns true if the device state is valid. The device state is considered valid, if the device password
+     * is enabled and if the Android key store state is valid.  The Android key store can be invalided if the
+     * device password was removed or if fingerprints are added/removed.
+     *
+     * @return "", if the device state is valid; !="", otherwise.
+     */
+    public String isDeviceStateValid() {
+        boolean isDeviceStateValid;
+        String dialogType = "";
+
+        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
+        if (!keyguardManager.isKeyguardSecure()) {
+            isDeviceStateValid = false;
+            dialogType = this.getString(R.string.Prompts_NoScreenLock_body_android);
+        } else {
+            switch (BRKeyStore.getValidityStatus()) {
+                case VALID:
+                    isDeviceStateValid = true;
+                    break;
+                case INVALID_WIPE:
+                    isDeviceStateValid = false;
+                    dialogType = this.getString(R.string.Alert_keystore_invalidated_wipe_android);
+                    break;
+                case INVALID_UNINSTALL:
+                    isDeviceStateValid = false;
+                    dialogType = this.getString(R.string.Alert_keystore_invalidated_uninstall_android);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid key store validity status.");
+            }
+        }
+
+        return dialogType;
     }
 
     @TargetApi(Build.VERSION_CODES.N)
