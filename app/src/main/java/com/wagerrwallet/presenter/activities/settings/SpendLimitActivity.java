@@ -125,20 +125,21 @@ public class SpendLimitActivity extends BRActivity {
     }
 
     private int getStepFromLimit(long limit) {
+        BigInteger biLimit = BigInteger.valueOf(limit);
         int ret = 0;
         if (limit==0L ) {
             ret = 0;
         }
-        else if (limit==ONE_BITCOIN *10 ) {
+        else if (biLimit.compareTo(BigInteger.valueOf((long)ONE_BITCOIN *10))==0 ) {
             ret = 1;
         }
-        else if (limit==ONE_BITCOIN *100 ) {
+        else if (biLimit.compareTo(BigInteger.valueOf((long)ONE_BITCOIN *100))==0)  {
             ret = 2;
         }
-        else if (limit==ONE_BITCOIN *1000 ) {
+        else if (biLimit.compareTo(BigInteger.valueOf((long)ONE_BITCOIN *1000))==0 ) {
             ret = 3;
         }
-        else if (limit==ONE_BITCOIN *10000 ) {
+        else if (biLimit.compareTo(BigInteger.valueOf((long)ONE_BITCOIN *10000))==0 ) {
             ret = 4;
         }
         return ret;

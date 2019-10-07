@@ -169,7 +169,7 @@ public class SettingsActivity extends BRActivity {
 
         items.add(new BRSettingsItem(getString(R.string.Settings_preferences), "", null, true));
 
-        if (AuthManager.isFingerPrintAvailableAndSetup(this)) {
+        if ( AuthManager.isFingerPrintAvailableAndSetup(this) ) {
             items.add(new BRSettingsItem(getString(R.string.Settings_touchIdLimit_android), "", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

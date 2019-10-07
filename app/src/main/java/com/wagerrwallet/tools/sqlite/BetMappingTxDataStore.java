@@ -272,9 +272,52 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         }
     }
 
-    private BetMappingEntity getById(Context app, String iso, BetMappingEntity.MappingNamespaceType ns, int mappingID) {
+    public class BetMappingDupItem {
+        public long NamespaceID;
+        public long MappingID;
+        public int nCount;
+
+        public BetMappingDupItem( long namespaceID, long mappingID, int ncount)
+        {
+            NamespaceID=namespaceID;
+            MappingID=mappingID;
+            nCount = ncount;
+        }
+    }
+
+    public List<BetMappingDupItem> SearchDuplicates(Context app, String iso, BetMappingEntity.MappingNamespaceType ns) {
+        Cursor cursor = null;
+        BetMappingDupItem mappingEntity = null;
+        List<BetMappingDupItem> list = new ArrayList<>();
+        try {
+            database = openDatabase();
+            String QUERY = "SELECT " + BRSQLiteHelper.BMTX_NAMESPACEID + ", " + BRSQLiteHelper.BMTX_MAPPINGID + ", count(*) "
+                    + " FROM " + BRSQLiteHelper.BMTX_TABLE_NAME
+                    + " GROUP BY " + BRSQLiteHelper.BMTX_NAMESPACEID + ", " + BRSQLiteHelper.BMTX_MAPPINGID
+                    + " HAVING count(*)>1 ";
+
+            cursor = database.rawQuery(QUERY, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                mappingEntity = new BetMappingDupItem(cursor.getLong(0), cursor.getLong(1) , cursor.getInt(2));
+                list.add(mappingEntity);
+                cursor.moveToNext();
+            }
+            //mappingEntity = new BetMappingEntity("", 0, BetMappingEntity.MappingNamespaceType.UNKNOWN,0,"",0,0,"WGR");
+
+        } finally {
+            if (cursor != null)
+                cursor.close();
+            closeDatabase();
+        }
+        //return mappingEntity;
+        return list;
+    }
+
+    private List<BetMappingEntity> getById(Context app, String iso, BetMappingEntity.MappingNamespaceType ns, int mappingID) {
         Cursor cursor = null;
         BetMappingEntity mappingEntity = null;
+        List<BetMappingEntity> list = new ArrayList<>();
         try {
             database = openDatabase();
 
@@ -284,16 +327,24 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             if (cursor.getCount()==1)   {
                 cursor.moveToFirst();
                 mappingEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                list.add(mappingEntity);
             }
             else if (cursor.getCount()>1) {     // should not happen
-                mappingEntity = new BetMappingEntity("", 0, BetMappingEntity.MappingNamespaceType.UNKNOWN,0,"",0,0,"WGR");
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    mappingEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                    list.add(mappingEntity);
+                    cursor.moveToNext();
+                }
+                //mappingEntity = new BetMappingEntity("", 0, BetMappingEntity.MappingNamespaceType.UNKNOWN,0,"",0,0,"WGR");
             }
         } finally {
             if (cursor != null)
                 cursor.close();
             closeDatabase();
         }
-        return mappingEntity;
+        //return mappingEntity;
+        return list;
     }
 
     @Override

@@ -57,6 +57,7 @@
             android:layout_below="@id/tx_amount"
             android:layout_marginLeft="60dp"
             android:text="X"
+            android:visibility="gone"
             android:textColor="@color/settings_chevron_right"
             app:customTFont="CircularPro-Bold.otf"/>
 
