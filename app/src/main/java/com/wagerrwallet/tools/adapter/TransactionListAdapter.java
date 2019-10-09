@@ -65,6 +65,7 @@ import java.util.List;
 public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = TransactionListAdapter.class.getName();
 
+    public static int PAYOUT_MATURITY = 101;
     private final Context mContext;
     private final int txResId;
     private final int promptResId;
@@ -247,9 +248,13 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         String shortDate = BRDateUtil.getShortDate(timeStamp);
         String txDescription = "", txDate = "";
         long eventID = 0;
+        long nCurrentHeight = BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext));
 
         if (item.isCoinbase() && item.getBlockHeight() != Integer.MAX_VALUE) {       // then payout reward
-            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.transaction_amount_payout_color, null));
+            boolean immature = (nCurrentHeight-item.getBlockHeight()) > PAYOUT_MATURITY;
+            String strMatureInfo = String.format( "%d/%d", (nCurrentHeight-item.getBlockHeight()), PAYOUT_MATURITY );
+            int amountColor = ( immature ) ? R.color.transaction_amount_payout_color:R.color.transaction_amount_inmature_color;
+            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(amountColor, null));
             BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
             BetResultEntity br = brds.getByBlockHeight(mContext, wallet.getIso(mContext), item.getBlockHeight() - 1);
             if (br != null) {
@@ -265,6 +270,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
                 txDate = "PAYOUT";
             }
+            if (immature)   txDate+=" " + strMatureInfo;
         } else if (item.getBetEntity()!=null) {        // outgoing bet
             eventID = item.getBetEntity().getEventID();
             EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);

@@ -205,12 +205,12 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 if (!hasFocus) {
                     try {
                         fValue = Float.parseFloat(mTxAmount.getText().toString());
-                        value = Math.max( minvalue, fValue.intValue() - minvalue);
+                        value = Math.max( minvalue, fValue.intValue() );
                         mTxAmount.setText(String.valueOf(value));
                     }
                     catch (NumberFormatException e)     {
                     }
-                    seekBar.setProgress(value);
+                    seekBar.setProgress(value-minvalue);
                 }
             }
         });

@@ -295,6 +295,9 @@ public class WalletsMaster {
                 Log.d(TAG, "updateFixedPeer: succeeded");
             }
         }
+        else {      // clean up
+            wm.getPeerManager().useFixedPeer("", 0);
+        }
         wm.getPeerManager().connect();
 
     }
