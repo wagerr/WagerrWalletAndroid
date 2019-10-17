@@ -215,7 +215,7 @@
   <!-- Jailbreak warning message -->
   <string name="JailbreakWarnings.messageWithBalance">裝置安全性遭破解\n 任何「越獄」應用程式都可以存取 Wagerr 的鑰匙圈資料、 竊取您的比特幣！立即抹除這個錢包，在安全的裝置上還原。</string>
   <!-- Jailbreak warning message -->
-  <string name="JailbreakWarnings.messageWithoutBalance">裝置安全性遭破解\n 任何「越獄」應用程式都可以存取 Wagerr 的鑰匙圈資料、 竊取您的比特幣。請只在未越獄的裝置上使用 BRD。</string>
+  <string name="JailbreakWarnings.messageWithoutBalance">裝置安全性遭破解\n 任何「越獄」應用程式都可以存取 Wagerr 的鑰匙圈資料、 竊取您的比特幣。請只在未越獄的裝置上使用 Wagerr。</string>
   <!-- Jailbreak warning title -->
   <string name="JailbreakWarnings.title">警告</string>
   <!-- Wipe wallet button -->
@@ -407,13 +407,13 @@
   <!-- Paper Key button title -->
   <string name="SecurityCenter.paperKeyTitle">紙本金鑰</string>
   <!-- PIN button description -->
-  <string name="SecurityCenter.pinDescription">保護您的 BRD，防範未經授權的使用者。</string>
+  <string name="SecurityCenter.pinDescription">保護您的 Wagerr，防範未經授權的使用者。</string>
   <!-- PIN button title -->
   <string name="SecurityCenter.pinTitle">6 位數 PIN 碼</string>
   <!-- Security Center Title -->
   <string name="SecurityCenter.title">資訊安全中心</string>
   <!-- Touch ID button description -->
-  <string name="SecurityCenter.touchIdDescription">輕鬆解鎖您的 BRD，並在設定好的限額內寄送款項。</string>
+  <string name="SecurityCenter.touchIdDescription">輕鬆解鎖您的 Wagerr，並在設定好的限額內寄送款項。</string>
   <!-- Touch ID button title -->
   <string name="SecurityCenter.touchIdTitle">Touch ID</string>
   <!-- Security center fingerprint authentication button -->
@@ -423,7 +423,7 @@
   <!-- Balance: $4.00 -->
   <string name="Send.balance">餘額：%1$s</string>
   <!-- Instructions how to allow the camera access for the app -->
-  <string name="Send.cameraUnavailabeMessage.android">到「設定」 &gt; 「應用程式」 &gt; 「BRD」 &gt; 「權限」允許相機存取</string>
+  <string name="Send.cameraUnavailabeMessage.android">到「設定」 &gt; 「應用程式」 &gt; 「Wagerr」 &gt; 「權限」允許相機存取</string>
   <!-- Permission required to access camera -->
   <string name="Send.cameraUnavailabeTitle.android">Wagerr 尚未獲准存取相機</string>
   <!-- Camera not allowed message -->
@@ -509,7 +509,7 @@
   <!-- Start or recover another wallet menu label. -->
   <string name="Settings.wipe">開啟／復原其他錢包</string>
   <!-- Share data view body -->
-  <string name="ShareData.body">請跟我們分享您的匿名資料，以協助我們改善 BRD。其中不會包含財務資訊。我們尊重您的財務隱私。</string>
+  <string name="ShareData.body">請跟我們分享您的匿名資料，以協助我們改善 Wagerr。其中不會包含財務資訊。我們尊重您的財務隱私。</string>
   <!-- Share data header -->
   <string name="ShareData.header">分享資料？</string>
   <!-- Share data switch label. -->
@@ -549,7 +549,7 @@
   <!-- Fingerprint Is Not Setup -->
   <string name="TouchIdSettings.disabledWarning.title.android">指紋驗證並未啟用</string>
   <!-- Touch Id screen label -->
-  <string name="TouchIdSettings.label">以您的指紋解鎖 BRD，並在設定好的限額內寄送款項。</string>
+  <string name="TouchIdSettings.label">以您的指紋解鎖 Wagerr，並在設定好的限額內寄送款項。</string>
   <!-- Link Text (see TouchIdSettings.customizeText) -->
   <string name="TouchIdSettings.linkText">Touch ID 支出限額畫面</string>
   <!-- Spending Limit: b100,000 ($100) -->
@@ -651,7 +651,7 @@
   <!-- Instruction to touch the sensor for fingerprint authentication -->
   <string name="UnlockScreen.touchIdInstructions.android">觸控感測器</string>
   <!-- TouchID prompt text -->
-  <string name="UnlockScreen.touchIdPrompt">解鎖您的 BRD。</string>
+  <string name="UnlockScreen.touchIdPrompt">解鎖您的 Wagerr。</string>
   <!-- Device authentication body -->
   <string name="UnlockScreen.touchIdPrompt.android">請解除鎖定您的 Android 裝置來繼續。</string>
   <!-- Unlock with TouchID accessibility label -->
@@ -705,9 +705,9 @@
   <!-- Updating webview message -->
   <string name="Webview.updating">正在更新……</string>
   <!-- Welcome screen text. (?) will be replaced with the help icon users should look for. -->
-  <string name="Welcome.body">Breadwallet 已經改名爲 BRD，有嶄新的面貌和一些新功能。\n\n如果需要協助，就在大部分畫面的右上角尋找(?)。</string>
+  <string name="Welcome.body">Breadwallet 已經改名爲 Wagerr，有嶄新的面貌和一些新功能。\n\n如果需要協助，就在大部分畫面的右上角尋找(?)。</string>
   <!-- Top title of welcome screen -->
-  <string name="Welcome.title">歡迎使用 BRD！</string>
+  <string name="Welcome.title">歡迎使用 Wagerr！</string>
   <!-- Wipe wallet alert message -->
   <string name="WipeWallet.alertMessage">確定要刪除此錢包嗎？</string>
   <!-- Wipe wallet alert title -->

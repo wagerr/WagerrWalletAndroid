@@ -290,7 +290,7 @@
   <string name="Prompts.NoScreenLock.body.android">A device screen lock is needed to safeguard your wallet. Go to \"Settings\" &gt; \"Security\" &gt; \"Screen lock\" and enable to continue.</string>
   <!-- Warn user key store data has been invalidate because the user changed their security settings. The user must wipe their app data. -->
     <!-- Warn user key store data has been invalidate because the user changed their security settings. The user must uninstall. -->
-  <string name="Alert.keystore.invalidated.uninstall.android">We can\'t proceed because your screen lock settings have been changed (e.g. password was disabled, fingerprints were changed). For security purposes, Android has permanently locked your key store. Therefore, your BRD app data must be wiped by uninstalling.\n\nDon’t worry, your funds are still secure! Reinstall the app and recover your wallet using your paper key.</string>
+  <string name="Alert.keystore.invalidated.uninstall.android">We can\'t proceed because your screen lock settings have been changed (e.g. password was disabled, fingerprints were changed). For security purposes, Android has permanently locked your key store. Therefore, your Wagerr app data must be wiped by uninstalling. Don’t worry, your funds are still secure! Reinstall the app and recover your wallet using your paper key.</string>
   <!-- Device encryption prompt title -->
   <string name="Prompts.NoScreenLock.title.android">Screen lock disabled</string>
   <!-- Warning about paper key. -->
@@ -776,7 +776,7 @@
   <string name="Events.Sport">Sport</string>
   <string name="Events.Tournament">Tournament</string>
   <string name="Events.Round">Round</string>
-    <string name="Alert.keystore.invalidated.wipe.android">We can\\\'t proceed because your screen lock settings have been changed (e.g. password was disabled, fingerprints were changed). For security purposes, Android has permanently locked your key store. Therefore, your BRD app data must be wiped.\\n\\nDon’t worry, your funds are still secure! Recover your wallet using your paper key.</string>
+    <string name="Alert.keystore.invalidated.wipe.android">We can\\\'t proceed because your screen lock settings have been changed (e.g. password was disabled, fingerprints were changed). For security purposes, Android has permanently locked your key store. Therefore, your Wagerr app data must be wiped.\\n\\nDon’t worry, your funds are still secure! Recover your wallet using your paper key.</string>
 
 
 </resources>

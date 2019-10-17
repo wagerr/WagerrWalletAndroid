@@ -145,7 +145,7 @@
   <!-- Email unavailable alert title -->
   <string name="ErrorMessages.emailUnavailableTitle">电子邮箱不可用</string>
   <!-- Message that gets shown when we've detected the user has encountered the looping lock-screen bug. (preserve [ ] characters) -->
-  <string name="ErrorMessages.loopingLockScreen.android">由于您的 Android 版本错误，BRD 无法验证。[Please tap here for more information.]</string>
+  <string name="ErrorMessages.loopingLockScreen.android">由于您的 Android 版本错误，Wagerr 无法验证。[Please tap here for more information.]</string>
   <!-- Messaging unavailable alert title -->
   <string name="ErrorMessages.messagingUnavailableMessage">本设备未被配置来发送消息。</string>
   <!-- Messaging unavailable alert title -->
@@ -301,7 +301,7 @@
   <!-- Transaction rejected prompt title -->
   <string name="Prompts.RecommendRescan.title">交易被拒</string>
   <!-- Share data prompt body -->
-  <string name="Prompts.ShareData.body">与我们分享您的匿名数据来帮助改善 BRD。</string>
+  <string name="Prompts.ShareData.body">与我们分享您的匿名数据来帮助改善 Wagerr。</string>
   <!-- Share data prompt title -->
   <string name="Prompts.ShareData.title">分享匿名数据</string>
   <!-- Enable touch ID prompt body -->
@@ -349,7 +349,7 @@
   <!-- Enter paper key instruction -->
   <string name="RecoverWallet.instruction">输入纸键</string>
   <!-- Recover wallet intro -->
-  <string name="RecoverWallet.intro">用您的纸键恢复您的 BRD。</string>
+  <string name="RecoverWallet.intro">用您的纸键恢复您的 Wagerr。</string>
   <!-- Invalid paper key message -->
   <string name="RecoverWallet.invalid">您输入的纸键无效。请仔细检查每个单词并重试。</string>
   <!-- Previous button accessibility label -->
@@ -413,7 +413,7 @@
   <!-- Security Center Title -->
   <string name="SecurityCenter.title">安全中心</string>
   <!-- Touch ID button description -->
-  <string name="SecurityCenter.touchIdDescription">方便地解锁 BRD，在设定限额下汇钱。</string>
+  <string name="SecurityCenter.touchIdDescription">方便地解锁 Wagerr，在设定限额下汇钱。</string>
   <!-- Touch ID button title -->
   <string name="SecurityCenter.touchIdTitle">触摸 ID</string>
   <!-- Security center fingerprint authentication button -->
@@ -423,7 +423,7 @@
   <!-- Balance: $4.00 -->
   <string name="Send.balance">余额：%1$s</string>
   <!-- Instructions how to allow the camera access for the app -->
-  <string name="Send.cameraUnavailabeMessage.android">在“设置”&gt;“应用”&gt;“BRD”&gt;“权限”中允许访问相机</string>
+  <string name="Send.cameraUnavailabeMessage.android">在“设置”&gt;“应用”&gt;“Wagerr”&gt;“权限”中允许访问相机</string>
   <!-- Permission required to access camera -->
   <string name="Send.cameraUnavailabeTitle.android">Wagerr 没有访问相机的权限</string>
   <!-- Camera not allowed message -->
@@ -509,7 +509,7 @@
   <!-- Start or recover another wallet menu label. -->
   <string name="Settings.wipe">开始/恢复另一钱包</string>
   <!-- Share data view body -->
-  <string name="ShareData.body">同我们分享您的匿名数据来帮助改善 BRD。这不包括任何财务信息。我们尊重您的财务隐私。</string>
+  <string name="ShareData.body">同我们分享您的匿名数据来帮助改善 Wagerr。这不包括任何财务信息。我们尊重您的财务隐私。</string>
   <!-- Share data header -->
   <string name="ShareData.header">共享数据？</string>
   <!-- Share data switch label. -->
@@ -651,7 +651,7 @@
   <!-- Instruction to touch the sensor for fingerprint authentication -->
   <string name="UnlockScreen.touchIdInstructions.android">触控感应器</string>
   <!-- TouchID prompt text -->
-  <string name="UnlockScreen.touchIdPrompt">解锁您的 BRD。</string>
+  <string name="UnlockScreen.touchIdPrompt">解锁您的 Wagerr。</string>
   <!-- Device authentication body -->
   <string name="UnlockScreen.touchIdPrompt.android">请解锁您的安卓设备以便继续。</string>
   <!-- Unlock with TouchID accessibility label -->
@@ -705,7 +705,7 @@
   <!-- Updating webview message -->
   <string name="Webview.updating">正在更新...</string>
   <!-- Welcome screen text. (?) will be replaced with the help icon users should look for. -->
-  <string name="Welcome.body">Breadwallet 更名为 BRD， 并增加了全新的界面和功能。如果您需要帮助，请使用在大多数设备屏幕右上角的(?)</string>
+  <string name="Welcome.body">Breadwallet 更名为 Wagerr， 并增加了全新的界面和功能。如果您需要帮助，请使用在大多数设备屏幕右上角的(?)</string>
   <!-- Top title of welcome screen -->
   <string name="Welcome.title">欢迎使用bread！</string>
   <!-- Wipe wallet alert message -->

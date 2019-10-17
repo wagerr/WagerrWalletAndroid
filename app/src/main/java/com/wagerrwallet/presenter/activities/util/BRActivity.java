@@ -1,17 +1,21 @@
 package com.wagerrwallet.presenter.activities.util;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.wagerrwallet.R;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.activities.DisabledActivity;
 import com.wagerrwallet.presenter.activities.intro.IntroActivity;
 import com.wagerrwallet.presenter.activities.intro.RecoverActivity;
 import com.wagerrwallet.presenter.activities.intro.WriteDownActivity;
+import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.tools.animation.BRAnimator;
+import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRApiManager;
 import com.wagerrwallet.tools.manager.InternetManager;
 import com.wagerrwallet.tools.security.AuthManager;
@@ -74,7 +78,25 @@ public class BRActivity extends Activity {
         init(this);
         super.onResume();
         WagerrApp.backgroundedTime = 0;
-
+        final WagerrApp app = ((WagerrApp)this.getApplicationContext());
+        final BRActivity act = this;
+        String dialogType = app.isDeviceStateValid();
+        // if (!m.isPasscodeEnabled(app)) {
+        if ( !"".equals(dialogType) ) {
+            //Device passcode/password should be enabled for the app to work
+            BRDialog.showCustomDialog(act, act.getString(R.string.JailbreakWarnings_title), dialogType,
+                    act.getString(R.string.AccessibilityLabels_close), null, new BRDialogView.BROnClickListener() {
+                        @Override
+                        public void onClick(BRDialogView brDialogView) {
+                            act.finish();
+                        }
+                    }, null, new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            act.finish();
+                        }
+                    }, 0);
+        }
     }
 
     @Override

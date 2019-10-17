@@ -174,7 +174,7 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             closeDatabase();
             if (cursor != null)
                 cursor.close();
-            printTest(app, iso);
+            //printTest(app, iso);
         }
         return transactions;
     }
@@ -208,7 +208,7 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             closeDatabase();
             if (cursor != null)
                 cursor.close();
-            printTest(app, iso);
+            //printTest(app, iso);
         }
         return transactions;
     }
@@ -248,7 +248,7 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             closeDatabase();
             if (cursor != null)
                 cursor.close();
-            printTest(app, iso);
+            //printTest(app, iso);
         }
         return transactions;
     }

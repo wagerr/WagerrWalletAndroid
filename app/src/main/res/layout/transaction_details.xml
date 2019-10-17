@@ -61,34 +61,37 @@
             android:textColor="@color/settings_chevron_right"
             app:customTFont="CircularPro-Bold.otf"/>
 
-        <com.wagerrwallet.presenter.customviews.BRText
-            android:id="@+id/amount_now"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tx_amount"
-            android:layout_toLeftOf="@id/label_now"
-            android:text="X"
-            android:textColor="@color/settings_chevron_right"
-            app:customTFont="CircularPro-Bold.otf"/>
+    <RelativeLayout
+        android:id="@+id/amountnow_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tx_amount">
 
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/label_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tx_amount"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="2dp"
-
+            android:layout_toEndOf="@id/amount_now"
+            android:layout_marginStart="2dp"
             android:text=" now"
             android:textColor="@color/settings_chevron_right"
             app:customTFont="CircularPro-Book.otf" />
 
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/amount_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$3.0453"
+            android:textColor="@color/settings_chevron_right"
+            app:customTFont="CircularPro-Bold.otf"/>
+    </RelativeLayout>
 
         <View
             android:id="@+id/divider1"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_below="@id/amount_now"
+            android:layout_below="@id/amountnow_parent"
             android:layout_marginTop="14dp"
             android:background="@color/light_gray"/>
 

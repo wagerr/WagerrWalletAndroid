@@ -188,9 +188,9 @@ public class WagerrOpCodeManager {
                 if (betMappingEntity != null)
                 {
                     BetMappingTxDataStore bmds = BetMappingTxDataStore.getInstance(app);
-                    Log.e(TAG, "storing bettx mapping :" + tx.getReverseHash() + ", " + tx.getBlockHeight() + "\n" + betMappingEntity );
+                    //Log.e(TAG, "storing bettx mapping :" + tx.getReverseHash() + ", " + tx.getBlockHeight() + "\n" + betMappingEntity );
                     BetMappingEntity betMappingEntity1 = bmds.putTransaction(app, WalletWagerrManager.ISO, betMappingEntity );
-                    Log.e(TAG, "retrieving bettx mapping from DB: "  + tx.getReverseHash() + "\n" + betMappingEntity1 );
+                    //Log.e(TAG, "retrieving bettx mapping from DB: "  + tx.getReverseHash() + "\n" + betMappingEntity1 );
                 }
 
                 if (betEventEntity != null)

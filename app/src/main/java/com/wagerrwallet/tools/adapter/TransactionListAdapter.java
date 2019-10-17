@@ -251,9 +251,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         long nCurrentHeight = BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext));
 
         if (item.isCoinbase() && item.getBlockHeight() != Integer.MAX_VALUE) {       // then payout reward
-            boolean immature = (nCurrentHeight-item.getBlockHeight()) > PAYOUT_MATURITY;
+            boolean immature = (nCurrentHeight-item.getBlockHeight()) <= PAYOUT_MATURITY;
             String strMatureInfo = String.format( "%d/%d", (nCurrentHeight-item.getBlockHeight()), PAYOUT_MATURITY );
-            int amountColor = ( immature ) ? R.color.transaction_amount_payout_color:R.color.transaction_amount_inmature_color;
+            int amountColor = ( !immature ) ? R.color.transaction_amount_payout_color:R.color.transaction_amount_inmature_color;
             convertView.transactionAmount.setTextColor(mContext.getResources().getColor(amountColor, null));
             BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
             BetResultEntity br = brds.getByBlockHeight(mContext, wallet.getIso(mContext), item.getBlockHeight() - 1);

@@ -423,7 +423,7 @@
   <!-- Balance: $4.00 -->
   <string name="Send.balance">Saldo: %1$s</string>
   <!-- Instructions how to allow the camera access for the app -->
-  <string name="Send.cameraUnavailabeMessage.android">Consenti l’accesso alla fotocamera in “Impostazioni” &gt; “Apps” &gt; “BRD” &gt; “Permessi”</string>
+  <string name="Send.cameraUnavailabeMessage.android">Consenti l’accesso alla fotocamera in “Impostazioni” &gt; “Apps” &gt; “Wagerr” &gt; “Permessi”</string>
   <!-- Permission required to access camera -->
   <string name="Send.cameraUnavailabeTitle.android">L’accesso alla fotocamera non è consentito a Wagerr.</string>
   <!-- Camera not allowed message -->

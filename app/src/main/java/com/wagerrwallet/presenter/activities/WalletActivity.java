@@ -544,6 +544,7 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
 
         setupNetworking();
 
+        TxManager.getInstance().adapter.updateData();
         TxManager.getInstance().onResume(this);
 
         CurrencyDataSource.getInstance(this).addOnDataChangedListener(new CurrencyDataSource.OnDataChanged() {

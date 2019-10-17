@@ -24,6 +24,7 @@ import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.customviews.BRButton;
 import com.wagerrwallet.presenter.customviews.BRKeyboard;
 import com.wagerrwallet.presenter.customviews.BRLinearLayoutWithCaret;
+import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.SlideDetector;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
@@ -36,6 +37,8 @@ import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.abstracts.OnBalanceChangedListener;
 import com.wagerrwallet.wallet.wallets.util.CryptoUriParser;
+
+import java.math.BigDecimal;
 
 import static com.wagerrwallet.tools.animation.BRAnimator.animateBackgroundDim;
 import static com.wagerrwallet.tools.animation.BRAnimator.animateSignalSlide;
@@ -172,6 +175,22 @@ public class FragmentReceive extends Fragment {
                 QRUtils.share("sms:", getActivity(), cryptoUri.toString());
             }
         });
+/*
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!BRAnimator.isClickAllowed()) {
+                    return;
+                }
+
+                BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+                CryptoRequest cryptoRequest = new CryptoRequest.Builder().setAddress(walletManager.decorateAddress(getActivity(), mReceiveAddress)).setAmount(BigDecimal.ZERO).build();
+                Uri cryptoUri = CryptoUriParser.createCryptoUrl(getActivity(), walletManager, cryptoRequest);
+                QRUtils.sendShareIntent(getActivity(), cryptoUri.toString(), cryptoRequest.getAddress(true));
+            }
+        });
+*/
+
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,6 +199,7 @@ public class FragmentReceive extends Fragment {
                 showShareButtons(shareButtonsShown);
             }
         });
+
         mAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

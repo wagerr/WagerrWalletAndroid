@@ -81,6 +81,8 @@ public class BRAnimator {
     public static float t2Size;
     public static boolean supportIsShowing;
 
+    public static EventTxUiHolder showFragmentEvent = null;
+
     public static void showBreadSignal(Activity activity, String title, String iconDescription, int drawableId, BROnSignalCompletion completion) {
         fragmentSignal = new FragmentSignal();
         Bundle bundle = new Bundle();

@@ -18,6 +18,7 @@ import com.wagerrwallet.tools.manager.BREventManager;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.SendManager;
+import com.wagerrwallet.tools.security.PostAuth;
 import com.wagerrwallet.tools.threads.ImportPrivKeyTask;
 import com.wagerrwallet.tools.threads.PaymentProtocolTask;
 import com.wagerrwallet.tools.util.BRConstants;
@@ -61,6 +62,16 @@ import java.util.Map;
 public class CryptoUriParser {
     private static final String TAG = CryptoUriParser.class.getName();
     private static final Object lockObject = new Object();
+
+    public static final String AMOUNT = "amount";
+    public static final String VALUE = "value";
+    public static final String LABEL = "label";
+    public static final String MESSAGE = "message";
+    public static final String REQ = "req"; // "req" parameter, whose value is a required variable which are prefixed with a req-.
+    public static final String R_URL = "r"; // "r" parameter, whose value is a URL from which a PaymentRequest message should be fetched
+    public static final String SCAN_QR = "scanqr";
+    public static final String ADDRESS_LIST = "addressList";
+    public static final String ADDRESS = "address";
 
     public static synchronized boolean processRequest(Context app, String url, BaseWalletManager walletManager) {
         if (url == null) {
@@ -328,4 +339,43 @@ public class CryptoUriParser {
 
     }
 
+    /**
+     * Generate an Uri for a given CryptoRequest including the wallet schema.
+     * @param context       Context were was called.
+     * @param walletManager Wallet manager.
+     * @param request       Request information to be included in the Uri.
+     * @return  An Uri with the request information.
+     */
+    public static Uri createCryptoUrl(Context context,
+                                      BaseWalletManager walletManager,
+                                      CryptoRequest request) {
+        String currencyCode = WalletWagerrManager.ISO;
+        Uri.Builder builder = new Uri.Builder();
+        String walletScheme = walletManager.getScheme(context);
+        String cleanAddress = request.getAddress(false);
+        builder = builder.scheme(walletScheme);
+        if (!Utils.isNullOrEmpty(cleanAddress)) {
+            builder = builder.appendPath(cleanAddress);
+        }
+        if (request.getAmount() != null && request.getAmount().compareTo(BigDecimal.ZERO) != 0) {
+            if (currencyCode.equalsIgnoreCase(WalletWagerrManager.ISO)) {
+                BigDecimal amount = WalletWagerrManager.getInstance(context).getCryptoForSmallestCrypto(context, request.getAmount());
+                builder = builder.appendQueryParameter(AMOUNT, amount.toPlainString());
+            } else {
+                throw new RuntimeException("URI not supported for: " + currencyCode);
+            }
+        }
+        if (!Utils.isNullOrEmpty(request.getLabel())) {
+            builder = builder.appendQueryParameter(LABEL, request.getLabel());
+        }
+        if (!Utils.isNullOrEmpty(request.getMessage())) {
+            builder = builder.appendQueryParameter(MESSAGE, request.getMessage());
+        }
+        if (!Utils.isNullOrEmpty(request.getRUrl())) {
+            builder = builder.appendQueryParameter(R_URL, request.getRUrl());
+        }
+
+        return Uri.parse(builder.build().toString().replace("/", ""));
+
+    }
 }

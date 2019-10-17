@@ -164,7 +164,7 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
             }
         });
 
-        mPromptContinue.setColor(Color.parseColor("#4b77f3"));
+        mPromptContinue.setColor(Color.parseColor("#c20c23"));
         mPromptContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

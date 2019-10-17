@@ -205,11 +205,11 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
 
             r = database.update(BRSQLiteHelper.BETX_TABLE_NAME, values, BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
                         new String[]{String.valueOf(event.getEventID()), iso.toUpperCase()});
-
+/*
             if (r > 0)
                 Log.e(TAG, "transaction updated with id: " + event.getTxHash());
             else Log.e(TAG, "updateTransaction: Warning: r:" + r);
-
+*/
             ret = (r > 0);
         } catch (Exception ex) {
             BRReportsManager.reportBug(ex);
@@ -222,7 +222,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
     }
 
     public boolean updateOdds(Context app, String iso, BetEventEntity transactionEntity) {
-        Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
+        //Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
 
         ContentValues args = new ContentValues();
         args.put(BRSQLiteHelper.BETX_LASTUPDATED, transactionEntity.getLastUpdated());
@@ -238,7 +238,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
     }
 
     public boolean updateSpreadsMarket(Context app, String iso, BetEventEntity transactionEntity) {
-        Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
+        //Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
 
         ContentValues args = new ContentValues();
         args.put(BRSQLiteHelper.BETX_SPREAD_POINTS, transactionEntity.getSpreadPoints());
@@ -252,7 +252,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
     }
 
     public boolean updateTotalsMarket(Context app, String iso, BetEventEntity transactionEntity) {
-        Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
+//        Log.e(TAG, "updateOdds: " + transactionEntity.getTxISO() + ":" + transactionEntity.getTxHash() + ", eventID:" + transactionEntity.getEventID() + ", b:" + transactionEntity.getBlockheight() + ", t:" + transactionEntity.getTimestamp());
 
         ContentValues args = new ContentValues();
         args.put(BRSQLiteHelper.BETX_TOTAL_POINTS, transactionEntity.getTotalPoints());

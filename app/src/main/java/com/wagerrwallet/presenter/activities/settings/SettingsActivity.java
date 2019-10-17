@@ -243,7 +243,7 @@ public class SettingsActivity extends BRActivity {
         }, false));
 
         items.add(new BRSettingsItem(getString(R.string.Settings_other), "", null, true));
-
+/* remove this option upon request
         items.add(new BRSettingsItem(getString(R.string.Settings_shareData), "ON", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -252,7 +252,7 @@ public class SettingsActivity extends BRActivity {
                 overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
         }, false));
-
+*/
         items.add(new BRSettingsItem(getString(R.string.Settings_review), "", new View.OnClickListener() {
             @Override
             public void onClick(View v) {

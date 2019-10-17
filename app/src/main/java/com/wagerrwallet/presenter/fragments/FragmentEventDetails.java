@@ -34,6 +34,7 @@ import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
@@ -369,8 +370,9 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
             CryptoRequest item = new CryptoRequest(tx, null, false, "", "", new BigDecimal(amount));
             SendManager.sendTransaction(getActivity(), item, wallet);
+            BRAnimator.showFragmentEvent = mTransaction;
+            dismiss();  // close fragment
         }
-        dismiss();  // close fragment
     }
 
     protected void CancelBet()  {

@@ -46,6 +46,7 @@ import com.wagerrwallet.tools.manager.BRNotificationManager;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.InternetManager;
+import com.wagerrwallet.tools.manager.TxManager;
 import com.wagerrwallet.tools.security.BRKeyStore;
 import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
 import com.wagerrwallet.tools.sqlite.BetMappingTxDataStore;
@@ -286,7 +287,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
                     tx.getOutputAddresses(), tx.getInputAddresses(),
                     getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
                     getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)
-                    , (tx.getInputAddresses().length==1 && "".equals(tx.getInputAddresses()[0])));      // is coinbase or POS
+                    , (tx.getInputAddresses().length==1 && tx.getInputAddresses()[0].length()==0) );      // is coinbase or POS
 
             BetEntity be = WagerrOpCodeManager.getEventIdFromCoreTx(tx);
             txUiHolder.setBetEntity(be);
@@ -620,8 +621,15 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
                             Utils.isNullOrEmpty(error) ? app.getString(R.string.Alerts_sendSuccessSubheader) : "Error: " + error, Utils.isNullOrEmpty(error) ? R.drawable.ic_check_mark_white : R.drawable.ic_error_outline_black_24dp, new BROnSignalCompletion() {
                                 @Override
                                 public void onComplete() {
-                                    if (!((Activity) app).isDestroyed())
+                                    if (!((Activity) app).isDestroyed()) {
                                         ((Activity) app).getFragmentManager().popBackStack();
+                                    }
+
+                                    if (BRAnimator.showFragmentEvent!=null) {
+                                        BRAnimator.showEventDetails((Activity) app, BRAnimator.showFragmentEvent, 0);
+                                        BRAnimator.showFragmentEvent=null;
+                                        TxManager.getInstance().adapter.updateData();
+                                    }
                                 }
                             });
 

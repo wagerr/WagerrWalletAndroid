@@ -71,6 +71,7 @@ public class FragmentTxDetails extends DialogFragment {
     private BRText mShowHide;
     private BRText mAmountWhenSent;
     private BRText mAmountNow;
+    private BRText mLabelNow;
 
     private ImageButton mCloseButton;
     private RelativeLayout mDetailsContainer;
@@ -96,6 +97,7 @@ public class FragmentTxDetails extends DialogFragment {
         View rootView = inflater.inflate(R.layout.transaction_details, container, false);
 
         mAmountNow = rootView.findViewById(R.id.amount_now);
+        mLabelNow = rootView.findViewById(R.id.label_now);
         mAmountWhenSent = rootView.findViewById(R.id.amount_when_sent);
         mTxAction = rootView.findViewById(R.id.tx_action);
         mTxAmount = rootView.findViewById(R.id.tx_amount);

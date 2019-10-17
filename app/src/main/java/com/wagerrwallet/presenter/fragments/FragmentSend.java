@@ -45,6 +45,7 @@ import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.SendManager;
+import com.wagerrwallet.tools.security.PostAuth;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.tools.util.CurrencyUtils;

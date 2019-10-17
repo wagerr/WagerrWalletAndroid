@@ -104,6 +104,7 @@ public class SendManager {
                         tryPay(app, payment, walletManager);
                     else
                         FirebaseCrash.report(new NullPointerException("did not send, timedOut!"));
+
                     return; //return so no error is shown
                 } catch (InsufficientFundsException ignored) {
                     errTitle[0] = app.getString(R.string.Alerts_sendFailure);
@@ -167,7 +168,7 @@ public class SendManager {
                 }
 
                 //show the message if we have one to show
-                if (errTitle[0] != null && errMessage[0] != null)
+                if (errTitle[0] != null && errMessage[0] != null) {
                     BRExecutor.getInstance().forMainThreadTasks().execute(new Runnable() {
                         @Override
                         public void run() {
@@ -179,6 +180,7 @@ public class SendManager {
                             }, null, null, 0);
                         }
                     });
+                }
 
             }
         });

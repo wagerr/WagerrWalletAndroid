@@ -1,11 +1,17 @@
 package com.wagerrwallet.tools.qrcode;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.graphics.Point;
 import android.net.Uri;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.Display;
@@ -19,9 +25,11 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import com.wagerrwallet.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
@@ -55,6 +63,14 @@ import static android.graphics.Color.WHITE;
  */
 public class QRUtils {
     private static final String TAG = QRUtils.class.getName();
+    private static final String SHARE_IMAGE_TYPE = "image/jpeg";
+    private static final String INTENT_TYPE = "image/*";
+    private static final String SHARE_TITLE = "QrCodeTitle";
+    public static final int WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_ID = 1133;
+    private static final int BITMAP_SIZE = 500;
+    private static final int BITMAP_QUALITY = 100;
+    private static String mQrDataToShare; // TODO to fix this later in the code.
+    private static String mTextToShare; // TODO same as above
 
     public static Bitmap encodeAsBitmap(String content, int dimension) {
 
@@ -221,5 +237,51 @@ public class QRUtils {
         return f;
     }
 
+    /**
+     * Send a share intent with a QR code and a text.
+     * @param context       The context in which we are operating.
+     * @param qrData        Uri used to generate the QR code.
+     * @param text          Uri to be include in the message.
+     */
+    public static void sendShareIntent(Activity context, String qrData, String text) {
+        if (context == null) {
+            Log.e(TAG, "sendShareIntent: context is null");
+            return;
+        }
+        mQrDataToShare = qrData;
+        mTextToShare = text;
+        // todo Permission check should be done before calling this method to avoid storing data in static variables
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(context,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_ID);
+        } else {
+            share(context);
+        }
+    }
 
+    public static void share(Context context) {
+        Bitmap qrImage = QRUtils.encodeAsBitmap(mQrDataToShare, BITMAP_SIZE);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType(SHARE_IMAGE_TYPE);
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, SHARE_TITLE);
+        values.put(MediaStore.Images.Media.MIME_TYPE, SHARE_IMAGE_TYPE);
+        Uri fileUri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        if (fileUri != null) {
+            try (OutputStream outputStream = context.getContentResolver().openOutputStream(fileUri)) {
+                qrImage.compress(Bitmap.CompressFormat.JPEG, BITMAP_QUALITY, outputStream);
+            } catch (IOException e) {
+                Log.e(TAG, "share: ", e);
+            }
+            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            shareIntent.setType(INTENT_TYPE);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, mTextToShare);
+            String emailSubject = "Wagerr Address";
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.Receive_share)));
+        }
+    }
 }
