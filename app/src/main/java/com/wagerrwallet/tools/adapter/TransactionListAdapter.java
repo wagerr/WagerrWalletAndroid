@@ -249,6 +249,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         String txDescription = "", txDate = "";
         long eventID = 0;
         long nCurrentHeight = BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext));
+        boolean isNormalTx = true;
 
         if (item.isCoinbase() && item.getBlockHeight() != Integer.MAX_VALUE) {       // then payout reward
             boolean immature = (nCurrentHeight-item.getBlockHeight()) <= PAYOUT_MATURITY;
@@ -266,10 +267,12 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     txDescription = String.format("Event #%d: info not avalable", eventID);
                 }
                 txDate = String.format("PAYOUT Event #%d", eventID);
-            } else {
+            }
+            else {
                 txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
                 txDate = "PAYOUT";
             }
+            isNormalTx=false;
             if (immature)   txDate+=" " + strMatureInfo;
         } else if (item.getBetEntity()!=null) {        // outgoing bet
             eventID = item.getBetEntity().getEventID();
@@ -281,8 +284,11 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 txDescription = String.format("Event #%d: info not avalable", eventID);
                 txDate = String.format("BET %s", item.getBetEntity().getOutcome().toString());
             }
+            isNormalTx=false;
         }
-        else {      // regular tx
+
+
+        if (isNormalTx) {      // regular tx
             if (level > 4) {
                 txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
             } else {

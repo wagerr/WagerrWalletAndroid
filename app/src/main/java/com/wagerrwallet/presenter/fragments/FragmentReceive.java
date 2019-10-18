@@ -175,7 +175,7 @@ public class FragmentReceive extends Fragment {
                 QRUtils.share("sms:", getActivity(), cryptoUri.toString());
             }
         });
-/*
+
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,8 +189,8 @@ public class FragmentReceive extends Fragment {
                 QRUtils.sendShareIntent(getActivity(), cryptoUri.toString(), cryptoRequest.getAddress(true));
             }
         });
-*/
 
+/*
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,7 +199,7 @@ public class FragmentReceive extends Fragment {
                 showShareButtons(shareButtonsShown);
             }
         });
-
+*/
         mAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -129,7 +129,9 @@ public class CurrencyDataSource implements BRDataSourceInterface {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 CurrencyEntity curEntity = cursorToCurrency(cursor);
-                currencies.add(curEntity);
+                if ( !curEntity.code.equals(iso.toUpperCase()) ) {
+                    currencies.add(curEntity);
+                }
                 cursor.moveToNext();
             }
             // make sure to close the cursor
