@@ -458,6 +458,19 @@ public class BRSharedPrefs {
         editor.apply();
     }
 
+    public static boolean getFingerprintDismissed(Context context) {
+        SharedPreferences settingsToGet = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return settingsToGet.getBoolean("FingerprintDismissed", false);
+    }
+
+    public static void putFingerprintDismissed(Context context, boolean dismissed) {
+        if (context == null) return;
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("FingerprintDismissed", dismissed);
+        editor.apply();
+    }
+
     public static String getTrustNode(Context context, String iso) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString("trustNode_" + iso.toUpperCase(), "");

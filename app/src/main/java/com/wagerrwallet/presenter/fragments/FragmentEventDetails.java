@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -39,6 +41,7 @@ import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.SendManager;
+import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.tools.util.BRDateUtil;
 import com.wagerrwallet.tools.util.CurrencyUtils;
 import com.wagerrwallet.tools.util.Utils;
@@ -122,6 +125,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private ImageButton mAcceptBet;
     private ImageButton mCancelBet;
     private View mCurrentSelectedBetOption = null;
+    private ImageButton faq;
     private BRText mPotentialReward;
 
 
@@ -152,6 +156,16 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.event_details, container, false);
+
+        faq = (ImageButton) rootView.findViewById(R.id.faq_button);
+
+        faq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!BRAnimator.isClickAllowed()) return;
+                BRAnimator.showSupportFragment(getActivity(), BRConstants.betSlip);
+            }
+        });
 
         mMainLayout = rootView.findViewById(R.id.dynamic_container);
         mTxEventHeader = rootView.findViewById(R.id.tx_eventheader);
@@ -229,6 +243,33 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             }
         });
 
+
+        mTxAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String oddTx = ((BRText)mCurrentSelectedBetOption).getText().toString();
+                float odds = 0;
+                int value = getContext().getResources().getInteger(R.integer.min_bet_amount);
+                int minvalue = value;
+                Float fValue = 0.0f;
+                try {
+                    odds = Float.parseFloat( oddTx );
+                    fValue = Float.parseFloat(mTxAmount.getText().toString());
+                    value = Math.max(minvalue, fValue.intValue());
+                } catch (NumberFormatException e) {
+                }
+                setRewardAmount(value, odds);
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO Auto-generated method stub
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+            }
+        });
+
         mSpreadsContainer = rootView.findViewById(R.id.spreads_container);
         mSpreadsLayout = rootView.findViewById(R.id.spreads_layout);
         mTxSpreadPoints= rootView.findViewById(R.id.tx_spread_points);
@@ -266,7 +307,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTxLastDate = rootView.findViewById(R.id.tx_last_date);
         mToFrom = rootView.findViewById(R.id.tx_to_from);
         mToFromAddress = rootView.findViewById(R.id.tx_to_from_address);
-        mMemoText = rootView.findViewById(R.id.memo);
+        //mMemoText = rootView.findViewById(R.id.memo);
         mStartingBalance = rootView.findViewById(R.id.tx_starting_balance);
         mEndingBalance = rootView.findViewById(R.id.tx_ending_balance);
         mExchangeRate = rootView.findViewById(R.id.exchange_rate);
@@ -333,11 +374,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             try {
                 odds = Float.parseFloat( oddTx );
                 stake = amount;
-                long rewardAmount = stake + (long)((stake * (odds - 1)) * 0.94);
-                BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
-                BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
-                String rewardFiatAmountStr = CurrencyUtils.getFormattedAmount(getContext(), BRSharedPrefs.getPreferredFiatIso(getContext()), rewardFiatAmount);
-                mPotentialReward.setText("" + rewardAmount + "  WGR (" + rewardFiatAmountStr +")" );
+                setRewardAmount(stake, odds);
             }
             catch (NumberFormatException e) {
                 mPotentialReward.setText("---");
@@ -347,6 +384,21 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTxCurrency.setText(" WGR (" + fiatAmountStr +")" );
 
         //mTxAmount.setX(seekBar.getX() + posX);
+    }
+
+    protected void setRewardAmount(long stake, float odds)  {
+        BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+
+        try {
+            long rewardAmount = stake + (long)((stake * (odds - 1)) * 0.94);
+            BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
+            BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
+            String rewardFiatAmountStr = CurrencyUtils.getFormattedAmount(getContext(), BRSharedPrefs.getPreferredFiatIso(getContext()), rewardFiatAmount);
+            mPotentialReward.setText("" + rewardAmount + "  WGR (" + rewardFiatAmountStr +")" );
+        }
+        catch (NumberFormatException e) {
+            mPotentialReward.setText("---");
+        }
     }
 
     protected void AcceptBet()  {
@@ -370,7 +422,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
             CryptoRequest item = new CryptoRequest(tx, null, false, "", "", new BigDecimal(amount));
             SendManager.sendTransaction(getActivity(), item, wallet);
-            BRAnimator.showFragmentEvent = mTransaction;
+            //BRAnimator.showFragmentEvent = mTransaction;
             dismiss();  // close fragment
         }
     }

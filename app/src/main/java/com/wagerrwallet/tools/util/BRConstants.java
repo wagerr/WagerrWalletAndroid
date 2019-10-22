@@ -117,6 +117,8 @@ public class BRConstants {
     public static final String loopBug = "android-loop-bug";
     public static final String bchFaq = "bitcoin-cash";
 
+    public static final String betSlip = "bet-slip";
+
     private BRConstants() {
     }
 

@@ -170,7 +170,73 @@ public class BRAnimator {
 
     public static void showSupportFragment(Activity app, String articleId) {
 
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/Wagerrpublictest"));
+        String URL = "https://wagerr.zendesk.com/hc/en-us/";
+
+        switch (articleId)  {
+
+            case BRConstants.walletDisabled:
+                URL += "articles/360035353391-Why-is-my-wallet-disabled-";
+                break;
+
+            case BRConstants.receive:
+                URL += "articles/360035353511-How-do-I-receive-Wagerr-WGR-";
+                break;
+
+            case BRConstants.setPin:
+                URL += "/articles/360035353791-Why-do-i-need-a-PIN-";
+                break;
+
+            case BRConstants.enableFingerprint:
+                URL += "articles/360035353591-What-is-fingerprint-authentication-";
+                break;
+
+            case BRConstants.fingerprintSpendingLimit:
+                URL += "articles/360035353631-What-is-the-fingerprint-touch-ID-spending-limit-";
+                break;
+
+            case BRConstants.wipeWallet:
+                URL += "articles/360035358811-How-do-I-wipe-my-wallet-";
+                break;
+
+            case BRConstants.paperKey:
+            case BRConstants.writePhrase:
+            case BRConstants.recoverWallet:
+                URL += "articles/360035353811-What-is-a-recovery-key-";
+                break;
+
+            case BRConstants.importWallet:
+                URL += "articles/360034979472-What-happens-when-I-import-a-Wagerr-private-key-";
+                break;
+
+            case BRConstants.displayCurrency:
+                URL += "articles/360035353871-How-does-the-Wagerr-wallet-app-show-my-balance-in-my-local-currency-";
+                break;
+
+            case BRConstants.reScan:
+                URL += "articles/360034979492-When-should-I-re-sync-my-Wagerr-wallet-with-the-blockchain-";
+                break;
+
+            case BRConstants.securityCenter:
+                URL += "articles/360035353831-What-is-the-Security-Center-";
+                break;
+
+            case BRConstants.send:
+                URL += "articles/360034979232-How-can-I-send-Wagerr-WGR-";
+                break;
+
+            case BRConstants.requestAmount:
+                URL += "articles/360034983592-How-do-I-use-the-Request-an-Amount-screen-in-my-Wagerr-wallet-";
+                break;
+
+            case BRConstants.betSlip:
+                URL += "articles/360035358891-Betting-Slip";
+                break;
+
+            default:
+                URL += "categories/360002247832-Mobile-Application";
+                break;
+        }
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
         app.startActivity(browserIntent);
         app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
 

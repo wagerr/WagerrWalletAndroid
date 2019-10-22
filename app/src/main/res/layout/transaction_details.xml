@@ -199,47 +199,14 @@
             android:textSize="12sp"
             app:customTFont="CircularPro-Book.otf" />
 
-        <com.wagerrwallet.presenter.customviews.BRText
-            android:id="@+id/memo_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/divider3"
-            android:layout_marginLeft="14dp"
-            android:layout_marginTop="14dp"
-            android:text="Memo"
 
-            android:textColor="@color/settings_chevron_right"
-            app:customTFont="CircularPro-Book.otf"/>
-
-        <com.wagerrwallet.presenter.customviews.BRText
-            android:id="@+id/memo"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/divider3"
-            android:paddingEnd="16dp"
-            android:gravity="end"
-            android:layout_marginTop="14dp"
-            android:layout_toEndOf="@id/memo_label"
-            android:text="Sample transaction memo would go here. Some things are truly better left unsaid"
-            android:textSize="12sp"
-            app:customTFont="CircularPro-Book.otf"/>
-
-
-        <View
-            android:id="@+id/memo_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_below="@id/memo"
-            android:layout_marginTop="14dp"
-            android:background="@color/light_gray"/>
 
 
         <RelativeLayout
             android:id="@+id/details_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/memo"
+            android:layout_below="@id/divider3"
             android:layout_marginTop="14dp"
             android:visibility="gone">
 
@@ -384,6 +351,22 @@
                 app:customTFont="CircularPro-Book.otf"/>
 
             <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/link_open_in_explorer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/transaction_id_label"
+                android:layout_alignLeft="@id/transaction_id_label"
+                android:layout_marginTop="6dp"
+                android:ellipsize="middle"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:singleLine="true"
+                android:text="Open in explorer"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
+                app:customTFont="CircularPro-Book.otf" />
+
+            <com.wagerrwallet.presenter.customviews.BRText
                 android:id="@+id/transaction_id"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -403,7 +386,7 @@
                 android:id="@+id/divider8"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_below="@id/transaction_id"
+                android:layout_below="@id/link_open_in_explorer"
                 android:layout_marginTop="14dp"
                 android:background="@color/light_gray"/>
 

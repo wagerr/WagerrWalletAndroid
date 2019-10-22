@@ -23,6 +23,7 @@ import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.customviews.BRButton;
 import com.wagerrwallet.presenter.customviews.BRKeyboard;
 import com.wagerrwallet.presenter.customviews.BRLinearLayoutWithCaret;
+import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.SlideDetector;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
@@ -232,6 +233,7 @@ public class FragmentRequestAmount extends Fragment {
                 QRUtils.share("sms:", getActivity(), bitcoinUri.toString());
             }
         });
+/*
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,6 +243,21 @@ public class FragmentRequestAmount extends Fragment {
                 showKeyboard(false);
             }
         });
+*/
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!BRAnimator.isClickAllowed()) {
+                    return;
+                }
+                showKeyboard(false);
+                BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+                CryptoRequest cryptoRequest = new CryptoRequest.Builder().setAddress(walletManager.decorateAddress(getActivity(), mReceiveAddress)).setAmount(new BigDecimal(getAmount())).build();
+                Uri cryptoUri = CryptoUriParser.createCryptoUrl(getActivity(), walletManager, cryptoRequest);
+                QRUtils.sendShareIntent(getActivity(), cryptoUri.toString(), cryptoRequest.getAddress(true));
+            }
+        });
+
         mAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

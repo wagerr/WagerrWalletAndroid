@@ -98,7 +98,7 @@ public class AboutActivity extends BRActivity {
         policyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.wagerr.com/privacy/"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/wagerr/WagerrWalletAndroid/blob/master/PrivacyPolicy.md"));
                 startActivity(browserIntent);
                 app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
             }

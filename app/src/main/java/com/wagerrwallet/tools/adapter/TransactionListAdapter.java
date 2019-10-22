@@ -181,7 +181,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (received)
             convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.transaction_amount_received_color, null));
         else
-            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.total_assets_usd_color, null));
+            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.transaction_amount_sent_color, null));
 
         // If this transaction failed, show the "FAILED" indicator in the cell
         if (!item.isValid())
@@ -251,30 +251,38 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         long nCurrentHeight = BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext));
         boolean isNormalTx = true;
 
-        if (item.isCoinbase() && item.getBlockHeight() != Integer.MAX_VALUE) {       // then payout reward
-            boolean immature = (nCurrentHeight-item.getBlockHeight()) <= PAYOUT_MATURITY;
-            String strMatureInfo = String.format( "%d/%d", (nCurrentHeight-item.getBlockHeight()), PAYOUT_MATURITY );
-            int amountColor = ( !immature ) ? R.color.transaction_amount_payout_color:R.color.transaction_amount_inmature_color;
-            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(amountColor, null));
-            BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
-            BetResultEntity br = brds.getByBlockHeight(mContext, wallet.getIso(mContext), item.getBlockHeight() - 1);
-            if (br != null) {
-                eventID = br.getEventID();
-                EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
-                if (ev != null) {
-                    txDescription = String.format("%s - %s", ev.getTxHomeTeam(), ev.getTxAwayTeam());
+        if (item.getBetEntity()==null)  {
+            if (item.isCoinbase() && item.getBlockHeight() != Integer.MAX_VALUE) {       // then payout reward
+                boolean immature = (nCurrentHeight - item.getBlockHeight()) <= PAYOUT_MATURITY;
+                String strMatureInfo = String.format("%d/%d", (nCurrentHeight - item.getBlockHeight()), PAYOUT_MATURITY);
+                int amountColor = (!immature) ? R.color.transaction_amount_payout_color : R.color.transaction_amount_inmature_color;
+                convertView.transactionAmount.setTextColor(mContext.getResources().getColor(amountColor, null));
+                BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
+                BetResultEntity br = brds.getByBlockHeight(mContext, wallet.getIso(mContext), item.getBlockHeight() - 1);
+                if (br != null) {
+                    eventID = br.getEventID();
+                    EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
+                    if (ev != null) {
+                        txDescription = String.format("%s - %s", ev.getTxHomeTeam(), ev.getTxAwayTeam());
+                    } else {
+                        txDescription = String.format("Event #%d: info not avalable", eventID);
+                    }
+                    txDate = String.format("PAYOUT Event #%d", eventID);
                 } else {
-                    txDescription = String.format("Event #%d: info not avalable", eventID);
+                    txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
+                    txDate = "PAYOUT";
                 }
-                txDate = String.format("PAYOUT Event #%d", eventID);
+                isNormalTx = false;
+                if (immature) txDate += " " + strMatureInfo;
             }
             else {
-                txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
-                txDate = "PAYOUT";
+                if (level > 4) {
+                    txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
+                } else {
+                    txDescription = !commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
+                }
             }
-            isNormalTx=false;
-            if (immature)   txDate+=" " + strMatureInfo;
-        } else if (item.getBetEntity()!=null) {        // outgoing bet
+        } else {        // outgoing bet
             eventID = item.getBetEntity().getEventID();
             EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
             if (ev != null) {
@@ -287,14 +295,6 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             isNormalTx=false;
         }
 
-
-        if (isNormalTx) {      // regular tx
-            if (level > 4) {
-                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
-            } else {
-                txDescription = !commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
-            }
-        }
         convertView.transactionDetail.setText(txDescription);
         convertView.transactionDate.setText(shortDate + " " + txDate);
     }

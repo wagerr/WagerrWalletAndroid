@@ -20,10 +20,21 @@
             android:layout_height="28dp"
             android:layout_marginBottom="-35dp"
             android:layout_above="@+id/tx_eventheader"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
             android:padding="50dp"
             android:background="@drawable/ic_close_light_grey"/>
+
+        <ImageButton
+            android:id="@+id/faq_button"
+            android:layout_width="@dimen/faq_dimen"
+            android:layout_height="@dimen/faq_dimen"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="-35dp"
+            android:background="@drawable/faq_question_black"
+            android:padding="50dp"
+            android:layout_above="@+id/tx_eventheader" />
 
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_eventheader"
@@ -334,6 +345,7 @@
                     android:layout_marginTop="1dp"
                     android:text="25"
                     android:singleLine="true"
+                    android:inputType="number"
                     android:textColor="@color/total_assets_usd_color"
                     android:imeOptions="actionDone"
                     android:textSize="20sp" />

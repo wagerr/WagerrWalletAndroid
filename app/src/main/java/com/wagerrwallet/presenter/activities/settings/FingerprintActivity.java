@@ -140,11 +140,11 @@ public class FingerprintActivity extends BRActivity {
         BigDecimal satoshis = new BigDecimal(BRKeyStore.getSpendLimit(this));
         WalletsMaster master = WalletsMaster.getInstance(this);
         //amount in BTC, mBTC or bits
-        BigDecimal amount = master.getCurrentWallet(this).getFiatForSmallestCrypto(this, satoshis, null);
+        BigDecimal amount = satoshis.divide( new BigDecimal(BRConstants.ONE_BITCOIN));       // master.getCurrentWallet(this).getFiatForSmallestCrypto(this, satoshis, null);
         //amount in user preferred ISO (e.g. USD)
         BigDecimal curAmount = master.getCurrentWallet(this).getFiatForSmallestCrypto(this, satoshis, null);
         //formatted string for the label
-        return String.format(getString(R.string.TouchIdSettings_spendingLimit), CurrencyUtils.getFormattedAmount(this, "WGR", amount), CurrencyUtils.getFormattedAmount(this, iso, curAmount));
+        return String.format(getString(R.string.TouchIdSettings_spendingLimit), CurrencyUtils.getFormattedAmount(this, "WGR", satoshis), CurrencyUtils.getFormattedAmount(this, iso, curAmount));
     }
 
     @Override

@@ -184,6 +184,9 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
         if (mCurrentPrompt == PromptManager.PromptItem.SHARE_DATA) {
             BRSharedPrefs.putShareDataDismissed(app, true);
         }
+        if (mCurrentPrompt == PromptManager.PromptItem.FINGER_PRINT) {
+            BRSharedPrefs.putFingerprintDismissed(app, true);
+        }
         if (mCurrentPrompt != null)
             BREventManager.getInstance().pushEvent("prompt." + PromptManager.getInstance().getPromptName(mCurrentPrompt) + ".dismissed");
         mCurrentPrompt = null;

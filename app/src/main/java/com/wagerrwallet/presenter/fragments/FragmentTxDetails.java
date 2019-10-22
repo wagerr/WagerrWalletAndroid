@@ -30,6 +30,7 @@ import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
 import com.wagerrwallet.tools.sqlite.BetResultTxDataStore;
+import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.tools.util.BRDateUtil;
 import com.wagerrwallet.tools.util.CurrencyUtils;
 import com.wagerrwallet.tools.util.Utils;
@@ -62,6 +63,7 @@ public class FragmentTxDetails extends DialogFragment {
     private BRText mToFromAddress2;
     private BRText mToFromAddress3;
     private BRText mMemoText;
+    private BRText mLinkOpenInExplorer;
 
     private BRText mStartingBalance;
     private BRText mEndingBalance;
@@ -108,7 +110,8 @@ public class FragmentTxDetails extends DialogFragment {
         mToFromAddress = rootView.findViewById(R.id.tx_to_from_address);
         mToFromAddress2 = rootView.findViewById(R.id.tx_to_from_address2);
         mToFromAddress3 = rootView.findViewById(R.id.tx_to_from_address3);
-        mMemoText = rootView.findViewById(R.id.memo);
+        //mMemoText = rootView.findViewById(R.id.memo);
+        mLinkOpenInExplorer = rootView.findViewById(R.id.link_open_in_explorer);
         mStartingBalance = rootView.findViewById(R.id.tx_starting_balance);
         mEndingBalance = rootView.findViewById(R.id.tx_ending_balance);
         mExchangeRate = rootView.findViewById(R.id.exchange_rate);
@@ -200,9 +203,9 @@ public class FragmentTxDetails extends DialogFragment {
 
             BigDecimal tmpStartingBalance = new BigDecimal(mTransaction.getBalanceAfterTx()).subtract(cryptoAmount.abs()).subtract(new BigDecimal(mTransaction.getFee()).abs());
 
-            BigDecimal startingBalance = isCryptoPreferred ? walletManager.getCryptoForSmallestCrypto(getActivity(), tmpStartingBalance) : walletManager.getFiatForSmallestCrypto(getActivity(), tmpStartingBalance, null);
+            BigDecimal startingBalance = isCryptoPreferred ? walletManager.getCryptoForSmallestCrypto(getActivity(), tmpStartingBalance).multiply(new BigDecimal(BRConstants.ONE_BITCOIN)) : walletManager.getFiatForSmallestCrypto(getActivity(), tmpStartingBalance, null);
 
-            BigDecimal endingBalance = isCryptoPreferred ? walletManager.getCryptoForSmallestCrypto(getActivity(), new BigDecimal(mTransaction.getBalanceAfterTx())) : walletManager.getFiatForSmallestCrypto(getActivity(), new BigDecimal(mTransaction.getBalanceAfterTx()), null);
+            BigDecimal endingBalance = isCryptoPreferred ? walletManager.getCryptoForSmallestCrypto(getActivity(), new BigDecimal(mTransaction.getBalanceAfterTx())).multiply(new BigDecimal(BRConstants.ONE_BITCOIN)) : walletManager.getFiatForSmallestCrypto(getActivity(), new BigDecimal(mTransaction.getBalanceAfterTx()), null);
 
             mStartingBalance.setText(CurrencyUtils.getFormattedAmount(getActivity(), iso, startingBalance == null ? null : startingBalance.abs()));
             mEndingBalance.setText(CurrencyUtils.getFormattedAmount(getActivity(), iso, endingBalance == null ? null : endingBalance.abs()));
@@ -299,6 +302,7 @@ public class FragmentTxDetails extends DialogFragment {
                 mTxAmount.setTextColor(getContext().getColor(R.color.transaction_amount_received_color));
 
             // Set the memo text if one is available
+/* disable memo upon request
             String memo;
             TxMetaData txMetaData = KVStoreManager.getInstance().getTxMetaData(getActivity(), mTransaction.getTxHash());
 
@@ -320,7 +324,7 @@ public class FragmentTxDetails extends DialogFragment {
             } else {
                 mMemoText.setText("");
             }
-
+*/
             // timestamp is 0 if it's not confirmed in a block yet so make it now
             mTxDate.setText(BRDateUtil.getMidDate(mTransaction.getTimeStamp() == 0 ? System.currentTimeMillis() : (mTransaction.getTimeStamp() * 1000)));
 
@@ -347,6 +351,15 @@ public class FragmentTxDetails extends DialogFragment {
 
                         }
                     }, 200);
+                }
+            });
+
+            mLinkOpenInExplorer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://explorer.wagerr.com/#/tx/%s", mTransaction.getTxHashHexReversed())));
+                    startActivity(browserIntent);
+                    getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
                 }
             });
 
