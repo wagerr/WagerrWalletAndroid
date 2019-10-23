@@ -218,7 +218,6 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 int value = minvalue;
                 int balance = (int)(walletManager.getWallet().getBalance()/UNIT_MULTIPLIER);
                 int maxvalue = Math.min(getContext().getResources().getInteger(R.integer.max_bet_amount), balance );
-                Float fValue = 0.0f;
                 if (!hasFocus) {
                     try {
                         value = Integer.parseInt(mTxAmount.getText().toString());
