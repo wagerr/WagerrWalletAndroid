@@ -3,7 +3,9 @@ package com.wagerrwallet.presenter.activities;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import com.wagerrwallet.presenter.interfaces.BRAuthCompletion;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.animation.SpringAnimator;
+import com.wagerrwallet.tools.manager.BRApiManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.security.AuthManager;
 import com.wagerrwallet.tools.security.BRKeyStore;
@@ -40,6 +43,9 @@ import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.platform.APIClient;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -216,6 +222,42 @@ public class LoginActivity extends BRActivity {
             }
         });
 
+        final Activity activity = this;
+        BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
+            @Override
+            public void run() {
+                checkLatestVersion(activity);
+            }
+        });
+    }
+
+    public void checkLatestVersion(final Activity app)    {
+
+        try {
+            String jsonString = BRApiManager.urlGET(app, "https://api.github.com/repos/wagerr/WagerrWalletAndroid/releases/latest");
+            if (jsonString == null || jsonString.isEmpty()) return;
+
+            JSONObject jsonObject = new JSONObject(jsonString);
+            String sTag = jsonObject.getString("tag_name");
+            int tag = Integer.parseInt((sTag!=null)?sTag:"");
+
+            PackageInfo pInfo = app.getPackageManager().getPackageInfo(app.getPackageName(), 0);
+            String version = pInfo.versionName;
+            int versionCode = pInfo.versionCode;
+            Log.d("MyApp", "Version Name : "+version + "\n Version Code : "+versionCode);
+            if (versionCode < tag)   {
+                BRDialog.showSimpleDialog(app, "New version available", "A new version of Wagerr Bet app is available");
+            }
+        } catch(PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (Exception e)   {
+        }
+
+        return;
     }
 
     @Override

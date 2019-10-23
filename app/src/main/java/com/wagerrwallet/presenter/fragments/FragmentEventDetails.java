@@ -214,13 +214,16 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTxAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                int value = getContext().getResources().getInteger(R.integer.min_bet_amount);
-                int minvalue = value;
+                int minvalue = getContext().getResources().getInteger(R.integer.min_bet_amount);
+                int value = minvalue;
+                int balance = (int)(walletManager.getWallet().getBalance()/UNIT_MULTIPLIER);
+                int maxvalue = Math.min(getContext().getResources().getInteger(R.integer.max_bet_amount), balance );
                 Float fValue = 0.0f;
                 if (!hasFocus) {
                     try {
-                        fValue = Float.parseFloat(mTxAmount.getText().toString());
-                        value = Math.max( minvalue, fValue.intValue() );
+                        value = Integer.parseInt(mTxAmount.getText().toString());
+                        if ( value < minvalue )    value = minvalue;
+                        if ( value > maxvalue )    value = maxvalue;
                         mTxAmount.setText(String.valueOf(value));
                     }
                     catch (NumberFormatException e)     {

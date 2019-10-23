@@ -703,7 +703,7 @@
   <!-- Copy wallet addresses alert button label -->
   <string name="URLHandling.copy">Copy</string>
   <!-- Verify PIN for transaction view body -->
-  <string name="VerifyPin.authorize">Please enter your PIN to authorize this transaction.</string>
+  <string name="VerifyPin.authorize">Please enter your PIN to authorize this action.</string>
   <!-- Verify PIN view body -->
   <string name="VerifyPin.continueBody">Please enter your PIN to continue.</string>
   <!-- Verify PIN view title -->

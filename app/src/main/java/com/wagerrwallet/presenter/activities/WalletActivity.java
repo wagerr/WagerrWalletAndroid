@@ -232,7 +232,8 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
         boolean cryptoPreferred = BRSharedPrefs.isCryptoPreferred(this);
 
         if (cryptoPreferred) {
-            swap();
+            setPriceTags(cryptoPreferred, false);
+            //swap();   // buggy when restoring activity
         }
 
         // Check if the "Twilight" screen altering app is currently running

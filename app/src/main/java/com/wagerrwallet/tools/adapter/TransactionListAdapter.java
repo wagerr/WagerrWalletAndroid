@@ -353,7 +353,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public boolean FilterItem( TxUiHolder item, boolean[] switches) {
         return ( (switches[0] && item.getBetEntity()!=null)
-            ||   (switches[1] && item.isCoinbase())
+            ||   (switches[1] && item.isCoinbase() && item.getBetEntity()==null)
             ||   (!switches[0] && !switches[1]) ) ;
     }
 
@@ -383,6 +383,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private void filter(final String query, final boolean[] switches) {
+        BaseWalletManager wallet = WalletsMaster.getInstance(mContext).getCurrentWallet(mContext);
+
         long start = System.currentTimeMillis();
         String lowerQuery = query.toLowerCase().trim();
         if (Utils.isNullOrEmpty(lowerQuery) && !switches[0] && !switches[1] && !switches[2] && !switches[3])
@@ -394,23 +396,22 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         TxUiHolder item;
         for (int i = 0; i < backUpFeed.size(); i++) {
             item = backUpFeed.get(i);
-            boolean matchesHash = item.getTxHashHexReversed() != null && item.getTxHashHexReversed().contains(lowerQuery);
-            boolean matchesAddress = item.getFrom()[0].contains(lowerQuery) || item.getTo()[0].contains(lowerQuery);
+            boolean matchesHash = item.getTxHashHexReversed() != null && item.getTxHashHexReversed().toLowerCase().contains(lowerQuery);
+            boolean matchesAddress = item.getToRecipient(wallet, false).toLowerCase().contains(lowerQuery) || item.getToRecipient(wallet, true).toLowerCase().contains(lowerQuery);
             boolean matchesMemo = item.metaData != null && item.metaData.comment != null && item.metaData.comment.toLowerCase().contains(lowerQuery);
             if (matchesHash || matchesAddress || matchesMemo) {
                 if (switchesON == 0) {
                     filteredList.add(item);
                 } else {
                     boolean willAdd = true;
-                    //filter by sent and this is received
-                    if (switches[0] && (item.getAmount() <= 0)) {
+                    //filter by sent and this is received - reverse logic
+                    if (switches[0] && (item.getAmount() > 0)) {
                         willAdd = false;
                     }
-                    //filter by received and this is sent
-                    if (switches[1] && (item.getAmount() > 0)) {
+                    //filter by received and this is sent - reverse logic
+                    if (switches[1] && (item.getAmount() <= 0)) {
                         willAdd = false;
                     }
-                    BaseWalletManager wallet = WalletsMaster.getInstance(mContext).getCurrentWallet(mContext);
 
                     int confirms = item.getBlockHeight() ==
                             Integer.MAX_VALUE ? 0

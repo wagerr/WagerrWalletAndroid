@@ -689,7 +689,7 @@
   <!-- Copy wallet addresses alert button label -->
   <string name="URLHandling.copy">Copiar</string>
   <!-- Verify PIN for transaction view body -->
-  <string name="VerifyPin.authorize">Introduce tu PIN para autorizar esta transacción.</string>
+  <string name="VerifyPin.authorize">Introduce tu PIN para autorizar esta acción.</string>
   <!-- Verify PIN view body -->
   <string name="VerifyPin.continueBody">Introduce tu PIN para continuar</string>
   <!-- Verify PIN view title -->

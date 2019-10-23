@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.security.keystore.UserNotAuthenticatedException;
@@ -11,11 +13,17 @@ import android.util.Log;
 
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.R;
+import com.wagerrwallet.core.BRCoreAddress;
 import com.wagerrwallet.core.BRCoreKey;
 import com.wagerrwallet.core.BRCoreMasterPubKey;
+import com.wagerrwallet.core.BRCoreTransaction;
+import com.wagerrwallet.core.BRCoreTransactionInput;
+import com.wagerrwallet.core.BRCoreTransactionOutput;
+import com.wagerrwallet.presenter.activities.util.BRActivity;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
+import com.wagerrwallet.tools.manager.BRApiManager;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.security.BRKeyStore;
@@ -23,11 +31,16 @@ import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.tools.util.Bip39Reader;
 import com.wagerrwallet.tools.util.TrustedNode;
+import com.wagerrwallet.tools.util.TypesConverter;
 import com.wagerrwallet.tools.util.Utils;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 import com.platform.entities.WalletInfo;
 import com.platform.tools.KVStoreManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.security.SecureRandom;
@@ -325,8 +338,8 @@ public class WalletsMaster {
             if (!m.noWallet(app)) {
                 BRAnimator.startBreadActivity(app, true);
             }
-            //else just sit in the intro screen
         }
     }
+
 
 }

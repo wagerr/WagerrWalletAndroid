@@ -172,6 +172,7 @@ public class BRAnimator {
 
         String URL = "https://wagerr.zendesk.com/hc/en-us/";
 
+        if (articleId==null)    articleId="";
         switch (articleId)  {
 
             case BRConstants.walletDisabled:

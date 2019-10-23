@@ -133,11 +133,17 @@
             android:visibility="gone"
             app:customTFont="CircularPro-Book.otf" />
 
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tx_home"
+            android:fillViewport="true">
+
     <LinearLayout
         android:id="@+id/dynamic_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tx_home"
         android:orientation="vertical"
         >
 
@@ -714,6 +720,7 @@
         </LinearLayout>
     </LinearLayout>
 
+        </ScrollView>
     </RelativeLayout>
 
 
