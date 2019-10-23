@@ -133,6 +133,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private boolean bHasMoneyLine = true;
     private boolean bHasSpreads = false;
     private boolean bHasTotals = false;
+    private boolean bBarSliding = false;
     LinearLayout rlToPutBelowBetSlider = null;
     LinearLayout rlToPutBelowPrevious = null;
     RelativeLayout rlLastContainer = null;
@@ -197,17 +198,19 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                    int posX = seekBar.getThumb().getBounds().centerX();
                    int coinAmount = progress + min;
                    updateSeekBar(coinAmount, 0);
+                   if (bBarSliding) {
+                       mTxAmount.setText("" + coinAmount);
+                   }
                    //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
                }
                @Override
                public void onStartTrackingTouch(SeekBar seekBar) {
-                   //Toast.makeText(getApplicationContext(), "Started tracking seekbar", Toast.LENGTH_SHORT).show();
+                   bBarSliding = true;
                }
 
                @Override
                public void onStopTrackingTouch(SeekBar seekBar) {
-                   //textView.setText("Covered: " + progress + "/" + seekBar.getMax());
-                   //Toast.makeText(getApplicationContext(), "Stopped tracking seekbar", Toast.LENGTH_SHORT).show();
+                   bBarSliding = false;
                }
         });
 
@@ -227,7 +230,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                     }
                     catch (NumberFormatException e)     {
                     }
-                    seekBar.setProgress(value-minvalue);
+                    seekBar.setProgress( value - minvalue);
                 }
             }
         });
@@ -382,10 +385,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 mPotentialReward.setText("---");
             }
         }
-        mTxAmount.setText("" + amount);
         mTxCurrency.setText(" WGR (" + fiatAmountStr +")" );
 
-        //mTxAmount.setX(seekBar.getX() + posX);
     }
 
     protected void setRewardAmount(long stake, float odds)  {
