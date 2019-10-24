@@ -187,6 +187,11 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
 
         seekBar = rootView.findViewById(R.id.bet_seekBar);
+        int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
+        int max = Math.min( (int)(walletManager.getWallet().getBalance()/UNIT_MULTIPLIER),
+                getContext().getResources().getInteger(R.integer.max_bet_amount));
+        seekBar.setMax(max-min);
+
         updateSeekBar(getContext().getResources().getInteger(R.integer.min_bet_amount), 0);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                @Override
@@ -252,6 +257,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTxAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (mCurrentSelectedBetOption==null)    return;
                 String oddTx = ((BRText)mCurrentSelectedBetOption).getText().toString();
                 float odds = 0;
                 int value = getContext().getResources().getInteger(R.integer.min_bet_amount);
@@ -405,6 +411,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     }
 
     protected void AcceptBet()  {
+        mTxAmount.clearFocus();
         int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
         BetEntity.BetTxType betType = (mTransaction.getType()== BetEventEntity.BetTxType.PEERLESS)? BetEntity.BetTxType.PEERLESS:BetEntity.BetTxType.CHAIN_LOTTO;
         long amount = (seekBar.getProgress() + min) * UNIT_MULTIPLIER;
@@ -431,6 +438,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     }
 
     protected void CancelBet()  {
+        mTxAmount.clearFocus();
         BRText txPrev = (mCurrentSelectedBetOption!=null)?(BRText) mCurrentSelectedBetOption:null;
         if (txPrev!=null)   {
             txPrev.setTextSize(NORMAL_SIZE);

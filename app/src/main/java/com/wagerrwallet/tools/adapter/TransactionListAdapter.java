@@ -387,8 +387,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         long start = System.currentTimeMillis();
         String lowerQuery = query.toLowerCase().trim();
-        if (Utils.isNullOrEmpty(lowerQuery) && !switches[0] && !switches[1] && !switches[2] && !switches[3])
-            return;
+        // undesired behavior: no filter = rebuild whole list instead return
+        //if (Utils.isNullOrEmpty(lowerQuery) && !switches[0] && !switches[1] && !switches[2] && !switches[3])
+        //    return;
         int switchesON = 0;
         for (boolean i : switches) if (i) switchesON++;
 

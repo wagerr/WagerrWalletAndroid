@@ -29,6 +29,7 @@ import com.wagerrwallet.presenter.entities.BRPeerEntity;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.BetEntity;
 import com.wagerrwallet.presenter.entities.BetEventEntity;
+import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
@@ -297,10 +298,18 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         return uiTxs;
     }
 
+    protected void CleanChainBugs(Context app) {
+        // fake team mappings for ID 187.
+        BetMappingTxDataStore.getInstance(app).deleteTxByHash(app,"wgr", "cc89779e8e57d49e5e6d3e16ad57e648b19d86fb8f4714bc7df5abd3f92daa1d");
+        BetMappingTxDataStore.getInstance(app).deleteTxByHash(app,"wgr", "d8e1e8389bbcffe1c79cf11e2206281377e54b99219ec6ccec296c2adb8ad65f");
+        BetMappingTxDataStore.getInstance(app).deleteTxByHash(app,"wgr", "929972a7b2fdf55f6da7488ccaf7312fd5d22c4bca003ca089293c93f1c32917");
+    }
+
     @Override
     public List<EventTxUiHolder> getEventTxUiHolders(Context app) {
         Date date = new Date();
         long timeStamp = (date.getTime()/1000) + BET_CUTTOFF_SECONDS;
+        CleanChainBugs(app);
         //BetEventTxDataStore.getInstance(app).deleteTxByEventTimestamp (app,ISO, timeStamp );
         //BetResultTxDataStore.getInstance(app).deleteResultsOldEvents(app, ISO, timeStamp);
         //List<BetEntity> bettxs = BetTxDataStore.getInstance(app).getAllTransactions(app,ISO);
