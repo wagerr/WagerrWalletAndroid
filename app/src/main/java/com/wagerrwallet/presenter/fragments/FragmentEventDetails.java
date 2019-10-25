@@ -3,6 +3,8 @@ package com.wagerrwallet.presenter.fragments;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -70,6 +72,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
     private BRText mTxEventHeader;
     private BRText mTxEventDate;
+    private BRText mTxEventId;
     private BRText mTxHomeTeam;
     private BRText mTxAwayTeam;
     //private BRText mTxHomeResult;
@@ -171,6 +174,16 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mMainLayout = rootView.findViewById(R.id.dynamic_container);
         mTxEventHeader = rootView.findViewById(R.id.tx_eventheader);
         mTxEventDate= rootView.findViewById(R.id.tx_eventdate);
+        mTxEventId= rootView.findViewById(R.id.tx_eventid);
+        final long evID = mTransaction.getEventID();
+        mTxEventId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://explorer.wagerr.com/#/bet/event/%d", evID)));
+                startActivity(browserIntent);
+                getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+            }
+        });
         mTxHomeTeam = rootView.findViewById(R.id.tx_home);
         mTxAwayTeam= rootView.findViewById(R.id.tx_away);
         //mTxHomeResult = rootView.findViewById(R.id.tx_home_result);
@@ -636,6 +649,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
             mTxEventHeader.setText(item.getTxEventHeader());
             mTxEventDate.setText( item.getTxEventDate() );
+            mTxEventId.setText( String.format("Event #%d",item.getEventID()) );
 
             // timestamp is 0 if it's not confirmed in a block yet so make it now
             mTxDate.setText(BRDateUtil.getEventDate(mTransaction.getTimestamp() == 0 ? System.currentTimeMillis() : (mTransaction.getTimestamp() * 1000)));

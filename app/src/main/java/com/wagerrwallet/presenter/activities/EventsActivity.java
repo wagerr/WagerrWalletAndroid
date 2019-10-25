@@ -271,15 +271,13 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         boolean cryptoPreferred = BRSharedPrefs.isCryptoPreferred(this);
 
         if (cryptoPreferred) {
-            swap();
+            setPriceTags(cryptoPreferred, false);
+            //swap();   // buggy when restoring activity
         }
 
         // Check if the "Twilight" screen altering app is currently running
         if (checkIfScreenAlteringAppIsRunning("com.urbandroid.lux")) {
-
             BRDialog.showSimpleDialog(this, getString(R.string.Dialog_screenAlteringTitle), getString(R.string.Dialog_screenAlteringMessage));
-
-
         }
 
     }

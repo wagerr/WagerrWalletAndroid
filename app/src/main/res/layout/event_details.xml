@@ -60,6 +60,19 @@
             app:customTFont="CircularPro-Book.otf" />
 
         <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_eventid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tx_eventheader"
+            android:layout_marginRight="22dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:text="Event #77777"
+            android:textColor="@color/blue"
+            android:textSize="18sp"
+            app:customTFont="CircularPro-Book.otf" />
+
+        <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_home_label"
             android:layout_width="165dp"
             android:layout_height="wrap_content"

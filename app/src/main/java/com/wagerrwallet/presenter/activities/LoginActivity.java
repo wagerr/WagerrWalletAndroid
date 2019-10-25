@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -239,14 +240,23 @@ public class LoginActivity extends BRActivity {
 
             JSONObject jsonObject = new JSONObject(jsonString);
             String sTag = jsonObject.getString("tag_name");
-            int tag = Integer.parseInt((sTag!=null)?sTag:"");
+            final int tag = Integer.parseInt((sTag!=null)?sTag:"");
 
             PackageInfo pInfo = app.getPackageManager().getPackageInfo(app.getPackageName(), 0);
             String version = pInfo.versionName;
             int versionCode = pInfo.versionCode;
             Log.d("MyApp", "Version Name : "+version + "\n Version Code : "+versionCode);
             if (versionCode < tag)   {
-                BRDialog.showSimpleDialog(app, "New version available", "A new version of Wagerr Bet app is available");
+                //BRDialog.showSimpleDialog(app, "New version available", "A new version of Wagerr Bet app is available");
+                BRDialog.showCustomDialog(app, "New version available", "A new version of Wagerr Bet app is available", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                    @Override
+                    public void onClick(BRDialogView brDialogView) {
+                        brDialogView.dismiss();
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://github.com/wagerr/WagerrWalletAndroid/releases/tag/%d", tag)));
+                        app.startActivity(browserIntent);
+                        app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+                    }
+                }, null, null, 0);
             }
         } catch(PackageManager.NameNotFoundException e) {
             e.printStackTrace();

@@ -287,7 +287,7 @@
   <!-- No Passcode set warning title -->
   <string name="Prompts.NoPasscode.title">Turn device passcode on</string>
   <!-- Instruction how to enable device encryption -->
-  <string name="Prompts.NoScreenLock.body.android">A device screen lock is needed to safeguard your wallet. Go to \"Settings\" &gt; \"Security\" &gt; \"Screen lock\" and enable to continue.</string>
+  <string name="Prompts.NoScreenLock.body.android">A device screen lock is mandatory to use the Wagerr wallet. Please enable the screen lock in your device settings and reinstall the application to enable wallet encryption</string>
   <!-- Warn user key store data has been invalidate because the user changed their security settings. The user must wipe their app data. -->
     <!-- Warn user key store data has been invalidate because the user changed their security settings. The user must uninstall. -->
   <string name="Alert.keystore.invalidated.uninstall.android">We can\'t proceed because your screen lock settings have been changed (e.g. password was disabled, fingerprints were changed). For security purposes, Android has permanently locked your key store. Therefore, your Wagerr app data must be wiped by uninstalling. Don’t worry, your funds are still secure! Reinstall the app and recover your wallet using your paper key.</string>

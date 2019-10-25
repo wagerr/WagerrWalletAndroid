@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -254,7 +255,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (item.getBetEntity()==null)  {
             if (item.isCoinbase() && item.getBlockHeight() != Integer.MAX_VALUE) {       // then payout reward
                 boolean immature = (nCurrentHeight - item.getBlockHeight()) <= PAYOUT_MATURITY;
-                String strMatureInfo = String.format("%d/%d", (nCurrentHeight - item.getBlockHeight()), PAYOUT_MATURITY);
+                String strMatureInfo = String.format("<b>%d/%d</b>", (nCurrentHeight - item.getBlockHeight()), PAYOUT_MATURITY);
                 int amountColor = (!immature) ? R.color.transaction_amount_payout_color : R.color.transaction_amount_inmature_color;
                 convertView.transactionAmount.setTextColor(mContext.getResources().getColor(amountColor, null));
                 BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
@@ -273,7 +274,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     txDate = "PAYOUT";
                 }
                 isNormalTx = false;
-                if (immature) txDate += " " + strMatureInfo;
+                if (immature)   txDate += " " + strMatureInfo;
             }
             else {
                 if (level > 4) {
@@ -296,7 +297,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         convertView.transactionDetail.setText(txDescription);
-        convertView.transactionDate.setText(shortDate + " " + txDate);
+        convertView.transactionDate.setText(Html.fromHtml(shortDate + " " + txDate));
     }
 
     private void showTransactionProgress(TxHolder holder, int progress) {
