@@ -73,8 +73,13 @@ public class EventTxManager {
                 txList, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, float x, float y) {
-                EventTxUiHolder item = adapter.getItems().get(position);
-                BRAnimator.showEventDetails(app, item, position);
+                try {
+                    EventTxUiHolder item = adapter.getItems().get(position);
+                    BRAnimator.showEventDetails(app, item, position);
+                }
+                catch (ArrayIndexOutOfBoundsException e)    {
+
+                }
             }
 
             @Override

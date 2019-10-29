@@ -60,25 +60,42 @@ public class CurrencyUtils {
         DecimalFormatSymbols decimalFormatSymbols;
         Currency currency = null;
         String symbol = null;
+        int maxDecimals = 2;
         decimalFormatSymbols = currencyFormat.getDecimalFormatSymbols();
-//        int decimalPoints = 0;
+        int minDecimals = 2;
         BaseWalletManager wallet = WalletsMaster.getInstance(app).getWalletByIso(app, iso);
         if (wallet != null) {
             symbol = wallet.getSymbol(app);
             amount = wallet.getCryptoForSmallestCrypto(app, amount);
+            maxDecimals = wallet.getMaxDecimalPlaces(app);
         } else {
             try {
                 currency = Currency.getInstance(iso);
                 symbol = currency.getSymbol();
+                maxDecimals = currency.getDefaultFractionDigits() + 2;
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+            }
+            if (iso.toLowerCase().equals("btc"))    {
+                maxDecimals = 8;
+                minDecimals = 4;
+                String symbolBitcoinSecondary = "\u0243";
+                String symbolBitcoinPrimary = "\u20BF";
+                SymbolUtils symbolUtils = new SymbolUtils();
+                if (symbolUtils.doesDeviceSupportSymbol(symbolBitcoinPrimary)) {
+                    symbol = symbolBitcoinPrimary;
+
+                } else {
+                    symbol = symbolBitcoinSecondary;
+                }
             }
         }
 
         decimalFormatSymbols.setCurrencySymbol(symbol);
 //        currencyFormat.setMaximumFractionDigits(decimalPoints);
         currencyFormat.setGroupingUsed(true);
-        currencyFormat.setMaximumFractionDigits(currency != null ? currency.getDefaultFractionDigits() + 2 : wallet.getMaxDecimalPlaces(app));      // add 2 decimal places for Coin fiat denomination - too low at the moment.
+        currencyFormat.setMinimumFractionDigits(minDecimals);
+        currencyFormat.setMaximumFractionDigits(maxDecimals);      // add 2 decimal places for Coin fiat denomination - too low at the moment.
         currencyFormat.setDecimalFormatSymbols(decimalFormatSymbols);
         currencyFormat.setNegativePrefix(decimalFormatSymbols.getCurrencySymbol() + "-");
         currencyFormat.setNegativeSuffix("");

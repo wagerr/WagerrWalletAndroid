@@ -42,6 +42,8 @@ import android.widget.ViewFlipper;
 import com.platform.HTTPServer;
 import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCorePeer;
+import com.wagerrwallet.presenter.activities.settings.BetSettings;
+import com.wagerrwallet.presenter.activities.settings.SettingsActivity;
 import com.wagerrwallet.presenter.activities.settings.WebViewActivity;
 import com.wagerrwallet.presenter.activities.util.BRActivity;
 import com.wagerrwallet.presenter.customviews.BRButton;
@@ -106,6 +108,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
     public ViewFlipper barFlipper;
     private BREventSearchBar searchBar;
     private ImageButton mSearchIcon;
+    private ImageButton mSettingsIcon;
     private ImageButton mSwap;
     private ConstraintLayout toolBarConstraintLayout;
 
@@ -143,6 +146,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         barFlipper = findViewById(R.id.tool_bar_flipper);
         searchBar = findViewById(R.id.search_bar);
         mSearchIcon = findViewById(R.id.search_icon);
+        mSettingsIcon = findViewById(R.id.settings_icon);
         toolBarConstraintLayout = findViewById(R.id.bread_toolbar);
         mSwap = findViewById(R.id.swap);
         mBalanceLabel = findViewById(R.id.balance_label);
@@ -176,7 +180,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
                 }
 
                 if (EventTxManager.getInstance().adapter != null)
-                    EventTxManager.getInstance().adapter.filter( filterSwitches, true);
+                    EventTxManager.getInstance().adapter.filter( filterSwitches, true, searchBar.getSearchQuery());
 
                 updateTournaments();
             }
@@ -197,7 +201,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
                 }
 
                 if (EventTxManager.getInstance().adapter != null)
-                    EventTxManager.getInstance().adapter.filter( filterSwitches, true);
+                    EventTxManager.getInstance().adapter.filter( filterSwitches, true, searchBar.getSearchQuery());
             }
 
             @Override
@@ -247,6 +251,15 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
                 searchBar.onShow(true);
             }
         });
+
+        mSettingsIcon.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 Intent intent = new Intent(EventsActivity.this, BetSettings.class);
+                 startActivity(intent);
+                 overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+             }
+         });
 
         mBalancePrimary.setOnClickListener(new View.OnClickListener() {
             @Override

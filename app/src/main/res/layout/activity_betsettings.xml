@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_intro_set_pit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/extra_light_blue_background"
+    tools:context="com.wagerrwallet.presenter.activities.SetPinActivity">
+
+    <com.wagerrwallet.presenter.customviews.BRText
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/bread_margin"
+        android:layout_marginTop="32dp"
+        android:lineSpacingMultiplier="1.3"
+        android:text="Wagerr Bet Display Settings"
+        android:textColor="@color/almost_black"
+        android:textSize="@dimen/header"
+        app:customTFont="CircularPro-Bold.otf"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/chk_displayodds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        android:lineSpacingMultiplier="1.3"
+        android:maxLines="2"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Include Wagerr network share in betting odds"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/sub_header"
+        app:customTFont="CircularPro-Bold.otf"
+        app:layout_constraintLeft_toLeftOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+
+</android.support.constraint.ConstraintLayout>

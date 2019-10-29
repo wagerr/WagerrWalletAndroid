@@ -229,7 +229,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void filterBy(String query, long[] switches) {
-        filter(switches, true);
+        filter(switches, true, query);
     }
 
     public void resetFilter() {
@@ -237,18 +237,28 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         notifyDataSetChanged();
     }
 
-    public void filter(final long[] switches, boolean bNotify) {
+    public void filter(final long[] switches, boolean bNotify, String query) {
         long start = System.currentTimeMillis();
         int switchesON = 0;
         for (long i : switches) if (i>0) switchesON++;
 
         final List<EventTxUiHolder> filteredList = new ArrayList<>();
+        String lowerQuery = query.toLowerCase().trim();
         EventTxUiHolder item;
         for (int i = 0; i < backUpFeed.size(); i++) {
             item = backUpFeed.get(i);
-            if (   (switches[0]==-1 || switches[0]==item.getSportID())
-                && (switches[1]==-1 || switches[1]==item.getTournamentID()) )    {
-                filteredList.add(item);
+            // team match
+            boolean matchesTeam =  item.getTxHomeTeam().toLowerCase().contains(lowerQuery)
+                                || item.getTxAwayTeam().toLowerCase().contains(lowerQuery);
+            if ( matchesTeam ) {
+                if (switchesON == 0) {
+                    filteredList.add(item);
+                } else {
+                    if ((switches[0] == -1 || switches[0] == item.getSportID())
+                    && (switches[1] == -1 || switches[1] == item.getTournamentID())) {
+                        filteredList.add(item);
+                    }
+                }
             }
         }
         filterSwitches = switches;

@@ -7,8 +7,8 @@ android {
         applicationId = 'com.wagerrwallet'
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 239
-        versionName "239"
+        versionCode 240
+        versionName "240"
         multiDexEnabled true
 
         // Similar to other properties in the defaultConfig block,
@@ -172,4 +172,5 @@ dependencies {
     implementation 'junit:junit:4.12'
     implementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'tools.fastlane:screengrab:1.1.0'
+    implementation 'com.android.support:support-v4:27.1.1'
 }

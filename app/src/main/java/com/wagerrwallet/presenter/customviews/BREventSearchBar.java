@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.EventsActivity;
@@ -53,6 +54,8 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
     private BRButton completedFilter;
     private BRButton cancelButton;
     private EventsActivity breadActivity;
+    private LinearLayout barLayout;
+    private LinearLayout betbarLayout;
 
     public long[] filterSwitches = new long[4];
 
@@ -81,6 +84,10 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
         pendingFilter = (BRButton) findViewById(R.id.pending_filter);
         completedFilter = (BRButton) findViewById(R.id.complete_filter);
         cancelButton = (BRButton) findViewById(R.id.cancel_button);
+        barLayout =  (LinearLayout) findViewById(R.id.filter_buttons_layout);
+        barLayout.setVisibility(GONE);
+        betbarLayout =  (LinearLayout) findViewById(R.id.bet_filter_buttons_layout);
+        betbarLayout.setVisibility(GONE);
 
         clearSwitches();
         setListeners();
@@ -241,5 +248,7 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
         }
     }
 
-
+    public String getSearchQuery()  {
+        return searchEdit.getText().toString();
+    }
 }

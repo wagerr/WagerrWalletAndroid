@@ -29,7 +29,9 @@ import android.widget.Toast;
 import com.platform.entities.TxMetaData;
 import com.platform.tools.KVStoreManager;
 import com.wagerrwallet.R;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.core.BRCoreTransaction;
+import com.wagerrwallet.presenter.activities.settings.BetSettings;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BetEntity;
@@ -43,6 +45,7 @@ import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.SendManager;
+import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
 import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.tools.util.BRDateUtil;
 import com.wagerrwallet.tools.util.CurrencyUtils;
@@ -142,6 +145,26 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     RelativeLayout rlLastContainer = null;
 
     boolean mDetailsShowing = false;
+
+    private int mInterval = 3000;
+    private Handler mHandler;
+    private boolean updatingNode;
+
+    // refresh to update odds
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Context app = WagerrApp.getBreadContext();
+                mTransaction = BetEventTxDataStore.getInstance(app).getTransactionByEventId(app, "wgr", mTransaction.getEventID());
+                updateUi();
+            } finally {
+                // 100% guarantee that this always happens, even if
+                // your update method throws an exception
+                mHandler.postDelayed(mStatusChecker, mInterval);
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -412,7 +435,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
 
         try {
-            long rewardAmount = stake + (long)((stake * (odds - 1)) * 0.94);
+            boolean oddsSetting = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, true);
+            long rewardAmount = stake + ((oddsSetting)?(long)((stake * (odds - 1)) * 0.94):(long)(stake * (odds-1)));
             BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
             BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
             String rewardFiatAmountStr = CurrencyUtils.getFormattedAmount(getContext(), BRSharedPrefs.getPreferredFiatIso(getContext()), rewardFiatAmount);
@@ -612,9 +636,9 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             EventTxUiHolder item = mTransaction;
             mTxHomeTeam.setText( (item.getTxHomeTeam()!=null)?item.getTxHomeTeam():"Home N/A" );
             mTxAwayTeam.setText( (item.getTxAwayTeam()!=null)?item.getTxAwayTeam():"Away N/A" );
-            mTxHomeOdds.setText( (item.getTxHomeOdds()!=null)?item.getTxHomeOdds():"N/A" );
-            mTxDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"N/A" );
-            mTxAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"N/A" );
+            mTxHomeOdds.setText( (item.getHomeOdds()>0)?item.getTxHomeOdds():"N/A" );
+            mTxDrawOdds.setText( (item.getDrawOdds()>0)?item.getTxDrawOdds():"N/A" );
+            mTxAwayOdds.setText( (item.getAwayOdds()>0)?item.getTxAwayOdds():"N/A" );
             rlLastContainer = mMoneyLineContainer;      // default...
 
             bHasSpreads = (item.getSpreadPoints()>0);
@@ -737,6 +761,20 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
+        mHandler = new Handler();
+        startRepeatingTask();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopRepeatingTask();
+    }
+
+    void startRepeatingTask() {
+        mStatusChecker.run();
+    }
+    void stopRepeatingTask() {
+        mHandler.removeCallbacks(mStatusChecker);
     }
 }

@@ -296,6 +296,11 @@ public class BRSharedPrefs {
         return prefs.getBoolean(feature, false);
     }
 
+    public static boolean getFeatureEnabled(Context activity, String feature, boolean defValue) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getBoolean(feature, defValue);
+    }
+
     public static void putFeatureEnabled(Context activity, boolean enabled, String feature) {
         SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();

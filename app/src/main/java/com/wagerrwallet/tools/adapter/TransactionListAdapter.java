@@ -73,7 +73,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private List<TxUiHolder> backUpFeed;
     private List<TxUiHolder> itemFeed;
     //    private Map<String, TxMetaData> mds;
-    public boolean[] filterSwitches; // = new boolean[1];
+    public boolean[] filterSwitches = { false, false, false, false };
+    public boolean[] betfilterSwitches = { false, false };
+    public String filterQuery="";
 
     private final int txType = 0;
     private final int promptType = 1;
@@ -101,9 +103,6 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (backUpFeed == null) backUpFeed = new ArrayList<>();
         this.itemFeed = items;
         this.backUpFeed = items;
-        if (filterSwitches!=null)   {
-            filterBetHistory(filterSwitches, false);
-        }
     }
 
     public void updateData() {
@@ -289,6 +288,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             if (ev != null) {
                 txDescription = ev.getEventDescriptionForBet(item.getBetEntity().getOutcome());
                 txDate = ev.getEventDateForBet(item.getBetEntity().getOutcome());
+                item.setTeamSearchDescription(txDescription);
             } else {
                 txDescription = String.format("Event #%d: info not avalable", eventID);
                 txDate = String.format("BET %s", item.getBetEntity().getOutcome().toString());
@@ -348,8 +348,12 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    public void filterBy(String query, boolean[] switches) {
-        filter(query, switches);
+    public void filterBy(String query, boolean[] switches, boolean[] betswitches) {
+        filter(query, switches, betswitches);
+    }
+
+    public void filterBy() {
+        filter(filterQuery, filterSwitches, betfilterSwitches);
     }
 
     public boolean FilterItem( TxUiHolder item, boolean[] switches) {
@@ -383,7 +387,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         notifyDataSetChanged();
     }
 
-    private void filter(final String query, final boolean[] switches) {
+    private void filter(final String query, final boolean[] switches, final boolean[] betswitches) {
         BaseWalletManager wallet = WalletsMaster.getInstance(mContext).getCurrentWallet(mContext);
 
         long start = System.currentTimeMillis();
@@ -393,6 +397,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         //    return;
         int switchesON = 0;
         for (boolean i : switches) if (i) switchesON++;
+        for (boolean i : betswitches) if (i) switchesON++;
 
         final List<TxUiHolder> filteredList = new ArrayList<>();
         TxUiHolder item;
@@ -401,7 +406,10 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             boolean matchesHash = item.getTxHashHexReversed() != null && item.getTxHashHexReversed().toLowerCase().contains(lowerQuery);
             boolean matchesAddress = item.getToRecipient(wallet, false).toLowerCase().contains(lowerQuery) || item.getToRecipient(wallet, true).toLowerCase().contains(lowerQuery);
             boolean matchesMemo = item.metaData != null && item.metaData.comment != null && item.metaData.comment.toLowerCase().contains(lowerQuery);
-            if (matchesHash || matchesAddress || matchesMemo) {
+            // team match
+            boolean matchesTeam = !item.getTeamSearchDescription().isEmpty() && item.getTeamSearchDescription().toLowerCase().contains(lowerQuery);
+
+            if (matchesHash || matchesAddress || matchesMemo || matchesTeam ) {
                 if (switchesON == 0) {
                     filteredList.add(item);
                 } else {
@@ -428,12 +436,19 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         willAdd = false;
                     }
 
+                    if (!FilterItem(item, betswitches)) {
+                        willAdd = false;
+                    }
+
                     if (willAdd) filteredList.add(item);
                 }
 
             }
 
         }
+        filterSwitches = switches;
+        betfilterSwitches = betswitches;
+        filterQuery = query;
         itemFeed = filteredList;
         notifyDataSetChanged();
 

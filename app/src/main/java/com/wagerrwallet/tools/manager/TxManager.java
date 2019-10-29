@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.WalletActivity;
+import com.wagerrwallet.presenter.customviews.BRSearchBar;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.tools.adapter.TransactionListAdapter;
@@ -111,9 +112,7 @@ public class TxManager {
                         final List<TxUiHolder> currentItems = adapter.getItems();
                         currentItems.clear();
                         for (TxUiHolder item : items) {
-                            if (adapter.FilterItem(item, ((WalletActivity) app).filterSwitches)) {
-                                currentItems.add(item);
-                            }
+                            currentItems.add(item);
                         }
                         //adapter.setItems(betItems);
                         //txList.setAdapter(adapter);

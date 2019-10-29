@@ -306,14 +306,15 @@
                     android:layout_marginRight="18dp"
                     android:layout_toRightOf="@id/tx_spreads_home_odds"
                     android:ellipsize="end"
-                    android:maxLength="10"
+                    android:maxLength="14"
                     android:maxLines="1"
                     android:paddingBottom="6dp"
-                    android:text="-9/+9"
+                    android:paddingTop="6dp"
+                    android:text="-11.5/+11.5"
                     android:textColor="@color/white"
                     android:textAlignment="center"
                     android:background="@color/light_gray"
-                    android:textSize="24sp" />
+                    android:textSize="18sp" />
 
                 <com.wagerrwallet.presenter.customviews.BRText
                     android:id="@+id/tx_spreads_away_odds"

@@ -64,40 +64,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
-                    <com.wagerrwallet.presenter.customviews.BRButton
-                        android:id="@+id/bet_filter"
-                        android:layout_width="105dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:paddingTop="4dp"
-                        android:paddingBottom="4dp"
-                        android:text="Bet History"
-                        android:textColor="@color/light_gray"
-                        android:textSize="@dimen/paragraph"
-                        app:buttonType="2"
-                        app:customBFont="CircularPro-Book.otf"
-                        app:isBreadButton="true"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/currency_usd_price" />
-
-                    <com.wagerrwallet.presenter.customviews.BRButton
-                        android:id="@+id/reward_filter"
-                        android:layout_width="105dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:paddingTop="4dp"
-                        android:paddingBottom="4dp"
-                        android:text="Payouts"
-                        android:textColor="@color/light_gray"
-                        android:textSize="@dimen/paragraph"
-                        app:buttonType="2"
-                        app:customBFont="CircularPro-Book.otf"
-                        app:isBreadButton="true"
-                        app:layout_constraintStart_toEndOf="@+id/bet_filter"
-                        app:layout_constraintTop_toBottomOf="@+id/currency_usd_price" />
-
                     <ImageButton
                         android:id="@+id/back_icon"
                         android:layout_width="48dp"

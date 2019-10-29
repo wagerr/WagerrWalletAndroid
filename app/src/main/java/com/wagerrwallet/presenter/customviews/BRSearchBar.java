@@ -51,8 +51,13 @@ public class BRSearchBar extends android.support.v7.widget.Toolbar {
     private BRButton pendingFilter;
     private BRButton completedFilter;
     private BRButton cancelButton;
+
+    private BRButton betHistoryFilter;
+    private BRButton rewardsFilter;
+
     private WalletActivity breadActivity;
 
+    public boolean[] betfilterSwitches = new boolean[2];
     public boolean[] filterSwitches = new boolean[4];
 
     public BRSearchBar(Context context) {
@@ -84,6 +89,24 @@ public class BRSearchBar extends android.support.v7.widget.Toolbar {
         clearSwitches();
         setListeners();
 
+        betHistoryFilter = findViewById(R.id.bet_filter);
+        betHistoryFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                betfilterSwitches[0] = !betfilterSwitches[0];
+                updateBetFilterButtonsUI(betfilterSwitches);
+            }
+        });
+        rewardsFilter = findViewById(R.id.reward_filter);
+        rewardsFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                betfilterSwitches[1] = !betfilterSwitches[1];
+                updateBetFilterButtonsUI(betfilterSwitches);
+            }
+        });
+
+
 
         searchEdit.requestFocus();
         searchEdit.postDelayed(new Runnable() {
@@ -111,7 +134,14 @@ public class BRSearchBar extends android.support.v7.widget.Toolbar {
         pendingFilter.setType(switches[2] ? 3 : 2);
         completedFilter.setType(switches[3] ? 3 : 2);
         if (TxManager.getInstance().adapter != null)
-            TxManager.getInstance().adapter.filterBy(searchEdit.getText().toString(), filterSwitches);
+            TxManager.getInstance().adapter.filterBy(searchEdit.getText().toString(), filterSwitches, betfilterSwitches);
+    }
+
+    private void updateBetFilterButtonsUI(boolean[] switches) {
+        betHistoryFilter.setType(switches[0] ? 3 : 2);
+        rewardsFilter.setType(switches[1] ? 3 : 2);
+        if (TxManager.getInstance().adapter != null)
+            TxManager.getInstance().adapter.filterBy( searchEdit.getText().toString(), filterSwitches, betfilterSwitches);
     }
 
     private void setListeners() {
@@ -146,7 +176,7 @@ public class BRSearchBar extends android.support.v7.widget.Toolbar {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TxManager.getInstance().adapter != null)
-                    TxManager.getInstance().adapter.filterBy(s.toString(), filterSwitches);
+                    TxManager.getInstance().adapter.filterBy(s.toString(), filterSwitches, betfilterSwitches);
             }
 
             @Override
@@ -207,6 +237,8 @@ public class BRSearchBar extends android.support.v7.widget.Toolbar {
         filterSwitches[1] = false;
         filterSwitches[2] = false;
         filterSwitches[3] = false;
+        betfilterSwitches[0] = false;
+        betfilterSwitches[1] = false;
     }
 
     public void onShow(boolean b) {
@@ -216,6 +248,7 @@ public class BRSearchBar extends android.support.v7.widget.Toolbar {
         if (b) {
             clearSwitches();
             updateFilterButtonsUI(filterSwitches);
+            updateBetFilterButtonsUI(betfilterSwitches);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

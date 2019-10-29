@@ -1,6 +1,12 @@
 package com.wagerrwallet.presenter.entities;
 
 
+import com.wagerrwallet.WagerrApp;
+import com.wagerrwallet.presenter.activities.settings.BetSettings;
+import com.wagerrwallet.tools.manager.BRSharedPrefs;
+
+import java.text.DecimalFormat;
+
 /**
  * BreadWallet
  * <p>
@@ -190,19 +196,33 @@ public class BetEventEntity {
         return awayTeamID;
     }
 
+    public String getOddTx( float odd)  {
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(odd);
+    }
+
     public String getTxHomeOdds() {
         if (homeOdds==0)    return "N/A";
-        else                return String.valueOf((float)homeOdds/ODDS_MULTIPLIER);
+        else                return getOddTx(getOdds((float)homeOdds/ODDS_MULTIPLIER));
     }
 
     public String getTxAwayOdds() {
         if (awayOdds==0)    return "N/A";
-        else                return String.valueOf((float)awayOdds/ODDS_MULTIPLIER);
+        else                return getOddTx(getOdds((float)awayOdds/ODDS_MULTIPLIER));
     }
 
     public String getTxDrawOdds() {
         if (drawOdds==0)    return "N/A";
-        else                return String.valueOf((float)drawOdds/ODDS_MULTIPLIER);
+        else                return getOddTx(getOdds((float)drawOdds/ODDS_MULTIPLIER));
+    }
+
+    public float getOdds( float odds )  {
+        if (BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, true))  {
+            return odds;
+        }
+        else {
+            return (float)((odds-1)*0.94)+1;
+        }
     }
 
     public long getHomeOdds() {
@@ -239,12 +259,12 @@ public class BetEventEntity {
 
     public String getTxSpreadHomeOdds() {
         if (spreadHomeOdds==0)      return "N/A";
-        else                        return String.valueOf((float)spreadHomeOdds/ODDS_MULTIPLIER);
+        else                        return getOddTx(getOdds((float)spreadHomeOdds/ODDS_MULTIPLIER));
     }
 
     public String getTxSpreadAwayOdds() {
         if (spreadAwayOdds==0)    return "N/A";
-        else                      return String.valueOf((float)spreadAwayOdds/ODDS_MULTIPLIER);
+        else                      return getOddTx(getOdds((float)spreadAwayOdds/ODDS_MULTIPLIER));
     }
 
     public long getTotalPoints() {
@@ -265,12 +285,12 @@ public class BetEventEntity {
 
     public String getTxOverOdds() {
         if (overOdds==0)    return "N/A";
-        else                return String.valueOf((float)overOdds/ODDS_MULTIPLIER);
+        else                return getOddTx(getOdds((float)overOdds/ODDS_MULTIPLIER));
     }
 
     public String getTxUnderOdds() {
         if (underOdds==0)   return "N/A";
-        else                return String.valueOf((float)underOdds/ODDS_MULTIPLIER);
+        else                return getOddTx(getOdds((float)underOdds/ODDS_MULTIPLIER));
     }
 
     public String getTxSport() {

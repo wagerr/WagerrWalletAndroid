@@ -53,8 +53,10 @@ public class TxUiHolder {
     private int txSize;
     public TxMetaData metaData;
     private BetEntity betEntity;
+    private String teamSearchDescription;
 
     private TxUiHolder() {
+        teamSearchDescription="";
     }
 
     public TxUiHolder(long timeStamp, int blockHeight, byte[] hash, String txReversed, long sent,
@@ -75,6 +77,7 @@ public class TxUiHolder {
         this.txSize = txSize;
         this.isCoinbase = isCoinbase;
         betEntity = null;
+        this.teamSearchDescription = "";
     }
 
     public BetEntity getBetEntity() {   return betEntity;}
@@ -156,4 +159,11 @@ public class TxUiHolder {
         return ret;
     }
 
+    public void setTeamSearchDescription(String teamSearchDesc) {
+        teamSearchDescription = teamSearchDesc;
+    }
+
+    public String getTeamSearchDescription() {
+        return teamSearchDescription;
+    }
 }

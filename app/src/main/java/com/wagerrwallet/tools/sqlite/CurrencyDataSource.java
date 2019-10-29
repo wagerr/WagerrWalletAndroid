@@ -35,6 +35,7 @@ import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.tools.util.Utils;
+import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -127,6 +128,9 @@ public class CurrencyDataSource implements BRDataSourceInterface {
                     new String[]{iso.toUpperCase()}, null, null, "\'" + BRSQLiteHelper.CURRENCY_CODE + "\'");
 
             cursor.moveToFirst();
+
+            currencies.add(getBTCEntity());
+
             while (!cursor.isAfterLast()) {
                 CurrencyEntity curEntity = cursorToCurrency(cursor);
                 if ( !curEntity.code.equals(iso.toUpperCase()) ) {
@@ -134,6 +138,7 @@ public class CurrencyDataSource implements BRDataSourceInterface {
                 }
                 cursor.moveToNext();
             }
+
             // make sure to close the cursor
         } finally {
             if (cursor != null)
@@ -142,6 +147,15 @@ public class CurrencyDataSource implements BRDataSourceInterface {
         }
         Log.e(TAG, "getAllCurrencies: size:" + currencies.size());
         return currencies;
+    }
+
+    public CurrencyEntity getBTCEntity()   {
+        CurrencyEntity btcEntity = new CurrencyEntity();
+        btcEntity.code="BTC";
+        btcEntity.iso="BTC";
+        btcEntity.name="Bitcoin";
+        btcEntity.rate= 1;
+        return btcEntity;
     }
 
     public List<String> getAllCurrencyCodes(Context app, String iso) {
@@ -174,6 +188,10 @@ public class CurrencyDataSource implements BRDataSourceInterface {
         Cursor cursor = null;
         CurrencyEntity result = null;
         try {
+            if (code.equals("BTC")) {
+                return getBTCEntity();
+            }
+
             database = openDatabase();
 //            printTest();
 //            Log.e(TAG, "getCurrencyByCode: code: " + code + ", iso: " + walletManager.getIso(app));
