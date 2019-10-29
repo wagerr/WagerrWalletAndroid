@@ -67,9 +67,13 @@ public class TxManager {
                 txList, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, float x, float y) {
+                try {
+                    TxUiHolder item = adapter.getItems().get(position);
+                    BRAnimator.showTransactionDetails(app, item, position);
+                }
+                catch (ArrayIndexOutOfBoundsException e)    {
 
-                TxUiHolder item = adapter.getItems().get(position);
-                BRAnimator.showTransactionDetails(app, item, position);
+                }
             }
 
             @Override
@@ -104,7 +108,7 @@ public class TxManager {
         long took = (System.currentTimeMillis() - start);
         if (took > 500)
             Log.e(TAG, "updateTxList: took: " + took);
-        if (adapter != null) {
+        if (adapter != null && !((WalletActivity)app).isSearchActive() ) {
             ((WalletActivity) app).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

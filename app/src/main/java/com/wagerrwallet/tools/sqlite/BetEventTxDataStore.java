@@ -315,7 +315,9 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 EventTxUiHolder transactionEntity = cursorToUIEvent(app, iso.toUpperCase(), cursor);
-                transactions.add(transactionEntity);
+                if (transactionEntity.getHomeOdds()>0 || transactionEntity.getDrawOdds()>0 || transactionEntity.getAwayOdds()>0) {
+                    transactions.add(transactionEntity);
+                }
                 cursor.moveToNext();
             }
         } finally {

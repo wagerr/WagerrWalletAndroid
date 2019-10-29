@@ -114,7 +114,7 @@ public class EventTxManager {
         long took = (System.currentTimeMillis() - start);
         if (took > 500)
             Log.e(TAG, "updateEventList: took: " + took);
-        if (adapter != null) {
+        if (adapter != null && !((EventsActivity)app).isSearchActive()) {
             ((Activity) app).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

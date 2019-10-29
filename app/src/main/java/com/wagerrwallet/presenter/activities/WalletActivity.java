@@ -228,6 +228,10 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
 
     }
 
+    public boolean isSearchActive() {
+        return searchBar.isShown();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

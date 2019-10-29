@@ -240,7 +240,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void filter(final long[] switches, boolean bNotify, String query) {
         long start = System.currentTimeMillis();
         int switchesON = 0;
-        for (long i : switches) if (i>0) switchesON++;
+        for (long i : switches) if (i>=0) switchesON++;
 
         final List<EventTxUiHolder> filteredList = new ArrayList<>();
         String lowerQuery = query.toLowerCase().trim();

@@ -148,12 +148,12 @@ public class BRSearchBar extends android.support.v7.widget.Toolbar {
         searchEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
+                /*if (!hasFocus) {
                     if (breadActivity.barFlipper != null) {
                         breadActivity.barFlipper.setDisplayedChild(0);
                         clearSwitches();
                     }
-                }
+                }*/
             }
         });
 
