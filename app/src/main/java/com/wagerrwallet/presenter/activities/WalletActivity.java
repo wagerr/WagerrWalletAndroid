@@ -229,7 +229,11 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
     }
 
     public boolean isSearchActive() {
-        return searchBar.isShown();
+        boolean ret = false;
+        if ( searchBar!=null && searchBar.isShown() )    {
+            ret = true;
+        }
+        return ret;
     }
 
     @Override

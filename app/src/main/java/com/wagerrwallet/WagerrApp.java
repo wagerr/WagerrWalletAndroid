@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.google.firebase.FirebaseApp;
 import com.wagerrwallet.presenter.activities.util.BRActivity;
 import com.wagerrwallet.tools.listeners.SyncReceiver;
 import com.wagerrwallet.tools.manager.InternetManager;
@@ -30,6 +31,13 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.platform.APIClient.BREAD_POINT;
+
+import org.acra.*;
+import org.acra.config.CoreConfigurationBuilder;
+import org.acra.config.HttpSenderConfigurationBuilder;
+import org.acra.config.ToastConfigurationBuilder;
+import org.acra.data.StringFormat;
+import org.acra.sender.HttpSender;
 
 /**
  * BreadWallet
@@ -77,15 +85,50 @@ public class WagerrApp extends Application {
 
     private static Activity currentActivity;
 
+/*    @AcraCore(buildConfigClass = BuildConfig.class,
+            reportFormat = StringFormat.JSON)
+    @AcraEmailSender(uri = "https://yourdomain.com/acra/report",
+            httpMethod = HttpSender.Method.POST,
+            basicAuthLogin = "*****",
+            basicAuthPassword = "*****")
+ */   public class MyApplication extends Application {
+        @Override
+        protected void attachBaseContext(Context base) {
+            super.attachBaseContext(base);
+
+            ACRAInit();
+        }
+    }
+
+    public void ACRAInit()  {
+        CoreConfigurationBuilder builder = new CoreConfigurationBuilder(this)
+                .setBuildConfigClass(BuildConfig.class)
+                .setReportFormat(StringFormat.JSON);
+        /*builder.getPluginConfigurationBuilder(MailSenderConfigurationBuilder.class)
+                .setMailTo("mip.putalocura@gmail.com")
+                .setReportAsFile(true)
+                .setSubject("Wagerr Crash Report")
+                .setEnabled(true);*/
+        builder.getPluginConfigurationBuilder(HttpSenderConfigurationBuilder.class)
+                .setHttpMethod(HttpSender.Method.POST)
+                .setUri("http://167.86.74.98/acra.php")
+                .setEnabled(true);
+        builder.getPluginConfigurationBuilder(ToastConfigurationBuilder.class).setText("Sending crash report");
+        // The following line triggers the initialization of ACRA
+        ACRA.init(this,builder);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         if (Utils.isEmulatorOrDebug(this)) {
+            FirebaseApp.initializeApp(this);
 //            BRKeyStore.putFailCount(0, this);
             HOST = "stage2.breadwallet.com";
             FirebaseCrash.setCrashCollectionEnabled(false);
 //            FirebaseCrash.report(new RuntimeException("test with new json file"));
         }
+        ACRAInit();
         mContext = this;
 
         if (!Utils.isEmulatorOrDebug(this) && IS_ALPHA)

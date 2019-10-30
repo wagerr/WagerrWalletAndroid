@@ -264,6 +264,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
                     if (ev != null) {
                         txDescription = String.format("%s - %s", ev.getTxHomeTeam(), ev.getTxAwayTeam());
+                        item.setTeamSearchDescription(txDescription);
                     } else {
                         txDescription = String.format("Event #%d: info not avalable", eventID);
                     }

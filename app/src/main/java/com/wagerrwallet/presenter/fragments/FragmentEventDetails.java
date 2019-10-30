@@ -651,6 +651,9 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 mSpreadsContainer.setVisibility(View.VISIBLE);
                 rlLastContainer = mSpreadsContainer;
             }
+            else    {
+                mSpreadsContainer.setVisibility(View.GONE);
+            }
 
             bHasTotals = (item.getTotalPoints()>0);
             if (bHasTotals) {
@@ -660,6 +663,10 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 mTotalsContainer.setVisibility(View.VISIBLE);
                 rlLastContainer = mTotalsContainer;
             }
+            else    {
+                mTotalsContainer.setVisibility(View.GONE);
+            }
+
 /*
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.BELOW, rlLastContainer.getId());
