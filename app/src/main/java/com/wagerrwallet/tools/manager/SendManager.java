@@ -265,7 +265,15 @@ public class SendManager {
                 }
             }, null, null, 0);
         } else {
-            if (Utils.isNullOrEmpty(item.address)) throw new RuntimeException("can't happen");
+            if (Utils.isNullOrEmpty(item.address)) {
+                BRDialog.showCustomDialog(app, app.getString(R.string.Alerts_sendFailure), "Error while obtaining destination address, please report case if it persists.", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                    @Override
+                    public void onClick(BRDialogView brDialogView) {
+                        brDialogView.dismissWithAnimation();
+                    }
+                }, null, null, 0);
+                return;
+            }
             final BRCoreTransaction tx = wm.getWallet().createTransaction(maxAmountDouble, new BRCoreAddress(item.address));
             if (tx == null) {
                 BRDialog.showCustomDialog(app, app.getString(R.string.Alerts_sendFailure), "Insufficient amount for transaction fee", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {

@@ -97,8 +97,8 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
     private static WalletActivity app;
 
     private InternetManager mConnectionReceiver;
-
     private TestLogger logger;
+    public boolean isSearchBarVisible = false;
 
     public static WalletActivity getApp() {
         return app;
@@ -229,11 +229,7 @@ public class WalletActivity extends BRActivity implements InternetManager.Connec
     }
 
     public boolean isSearchActive() {
-        boolean ret = false;
-        if ( searchBar!=null && searchBar.isShown() )    {
-            ret = true;
-        }
-        return ret;
+        return isSearchBarVisible;
     }
 
     @Override

@@ -57,7 +57,7 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
     private LinearLayout barLayout;
     private LinearLayout betbarLayout;
 
-    public long[] filterSwitches = new long[4];
+    public long[] filterSwitches = new long[2];
 
     public BREventSearchBar(Context context) {
         super(context);
@@ -156,7 +156,7 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (EventTxManager.getInstance().adapter != null)
-                    EventTxManager.getInstance().adapter.filterBy(s.toString(), filterSwitches);
+                    EventTxManager.getInstance().adapter.filterBy(s.toString());
             }
 
             @Override
@@ -246,6 +246,7 @@ public class BREventSearchBar extends android.support.v7.widget.Toolbar {
                 EventTxManager.getInstance().adapter.resetFilter();
             }
         }
+        breadActivity.isSearchBarVisible = b;
     }
 
     public String getSearchQuery()  {

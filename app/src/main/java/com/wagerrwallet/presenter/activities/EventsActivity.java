@@ -121,8 +121,8 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
     private static EventsActivity app;
 
     private InternetManager mConnectionReceiver;
-
     private TestLogger logger;
+    public boolean isSearchBarVisible = false;
 
     public static EventsActivity getApp() {
         return app;

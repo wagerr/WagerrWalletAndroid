@@ -267,6 +267,7 @@ public class BRSearchBar extends android.support.v7.widget.Toolbar {
                 TxManager.getInstance().adapter.resetFilter();
             }
         }
+        breadActivity.isSearchBarVisible = b;
     }
 
 

@@ -228,8 +228,8 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    public void filterBy(String query, long[] switches) {
-        filter(switches, true, query);
+    public void filterBy(String query) {
+        filter(filterSwitches, true, query);
     }
 
     public void resetFilter() {
@@ -241,6 +241,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         long start = System.currentTimeMillis();
         int switchesON = 0;
         for (long i : switches) if (i>=0) switchesON++;
+        filterSwitches = switches;
 
         final List<EventTxUiHolder> filteredList = new ArrayList<>();
         String lowerQuery = query.toLowerCase().trim();
