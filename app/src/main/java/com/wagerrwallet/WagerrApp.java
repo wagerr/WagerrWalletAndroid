@@ -23,6 +23,7 @@ import com.wagerrwallet.tools.util.Utils;
 import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -226,7 +227,14 @@ public class WagerrApp extends Application {
     public static synchronized void fireListeners() {
         if (listeners == null) return;
         List<OnAppBackgrounded> copy = listeners;
-        for (OnAppBackgrounded lis : copy) if (lis != null) lis.onBackgrounded();
+
+            for (OnAppBackgrounded lis : copy) {
+                try {
+                    if (lis != null) lis.onBackgrounded();
+                }
+                catch (ConcurrentModificationException e)   {
+                }
+            }
     }
 
     public static void addOnBackgroundedListener(OnAppBackgrounded listener) {

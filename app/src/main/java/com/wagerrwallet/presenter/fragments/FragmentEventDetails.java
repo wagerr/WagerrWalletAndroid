@@ -333,7 +333,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mAmountWhenSent = rootView.findViewById(R.id.amount_when_sent);
 
         mTxNoBetBalance = rootView.findViewById(R.id.tx_no_bet_balance);
-        boolean canBet = ((int)(walletManager.getWallet().getBalance()/UNIT_MULTIPLIER) > getContext().getResources().getInteger(R.integer.min_bet_amount));
+        boolean canBet = (((float)walletManager.getWallet().getBalance())/UNIT_MULTIPLIER) > getContext().getResources().getInteger(R.integer.min_bet_amount);
 
         if (canBet) {
             mTxHomeOdds.setOnClickListener(this);

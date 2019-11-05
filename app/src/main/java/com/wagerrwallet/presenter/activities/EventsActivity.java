@@ -66,6 +66,7 @@ import com.wagerrwallet.tools.util.CurrencyUtils;
 import com.wagerrwallet.tools.util.Utils;
 import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
+import com.wagerrwallet.wallet.abstracts.OnBalanceChangedListener;
 import com.wagerrwallet.wallet.abstracts.OnEventTxListModified;
 import com.wagerrwallet.wallet.abstracts.OnTxListModified;
 import com.wagerrwallet.wallet.abstracts.SyncListener;
@@ -293,6 +294,12 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             BRDialog.showSimpleDialog(this, getString(R.string.Dialog_screenAlteringTitle), getString(R.string.Dialog_screenAlteringMessage));
         }
 
+        WalletsMaster.getInstance(this).getCurrentWallet(this).addBalanceChangedListener(new OnBalanceChangedListener() {
+            @Override
+            public void onBalanceChanged(String iso, long newBalance) {
+                updateBalance();
+            }
+        });
     }
 
     public boolean isSearchActive() {
@@ -455,6 +462,19 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
 
 //        String fiatIso = BRSharedPrefs.getPreferredFiatIso(this);
 
+        updateBalance();
+
+        mToolbar.setBackgroundColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
+        //mSendButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
+        //mBuyButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
+        //mReceiveButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
+
+        EventTxManager.getInstance().updateTxList(EventsActivity.this);
+    }
+
+    protected void updateBalance()  {
+        final BaseWalletManager wallet = WalletsMaster.getInstance(this).getCurrentWallet(this);
+
         String fiatExchangeRate = CurrencyUtils.getFormattedAmount(this, BRSharedPrefs.getPreferredFiatIso(this), wallet.getFiatExchangeRate(this));
         String fiatBalance = CurrencyUtils.getFormattedAmount(this, BRSharedPrefs.getPreferredFiatIso(this), wallet.getFiatBalance(this));
         String cryptoBalance = CurrencyUtils.getFormattedAmount(this, wallet.getIso(this), new BigDecimal(wallet.getCachedBalance(this)));
@@ -463,12 +483,6 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         mCurrencyPriceUsd.setText(String.format("%s per %s", fiatExchangeRate, wallet.getIso(this)));
         mBalancePrimary.setText(fiatBalance);
         mBalanceSecondary.setText(cryptoBalance);
-        mToolbar.setBackgroundColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
-        //mSendButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
-        //mBuyButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
-        //mReceiveButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
-
-        EventTxManager.getInstance().updateTxList(EventsActivity.this);
     }
 
     // This method checks if a screen altering app(such as Twightlight) is currently running
