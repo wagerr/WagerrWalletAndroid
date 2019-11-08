@@ -160,6 +160,7 @@ public class Utils {
     }
 
     public static boolean isFingerprintEnrolled(Context app) {
+        //return true;
         FingerprintManager fingerprintManager = (FingerprintManager) app.getSystemService(FINGERPRINT_SERVICE);
         if (fingerprintManager==null) {        // Device doesn't support fingerprint authentication
             return false;
@@ -167,9 +168,11 @@ public class Utils {
         else {
             return ActivityCompat.checkSelfPermission(app, Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED && fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints();
         }
+
     }
 
     public static boolean isFingerprintAvailable(Context app) {
+        //return true;
         FingerprintManager fingerprintManager = (FingerprintManager) app.getSystemService(FINGERPRINT_SERVICE);
         if (fingerprintManager == null) return false;
         // Device doesn't support fingerprint authentication

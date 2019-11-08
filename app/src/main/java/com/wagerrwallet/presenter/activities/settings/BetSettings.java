@@ -40,7 +40,7 @@ public class BetSettings extends BRActivity {
 
     private AppCompatCheckBox chkDisplayOdds;
     private static BetSettings app;
-
+    private ImageButton mBackButton;
 
     public static BetSettings getApp() {
         return app;
@@ -65,6 +65,16 @@ public class BetSettings extends BRActivity {
                 BRSharedPrefs.putFeatureEnabled(app, isChecked, FEATURE_DISPLAY_ODDS);
             }
         });
+
+        mBackButton = findViewById(R.id.back_button);
+
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 
     @Override

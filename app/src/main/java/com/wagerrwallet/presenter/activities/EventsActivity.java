@@ -294,12 +294,6 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             BRDialog.showSimpleDialog(this, getString(R.string.Dialog_screenAlteringTitle), getString(R.string.Dialog_screenAlteringMessage));
         }
 
-        WalletsMaster.getInstance(this).getCurrentWallet(this).addBalanceChangedListener(new OnBalanceChangedListener() {
-            @Override
-            public void onBalanceChanged(String iso, long newBalance) {
-                updateBalance();
-            }
-        });
     }
 
     public boolean isSearchActive() {
