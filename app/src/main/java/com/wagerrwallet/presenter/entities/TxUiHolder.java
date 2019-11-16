@@ -53,6 +53,7 @@ public class TxUiHolder {
     private int txSize;
     public TxMetaData metaData;
     private BetEntity betEntity;
+    private BetResultEntity betResultEntity;
     private String teamSearchDescription;
 
     private TxUiHolder() {
@@ -77,11 +78,15 @@ public class TxUiHolder {
         this.txSize = txSize;
         this.isCoinbase = isCoinbase;
         betEntity = null;
+        betResultEntity = null;
         this.teamSearchDescription = "";
     }
 
     public BetEntity getBetEntity() {   return betEntity;}
     public void setBetEntity( BetEntity be ) {   betEntity=be; }
+
+    public BetResultEntity getBetResultEntity() {   return betResultEntity;}
+    public void setBetResultEntity( BetResultEntity br ) {   betResultEntity=br; }
 
     public int getBlockHeight() {
         return blockHeight;

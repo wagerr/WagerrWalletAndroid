@@ -260,6 +260,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
                 BetResultEntity br = brds.getByBlockHeight(mContext, wallet.getIso(mContext), item.getBlockHeight() - 1);
                 if (br != null) {
+                    item.setBetResultEntity( br );
                     eventID = br.getEventID();
                     EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
                     if (ev != null) {
@@ -406,11 +407,14 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             item = backUpFeed.get(i);
             boolean matchesHash = item.getTxHashHexReversed() != null && item.getTxHashHexReversed().toLowerCase().contains(lowerQuery);
             boolean matchesAddress = item.getToRecipient(wallet, false).toLowerCase().contains(lowerQuery) || item.getToRecipient(wallet, true).toLowerCase().contains(lowerQuery);
-            boolean matchesMemo = item.metaData != null && item.metaData.comment != null && item.metaData.comment.toLowerCase().contains(lowerQuery);
+            //boolean matchesMemo = item.metaData != null && item.metaData.comment != null && item.metaData.comment.toLowerCase().contains(lowerQuery);
             // team match
             boolean matchesTeam = !item.getTeamSearchDescription().isEmpty() && item.getTeamSearchDescription().toLowerCase().contains(lowerQuery);
+            boolean matchesEventId = Utils.isInteger(lowerQuery) &&
+                                    ((item.getBetEntity()!=null) && item.getBetEntity().getEventID()==Integer.parseInt(lowerQuery)      // bets
+                                  || (item.getBetResultEntity()!=null) && item.getBetResultEntity().getEventID()==Integer.parseInt(lowerQuery) );   // payouts
 
-            if (matchesHash || matchesAddress || matchesMemo || matchesTeam ) {
+            if (matchesHash || matchesAddress || matchesTeam || matchesEventId) {
                 if (switchesON == 0) {
                     filteredList.add(item);
                 } else {

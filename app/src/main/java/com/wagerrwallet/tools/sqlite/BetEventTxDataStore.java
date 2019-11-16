@@ -102,12 +102,13 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         try {
             database = openDatabase();
             BetEventEntity transactionEntity1 = getTxByHash(app,iso, transactionEntity.getTxHash());
+            BetEventEntity transactionEntity2 = getByEventIdLowerHeight(app,iso, transactionEntity.getEventID(), transactionEntity.getBlockheight());
             if (transactionEntity1==null) {
                 ContentValues values = new ContentValues();
+
                 values.put(BRSQLiteHelper.BETX_COLUMN_ID, transactionEntity.getTxHash());
                 values.put(BRSQLiteHelper.BETX_TYPE, transactionEntity.getType().getNumber());
                 values.put(BRSQLiteHelper.BETX_VERSION, transactionEntity.getVersion());
-                values.put(BRSQLiteHelper.BETX_EVENTID, transactionEntity.getEventID());
                 values.put(BRSQLiteHelper.BETX_EVENT_TIMESTAMP, transactionEntity.getEventTimestamp());
                 values.put(BRSQLiteHelper.BETX_SPORT, transactionEntity.getSportID());
                 values.put(BRSQLiteHelper.BETX_TOURNAMENT, transactionEntity.getTournamentID());
@@ -124,7 +125,18 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
                 values.put(BRSQLiteHelper.BETX_ISO, iso.toUpperCase());
 
                 database.beginTransaction();
-                database.insert(BRSQLiteHelper.BETX_TABLE_NAME, null, values);
+
+                // request, we may receive correction txs
+                if (transactionEntity2!=null) {
+                    database.update(BRSQLiteHelper.BETX_TABLE_NAME, values, BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
+                            new String[]{String.valueOf(transactionEntity.getEventID()), iso.toUpperCase()} );
+                }
+                else    {
+                    values.put(BRSQLiteHelper.BETX_EVENTID, transactionEntity.getEventID());
+                    database.insert(BRSQLiteHelper.BETX_TABLE_NAME, null, values);
+                }
+
+
                 cursor = database.query(BRSQLiteHelper.BETX_TABLE_NAME,
                         allColumns, BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
                         new String[]{String.valueOf(transactionEntity.getEventID()), iso.toUpperCase()}, null, null, null);
@@ -265,7 +277,7 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
         return ret;
     }
 
-    public BetEventEntity getById(Context app, String iso, int eventID)     {
+    public BetEventEntity getByEventIdLowerHeight(Context app, String iso, long eventID, long blockHeight)     {
         Cursor cursor = null;
         BetEventEntity transactionEntity1 = null;
         try {
@@ -273,8 +285,8 @@ public class BetEventTxDataStore implements BRDataSourceInterface {
             database = openDatabase();
 
             cursor = database.query(BRSQLiteHelper.BETX_TABLE_NAME,
-                    allColumns,  BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
-                    new String[]{ String.valueOf(eventID), iso.toUpperCase()},null,null,null);
+                    allColumns,  BRSQLiteHelper.BETX_EVENTID + "=? AND " + BRSQLiteHelper.TX_ISO + "=? AND " + BRSQLiteHelper.TX_BLOCK_HEIGHT + "<?" ,
+                    new String[]{ String.valueOf(eventID), iso.toUpperCase(), String.valueOf(blockHeight) },null,null,null);
             if (cursor.getCount()==1)   {
                 cursor.moveToFirst();
                 transactionEntity1 = cursorToTransaction(app, iso.toUpperCase(), cursor);

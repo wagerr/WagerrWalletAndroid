@@ -251,7 +251,9 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             // team match
             boolean matchesTeam =  item.getTxHomeTeam().toLowerCase().contains(lowerQuery)
                                 || item.getTxAwayTeam().toLowerCase().contains(lowerQuery);
-            if ( matchesTeam ) {
+            boolean matchesEventId = Utils.isInteger(lowerQuery) && item.getEventID()==Integer.parseInt(lowerQuery);
+
+            if ( matchesTeam || matchesEventId ) {
                 if (switchesON == 0) {
                     filteredList.add(item);
                 } else {
