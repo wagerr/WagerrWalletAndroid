@@ -257,7 +257,7 @@ public class SendManager {
             BRReportsManager.reportBug(new RuntimeException("getMaxOutputAmount is -1, meaning _wallet is NULL"));
             return;
         }
-        if (maxAmountDouble == 0) {
+        if (maxAmountDouble == 0 || maxAmountDouble < item.amount.longValue() ) {
             BRDialog.showCustomDialog(app, app.getString(R.string.Alerts_sendFailure), "Insufficient amount for transaction fee", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
                 @Override
                 public void onClick(BRDialogView brDialogView) {

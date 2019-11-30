@@ -148,6 +148,7 @@ public class PromptManager {
                             public void run() {
                                 BRSharedPrefs.putStartHeight(app, BRSharedPrefs.getCurrentWalletIso(app), 0);
                                 BaseWalletManager wallet = WalletsMaster.getInstance(app).getCurrentWallet(app);
+                                wallet.wipeData(app);
                                 wallet.getPeerManager().rescan();
                                 BRSharedPrefs.putScanRecommended(app, BRSharedPrefs.getCurrentWalletIso(app), false);
                             }

@@ -346,7 +346,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         }
         else {
             mTxNoBetBalance.setVisibility(View.VISIBLE);
-            mTxNoBetBalance.setText(String.format("Minimum bet is %d", getContext().getResources().getInteger(R.integer.min_bet_amount)));
+            mTxNoBetBalance.setText(String.format("Minimum bet is %d plus fees", getContext().getResources().getInteger(R.integer.min_bet_amount)));
         }
         mTxStatus = rootView.findViewById(R.id.tx_status);
         mTxDate = rootView.findViewById(R.id.tx_date);
