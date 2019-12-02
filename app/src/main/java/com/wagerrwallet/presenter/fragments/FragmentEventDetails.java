@@ -262,11 +262,22 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 int value = minvalue;
                 int balance = (int)(walletManager.getWallet().getBalance()/UNIT_MULTIPLIER);
                 int maxvalue = Math.min(getContext().getResources().getInteger(R.integer.max_bet_amount), balance );
+
                 if (!hasFocus) {
                     try {
                         value = Integer.parseInt(mTxAmount.getText().toString());
                         if ( value < minvalue )    value = minvalue;
-                        if ( value > maxvalue )    value = maxvalue;
+                        if ( value > maxvalue )    {
+                            value = maxvalue;
+                            // add message
+                            BRDialog.showCustomDialog(getContext(), "Warning", String.format("Transaction reduced to maximum of %d WGR", maxvalue), getContext().getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                                @Override
+                                public void onClick(BRDialogView brDialogView) {
+                                    brDialogView.dismiss();
+                                }
+                            }, null, null, 0);
+
+                        }
                         mTxAmount.setText(String.valueOf(value));
                     }
                     catch (NumberFormatException e)     {
