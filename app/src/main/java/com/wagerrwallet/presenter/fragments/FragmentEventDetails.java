@@ -446,7 +446,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
 
         try {
-            boolean oddsSetting = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, true);
+            boolean oddsSetting = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false);
             long rewardAmount = stake + ((oddsSetting)?(long)((stake * (odds - 1)) * 0.94):(long)(stake * (odds-1)));
             BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
             BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
@@ -465,7 +465,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         long amount = (seekBar.getProgress() + min) * UNIT_MULTIPLIER;
         //amount = 1000000;   // 0.01 WGR for testing
         Date date = new Date();
-        long timeStampLimit = (date.getTime()/1000) - WalletWagerrManager.BET_CUTTOFF_SECONDS;
+        long timeStampLimit = (date.getTime()/1000) + WalletWagerrManager.BET_CUTTOFF_SECONDS;
         if (mTransaction.getEventTimestamp()<timeStampLimit)    {
             BRDialog.showCustomDialog(getContext(), "Error", "Event is closed for betting", getContext().getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
                 @Override
@@ -654,7 +654,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
             bHasSpreads = (item.getSpreadPoints()>0);
             if (bHasSpreads) {
-                String txSpreadFormat = (item.getHomeOdds()>item.getAwayOdds())?"+%s/-%s":"-%s/+%s";
+                String txSpreadFormat = (item.getSpreadHomeOdds()>item.getSpreadAwayOdds())?"+%s/-%s":"-%s/+%s";
                 String txSpreadPoints = String.format(txSpreadFormat, item.getTxSpreadPoints(), item.getTxSpreadPoints() );
                 mTxSpreadPoints.setText(txSpreadPoints);
                 mTxSpreadHomeOdds.setText((item.getSpreadHomeOdds() > 0) ? item.getTxSpreadHomeOdds() : "N/A");

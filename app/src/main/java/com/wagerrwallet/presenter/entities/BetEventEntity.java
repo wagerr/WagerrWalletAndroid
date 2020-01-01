@@ -217,7 +217,7 @@ public class BetEventEntity {
     }
 
     public float getOdds( float odds )  {
-        if (BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, true))  {
+        if (BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false))  {
             return odds;
         }
         else {

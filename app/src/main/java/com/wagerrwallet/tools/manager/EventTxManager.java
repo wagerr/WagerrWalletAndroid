@@ -14,15 +14,19 @@ import android.view.View;
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.activities.WalletActivity;
+import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.tools.adapter.EventListAdapter;
 import com.wagerrwallet.tools.adapter.TransactionListAdapter;
 import com.wagerrwallet.tools.animation.BRAnimator;
+import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.listeners.RecyclerItemClickListener;
 import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
+import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -75,6 +79,27 @@ public class EventTxManager {
             public void onItemClick(View view, int position, float x, float y) {
                 try {
                     EventTxUiHolder item = adapter.getItems().get(position);
+                    Date date = new Date();
+                    long timeStampLimit = (date.getTime()/1000) + WalletWagerrManager.BET_CUTTOFF_SECONDS;
+                    if (item.getEventTimestamp()<timeStampLimit)    {
+                        BRDialog.showCustomDialog(app, "Error", "Event is closed for betting", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                            @Override
+                            public void onClick(BRDialogView brDialogView) {
+                                brDialogView.dismiss();
+                            }
+                        }, null, null, 0);
+                    }
+
+                    BaseWalletManager wallet = WalletsMaster.getInstance(app).getCurrentWallet(app);
+                    Boolean isSyncing =  wallet.getPeerManager().getSyncProgress(BRSharedPrefs.getStartHeight(app, "WGR" ))<1;
+                    if (isSyncing)    {
+                        BRDialog.showCustomDialog(app, "Error", "Wallet is still syncing", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                            @Override
+                            public void onClick(BRDialogView brDialogView) {
+                                brDialogView.dismiss();
+                            }
+                        }, null, null, 0);
+                    }
                     BRAnimator.showEventDetails(app, item, position);
                 }
                 catch (ArrayIndexOutOfBoundsException e)    {

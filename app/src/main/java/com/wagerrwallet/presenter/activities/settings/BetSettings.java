@@ -57,7 +57,7 @@ public class BetSettings extends BRActivity {
 
         chkDisplayOdds = findViewById(R.id.chk_displayodds);
 
-        chkDisplayOdds.setChecked(BRSharedPrefs.getFeatureEnabled(this, FEATURE_DISPLAY_ODDS, true));
+        chkDisplayOdds.setChecked(BRSharedPrefs.getFeatureEnabled(this, FEATURE_DISPLAY_ODDS, false));
         chkDisplayOdds.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
