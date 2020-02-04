@@ -7,8 +7,8 @@ android {
         applicationId = 'com.wagerrwallet'
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 253
-        versionName "253"
+        versionCode 255
+        versionName "255"
         multiDexEnabled true
 
         // Similar to other properties in the defaultConfig block,
@@ -50,7 +50,7 @@ android {
         wagerr {
             applicationId = "com.wagerrwallet"
             dimension "mode"
-            resValue "string", "app_name", "Wagerr Bet"
+            resValue "string", "app_name", "Wagerr Pro"
             buildConfigField "boolean", "BITCOIN_TESTNET", "false"
             externalNativeBuild {
                 cmake {

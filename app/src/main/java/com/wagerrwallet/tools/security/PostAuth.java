@@ -11,6 +11,7 @@ import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCoreKey;
 import com.wagerrwallet.core.BRCoreMasterPubKey;
 import com.wagerrwallet.core.BRCoreTransaction;
+import com.wagerrwallet.presenter.activities.InputWordsActivity;
 import com.wagerrwallet.presenter.activities.SetPinActivity;
 import com.wagerrwallet.presenter.activities.PaperKeyActivity;
 import com.wagerrwallet.presenter.activities.PaperKeyProveActivity;
@@ -130,8 +131,10 @@ public class PostAuth {
             }
             return;
         }
-        Intent intent = new Intent(app, PaperKeyProveActivity.class);
-        intent.putExtra("phrase", cleanPhrase);
+        //Intent intent = new Intent(app, PaperKeyProveActivity.class);
+        //intent.putExtra("phrase", cleanPhrase);
+        Intent intent = new Intent(app, InputWordsActivity.class);
+        intent.putExtra("validateSeed", true);
         app.startActivity(intent);
         app.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
     }

@@ -93,15 +93,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="54dp"
+                        android:layout_marginTop="14dp"
                         android:text="@string/CurrencyBalance"
                         android:textColor="@color/trans_white"
                         android:textSize="14sp"
                         android:visibility="visible"
                         app:customTFont="CircularPro-Book.otf"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/currency_usd_price"
+                        app:layout_constraintStart_toStartOf="@id/back_icon"
+                        />
 
                     <com.wagerrwallet.presenter.customviews.BRText
                         android:id="@+id/syncing_label"
@@ -142,12 +142,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
-                        android:paddingBottom="16dp"
+                        android:paddingBottom="0dp"
                         android:text="$26,495.69"
                         android:textColor="@color/white"
                         android:textSize="28sp"
                         app:customTFont="CircularPro-Bold.otf"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/currency_usd_price"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintVertical_bias="0.492" />
 
@@ -158,9 +158,9 @@
                         android:layout_height="14dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
-                        android:layout_marginBottom="23dp"
+                        android:layout_marginTop="20dp"
                         android:background="@drawable/ic_swap_horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/currency_usd_price"
                         app:layout_constraintRight_toLeftOf="@id/balance_primary"
                         app:layout_constraintVertical_bias="0.492" />
 
@@ -170,13 +170,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="28dp"
                         android:layout_marginEnd="8dp"
-                        android:paddingTop="18dp"
-                        android:paddingBottom="20dp"
+                        android:layout_marginTop="10dp"
+                        android:paddingTop="1dp"
+                        android:paddingBottom="0dp"
                         android:text="1.56739 BTC"
                         android:textColor="@color/trans_white"
                         android:textSize="16sp"
                         app:customTFont="CircularPro-Book.otf"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/currency_usd_price"
                         app:layout_constraintEnd_toStartOf="@id/swap"
                         app:layout_constraintRight_toLeftOf="@id/swap"
                         app:layout_constraintVertical_bias="0.492" />
@@ -205,31 +206,43 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <Spinner
-                        android:id="@+id/spinner_sport"
-                        android:layout_width="100dp"
-                        android:layout_height="24dp"
-                        app:layout_constraintTop_toBottomOf="@+id/currency_usd_price"
-                        app:layout_constraintStart_toStartOf="@id/back_icon"
-                        android:layout_marginTop="10dp"
-                        tools:layout_editor_absoluteX="8dp"
-                        android:textColor="@color/light_gray"
-                        android:textSize="@dimen/paragraph"
-                        android:background="@drawable/shadow_trans"
-                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        app:layout_constraintTop_toBottomOf="@+id/balance_label"
+                        android:orientation="horizontal">
 
-                    <Spinner
-                        android:id="@+id/spinner_tournament"
-                        android:layout_width="170dp"
-                        android:layout_height="24dp"
-                        app:layout_constraintTop_toBottomOf="@+id/currency_usd_price"
-                        app:layout_constraintStart_toEndOf="@id/spinner_sport"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="20dp"
-                        tools:layout_editor_absoluteX="168dp"
-                        tools:layout_editor_absoluteY="76dp"
-                        android:textColor="@color/light_gray"
-                        android:background="@drawable/shadow_trans"/>
+                        <Spinner
+                            android:id="@+id/spinner_sport"
+                            android:layout_width="100dp"
+                            android:layout_height="26dp"
+                            app:layout_constraintStart_toStartOf="@id/back_icon"
+                            android:layout_marginTop="20dp"
+                            tools:layout_editor_absoluteX="8dp"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/paragraph"
+                            android:background="@drawable/shadow_trans"
+                            android:spinnerMode="dropdown"
+                            android:layout_weight=".40"
+                            />
+
+                        <Spinner
+                            android:id="@+id/spinner_tournament"
+                            android:layout_width="170dp"
+                            android:layout_height="26dp"
+                            app:layout_constraintTop_toBottomOf="@+id/balance_label"
+                            app:layout_constraintStart_toEndOf="@id/spinner_sport"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            tools:layout_editor_absoluteX="168dp"
+                            tools:layout_editor_absoluteY="76dp"
+                            android:textColor="@color/light_gray"
+                            android:spinnerMode="dropdown"
+                            android:layout_weight=".60"
+                            android:background="@drawable/shadow_trans"/>
+                    </LinearLayout>
 
 
                 </android.support.constraint.ConstraintLayout>

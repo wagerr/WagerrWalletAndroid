@@ -724,9 +724,9 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             });
 
             // Set the transaction block number
-            mConfirmedInBlock.setText(String.valueOf(mTransaction.getBlockheight()));
-
-
+            String confirmedBlock = String.valueOf(mTransaction.getBlockheight());
+            if ( confirmedBlock.equals(BRConstants.INT23_MAX))  confirmedBlock = "Unconfirmed";
+            mConfirmedInBlock.setText(confirmedBlock);
 /*
             mToFrom.setText(sent ? "To " : "Via ");
 

@@ -134,6 +134,8 @@
     <string name="Confirmation.totalLabel">Total Cost:</string>
     <!-- Confirm paper phrase view label. -->
     <string name="ConfirmPaperPhrase.label">To make sure everything was written down correctly, please enter the following words from your paper key.</string>
+    <!-- Confirm paper phrase view label. -->
+    <string name="ConfirmPaperPhrase.label12">To make sure everything was written down correctly, please enter again the 12 words from your paper key.</string>
     <!-- Word label eg. Word #1, Word #2 -->
     <string name="ConfirmPaperPhrase.word">Word #%1$s</string>
     <!-- Bitcoin denomination picker label -->

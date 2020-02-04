@@ -100,7 +100,9 @@ public class EventTxManager {
                             }
                         }, null, null, 0);
                     }
-                    BRAnimator.showEventDetails(app, item, position);
+                    else {
+                        BRAnimator.showEventDetails(app, item, position);
+                    }
                 }
                 catch (ArrayIndexOutOfBoundsException e)    {
 

@@ -303,6 +303,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         BetMappingTxDataStore.getInstance(app).deleteTxByHash(app,"wgr", "cc89779e8e57d49e5e6d3e16ad57e648b19d86fb8f4714bc7df5abd3f92daa1d");
         BetMappingTxDataStore.getInstance(app).deleteTxByHash(app,"wgr", "d8e1e8389bbcffe1c79cf11e2206281377e54b99219ec6ccec296c2adb8ad65f");
         BetMappingTxDataStore.getInstance(app).deleteTxByHash(app,"wgr", "929972a7b2fdf55f6da7488ccaf7312fd5d22c4bca003ca089293c93f1c32917");
+        BetMappingTxDataStore.getInstance(app).deleteTxByHash(app,"wgr", "e4e3a4f782569fa3bf0135297942c8a1c791ec869ca036bf530ab95633d17815");
     }
 
     @Override

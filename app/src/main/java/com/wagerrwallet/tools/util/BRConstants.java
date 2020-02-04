@@ -90,6 +90,7 @@ public class BRConstants {
     public static boolean PLATFORM_ON = true;
     public static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
     public static final boolean WAL = true;
+    public static final String INT23_MAX = "2147483647";
 
     /**
      * Support Center article ids.

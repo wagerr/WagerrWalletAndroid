@@ -248,7 +248,7 @@ public class LoginActivity extends BRActivity {
             Log.d("MyApp", "Version Name : "+version + "\n Version Code : "+versionCode);
             if (versionCode < tag)   {
                 //BRDialog.showSimpleDialog(app, "New version available", "A new version of Wagerr Bet app is available");
-                BRDialog.showCustomDialog(app, "New version available", "A new version of Wagerr Bet app is available", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                BRDialog.showCustomDialog(app, "New version available", "A new version of Wagerr Pro app is available", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
                     @Override
                     public void onClick(BRDialogView brDialogView) {
                         brDialogView.dismiss();

@@ -329,7 +329,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         BetMappingEntity bmeS = (BetMappingEntity)mSpinnerSport.getSelectedItem();
 
         // add item 0
-        sports.add(0, new BetMappingEntity("",0, BetMappingEntity.MappingNamespaceType.SPORT, -1, "<Sport>",0,0,"wgr"));
+        sports.add(0, new BetMappingEntity("",0, BetMappingEntity.MappingNamespaceType.SPORT, -1, "Sport",0,0,"wgr"));
         currPosition = findItemIndex( bmeS, sports);
 
         ArrayAdapter<BetMappingEntity> dataAdapter = getDataAdapter(sports);
@@ -353,11 +353,11 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             sportID = bmeS.getMappingID();
             tournaments = bmds.getAllTournaments(this, "wgr", sportID, timeStamp );
             // add item 0
-            tournaments.add(0, new BetMappingEntity("",0, BetMappingEntity.MappingNamespaceType.TOURNAMENT, -1, "<Tournament>",0,0,"wgr"));
+            tournaments.add(0, new BetMappingEntity("",0, BetMappingEntity.MappingNamespaceType.TOURNAMENT, -1, "League",0,0,"wgr"));
             currPosition = findItemIndex( bmeT, tournaments);
         }
         else {
-            tournaments.add(0, new BetMappingEntity("",0, BetMappingEntity.MappingNamespaceType.TOURNAMENT, -1, "<Tournament>",0,0,"wgr"));
+            tournaments.add(0, new BetMappingEntity("",0, BetMappingEntity.MappingNamespaceType.TOURNAMENT, -1, "League",0,0,"wgr"));
         }
 
         ArrayAdapter<BetMappingEntity> dataAdapter = getDataAdapter(tournaments);
@@ -563,7 +563,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
 
             // Align crypto balance to the right parent
             set.connect(R.id.balance_secondary, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, px8);
-            set.connect(R.id.balance_secondary, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, -px8);
+            set.connect(R.id.balance_secondary, ConstraintSet.TOP, R.id.currency_usd_price, ConstraintSet.BOTTOM, -px8);
 
             // Align swap icon to left of crypto balance
             set.connect(R.id.swap, ConstraintSet.END, R.id.balance_secondary, ConstraintSet.START, px8);
@@ -572,7 +572,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             set.connect(R.id.balance_primary, ConstraintSet.END, R.id.swap, ConstraintSet.START, px8);
 
             mBalancePrimary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 6));
-            mBalanceSecondary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 4));
+            mBalanceSecondary.setPadding(0, Utils.getPixelsFromDps(this, 6), 0, Utils.getPixelsFromDps(this, 4));
             mSwap.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 2));
 
             Log.d(TAG, "CryptoPreferred " + cryptoPreferred);
@@ -598,7 +598,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             set.connect(R.id.balance_secondary, ConstraintSet.END, R.id.swap, ConstraintSet.START, px8);
 
             mBalancePrimary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 2));
-            mBalanceSecondary.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 4));
+            mBalanceSecondary.setPadding(0, Utils.getPixelsFromDps(this, 6), 0, Utils.getPixelsFromDps(this, 4));
             mSwap.setPadding(0, 0, 0, Utils.getPixelsFromDps(this, 2));
 
             //mBalancePrimary.setPadding(0,0, 0, Utils.getPixelsFromDps(this, -4));

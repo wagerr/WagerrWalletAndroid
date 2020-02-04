@@ -16,6 +16,7 @@ import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.intro.IntroActivity;
 import com.wagerrwallet.presenter.activities.util.BRActivity;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
+import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.animation.SpringAnimator;
@@ -58,6 +59,7 @@ public class InputWordsActivity extends BRActivity {
     //will be true if this screen was called from the restore screen
     private boolean restore = false;
     private boolean resetPin = false;
+    private boolean validateSeed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +136,7 @@ public class InputWordsActivity extends BRActivity {
 
         restore = getIntent().getExtras() != null && getIntent().getExtras().getBoolean("restore");
         resetPin = getIntent().getExtras() != null && getIntent().getExtras().getBoolean("resetPin");
+        validateSeed = getIntent().getExtras() != null && getIntent().getExtras().getBoolean("validateSeed");
 
         if (restore) {
             //change the labels
@@ -143,6 +146,10 @@ public class InputWordsActivity extends BRActivity {
             //change the labels
             title.setText(getString(R.string.RecoverWallet_header_reset_pin));
             description.setText(getString(R.string.RecoverWallet_subheader_reset_pin));
+        } else if (validateSeed) {
+            //change the labels
+            title.setText(getString(R.string.SecurityCenter_paperKeyTitle));
+            description.setText(getString(R.string.ConfirmPaperPhrase_label12));
         }
 
         word12.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -173,7 +180,7 @@ public class InputWordsActivity extends BRActivity {
                 }
                 if (SmartValidator.isPaperKeyValid(app, cleanPhrase)) {
 
-                    if (restore || resetPin) {
+                    if (restore || resetPin || validateSeed) {
                         if (SmartValidator.isPaperKeyCorrect(cleanPhrase, app)) {
                             Utils.hideKeyboard(app);
                             clearWords();
@@ -196,11 +203,21 @@ public class InputWordsActivity extends BRActivity {
                                     }
                                 }, null, 0);
 
-                            } else {
+                            } else if (resetPin) {
                                 AuthManager.getInstance().setPinCode("", InputWordsActivity.this);
                                 Intent intent = new Intent(app, SetPinActivity.class);
                                 intent.putExtra("noPin", true);
                                 finalizeIntent(intent);
+                            } else if (validateSeed)    {
+                                BRSharedPrefs.putPhraseWroteDown(InputWordsActivity.this, true);
+                                BRAnimator.showBreadSignal(InputWordsActivity.this, getString(R.string.Alerts_paperKeySet), getString(R.string.Alerts_paperKeySetSubheader), R.drawable.ic_check_mark_white, new BROnSignalCompletion() {
+                                    @Override
+                                    public void onComplete() {
+                                        BRAnimator.startBreadActivity(InputWordsActivity.this, false);
+                                        overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                                        finishAffinity();
+                                    }
+                                });
                             }
 
 

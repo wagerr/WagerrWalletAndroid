@@ -364,7 +364,9 @@ public class FragmentTxDetails extends DialogFragment {
             });
 
             // Set the transaction block number
-            mConfirmedInBlock.setText(String.valueOf(mTransaction.getBlockHeight()));
+            String confirmedBlock = String.valueOf(mTransaction.getBlockHeight());
+            if ( confirmedBlock.equals(BRConstants.INT23_MAX))  confirmedBlock = "Unconfirmed";
+            mConfirmedInBlock.setText(confirmedBlock);
 
         } else {
             Toast.makeText(getContext(), "Error getting transaction data", Toast.LENGTH_SHORT).show();
