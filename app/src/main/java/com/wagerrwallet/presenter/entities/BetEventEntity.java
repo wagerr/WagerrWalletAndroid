@@ -197,8 +197,23 @@ public class BetEventEntity {
     }
 
     public String getOddTx( float odd)  {
-        DecimalFormat df = new DecimalFormat("0.00");
-        return df.format(odd);
+        boolean settingAmerican = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_AMERICAN, false);
+        DecimalFormat df;
+        String ret;
+
+        df = new DecimalFormat();
+        df.setMaximumFractionDigits( (settingAmerican) ? 0 : 2 );
+        df.setMinimumFractionDigits( (settingAmerican) ? 0 : 2 );
+        df.setPositivePrefix( (settingAmerican) ? "+" : "");
+        df.setNegativePrefix("-");
+
+        ret = df.format(odd);
+
+        if ( ret.equals("+100") )   {
+            ret = "-100";
+        }
+
+        return ret;
     }
 
     public String getTxHomeOdds() {
@@ -217,12 +232,23 @@ public class BetEventEntity {
     }
 
     public float getOdds( float odds )  {
-        if (BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false))  {
-            return odds;
+        boolean settingOdds = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false);
+        boolean settingAmerican = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_AMERICAN, false);
+
+        float ret = (settingOdds) ? odds : (float)((odds-1)*0.94)+1;
+        ret = (settingAmerican) ? DecimalToAmerican(ret) : ret;
+
+        return ret;
+    }
+
+    public float DecimalToAmerican(float odd)   {
+        if (odd>2)  {
+            return (odd-1)*100;
         }
         else {
-            return (float)((odds-1)*0.94)+1;
+            return (-100) / (odd-1);
         }
+
     }
 
     public long getHomeOdds() {

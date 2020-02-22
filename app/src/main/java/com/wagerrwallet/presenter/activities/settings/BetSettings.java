@@ -18,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.wagerrwallet.R;
@@ -37,8 +38,10 @@ import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 public class BetSettings extends BRActivity {
     private static final String TAG = BetSettings.class.getName();
     public static String FEATURE_DISPLAY_ODDS = "wgr_displaymodifiedodds";
+    public static String FEATURE_DISPLAY_AMERICAN = "wgr_displayamerican";
 
-    private AppCompatCheckBox chkDisplayOdds;
+    private Switch chkDisplayOdds;
+    private Switch chkDisplayAmerican;
     private static BetSettings app;
     private ImageButton mBackButton;
 
@@ -56,13 +59,20 @@ public class BetSettings extends BRActivity {
         setContentView(R.layout.activity_betsettings);
 
         chkDisplayOdds = findViewById(R.id.chk_displayodds);
-
         chkDisplayOdds.setChecked(BRSharedPrefs.getFeatureEnabled(this, FEATURE_DISPLAY_ODDS, false));
         chkDisplayOdds.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 BRSharedPrefs.putFeatureEnabled(app, isChecked, FEATURE_DISPLAY_ODDS);
+            }
+        });
+
+        chkDisplayAmerican = findViewById(R.id.chk_displayamerican);
+        chkDisplayAmerican.setChecked(BRSharedPrefs.getFeatureEnabled(this, FEATURE_DISPLAY_AMERICAN, false));
+        chkDisplayAmerican.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                BRSharedPrefs.putFeatureEnabled(app, isChecked, FEATURE_DISPLAY_AMERICAN);
             }
         });
 

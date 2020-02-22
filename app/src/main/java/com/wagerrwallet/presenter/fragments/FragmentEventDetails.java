@@ -447,6 +447,11 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
         try {
             boolean oddsSetting = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false);
+            boolean americanSetting = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_AMERICAN, false);
+
+            if (americanSetting)    {
+                odds = AmericanToDecimal( odds );
+            }
             long rewardAmount = stake + ((oddsSetting)?(long)((stake * (odds - 1)) * 0.94):(long)(stake * (odds-1)));
             BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
             BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
@@ -455,6 +460,15 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         }
         catch (NumberFormatException e) {
             mPotentialReward.setText("---");
+        }
+    }
+
+    public float AmericanToDecimal(float odd)   {
+        if ( odd > 0 )  {
+            return (float)Math.round( ((odd/100) + 1)*100 )/100;
+        }
+        else    {
+            return (float)Math.round( ((100/-odd) + 1)*100 )/100;
         }
     }
 
