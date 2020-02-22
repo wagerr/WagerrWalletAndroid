@@ -35,6 +35,7 @@ import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.PeerEntity;
+import com.wagerrwallet.presenter.entities.SwapUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
 import com.wagerrwallet.tools.animation.BRAnimator;
@@ -67,6 +68,7 @@ import com.wagerrwallet.tools.util.Utils;
 import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.abstracts.OnBalanceChangedListener;
+import com.wagerrwallet.wallet.abstracts.OnSwapListModified;
 import com.wagerrwallet.wallet.abstracts.OnTxListModified;
 import com.wagerrwallet.wallet.abstracts.OnEventTxListModified;
 import com.wagerrwallet.wallet.abstracts.OnTxStatusUpdatedListener;
@@ -149,6 +151,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     private List<SyncListener> syncListeners = new ArrayList<>();
     private List<OnTxListModified> txModifiedListeners = new ArrayList<>();
     private List<OnEventTxListModified> eventTxModifiedListeners = new ArrayList<>();
+    private List<OnSwapListModified> swapModifiedListeners = new ArrayList<>();
 
     private Executor listenerExecutor = Executors.newSingleThreadExecutor();
 
@@ -320,6 +323,13 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         if (txs == null || txs.size() <= 0) return null;
 
         return txs;
+    }
+
+    public List<SwapUiHolder> getSwapUiHolders()    {
+        // todo +++
+        List<SwapUiHolder> uiTxs = new ArrayList<>();
+
+        return uiTxs;
     }
 
     @Override
@@ -617,6 +627,11 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
     public void addEventTxListModifiedListener(OnEventTxListModified list) {
         if (list != null && !eventTxModifiedListeners.contains(list))
             eventTxModifiedListeners.add(list);
+    }
+
+    public void addSwapListModifiedListener(OnSwapListModified list) {
+        if (list != null && !swapModifiedListeners.contains(list))
+            swapModifiedListeners.add(list);
     }
 
     @Override

@@ -33,14 +33,17 @@ import com.wagerrwallet.presenter.activities.intro.IntroActivity;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.presenter.entities.SwapUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.fragments.FragmentEventDetails;
 import com.wagerrwallet.presenter.fragments.FragmentGreetings;
 import com.wagerrwallet.presenter.fragments.FragmentMenu;
+import com.wagerrwallet.presenter.fragments.FragmentSendSwap;
 import com.wagerrwallet.presenter.fragments.FragmentSignal;
 import com.wagerrwallet.presenter.fragments.FragmentReceive;
 import com.wagerrwallet.presenter.fragments.FragmentRequestAmount;
 import com.wagerrwallet.presenter.fragments.FragmentSend;
+import com.wagerrwallet.presenter.fragments.FragmentSwapDetails;
 import com.wagerrwallet.presenter.fragments.FragmentTxDetails;
 import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
@@ -150,6 +153,38 @@ public class BRAnimator {
         try {
             SLIDE_ANIMATION_DURATION = 300;
             fragmentSend = new FragmentSend();
+            if (request != null && !request.address.isEmpty()) {
+                fragmentSend.setCryptoObject(request);
+            }
+            app.getFragmentManager().beginTransaction()
+                    .setCustomAnimations(0, 0, 0, R.animator.plain_300)
+                    .add(android.R.id.content, fragmentSend, FragmentSend.class.getName())
+                    .addToBackStack(FragmentSend.class.getName()).commit();
+        } finally {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    SLIDE_ANIMATION_DURATION = slideAnimation;
+                }
+            }, 800);
+        }
+
+    }
+
+    public static void showSendSwapFragment(Activity app, final CryptoRequest request) {
+        if (app == null) {
+            Log.e(TAG, "showSendFragment: app is null");
+            return;
+        }
+        FragmentSendSwap fragmentSend = (FragmentSendSwap) app.getFragmentManager().findFragmentByTag(FragmentSendSwap.class.getName());
+        if (fragmentSend != null && fragmentSend.isAdded()) {
+            fragmentSend.setCryptoObject(request);
+            return;
+        }
+        final int slideAnimation = SLIDE_ANIMATION_DURATION;
+        try {
+            SLIDE_ANIMATION_DURATION = 300;
+            fragmentSend = new FragmentSendSwap();
             if (request != null && !request.address.isEmpty()) {
                 fragmentSend.setCryptoObject(request);
             }
@@ -339,6 +374,22 @@ public class BRAnimator {
         }
 
         txDetails = new FragmentEventDetails();
+        txDetails.setTransaction(item);
+        txDetails.show(app.getFragmentManager(), "txDetails");
+
+    }
+
+    public static void showSwapDetails(Activity app, SwapUiHolder item, int position){
+
+        FragmentSwapDetails txDetails = (FragmentSwapDetails) app.getFragmentManager().findFragmentByTag(FragmentSwapDetails.class.getName());
+
+        if(txDetails != null && txDetails.isAdded()){
+            Log.e(TAG, "showTransactionDetails: Already showing");
+
+            return;
+        }
+
+        txDetails = new FragmentSwapDetails();
         txDetails.setTransaction(item);
         txDetails.show(app.getFragmentManager(), "txDetails");
 

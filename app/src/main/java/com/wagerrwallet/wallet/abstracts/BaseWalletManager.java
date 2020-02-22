@@ -10,6 +10,7 @@ import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.core.BRCoreWallet;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
+import com.wagerrwallet.presenter.entities.SwapUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.wallet.wallets.configs.WalletUiConfiguration;
@@ -71,6 +72,8 @@ public interface BaseWalletManager {
 
     void addEventTxListModifiedListener(OnEventTxListModified list);
 
+    void addSwapListModifiedListener(OnSwapListModified list);
+
     //get a list of all the transactions sorted by timestamp
     BRCoreTransaction[] getTransactions();
 
@@ -84,6 +87,9 @@ public interface BaseWalletManager {
 
     //get a list of all the transactions UI holders sorted by timestamp
     List<EventTxUiHolder> getEventTxUiHolders(Context app);
+
+    //get a list of all the transactions UI holders sorted by timestamp
+    List<SwapUiHolder> getSwapUiHolders();
 
     //generate the wallet if needed
     boolean generateWallet(Context app);

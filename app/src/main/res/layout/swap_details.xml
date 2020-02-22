@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/tx_details_card"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="12dp"
+                                    android:layout_marginRight="12dp"
+                                    android:minWidth="330dp"
+                                    app:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:id="@+id/details_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:text="Sent"
+            android:textColor="@color/total_assets_usd_color"
+            android:textSize="16sp"
+            app:customTFont="CircularPro-Book.otf"/>
+
+
+        <ImageButton
+            android:id="@+id/close_button"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_above="@+id/tx_amount"
+            android:layout_alignEnd="@id/tx_date"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_close_light_grey"/>
+
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tx_action"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="-0.10965 BTC"
+
+            android:textColor="@color/total_assets_usd_color"
+            android:textSize="28sp"
+            app:customTFont="CircularPro-Book.otf"/>
+
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/amount_when_sent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tx_amount"
+            android:layout_marginLeft="60dp"
+            android:text="X"
+            android:visibility="gone"
+            android:textColor="@color/settings_chevron_right"
+            app:customTFont="CircularPro-Bold.otf"/>
+
+    <RelativeLayout
+        android:id="@+id/amountnow_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tx_amount">
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/label_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/amount_now"
+            android:layout_marginStart="2dp"
+            android:text=" now"
+            android:textColor="@color/settings_chevron_right"
+            app:customTFont="CircularPro-Book.otf" />
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/amount_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$3.0453"
+            android:textColor="@color/settings_chevron_right"
+            app:customTFont="CircularPro-Bold.otf"/>
+    </RelativeLayout>
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@id/amountnow_parent"
+            android:layout_marginTop="14dp"
+            android:background="@color/light_gray"/>
+
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider1"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="14dp"
+            android:drawableLeft="@drawable/checkmark_circled"
+            android:drawablePadding="5dp"
+            android:text="Complete"
+            android:textColor="@color/settings_chevron_right"
+            app:customTFont="CircularPro-Book.otf"/>
+
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/divider1"
+            android:layout_marginTop="14dp"
+            android:paddingEnd="20dp"
+            android:text="Yesterday at 12:53 PM"
+            app:customTFont="CircularPro-Book.otf"/>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@id/tx_date"
+            android:layout_marginTop="14dp"
+            android:background="@color/light_gray"/>
+
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_to_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/divider2"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="14dp"
+            android:text="To"
+            android:textColor="@color/settings_chevron_right"
+            app:customTFont="CircularPro-Book.otf"/>
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_to_from_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/divider2"
+            android:layout_marginTop="14dp"
+            android:layout_toEndOf="@+id/tx_to_from"
+            android:ellipsize="middle"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12sp"
+            app:customTFont="CircularPro-Book.otf"/>
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@id/tx_to_from_address2"
+            android:layout_marginTop="14dp"
+            android:background="@color/light_gray"/>
+
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_to_from_address2"
+            android:layout_width="287dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider2"
+            android:layout_toEndOf="@id/tx_to_from_address3"
+            android:layout_marginTop="34dp"
+            android:ellipsize="middle"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12sp"
+            app:customTFont="CircularPro-Book.otf" />
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_to_from_address3"
+            android:layout_width="87dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider2"
+            android:layout_alignLeft="@id/tx_to_from_address"
+            android:layout_marginTop="34dp"
+            android:layout_toEndOf="@+id/tx_to_from"
+            android:ellipsize="middle"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:singleLine="true"
+            android:text="Event #77777"
+            android:textColor="@color/blue"
+            android:textSize="12sp"
+            app:customTFont="CircularPro-Book.otf" />
+
+
+
+
+        <RelativeLayout
+            android:id="@+id/details_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider3"
+            android:layout_marginTop="14dp"
+            android:visibility="gone">
+
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_starting_balance_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="14dp"
+                android:text="Starting Balance"
+                android:textColor="@color/settings_chevron_right"
+
+                app:customTFont="CircularPro-Book.otf"/>
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_starting_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="14dp"
+                android:text=""
+                app:customTFont="CircularPro-Book.otf"/>
+
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/tx_starting_balance_label"
+                android:layout_marginTop="14dp"
+                android:background="@color/light_gray"/>
+
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_ending_balance_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider4"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="14dp"
+                android:text="Ending Balance"
+                android:textColor="@color/settings_chevron_right"
+
+                app:customTFont="CircularPro-Book.otf"/>
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_ending_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/divider4"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="14dp"
+                android:text=""
+                app:customTFont="CircularPro-Book.otf"/>
+
+
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/tx_ending_balance"
+                android:layout_marginTop="14dp"
+                android:background="@color/light_gray"/>
+
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/exchange_rate_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider5"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="14dp"
+                android:text="Exchange Rate at Time"
+                android:textColor="@color/settings_chevron_right"
+
+                app:customTFont="CircularPro-Book.otf"/>
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/exchange_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/divider5"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="14dp"
+                android:text=""
+                app:customTFont="CircularPro-Book.otf"/>
+
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/exchange_rate"
+                android:layout_marginTop="14dp"
+                android:background="@color/light_gray"/>
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/confirmed_in_block_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider6"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="14dp"
+                android:text="Confirmed in Block"
+                android:textColor="@color/settings_chevron_right"
+
+                app:customTFont="CircularPro-Book.otf"/>
+
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/confirmed_in_block_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/divider6"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="14dp"
+                android:text="549293"
+                app:customTFont="CircularPro-Book.otf"/>
+
+
+            <View
+                android:id="@+id/divider7"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/confirmed_in_block_label"
+                android:layout_marginTop="14dp"
+                android:background="@color/light_gray"/>
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/transaction_id_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider7"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="14dp"
+                android:text="Transaction ID"
+                android:textColor="@color/settings_chevron_right"
+                app:customTFont="CircularPro-Book.otf"/>
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/link_open_in_explorer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/transaction_id_label"
+                android:layout_alignLeft="@id/transaction_id_label"
+                android:layout_marginTop="6dp"
+                android:ellipsize="middle"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:singleLine="true"
+                android:text="Open in explorer"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
+                app:customTFont="CircularPro-Book.otf" />
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/transaction_id"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/divider7"
+                android:layout_marginTop="14dp"
+                android:layout_toEndOf="@id/transaction_id_label"
+                android:ellipsize="middle"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:singleLine="true"
+                android:textSize="12sp"
+                app:customTFont="CircularPro-Book.otf"/>
+
+
+            <View
+                android:id="@+id/divider8"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/link_open_in_explorer"
+                android:layout_marginTop="14dp"
+                android:background="@color/light_gray"/>
+
+
+        </RelativeLayout>
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/show_hide_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/details_container"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Show Details"
+            android:textColor="@color/blue"/>
+
+
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>
