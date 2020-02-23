@@ -1,16 +1,15 @@
 package com.wagerrwallet.presenter.entities;
 
 
-import com.platform.entities.TxMetaData;
-import com.wagerrwallet.core.BRCoreAddress;
-import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
-
 /**
  * BreadWallet
  * <p>
- * Created by Mihail Gutan <mihail@breadwallet.com> on 1/13/16.
+ * Created by MIP (2020)
  * Copyright (c) 2016 breadwallet LLC
  * <p>
+ *
+ * (c) Wagerr Betting platform 2020
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -32,138 +31,101 @@ import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 
 public class SwapUiHolder {
     public static final String TAG = SwapUiHolder.class.getName();
-    private long timeStamp;
-    private int blockHeight;
-    private byte[] txHash;
-    private long sent;
-    private long received;
-    private long fee;
-    private String to[];
-    private String from[];
-    public String txReversed;
-    private long balanceAfterTx;
-    private long amount;
-    private boolean isValid;
-    private boolean isCoinbase;
-    private int txSize;
-    public TxMetaData metaData;
-    private BetEntity betEntity;
-    private BetResultEntity betResultEntity;
-    private String teamSearchDescription;
 
-    private SwapUiHolder() {
-        teamSearchDescription="";
-    }
+    public enum TransactionState {
+        awaiting("Awaiting Deposit"),
+        swaping("Swaping"),
+        withdraw("Withdraw"),
+        completed("Completed"),
+        notcompleted("Deposit Not Completed"),
+        unknown("Unknown");
 
-    public SwapUiHolder(long timeStamp, int blockHeight, byte[] hash, String txReversed, long sent,
-                        long received, long fee, String to[], String from[],
-                        long balanceAfterTx, int txSize, long amount, boolean isValid, boolean isCoinbase ) {
-        this.timeStamp = timeStamp;
-        this.blockHeight = blockHeight;
-        this.txReversed = txReversed;
-        this.txHash = hash;
-        this.sent = sent;
-        this.received = received;
-        this.fee = fee;
-        this.to = to;
-        this.from = from;
-        this.balanceAfterTx = balanceAfterTx;
-        this.amount = amount;
-        this.isValid = isValid;
-        this.txSize = txSize;
-        this.isCoinbase = isCoinbase;
-        betEntity = null;
-        betResultEntity = null;
-        this.teamSearchDescription = "";
-    }
-
-    public BetEntity getBetEntity() {   return betEntity;}
-    public void setBetEntity( BetEntity be ) {   betEntity=be; }
-
-    public BetResultEntity getBetResultEntity() {   return betResultEntity;}
-    public void setBetResultEntity( BetResultEntity br ) {   betResultEntity=br; }
-
-    public int getBlockHeight() {
-        return blockHeight;
-    }
-
-    public long getFee() {
-        return fee;
-    }
-
-    public int getTxSize() {
-        return txSize;
-    }
-
-    public String[] getFrom() {
-        return from;
-    }
-
-    public byte[] getTxHash() {
-        return txHash;
-    }
-
-    public String getTxHashHexReversed() {
-        return txReversed;
-    }
-
-    public long getReceived() {
-        return received;
-    }
-
-    public long getSent() {
-        return sent;
-    }
-
-    public static String getTAG() {
-        return TAG;
-    }
-
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public String[] getTo() {
-        return to;
-    }
-
-    public long getBalanceAfterTx() {
-        return balanceAfterTx;
-    }
-
-    public long getAmount() {
-        return amount;
-    }
-
-    public boolean isValid() {
-        return isValid;
-    }
-
-    public boolean isCoinbase() {
-        return isCoinbase;
-    }
-
-    public String getToRecipient( BaseWalletManager wm, boolean received ) {
-        String ret = "";
-
-        for (final String s : getTo()) {
-            final BRCoreAddress address = new BRCoreAddress(s);
-            if (address.isValid()) {
-                boolean bInWallet = wm.getWallet().containsAddress(address);
-                if ( (received && bInWallet) || (!received && !bInWallet) ) {
-                    ret = s;
-                    break;
-                }
-            }
+        private String type;
+        TransactionState(String type) {
+            this.type = type;
         }
-        return ret;
+
+        @Override
+        public String toString() {
+            return type;
+        }
+
+        public static TransactionState fromValue (String value) {
+            // Just a linear search - easy, quick-enough.
+            for (TransactionState txType : TransactionState.values())
+                if (txType.type == value)
+                    return txType;
+            return unknown;
+        }
     }
 
-    public void setTeamSearchDescription(String teamSearchDesc) {
-        teamSearchDescription = teamSearchDesc;
+    protected String transactionId;
+    protected String depositCoin;
+    protected String receiveCoin;
+    protected String depositAmount;
+    protected String receivingAmount;
+
+    protected String refundWallet;
+    protected String receiveWallet;
+    protected String depositWallet;
+    protected TransactionState transactionState;
+    protected String timestamp;
+
+    public SwapUiHolder(String transactionId, String depositCoin, String receiveCoin, String depositAmount, String receivingAmount,
+                           String refundWallet, String receiveWallet, String depositWallet, TransactionState transactionState,
+                           String timestamp) {
+        this.transactionId = transactionId;
+        this.depositCoin = depositCoin;
+        this.receiveCoin = receiveCoin;
+        this.depositAmount = depositAmount;
+        this.receivingAmount = receivingAmount;
+        this.refundWallet = refundWallet;
+        this.receiveWallet = receiveWallet;
+        this.depositWallet = depositWallet;
+        this.transactionState = transactionState;
+        this.timestamp = timestamp;
     }
 
-    public String getTeamSearchDescription() {
-        return teamSearchDescription;
+    public SwapUiHolder()    {}
+
+    public String getTransactionId() {
+        return transactionId;
     }
+
+    public String getDepositCoin() {
+        return depositCoin;
+    }
+
+    public String getReceiveCoin() {
+        return receiveCoin;
+    }
+
+    public String getDepositAmount() {
+        return depositAmount;
+    }
+
+    public String getReceivingAmount() {
+        return receivingAmount;
+    }
+
+    public String getRefundWallet() {
+        return refundWallet;
+    }
+
+    public String getReceiveWallet() {
+        return receiveWallet;
+    }
+
+    public String getDepositWallet() {
+        return depositWallet;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public TransactionState getTransactionState() {
+        return transactionState;
+    }
+
 }

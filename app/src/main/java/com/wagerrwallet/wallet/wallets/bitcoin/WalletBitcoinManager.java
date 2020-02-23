@@ -271,7 +271,7 @@ public class WalletBitcoinManager extends BRCoreWalletManager implements BaseWal
         return uiTxs;
     }
 
-    public List<SwapUiHolder> getSwapUiHolders()    {
+    public List<SwapUiHolder> getSwapUiHolders( Context app)    {
         List<SwapUiHolder> uiTxs = new ArrayList<>();
 
         return uiTxs;

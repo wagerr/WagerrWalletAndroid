@@ -104,7 +104,7 @@ public class SwapManager {
             Log.e(TAG, "updateSwapList: wallet is null");
             return;
         }
-        final List<SwapUiHolder> items = wallet.getSwapUiHolders();
+        final List<SwapUiHolder> items = wallet.getSwapUiHolders( app );
 
         long took = (System.currentTimeMillis() - start);
         if (took > 500)

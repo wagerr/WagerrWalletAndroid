@@ -9,6 +9,8 @@ import android.util.Log;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.activities.util.ActivityUTILS;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
+import com.wagerrwallet.presenter.entities.SwapResponse;
+import com.wagerrwallet.presenter.entities.SwapUiHolder;
 import com.wagerrwallet.tools.sqlite.CurrencyDataSource;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.Utils;
@@ -25,9 +27,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -64,7 +68,7 @@ import okhttp3.Response;
 
 public class BRApiManager {
     private static final String TAG = BRApiManager.class.getName();
-
+    private static final String instaswapURL = "https://instaswap.wagerr.com/instaswap_service.php?s=";
     private static BRApiManager instance;
     private Timer timer;
 
@@ -244,6 +248,111 @@ public class BRApiManager {
         }
 
         return price1;
+    }
+
+    public static String InstaSwapTickers(Activity app, String getCoin, String giveCoin, String sendAmount) {
+        String url1 = instaswapURL + "InstaswapTickers&getCoin="+getCoin+"&giveCoin="+giveCoin+"&sendAmount="+sendAmount;
+        String jsonString1 = urlGET(app, url1);
+
+        String getAmount = "Unknown";
+
+        JSONArray jsonArray1 = null;
+        if (jsonString1 == null) {
+            jsonString1 = urlGET(app, url1);        // retry
+            if (jsonString1 == null) {
+                Log.e(TAG, "InstaSwapTickers: instaswap URL failed, response is null");
+                return getAmount;
+            }
+        }
+
+        try {
+            JSONObject object = new JSONObject(jsonString1);
+            String strInfo = object.getString("apiInfo");
+            if (strInfo.equals("OK")) {
+                JSONObject objectTicker = object.getJSONObject("Response");
+                getAmount = objectTicker.getString("getAmount");
+            }
+        } catch (JSONException ignored) {
+        }
+
+        return getAmount;
+    }
+
+    public static List<SwapUiHolder> InstaSwapReport(Activity app, String wallet) {
+        String url1 = instaswapURL + "InstaswapReportWalletHistory&wallet="+wallet;
+        String jsonString1 = urlGET(app, url1);
+
+        List<SwapUiHolder> swapList = new ArrayList<>();
+
+        JSONArray jsonArray1 = null;
+        if (jsonString1 == null) {
+            jsonString1 = urlGET(app, url1);        // retry
+            if (jsonString1 == null) {
+                Log.e(TAG, "InstaSwapReport: instaswap API failed, response is null");
+                return null;
+            }
+        }
+
+        try {
+            JSONObject object = new JSONObject(jsonString1);
+            String strInfo = object.getString("apiInfo");
+            if (strInfo.equals("OK")) {
+                JSONArray arrayResponse = object.getJSONArray("Response");
+                if (arrayResponse != null) {
+                    int length = arrayResponse.length();
+                    for (int i = 1; i < length; i++) {
+                        JSONObject objectResponse = (JSONObject) arrayResponse.get(i);
+                        SwapUiHolder swapResponse = new SwapUiHolder(objectResponse.getString("TransactionId"),
+                                objectResponse.getString("depositCoin"),
+                                objectResponse.getString("receiveCoin"),
+                                objectResponse.getString("depositAmount"),
+                                objectResponse.getString("receivingAmount"),
+                                objectResponse.getString("refundWalletWallet"),
+                                objectResponse.getString("receiveWallet"),
+                                objectResponse.getString("depositWallet"),
+                                SwapUiHolder.TransactionState.fromValue(objectResponse.getString("transactionState")),
+                                objectResponse.getString("timestamp"));
+
+                        swapList.add(swapResponse);
+                    }
+                }
+            }
+        } catch (JSONException ignored) {
+        }
+
+        return swapList;
+    }
+
+    public static SwapResponse InstaSwapDoSwap(Activity app, String getCoin, String giveCoin, String sendAmount
+            , String receiveWallet, String refundWallet) {
+        String url1 = instaswapURL + "InstaswapSwap&getCoin="+getCoin+"&giveCoin="+giveCoin+"&sendAmount="+sendAmount
+                +"&receiveWallet="+receiveWallet+"&refundWallet="+refundWallet;
+        String jsonString1 = urlGET(app, url1);
+
+        SwapResponse swapResponse = null;
+
+        JSONArray jsonArray1 = null;
+        if (jsonString1 == null) {
+            jsonString1 = urlGET(app, url1);        // retry
+            if (jsonString1 == null) {
+                Log.e(TAG, "InstaSwapSwap: instaswap API failed, response is null");
+                return null;
+            }
+        }
+
+        try {
+            JSONObject object = new JSONObject(jsonString1);
+            String strInfo = object.getString("apiInfo");
+            if (strInfo.equals("OK")) {
+                JSONObject objectResponse = object.getJSONObject("Response");
+                swapResponse = new SwapResponse( objectResponse.getString("TransactionId"),
+                        objectResponse.getString("depositWallet"),
+                        objectResponse.getString("receivingAmount"));
+            }
+        } catch (JSONException ignored) {
+        }
+
+        return swapResponse;
     }
 
     public static void updateFeePerKb(Context app) {

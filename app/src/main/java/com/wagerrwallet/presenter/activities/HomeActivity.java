@@ -52,6 +52,7 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
     private WalletListAdapter mAdapter;
     private BRText mFiatTotal;
     private RelativeLayout mEvents;
+    private RelativeLayout mSwaps;
     private RelativeLayout mSettings;
     private RelativeLayout mSecurity;
     private RelativeLayout mSupport;
@@ -87,6 +88,7 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
         mFiatTotal = findViewById(R.id.total_assets_usd);
 
         mEvents = findViewById(R.id.events_row);
+        mSwaps = findViewById(R.id.swaps_row);
         mSettings = findViewById(R.id.settings_row);
         mSecurity = findViewById(R.id.security_row);
         mSupport = findViewById(R.id.support_row);
@@ -125,6 +127,15 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, EventsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+            }
+        });
+
+        mSwaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, SwapActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }

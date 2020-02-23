@@ -45,7 +45,7 @@ import com.wagerrwallet.tools.manager.FontManager;
 import com.wagerrwallet.tools.manager.InternetManager;
 import com.wagerrwallet.tools.manager.SwapManager;
 import com.wagerrwallet.tools.manager.SyncManager;
-import com.wagerrwallet.tools.manager.TxManager;
+import com.wagerrwallet.tools.manager.SwapManager;
 import com.wagerrwallet.tools.sqlite.CurrencyDataSource;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.CurrencyUtils;
@@ -206,9 +206,7 @@ public class SwapActivity extends BRActivity implements InternetManager.Connecti
 
 
         }
-
-
-
+        
     }
 
     public boolean isSearchActive() {
@@ -433,8 +431,8 @@ public class SwapActivity extends BRActivity implements InternetManager.Connecti
 
         setupNetworking();
 
-        TxManager.getInstance().adapter.updateData();
-        TxManager.getInstance().onResume(this);
+        SwapManager.getInstance().adapter.updateData();
+        SwapManager.getInstance().onResume(this);
 
         CurrencyDataSource.getInstance(this).addOnDataChangedListener(new CurrencyDataSource.OnDataChanged() {
             @Override

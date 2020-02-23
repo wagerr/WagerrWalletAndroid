@@ -89,7 +89,7 @@ public interface BaseWalletManager {
     List<EventTxUiHolder> getEventTxUiHolders(Context app);
 
     //get a list of all the transactions UI holders sorted by timestamp
-    List<SwapUiHolder> getSwapUiHolders();
+    List<SwapUiHolder> getSwapUiHolders(Context app);
 
     //generate the wallet if needed
     boolean generateWallet(Context app);

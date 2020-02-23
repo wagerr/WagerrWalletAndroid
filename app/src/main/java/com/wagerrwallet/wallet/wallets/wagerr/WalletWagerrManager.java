@@ -325,10 +325,16 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         return txs;
     }
 
-    public List<SwapUiHolder> getSwapUiHolders()    {
-        // todo +++
+    public List<SwapUiHolder> getSwapUiHolders( Context app )    {
         List<SwapUiHolder> uiTxs = new ArrayList<>();
-
+        BRCoreAddress address = getWallet().getAllAddresses()[0];
+        if (Utils.isNullOrEmpty(address.stringify())) {
+            Log.e(TAG, "getSwapUiHolders: ERROR, retrieved address:" + address);
+        }
+        else {
+            String wallet = address.stringify();
+            uiTxs = BRApiManager.InstaSwapReport((Activity)app, wallet);
+        }
         return uiTxs;
     }
 
