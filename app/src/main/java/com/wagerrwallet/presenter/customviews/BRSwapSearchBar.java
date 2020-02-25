@@ -12,8 +12,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.wagerrwallet.R;
+import com.wagerrwallet.presenter.activities.SwapActivity;
 import com.wagerrwallet.presenter.activities.WalletActivity;
-import com.wagerrwallet.tools.manager.TxManager;
+import com.wagerrwallet.tools.manager.SwapManager;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 
 /**
@@ -46,18 +47,13 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
 
     private EditText searchEdit;
     //    private LinearLayout filterButtonsLayout;
-    private BRButton sentFilter;
-    private BRButton receivedFilter;
-    private BRButton pendingFilter;
+    private BRButton openFilter;
+    private BRButton notCompletedFilter;
     private BRButton completedFilter;
     private BRButton cancelButton;
 
-    private BRButton betHistoryFilter;
-    private BRButton rewardsFilter;
+    private SwapActivity breadActivity;
 
-    private WalletActivity breadActivity;
-
-    public boolean[] betfilterSwitches = new boolean[2];
     public boolean[] filterSwitches = new boolean[4];
 
     public BRSwapSearchBar(Context context) {
@@ -77,36 +73,16 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
 
 
     private void init() {
-        inflate(getContext(), R.layout.search_bar, this);
-        breadActivity = (WalletActivity) getContext();
+        inflate(getContext(), R.layout.swapsearch_bar, this);
+        breadActivity = (SwapActivity) getContext();
         searchEdit = (EditText) findViewById(R.id.search_edit);
-        sentFilter = (BRButton) findViewById(R.id.sent_filter);
-        receivedFilter = (BRButton) findViewById(R.id.received_filter);
-        pendingFilter = (BRButton) findViewById(R.id.pending_filter);
+        openFilter = (BRButton) findViewById(R.id.open_filter);
+        notCompletedFilter = (BRButton) findViewById(R.id.not_completed_filter);
         completedFilter = (BRButton) findViewById(R.id.complete_filter);
         cancelButton = (BRButton) findViewById(R.id.cancel_button);
 
         clearSwitches();
         setListeners();
-
-        betHistoryFilter = findViewById(R.id.bet_filter);
-        betHistoryFilter.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                betfilterSwitches[0] = !betfilterSwitches[0];
-                updateBetFilterButtonsUI(betfilterSwitches);
-            }
-        });
-        rewardsFilter = findViewById(R.id.reward_filter);
-        rewardsFilter.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                betfilterSwitches[1] = !betfilterSwitches[1];
-                updateBetFilterButtonsUI(betfilterSwitches);
-            }
-        });
-
-
 
         searchEdit.requestFocus();
         searchEdit.postDelayed(new Runnable() {
@@ -122,26 +98,18 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
         BRExecutor.getInstance().forBackgroundTasks().execute(new Runnable() {
             @Override
             public void run() {
-                TxManager.getInstance().updateTxList(breadActivity);
+                SwapManager.getInstance().updateSwapList(breadActivity);
             }
         });
 
     }
 
     private void updateFilterButtonsUI(boolean[] switches) {
-        sentFilter.setType(switches[0] ? 3 : 2);
-        receivedFilter.setType(switches[1] ? 3 : 2);
-        pendingFilter.setType(switches[2] ? 3 : 2);
-        completedFilter.setType(switches[3] ? 3 : 2);
-        if (TxManager.getInstance().adapter != null)
-            TxManager.getInstance().adapter.filterBy(searchEdit.getText().toString(), filterSwitches, betfilterSwitches);
-    }
-
-    private void updateBetFilterButtonsUI(boolean[] switches) {
-        betHistoryFilter.setType(switches[0] ? 3 : 2);
-        rewardsFilter.setType(switches[1] ? 3 : 2);
-        if (TxManager.getInstance().adapter != null)
-            TxManager.getInstance().adapter.filterBy( searchEdit.getText().toString(), filterSwitches, betfilterSwitches);
+        openFilter.setType(switches[0] ? 3 : 2);
+        notCompletedFilter.setType(switches[1] ? 3 : 2);
+        completedFilter.setType(switches[2] ? 3 : 2);
+        if (SwapManager.getInstance().adapter != null)
+            SwapManager.getInstance().adapter.filterBy(searchEdit.getText().toString(), filterSwitches);
     }
 
     private void setListeners() {
@@ -175,8 +143,8 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TxManager.getInstance().adapter != null)
-                    TxManager.getInstance().adapter.filterBy(s.toString(), filterSwitches, betfilterSwitches);
+                if (SwapManager.getInstance().adapter != null)
+                    SwapManager.getInstance().adapter.filterBy(s.toString(), filterSwitches);
             }
 
             @Override
@@ -194,30 +162,23 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
             }
         });
 
-        sentFilter.setOnClickListener(new OnClickListener() {
+        openFilter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 filterSwitches[0] = !filterSwitches[0];
                 filterSwitches[1] = false;
+                filterSwitches[2] = false;
                 updateFilterButtonsUI(filterSwitches);
 
             }
         });
 
-        receivedFilter.setOnClickListener(new OnClickListener() {
+        notCompletedFilter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 filterSwitches[1] = !filterSwitches[1];
                 filterSwitches[0] = false;
-                updateFilterButtonsUI(filterSwitches);
-            }
-        });
-
-        pendingFilter.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterSwitches[2] = !filterSwitches[2];
-                filterSwitches[3] = false;
+                filterSwitches[2] = false;
                 updateFilterButtonsUI(filterSwitches);
             }
         });
@@ -225,8 +186,9 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
         completedFilter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterSwitches[3] = !filterSwitches[3];
-                filterSwitches[2] = false;
+                filterSwitches[2] = !filterSwitches[3];
+                filterSwitches[1] = false;
+                filterSwitches[0] = false;
                 updateFilterButtonsUI(filterSwitches);
             }
         });
@@ -236,9 +198,6 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
         filterSwitches[0] = false;
         filterSwitches[1] = false;
         filterSwitches[2] = false;
-        filterSwitches[3] = false;
-        betfilterSwitches[0] = false;
-        betfilterSwitches[1] = false;
     }
 
     public void onShow(boolean b) {
@@ -248,7 +207,6 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
         if (b) {
             clearSwitches();
             updateFilterButtonsUI(filterSwitches);
-            updateBetFilterButtonsUI(betfilterSwitches);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -256,15 +214,15 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
                     keyboard.showSoftInput(searchEdit, 0);
                 }
             }, 400);
-            if (TxManager.getInstance().adapter != null)
-                TxManager.getInstance().adapter.updateData();
+            if (SwapManager.getInstance().adapter != null)
+                SwapManager.getInstance().adapter.updateData();
 
         } else {
             keyboard.hideSoftInputFromWindow(searchEdit.getWindowToken(), 0);
             clearSwitches();
             updateFilterButtonsUI(filterSwitches);
-            if (TxManager.getInstance().adapter != null) {
-                TxManager.getInstance().adapter.resetFilter();
+            if (SwapManager.getInstance().adapter != null) {
+                SwapManager.getInstance().adapter.resetFilter();
             }
         }
         breadActivity.isSearchBarVisible = b;

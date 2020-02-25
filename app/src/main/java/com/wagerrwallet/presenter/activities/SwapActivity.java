@@ -256,7 +256,13 @@ public class SwapActivity extends BRActivity implements InternetManager.Connecti
         mToolbar.setBackgroundColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
         mBuyButton.setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
 
-        SwapManager.getInstance().updateSwapList(SwapActivity.this);
+        BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
+            @Override
+            public void run() {
+                SwapManager.getInstance().updateSwapList(SwapActivity.this);
+            }
+        });
+
     }
 
     // This method checks if a screen altering app(such as Twightlight) is currently running

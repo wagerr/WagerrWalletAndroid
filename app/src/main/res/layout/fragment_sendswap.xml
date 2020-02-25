@@ -50,7 +50,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/bread_margin"
-                android:text="@string/Send.title"
+                android:text="@string/Instaswap.Transaction"
                 android:textColor="@color/almost_black"
                 android:textSize="@dimen/header"
                 app:customTFont="CircularPro-Bold.otf"
@@ -74,78 +74,32 @@
 
         </RelativeLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:visibility="visible">
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/wallet_receive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/Instaswap.Receive"
+                android:inputType="textPersonName"
+                android:maxLength="250"
+                android:textSize="@dimen/sub_header" />
+
+        </LinearLayout>
+
         <View
             android:id="@+id/separator0"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/extra_light_gray"
             />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <com.wagerrwallet.presenter.customviews.BREdit
-                android:id="@+id/address_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_weight="0.6"
-                android:background="@android:color/transparent"
-                android:ellipsize="middle"
-                android:ems="10"
-                android:hint="@string/Send.toLabel"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                />
-
-            <com.wagerrwallet.presenter.customviews.BRButton
-                android:id="@+id/paste_button"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="@dimen/bread_margin"
-                android:layout_marginTop="8dp"
-                android:layout_weight="0.7"
-                android:background="@android:color/transparent"
-                android:minHeight="50dp"
-                android:paddingBottom="12dp"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:paddingTop="12dp"
-                android:text="@string/Send.pasteLabel"
-                android:textColor="@color/light_gray"
-                android:textSize="16sp"
-                app:buttonType="2"
-                app:isBreadButton="true"
-                />
-
-            <com.wagerrwallet.presenter.customviews.BRButton
-                android:id="@+id/scan"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="@dimen/bread_margin"
-                android:layout_marginTop="8dp"
-                android:layout_weight="0.7"
-                android:background="@android:color/transparent"
-                android:minHeight="50dp"
-                android:paddingBottom="12dp"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:paddingTop="12dp"
-                android:text="@string/Send.scanLabel"
-                android:textColor="@color/light_gray"
-                android:textSize="16sp"
-                app:buttonType="2"
-                app:isBreadButton="true"
-                />
-
-        </LinearLayout>
 
         <View
             android:id="@+id/separator"
@@ -166,6 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:visibility="gone"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:text="$"
@@ -181,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="16dp"
                 android:layout_toEndOf="@id/iso_text"
                 android:background="@android:color/transparent"
                 android:clickable="false"
@@ -191,36 +146,12 @@
                 android:focusableInTouchMode="false"
                 android:inputType="numberDecimal"
                 android:textIsSelectable="false"
-                app:layout_constraintBottom_toBottomOf="@+id/iso_text"
+                app:layout_constraintBottom_toBottomOf="@+id/iso_button"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toRightOf="@+id/iso_text"
                 app:layout_constraintRight_toLeftOf="@+id/iso_button"
-                app:layout_constraintTop_toTopOf="@+id/iso_text"
+                app:layout_constraintTop_toTopOf="@+id/iso_button"
                 app:layout_constraintVertical_bias="0.5"/>
-
-            <com.wagerrwallet.presenter.customviews.BRText
-                android:id="@+id/balance_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/iso_text"
-                android:layout_marginTop="8dp"
-                android:text="Current Balance"
-                android:textColor="@color/light_gray"
-                android:visibility="invisible"
-                app:layout_constraintLeft_toLeftOf="@+id/iso_text"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <com.wagerrwallet.presenter.customviews.BRText
-                android:id="@+id/fee_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/balance_text"
-                android:layout_marginTop="8dp"
-                android:text="Network Fee"
-                android:textColor="@color/light_gray"
-                android:visibility="invisible"
-                app:layout_constraintLeft_toLeftOf="@+id/iso_text"
-                app:layout_constraintTop_toTopOf="parent"/>
 
             <com.wagerrwallet.presenter.customviews.BRButton
                 android:id="@+id/iso_button"
@@ -235,7 +166,7 @@
                 android:background="@android:color/transparent"
                 android:drawablePadding="4dp"
                 android:minHeight="40dp"
-                android:text="iso"
+                android:text="BTC"
                 android:textColor="@color/light_gray"
                 android:textSize="18sp"
                 app:buttonType="2"
@@ -245,108 +176,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"/>
 
-
-            <ImageView
-                android:id="@+id/edit"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginBottom="0dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/edit"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/fee_text"
-                app:layout_constraintLeft_toRightOf="@+id/fee_text"
-                />
-
         </android.support.constraint.ConstraintLayout>
-
-        <com.wagerrwallet.presenter.customviews.BRLinearLayoutWithCaret
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/fee_buttons_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="2.0"
-            app:backgroundColor="@color/extra_light_blue_background"
-            app:strokeColor="@color/extra_light_gray"
-            app:withStroke="true">
-
-            <com.wagerrwallet.presenter.customviews.BRText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/FeeSelector.title"
-                android:textSize="@dimen/sub_header"
-                android:textColor="@color/almost_black"
-                android:textStyle="bold"/>
-
-            <com.wagerrwallet.presenter.customviews.BRText
-                android:id="@+id/fee_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textColor="@color/light_gray"
-                />
-
-            <LinearLayout
-                android:id="@+id/buttons_layout"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                android:weightSum="2.0"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/BRText2">
-
-                <com.wagerrwallet.presenter.customviews.BRButton
-                    android:id="@+id/left_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_weight="1.0"
-                    android:background="@drawable/b_half_left_blue"
-                    android:padding="0dp"
-                    android:text="@string/FeeSelector.regular"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    app:customBFont="CircularPro-Medium.otf"
-                    app:isBreadButton="false"
-                    />
-
-                <com.wagerrwallet.presenter.customviews.BRButton
-                    android:id="@+id/right_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:background="@drawable/b_half_right_blue_stroke"
-                    android:padding="0dp"
-                    android:text="@string/FeeSelector.economy"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="14sp"
-                    app:customBFont="CircularPro-Medium.otf"
-                    app:isBreadButton="false"
-                    />
-            </LinearLayout>
-
-            <com.wagerrwallet.presenter.customviews.BRText
-                android:id="@+id/warning_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:textSize="@dimen/paragraph"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:text="@string/FeeSelector.economyWarning"
-                android:textColor="@color/red_text"
-                />
-
-
-        </com.wagerrwallet.presenter.customviews.BRLinearLayoutWithCaret>
 
         <View
             android:id="@+id/separator2"
@@ -374,26 +204,7 @@
                 android:layout_height="1dp"
                 android:background="@color/extra_light_gray"
                 />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:visibility="gone">
-
-            <com.wagerrwallet.presenter.customviews.BREdit
-                android:id="@+id/comment_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:background="@android:color/transparent"
-                android:hint="@string/Send.descriptionLabel"
-                android:textSize="@dimen/sub_header"
-                android:inputType="textPersonName"
-                android:maxLength="250"
-                />
 
         </LinearLayout>
 
@@ -403,6 +214,69 @@
             android:layout_height="1dp"
             android:background="@color/extra_light_gray"
             />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:visibility="visible">
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/amount_receive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/Instaswap.AmountReceive"
+                android:inputType="textPersonName"
+                android:maxLength="250"
+                android:textSize="@dimen/sub_header" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.wagerrwallet.presenter.customviews.BREdit
+                android:id="@+id/address_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1.3"
+                android:background="@android:color/transparent"
+                android:ellipsize="middle"
+                android:ems="10"
+                android:hint="@string/Instaswap.RefundAddress"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+
+            <com.wagerrwallet.presenter.customviews.BRButton
+                android:id="@+id/paste_button"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/bread_margin"
+                android:layout_weight="0.7"
+                android:background="@android:color/transparent"
+                android:minHeight="50dp"
+                android:paddingStart="8dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="12dp"
+                android:text="@string/Send.pasteLabel"
+                android:textColor="@color/light_gray"
+                android:textSize="16sp"
+                app:buttonType="2"
+                app:isBreadButton="true" />
+
+        </LinearLayout>
 
         <com.wagerrwallet.presenter.customviews.BRButton
             android:id="@+id/send_button"

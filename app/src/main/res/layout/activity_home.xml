@@ -43,7 +43,7 @@
                     android:layout_marginLeft="22dp"
                     android:layout_marginTop="16dp"
                     android:clickable="false"
-                    android:drawableLeft="@drawable/ic_check_mark_white"
+                    android:drawableLeft="@drawable/soccer_ball"
                     android:drawablePadding="8dp"
                     android:focusable="false"
                     android:paddingBottom="4dp"

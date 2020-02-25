@@ -12,16 +12,17 @@ import android.view.View;
 
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.SwapActivity;
-import com.wagerrwallet.presenter.activities.WalletActivity;
 import com.wagerrwallet.presenter.entities.SwapUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.tools.adapter.SwapListAdapter;
 import com.wagerrwallet.tools.adapter.TransactionListAdapter;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.listeners.RecyclerItemClickListener;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -104,13 +105,14 @@ public class SwapManager {
             Log.e(TAG, "updateSwapList: wallet is null");
             return;
         }
+
         final List<SwapUiHolder> items = wallet.getSwapUiHolders( app );
 
         long took = (System.currentTimeMillis() - start);
         if (took > 500)
             Log.e(TAG, "updateSwapList: took: " + took);
-        if (adapter != null && !((WalletActivity)app).isSearchActive() ) {
-            ((WalletActivity) app).runOnUiThread(new Runnable() {
+        if (adapter != null && !((SwapActivity)app).isSearchActive() ) {
+            ((SwapActivity) app).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (adapter!=null && items!=null) {

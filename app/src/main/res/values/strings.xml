@@ -854,6 +854,15 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="Instaswap.Receive">Receive at</string>
+    <string name="Instaswap.AmountReceive">Amount to receive</string>
+    <string name="Instaswap.RefundAddress">Refund address</string>
+    <string name="Instaswap.Transaction">Instaswap transaction</string>
+    <string name="Instaswap.open">Open</string>
+    <string name="Instaswap.NotCompleted">not completed</string>
+    <string name="Instaswap.completed">completed</string>
+    <string name="Instaswap.InvalidAddress">A valid Bitcoin address is required</string>
+    <string name="Instaswap.InvalidAmount">A valid deposit BTC amount is required</string>
 
 
 </resources>

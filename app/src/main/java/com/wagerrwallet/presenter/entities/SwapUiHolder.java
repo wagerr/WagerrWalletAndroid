@@ -53,7 +53,7 @@ public class SwapUiHolder {
         public static TransactionState fromValue (String value) {
             // Just a linear search - easy, quick-enough.
             for (TransactionState txType : TransactionState.values())
-                if (txType.type == value)
+                if (txType.type.equals(value))
                     return txType;
             return unknown;
         }

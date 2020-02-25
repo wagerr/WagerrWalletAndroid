@@ -59,14 +59,13 @@ import java.util.List;
 public class SwapListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = SwapListAdapter.class.getName();
 
-    public static int PAYOUT_MATURITY = 101;
     private final Context mContext;
     private final int txResId;
     private final int promptResId;
     private List<SwapUiHolder> backUpFeed;
     private List<SwapUiHolder> itemFeed;
     //    private Map<String, TxMetaData> mds;
-    public boolean[] filterSwitches = { false, false, false, false };
+    public boolean[] filterSwitches = { false, false, false };
     public String filterQuery="";
 
     private final int txType = 0;
@@ -77,7 +76,7 @@ public class SwapListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //    private boolean updatingMetadata;
 
     public SwapListAdapter(Context mContext, List<SwapUiHolder> items) {
-        this.txResId = R.layout.tx_item;
+        this.txResId = R.layout.swap_item;
         this.promptResId = R.layout.prompt_item;
         this.mContext = mContext;
         items = new ArrayList<>();
@@ -107,9 +106,6 @@ public class SwapListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 SwapUiHolder item;
                 for (int i = 0; i < newItems.size(); i++) {
                     item = newItems.get(i);
-                    item.metaData = KVStoreManager.getInstance().getTxMetaData(mContext, item.getTxHash());
-                    item.txReversed = Utils.reverseHex(Utils.bytesToHex(item.getTxHash()));
-
                 }
                 backUpFeed = newItems;
                 String log = String.format("newItems: %d, took: %d", newItems.size(), (System.currentTimeMillis() - s));
@@ -159,149 +155,20 @@ public class SwapListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void setTexts(final SwapHolder convertView, int position) {
         BaseWalletManager wallet = WalletsMaster.getInstance(mContext).getCurrentWallet(mContext);
         SwapUiHolder item = itemFeed.get(position);
-        item.metaData = KVStoreManager.getInstance().getTxMetaData(mContext, item.getTxHash());
 
-        String commentString = "";
-        if (item.metaData != null) {
-            if (item.metaData.comment != null) {
-                commentString = item.metaData.comment;
-            }
-        }
-
-        boolean received = item.getSent() == 0;
-
-        if (received)
-            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.transaction_amount_received_color, null));
-        else
-            convertView.transactionAmount.setTextColor(mContext.getResources().getColor(R.color.transaction_amount_sent_color, null));
-
-        BigDecimal cryptoAmount = new BigDecimal(item.getAmount());
-        boolean isCryptoPreferred = BRSharedPrefs.isCryptoPreferred(mContext);
-        String preferredIso = isCryptoPreferred ? wallet.getIso(mContext) : BRSharedPrefs.getPreferredFiatIso(mContext);
-
-        BigDecimal amount = isCryptoPreferred ? cryptoAmount : wallet.getFiatForSmallestCrypto(mContext, cryptoAmount, null);
-        convertView.transactionAmount.setText(CurrencyUtils.getFormattedAmount(mContext, preferredIso, amount));
-
-        int blockHeight = item.getBlockHeight();
-        int confirms = blockHeight == Integer.MAX_VALUE ? 0 : BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext)) - blockHeight + 1;
-
-        int level = 0;
-        if (confirms <= 0) {
-            long relayCount = wallet.getPeerManager().getRelayCount(item.getTxHash());
-            if (relayCount <= 0)
-                level = 0;
-            else if (relayCount == 1)
-                level = 1;
-            else
-                level = 2;
-        } else {
-            if (confirms == 1)
-                level = 3;
-            else if (confirms == 2)
-                level = 4;
-            else if (confirms == 3)
-                level = 5;
-            else
-                level = 6;
-        }
-
-        Log.d(TAG, "Level -> " + level);
-
-        long timeStamp = item.getTimeStamp() == 0 ? System.currentTimeMillis() : item.getTimeStamp() * 1000;
-        String shortDate = BRDateUtil.getShortDate(timeStamp);
-        String txDescription = "", txDate = "";
-        long eventID = 0;
-        long nCurrentHeight = BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext));
-        boolean isNormalTx = true;
-/*
-        if (item.getBetEntity()==null)  {
-            if (item.isCoinbase() && item.getBlockHeight() != Integer.MAX_VALUE) {       // then payout reward
-                boolean immature = (nCurrentHeight - item.getBlockHeight()) <= PAYOUT_MATURITY;
-                String strMatureInfo = String.format("<b>%d/%d</b>", (nCurrentHeight - item.getBlockHeight()), PAYOUT_MATURITY);
-                int amountColor = (!immature) ? R.color.transaction_amount_payout_color : R.color.transaction_amount_inmature_color;
-                convertView.transactionAmount.setTextColor(mContext.getResources().getColor(amountColor, null));
-                BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
-                BetResultEntity br = brds.getByBlockHeight(mContext, wallet.getIso(mContext), item.getBlockHeight() - 1);
-                if (br != null) {
-                    item.setBetResultEntity( br );
-                    eventID = br.getEventID();
-                    EventSwapUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
-                    if (ev != null) {
-                        txDescription = String.format("%s - %s", ev.getTxHomeTeam(), ev.getTxAwayTeam());
-                        item.setTeamSearchDescription(txDescription);
-                    } else {
-                        txDescription = String.format("Event #%d: info not avalable", eventID);
-                    }
-                    txDate = String.format("PAYOUT Event #%d", eventID);
-                } else {
-                    txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
-                    txDate = "PAYOUT";
-                }
-                isNormalTx = false;
-                if (immature)   txDate += " " + strMatureInfo;
-            }
-            else {
-                if (level > 4) {
-                    txDescription = !commentString.isEmpty() ? commentString : (!received ? "sent to " : "received via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
-                } else {
-                    txDescription = !commentString.isEmpty() ? commentString : (!received ? "sending to " : "receiving via ") + wallet.decorateAddress(mContext, item.getToRecipient(wallet, received));
-                }
-            }
-        } else {        // outgoing bet
-            eventID = item.getBetEntity().getEventID();
-            EventSwapUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
-            if (ev != null) {
-                txDescription = ev.getEventDescriptionForBet(item.getBetEntity().getOutcome());
-                txDate = ev.getEventDateForBet(item.getBetEntity().getOutcome());
-                item.setTeamSearchDescription(txDescription);
-            } else {
-                txDescription = String.format("Event #%d: info not avalable", eventID);
-                txDate = String.format("BET %s", item.getBetEntity().getOutcome().toString());
-            }
-            isNormalTx=false;
-        }
-*/
-        convertView.transactionDetail.setText(txDescription);
-        convertView.transactionDate.setText(Html.fromHtml(shortDate + " " + txDate));
-    }
-
-    public void filterBy(String query, boolean[] switches, boolean[] betswitches) {
-        filter(query, switches);
-    }
-
-    public void filterBy() {
-        filter(filterQuery, filterSwitches);
-    }
-
-    public boolean FilterItem( SwapUiHolder item, boolean[] switches) {
-        return ( (switches[0] && item.getBetEntity()!=null)
-            ||   (switches[1] && item.isCoinbase() && item.getBetEntity()==null)
-            ||   (!switches[0] && !switches[1]) ) ;
-    }
-
-    public void filterBetHistory(boolean[] switches, boolean bNotify) {
-        long start = System.currentTimeMillis();
-        int switchesON = 0;
-        for (boolean i : switches) if (i) switchesON++;
-
-        final List<SwapUiHolder> filteredList = new ArrayList<>();
-        SwapUiHolder item;
-        for (int i = 0; i < backUpFeed.size(); i++) {
-            item = backUpFeed.get(i);
-            if (FilterItem(item, switches)) {
-                filteredList.add(item);
-            }
-        }
-        filterSwitches = switches;
-        itemFeed = filteredList;
-        if (bNotify)    notifyDataSetChanged();
-
-        Log.e(TAG, "filter bet history took: " + (System.currentTimeMillis() - start));
+        convertView.transactionTimestamp.setText(item.getTimestamp());
+        convertView.transactionAmount.setText(item.getReceivingAmount());
+        convertView.transactionState.setText(item.getTransactionState().toString());
+        convertView.transactionId.setText("ID: " + item.getTransactionId());
     }
 
     public void resetFilter() {
         itemFeed = backUpFeed;
         notifyDataSetChanged();
+    }
+
+    public void filterBy(String query, boolean[] switches) {
+        filter(query, switches);
     }
 
     private void filter(final String query, final boolean[] switches) {
@@ -319,47 +186,25 @@ public class SwapListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         SwapUiHolder item;
         for (int i = 0; i < backUpFeed.size(); i++) {
             item = backUpFeed.get(i);
-            boolean matchesHash = item.getTxHashHexReversed() != null && item.getTxHashHexReversed().toLowerCase().contains(lowerQuery);
-            boolean matchesAddress = item.getToRecipient(wallet, false).toLowerCase().contains(lowerQuery) || item.getToRecipient(wallet, true).toLowerCase().contains(lowerQuery);
-            //boolean matchesMemo = item.metaData != null && item.metaData.comment != null && item.metaData.comment.toLowerCase().contains(lowerQuery);
-            // team match
-            boolean matchesTeam = !item.getTeamSearchDescription().isEmpty() && item.getTeamSearchDescription().toLowerCase().contains(lowerQuery);
-            boolean matchesEventId = Utils.isInteger(lowerQuery) &&
-                                    ((item.getBetEntity()!=null) && item.getBetEntity().getEventID()==Integer.parseInt(lowerQuery)      // bets
-                                  || (item.getBetResultEntity()!=null) && item.getBetResultEntity().getEventID()==Integer.parseInt(lowerQuery) );   // payouts
+            boolean matchesId = item.getTransactionId() != null && item.getTransactionId().toLowerCase().contains(lowerQuery);
 
-            if (matchesHash || matchesAddress || matchesTeam || matchesEventId) {
+            if (matchesId) {
                 if (switchesON == 0) {
                     filteredList.add(item);
                 } else {
                     boolean willAdd = true;
-                    //filter by sent and this is received - reverse logic
-                    if (switches[0] && (item.getAmount() > 0)) {
+                    if (switches[0] && (item.getTransactionState() != SwapUiHolder.TransactionState.completed && item.getTransactionState() != SwapUiHolder.TransactionState.notcompleted)) {
                         willAdd = false;
                     }
-                    //filter by received and this is sent - reverse logic
-                    if (switches[1] && (item.getAmount() <= 0)) {
+                    if (switches[1] && item.getTransactionState() == SwapUiHolder.TransactionState.notcompleted ) {
                         willAdd = false;
                     }
-
-                    int confirms = item.getBlockHeight() ==
-                            Integer.MAX_VALUE ? 0
-                            : BRSharedPrefs.getLastBlockHeight(mContext, wallet.getIso(mContext)) - item.getBlockHeight() + 1;
-                    //complete
-                    if (switches[2] && confirms >= 6) {
+                    if (switches[2] && item.getTransactionState() == SwapUiHolder.TransactionState.completed ) {
                         willAdd = false;
                     }
-
-                    //pending
-                    if (switches[3] && confirms < 6) {
-                        willAdd = false;
-                    }
-
                     if (willAdd) filteredList.add(item);
                 }
-
             }
-
         }
         filterSwitches = switches;
         filterQuery = query;
@@ -372,31 +217,19 @@ public class SwapListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private class SwapHolder extends RecyclerView.ViewHolder {
         public RelativeLayout mainLayout;
         public ConstraintLayout constraintLayout;
-        public TextView sentReceived;
-        public TextView amount;
-        public TextView account;
-        public TextView status;
-        public TextView status_2;
-        public TextView timestamp;
-        public TextView comment;
-        public ImageView arrowIcon;
 
-        public BRText transactionDate;
+        public BRText transactionTimestamp;
         public BRText transactionAmount;
-        public BRText transactionDetail;
-        public Button transactionFailed;
-        public ProgressBar transactionProgress;
-
+        public BRText transactionState;
+        public BRText transactionId;
 
         public SwapHolder(View view) {
             super(view);
 
-            transactionDate = view.findViewById(R.id.tx_date);
+            transactionTimestamp = view.findViewById(R.id.tx_timestamp);
             transactionAmount = view.findViewById(R.id.tx_amount);
-            transactionDetail = view.findViewById(R.id.tx_description);
-            transactionFailed = view.findViewById(R.id.tx_failed_button);
-            transactionProgress = view.findViewById(R.id.tx_progress);
-
+            transactionState = view.findViewById(R.id.tx_state);
+            transactionId = view.findViewById(R.id.tx_id);
         }
     }
 

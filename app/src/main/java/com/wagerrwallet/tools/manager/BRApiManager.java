@@ -269,7 +269,7 @@ public class BRApiManager {
             JSONObject object = new JSONObject(jsonString1);
             String strInfo = object.getString("apiInfo");
             if (strInfo.equals("OK")) {
-                JSONObject objectTicker = object.getJSONObject("Response");
+                JSONObject objectTicker = object.getJSONObject("response");
                 getAmount = objectTicker.getString("getAmount");
             }
         } catch (JSONException ignored) {
@@ -297,17 +297,17 @@ public class BRApiManager {
             JSONObject object = new JSONObject(jsonString1);
             String strInfo = object.getString("apiInfo");
             if (strInfo.equals("OK")) {
-                JSONArray arrayResponse = object.getJSONArray("Response");
+                JSONArray arrayResponse = object.getJSONArray("response");
                 if (arrayResponse != null) {
                     int length = arrayResponse.length();
-                    for (int i = 1; i < length; i++) {
+                    for (int i = 0; i < length; i++) {
                         JSONObject objectResponse = (JSONObject) arrayResponse.get(i);
-                        SwapUiHolder swapResponse = new SwapUiHolder(objectResponse.getString("TransactionId"),
+                        SwapUiHolder swapResponse = new SwapUiHolder(objectResponse.getString("transactionId"),
                                 objectResponse.getString("depositCoin"),
                                 objectResponse.getString("receiveCoin"),
                                 objectResponse.getString("depositAmount"),
                                 objectResponse.getString("receivingAmount"),
-                                objectResponse.getString("refundWalletWallet"),
+                                objectResponse.getString("refundWallet"),
                                 objectResponse.getString("receiveWallet"),
                                 objectResponse.getString("depositWallet"),
                                 SwapUiHolder.TransactionState.fromValue(objectResponse.getString("transactionState")),
@@ -344,8 +344,8 @@ public class BRApiManager {
             JSONObject object = new JSONObject(jsonString1);
             String strInfo = object.getString("apiInfo");
             if (strInfo.equals("OK")) {
-                JSONObject objectResponse = object.getJSONObject("Response");
-                swapResponse = new SwapResponse( objectResponse.getString("TransactionId"),
+                JSONObject objectResponse = object.getJSONObject("response");
+                swapResponse = new SwapResponse( objectResponse.getString("transactionId"),
                         objectResponse.getString("depositWallet"),
                         objectResponse.getString("receivingAmount"));
             }

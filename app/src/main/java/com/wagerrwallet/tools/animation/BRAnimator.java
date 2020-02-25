@@ -178,7 +178,7 @@ public class BRAnimator {
         }
         FragmentSendSwap fragmentSend = (FragmentSendSwap) app.getFragmentManager().findFragmentByTag(FragmentSendSwap.class.getName());
         if (fragmentSend != null && fragmentSend.isAdded()) {
-            fragmentSend.setCryptoObject(request);
+            //fragmentSend.setCryptoObject(request);
             return;
         }
         final int slideAnimation = SLIDE_ANIMATION_DURATION;
@@ -186,7 +186,7 @@ public class BRAnimator {
             SLIDE_ANIMATION_DURATION = 300;
             fragmentSend = new FragmentSendSwap();
             if (request != null && !request.address.isEmpty()) {
-                fragmentSend.setCryptoObject(request);
+                //fragmentSend.setCryptoObject(request);
             }
             app.getFragmentManager().beginTransaction()
                     .setCustomAnimations(0, 0, 0, R.animator.plain_300)
