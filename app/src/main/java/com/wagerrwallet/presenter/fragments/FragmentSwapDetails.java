@@ -59,6 +59,7 @@ public class FragmentSwapDetails extends DialogFragment implements View.OnClickL
     private BRText mReceivedAmount;
     private BRText mReceiveAddress;
     private BRText mRefundAddress;
+    private BRText mDepositAddress;
 
     private ImageButton mCloseButton;
     private RelativeLayout mDetailsContainer;
@@ -89,6 +90,7 @@ public class FragmentSwapDetails extends DialogFragment implements View.OnClickL
         mLabelStatus = rootView.findViewById(R.id.label_transaction_state);
         mTimestamp = rootView.findViewById(R.id.value_timestamp);
         mDepositAmount = rootView.findViewById(R.id.value_deposit_amount);
+        mDepositAddress= rootView.findViewById(R.id.value_deposit_address);
         mReceivedAmount = rootView.findViewById(R.id.value_receive_amount);
         mReceiveAddress = rootView.findViewById(R.id.value_receive_address);
         mRefundAddress = rootView.findViewById(R.id.value_refund_address);
@@ -105,6 +107,7 @@ public class FragmentSwapDetails extends DialogFragment implements View.OnClickL
         mTxId.setOnClickListener(this);
         mReceiveAddress.setOnClickListener(this);
         mRefundAddress.setOnClickListener(this);
+        mDepositAddress.setOnClickListener(this);
 
         updateUi();
         return rootView;
@@ -130,9 +133,10 @@ public class FragmentSwapDetails extends DialogFragment implements View.OnClickL
             mLabelStatus.setText(mTransaction.getTransactionState().toString());
             mTimestamp.setText(mTransaction.getTimestamp());
             mDepositAmount.setText(mTransaction.getDepositAmount());
-            mReceivedAmount.setText(mTransaction.getReceivingAmount());
+            mReceivedAmount.setText(mTransaction.getReceivingAmount()+" WGR");
             mReceiveAddress.setText(mTransaction.getReceiveWallet());
             mRefundAddress.setText(mTransaction.getRefundWallet());
+            mDepositAddress.setText(mTransaction.getDepositWallet());
 
         } else {
             Toast.makeText(getContext(), "Error getting transaction data", Toast.LENGTH_SHORT).show();

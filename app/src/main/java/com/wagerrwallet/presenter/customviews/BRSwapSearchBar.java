@@ -54,7 +54,7 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
 
     private SwapActivity breadActivity;
 
-    public boolean[] filterSwitches = new boolean[4];
+    public boolean[] filterSwitches = new boolean[3];
 
     public BRSwapSearchBar(Context context) {
         super(context);
@@ -186,7 +186,7 @@ public class BRSwapSearchBar extends android.support.v7.widget.Toolbar {
         completedFilter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterSwitches[2] = !filterSwitches[3];
+                filterSwitches[2] = !filterSwitches[2];
                 filterSwitches[1] = false;
                 filterSwitches[0] = false;
                 updateFilterButtonsUI(filterSwitches);

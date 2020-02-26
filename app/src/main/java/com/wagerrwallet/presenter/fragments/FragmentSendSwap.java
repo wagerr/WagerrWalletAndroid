@@ -40,6 +40,7 @@ import com.wagerrwallet.presenter.customviews.BRLinearLayoutWithCaret;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.SwapResponse;
+import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.animation.SlideDetector;
@@ -50,6 +51,7 @@ import com.wagerrwallet.tools.manager.BRReportsManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.SendManager;
 import com.wagerrwallet.tools.manager.SwapManager;
+import com.wagerrwallet.tools.manager.TxManager;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.tools.util.CurrencyUtils;
@@ -330,11 +332,24 @@ public class FragmentSendSwap extends Fragment {
                 BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
                     @Override
                     public void run() {
+                        SwapActivity app = (SwapActivity)getActivity();
                         BRCoreAddress address = wallet.getWallet().getAllAddresses()[0];
                         if (Utils.isNullOrEmpty(address.stringify())) {
                             Log.e(TAG, "getSwapUiHolders: ERROR, retrieved address:" + address);
                         }
-                        SwapResponse response = BRApiManager.InstaSwapDoSwap(getActivity(), "WGR", "BTC", amountStr, address.stringify(), rawAddress);
+                        SwapResponse response = BRApiManager.InstaSwapDoSwap(app, "WGR", "BTC", amountStr, address.stringify(), rawAddress);
+                        String error = null;
+                        if (response == null)   {
+                            error = app.getString(R.string.Instaswap_Error);
+                        }
+                        else {
+                            BRClipboardManager.putClipboard(getContext(), response.getDepositWallet());
+                        }
+
+                        Message msg = Message.obtain(); // Creates an new Message instance
+                        msg.arg1 = 2;   // DoSwap callback
+                        msg.obj = error;
+                        handler.sendMessage(msg);
                     }
                 });
             }
@@ -546,8 +561,33 @@ public class FragmentSendSwap extends Fragment {
     // Define the Handler that receives messages from the thread and update the progress
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            String getAmount = (String) msg.obj;
-            amountReceive.setText("Amount to receive: " + getAmount + " WGR");
+            switch (msg.arg1) {
+                case 1:     // Ticker Callback
+                    String getAmount = (String) msg.obj;
+                    amountReceive.setText("Amount to receive: " + getAmount + " WGR");
+                    break;
+                case 2:     // DoSwap Callback
+                    String error = (String) msg.obj;
+                    SwapActivity app = (SwapActivity)getActivity();
+                    if (app instanceof Activity)
+                        BRAnimator.showBreadSignal((Activity) app, Utils.isNullOrEmpty(error) ? app.getString(R.string.Instaswap_sendSuccess) : app.getString(R.string.Alert_error),
+                                Utils.isNullOrEmpty(error) ? app.getString(R.string.Instaswap_sendSuccessSubheader) : "Error: " + error, Utils.isNullOrEmpty(error) ? R.drawable.ic_check_mark_white : R.drawable.ic_error_outline_black_24dp, new BROnSignalCompletion() {
+                                    @Override
+                                    public void onComplete() {
+                                        if (!((Activity) app).isDestroyed()) {
+                                            ((Activity) app).getFragmentManager().popBackStack();
+                                        }
+
+                                        if (BRAnimator.showFragmentEvent!=null) {
+                                            BRAnimator.showEventDetails((Activity) app, BRAnimator.showFragmentEvent, 0);
+                                            BRAnimator.showFragmentEvent=null;
+                                            SwapManager.getInstance().adapter.updateData();
+                                        }
+                                    }
+                                });
+                    break;
+            }
+
         }
     };
 
@@ -584,6 +624,7 @@ public class FragmentSendSwap extends Fragment {
                 public void run() {
                     String getAmount = BRApiManager.InstaSwapTickers(app, "WGR", "BTC", stringAmount);
                     Message msg = Message.obtain(); // Creates an new Message instance
+                    msg.arg1 = 1;   // Ticker callback
                     msg.obj = getAmount;
                     handler.sendMessage(msg);
                 }

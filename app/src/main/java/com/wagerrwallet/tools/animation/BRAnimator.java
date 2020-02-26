@@ -391,7 +391,7 @@ public class BRAnimator {
 
         txDetails = new FragmentSwapDetails();
         txDetails.setTransaction(item);
-        txDetails.show(app.getFragmentManager(), "txDetails");
+        txDetails.show(app.getFragmentManager(), "swapDetails");
 
     }
 

@@ -780,6 +780,7 @@
     <string name="Events.Sport">Sport</string>
     <string name="Events.Tournament">Tournament</string>
     <string name="Events.Round">Round</string>
+    <string name="Events.EmptyList">Please allow 10-20 minutes for sync to complete before sporting events appear</string>
     <string name="Alert.keystore.invalidated.wipe.android">We can\\\'t proceed because your screen lock settings have been changed (e.g. password was disabled, fingerprints were changed). For security purposes, Android has permanently locked your key store. Therefore, your Wagerr app data must be wiped.\\n\\nDon’t worry, your funds are still secure! Recover your wallet using your paper key.</string>
     <string name="title_activity_bet_settings">Bet Settings</string>
 
@@ -863,6 +864,9 @@
     <string name="Instaswap.completed">completed</string>
     <string name="Instaswap.InvalidAddress">A valid Bitcoin address is required</string>
     <string name="Instaswap.InvalidAmount">A valid deposit BTC amount is required</string>
+    <string name="Instaswap.sendSuccess">Swap Request Sent</string>
+    <string name="Instaswap.sendSuccessSubheader">Deposit BTC address copied to clipboard</string>
+    <string name="Instaswap.Error">There was a problem while sending the swap request</string>
 
 
 </resources>

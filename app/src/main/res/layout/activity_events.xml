@@ -303,5 +303,17 @@
         android:layout_above="@id/bottom_toolbar_layout1"
         android:background="@color/light_gray"/>
 
+    <com.wagerrwallet.presenter.customviews.BRText
+        android:id="@+id/label_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Events.EmptyList"
+        android:layout_marginLeft="80dp"
+        android:textAlignment="center"
+        android:textColor="@color/gray_shadow"
+        android:layout_centerInParent="true"
+        android:textSize="14dp"
+        app:customTFont="CircularPro-Book.otf" />
+
 
 </RelativeLayout>

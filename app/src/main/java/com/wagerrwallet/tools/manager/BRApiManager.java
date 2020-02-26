@@ -345,7 +345,7 @@ public class BRApiManager {
             String strInfo = object.getString("apiInfo");
             if (strInfo.equals("OK")) {
                 JSONObject objectResponse = object.getJSONObject("response");
-                swapResponse = new SwapResponse( objectResponse.getString("transactionId"),
+                swapResponse = new SwapResponse( objectResponse.getString("TransactionId"),
                         objectResponse.getString("depositWallet"),
                         objectResponse.getString("receivingAmount"));
             }

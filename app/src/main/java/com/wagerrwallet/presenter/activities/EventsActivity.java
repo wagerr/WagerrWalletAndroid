@@ -104,6 +104,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
     //BRButton mBuyButton;
     BRText mBalanceLabel;
     BRText mProgressLabel;
+    BRText mLabelEmpty;
     ProgressBar mProgressBar;
 
     public ViewFlipper barFlipper;
@@ -154,6 +155,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         mProgressLabel = findViewById(R.id.syncing_label);
         mProgressBar = findViewById(R.id.sync_progress);
         mNotificationBar = findViewById(R.id.notification_bar);
+        mLabelEmpty = findViewById(R.id.label_empty);
 
         if (Utils.isEmulatorOrDebug(this)) {
             if (logger != null) logger.interrupt();
@@ -430,6 +432,8 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             Log.e(TAG, "events updateUi: wallet is null");
             return;
         }
+
+        mLabelEmpty.setVisibility( (EventTxManager.getInstance().adapter.getItemCount()>0) ? View.GONE : View.VISIBLE);
 
         // update spinners
         updateSports();

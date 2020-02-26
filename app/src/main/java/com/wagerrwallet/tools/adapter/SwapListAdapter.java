@@ -157,7 +157,7 @@ public class SwapListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         SwapUiHolder item = itemFeed.get(position);
 
         convertView.transactionTimestamp.setText(item.getTimestamp());
-        convertView.transactionAmount.setText(item.getReceivingAmount());
+        convertView.transactionAmount.setText(item.getReceivingAmount()+ " WGR");
         convertView.transactionState.setText(item.getTransactionState().toString());
         convertView.transactionId.setText("ID: " + item.getTransactionId());
     }
@@ -192,15 +192,15 @@ public class SwapListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 if (switchesON == 0) {
                     filteredList.add(item);
                 } else {
-                    boolean willAdd = true;
+                    boolean willAdd = false;
                     if (switches[0] && (item.getTransactionState() != SwapUiHolder.TransactionState.completed && item.getTransactionState() != SwapUiHolder.TransactionState.notcompleted)) {
-                        willAdd = false;
+                        willAdd = true;
                     }
                     if (switches[1] && item.getTransactionState() == SwapUiHolder.TransactionState.notcompleted ) {
-                        willAdd = false;
+                        willAdd = true;
                     }
                     if (switches[2] && item.getTransactionState() == SwapUiHolder.TransactionState.completed ) {
-                        willAdd = false;
+                        willAdd = true;
                     }
                     if (willAdd) filteredList.add(item);
                 }

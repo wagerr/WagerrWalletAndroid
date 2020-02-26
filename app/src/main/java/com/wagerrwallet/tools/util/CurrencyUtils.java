@@ -72,7 +72,7 @@ public class CurrencyUtils {
             try {
                 currency = Currency.getInstance(iso);
                 symbol = currency.getSymbol();
-                maxDecimals = currency.getDefaultFractionDigits() + 2;
+                maxDecimals = currency.getDefaultFractionDigits() ;
             } catch (IllegalArgumentException e) {
                 //e.printStackTrace();
             }
