@@ -2,7 +2,9 @@ package com.wagerrwallet.presenter.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,11 +23,13 @@ import android.view.ViewTreeObserver;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.wagerrwallet.BuildConfig;
@@ -114,6 +118,9 @@ public class FragmentSendSwap extends Fragment {
     private ConstraintLayout amountLayout;
     private boolean feeButtonsShown = false;
     private boolean amountLabelOn = true;
+    private TextView mTOSLabel;
+    private TextView mTOSLink;
+    private Switch mTOSAccept;
 
     private static String savedMemo;
     private static String savedIso;
@@ -140,6 +147,9 @@ public class FragmentSendSwap extends Fragment {
         isoButton = (Button) rootView.findViewById(R.id.iso_button);
         keyboardLayout = (LinearLayout) rootView.findViewById(R.id.keyboard_layout);
         amountLayout = (ConstraintLayout) rootView.findViewById(R.id.amount_layout);
+        mTOSLabel =  (TextView) rootView.findViewById(R.id.content_text);
+        mTOSLink =  (TextView) rootView.findViewById(R.id.link_text);
+        mTOSAccept =  (Switch) rootView.findViewById(R.id.chk_acceptTOS);
 
         close = (ImageButton) rootView.findViewById(R.id.close_button);
         BaseWalletManager wm = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
@@ -182,11 +192,33 @@ public class FragmentSendSwap extends Fragment {
             }
         });
 
+        mTOSLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wagerr.zendesk.com/hc/en-us/articles/360040437891"));
+                startActivity(browserIntent);
+                getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+            }
+        });
+
+        mTOSAccept.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ToggleSendButton( isChecked );
+            }
+        });
+
         showKeyboard(false);
+        ToggleSendButton( false );
 
         signalLayout.setLayoutTransition(BRAnimator.getDefaultTransition());
 
         return rootView;
+    }
+
+    private void ToggleSendButton(Boolean bAccepted) {
+        send.setAlpha( (bAccepted) ? 1.0f : .5f );
+        send.setClickable(bAccepted);
     }
 
     private String getBitcoinRegexp()   {

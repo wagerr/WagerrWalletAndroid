@@ -867,6 +867,8 @@
     <string name="Instaswap.sendSuccess">Swap Request Sent</string>
     <string name="Instaswap.sendSuccessSubheader">Deposit BTC address copied to clipboard</string>
     <string name="Instaswap.Error">There was a problem while sending the swap request</string>
+    <string name="Instaswap.TOScontent">I have read and accept the </string>
+    <string name="Instaswap.TOSlink">Terms of Service</string>
 
 
 </resources>

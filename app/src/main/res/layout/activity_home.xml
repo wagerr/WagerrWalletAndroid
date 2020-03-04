@@ -90,6 +90,25 @@
                     android:paddingBottom="4dp"
                     android:text="@string/MenuButton.Swaps"
                     android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    app:customTFont="CircularPro-Book.otf" />
+
+                <com.wagerrwallet.presenter.customviews.BRText
+                    android:id="@+id/swap_label2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="false"
+                    android:drawablePadding="8dp"
+                    android:focusable="false"
+                    android:paddingBottom="4dp"
+                    android:text="by instaswap.io"
+                    android:layout_toEndOf="@id/swap_label"
+                    android:layout_alignBottom="@id/swap_label"
+                    android:textSize="15sp"
                     android:textColor="@color/white"
                     app:customTFont="CircularPro-Book.otf" />
 
