@@ -204,7 +204,7 @@ public class FragmentSendSwap extends Fragment {
         mTOSAccept.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ToggleSendButton( isChecked );
+                ToggleSendButton( CanSend() );
             }
         });
 
@@ -221,8 +221,16 @@ public class FragmentSendSwap extends Fragment {
         send.setClickable(bAccepted);
     }
 
+    private Boolean CanSend()  {
+        String amountStr = amountBuilder.toString();
+
+        //inserted amount
+        BigDecimal rawAmount = new BigDecimal(Utils.isNullOrEmpty(amountStr) ? "0" : amountStr);
+        return mTOSAccept.isChecked() && rawAmount.compareTo(new BigDecimal("0")) > 0 ;
+    }
+
     private String getBitcoinRegexp()   {
-        return "^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$";
+        return "^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$";
     }
 
     private void setListeners() {
@@ -360,6 +368,7 @@ public class FragmentSendSwap extends Fragment {
                     sayInvalidAddress();
                     return;
                 }
+                ToggleSendButton( false );  // avoid send spam
                 // instaswap send
                 BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
                     @Override
@@ -678,6 +687,7 @@ public class FragmentSendSwap extends Fragment {
             }
         }
         amountEdit.setText(newAmount.toString());
+        ToggleSendButton( CanSend() );
     }
 
     // from the link above

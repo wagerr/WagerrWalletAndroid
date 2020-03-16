@@ -156,7 +156,7 @@ public class FragmentSend extends Fragment {
 
         amountBuilder = new StringBuilder(0);
         setListeners();
-        isoText.setText(getString(R.string.Send_amountLabel));
+        isoText.setText(getString(R.string.Instaswap_AmountSwap));
         isoText.setTextSize(18);
         isoText.setTextColor(getContext().getColor(R.color.light_gray));
         isoText.requestLayout();
