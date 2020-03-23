@@ -7,8 +7,8 @@ android {
         applicationId = 'com.wagerrwallet'
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 258
-        versionName "258"
+        versionCode 262
+        versionName "262"
         multiDexEnabled true
 
         // Similar to other properties in the defaultConfig block,
@@ -65,7 +65,7 @@ android {
         brdTestnet {
             applicationId = "com.wagerrtestnet"
             dimension "mode"
-            resValue "string", "app_name", "Wagerr-testnet Bet"
+            resValue "string", "app_name", "Wagerr Pro Testnet"
             buildConfigField "boolean", "BITCOIN_TESTNET", "true"
             externalNativeBuild {
                 cmake {
