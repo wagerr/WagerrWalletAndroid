@@ -2,6 +2,8 @@ package com.wagerrwallet.tools.manager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Looper;
 import android.support.annotation.WorkerThread;
 import android.support.v7.widget.LinearLayoutManager;
@@ -90,6 +92,11 @@ public class EventTxManager {
                         }, null, null, 0);
                     }
 
+                    int itemHeight = view.getHeight();
+                    int bsButtonMargin = 12;
+                    int bsButtonSize = 42;
+                    Boolean isBetSmartClick = ( x > bsButtonMargin && x < bsButtonMargin+bsButtonSize && y%itemHeight > bsButtonMargin && y%itemHeight < bsButtonMargin+bsButtonSize );
+
                     BaseWalletManager wallet = WalletsMaster.getInstance(app).getCurrentWallet(app);
                     Boolean isSyncing =  wallet.getPeerManager().getSyncProgress(BRSharedPrefs.getStartHeight(app, "WGR" ))<1;
                     if (isSyncing)    {
@@ -101,7 +108,14 @@ public class EventTxManager {
                         }, null, null, 0);
                     }
                     else {
-                        BRAnimator.showEventDetails(app, item, position);
+                        if (isBetSmartClick)    {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID())));
+                            app.startActivity(browserIntent);
+                            app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+                        }
+                        else    {
+                            BRAnimator.showEventDetails(app, item, position);
+                        }
                     }
                 }
                 catch (ArrayIndexOutOfBoundsException e)    {

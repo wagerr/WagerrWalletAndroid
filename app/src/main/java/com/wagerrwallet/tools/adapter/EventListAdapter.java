@@ -2,6 +2,8 @@ package com.wagerrwallet.tools.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 
 import com.platform.tools.KVStoreManager;
 import com.wagerrwallet.R;
+import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.tools.animation.BRAnimator;
@@ -192,6 +196,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         convertView.transactionHeader.setText(item.getTxEventHeader());
         convertView.transactionEventDate.setText( item.getTxEventDate() );
+
     }
 
     private void showTransactionProgress(EventHolder holder, int progress) {
@@ -289,6 +294,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public TextView total_under_odds;
         public ImageView arrowIcon;
 
+        public ImageButton betSmartButton;
         public BRText transactionHeader;        // sport - tournament - round
         public BRText transactionEventDate;
         public BRText transactionHomeTeam;
@@ -305,6 +311,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public EventHolder(View view) {
             super(view);
 
+            betSmartButton = view.findViewById(R.id.betsmart_button);
             transactionHeader = view.findViewById(R.id.tx_eventheader);
             transactionHeader.setLineSpacing(0, 1.0f);
             transactionEventDate = view.findViewById(R.id.tx_eventdate);

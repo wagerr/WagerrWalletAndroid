@@ -72,17 +72,30 @@
             android:textSize="18sp"
             app:customTFont="CircularPro-Book.otf" />
 
+
+
+        <ImageButton
+            android:id="@+id/betsmart_button_home"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/white"
+            android:focusableInTouchMode="true"
+            android:layout_below="@id/tx_eventdate"
+            android:src="@drawable/betsmart_widget" />
+
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_home_label"
             android:layout_width="165dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="12dp"
             android:ellipsize="end"
             android:maxLength="20"
             android:maxLines="1"
             android:layout_below="@id/tx_eventdate"
-
+            android:layout_toRightOf="@id/betsmart_button_home"
             android:text="Home Team"
             android:textColor="@color/light_gray"
             android:textSize="16sp" />
@@ -101,15 +114,27 @@
             android:textColor="@color/red"
             android:textSize="18sp" />
 
+        <ImageButton
+            android:id="@+id/betsmart_button_away"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_toLeftOf="@id/tx_away_label"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/white"
+            android:focusableInTouchMode="true"
+            android:layout_below="@id/tx_eventdate"
+            android:src="@drawable/betsmart_widget" />
+
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_away_label"
-            android:layout_width="155dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLength="20"
             android:maxLines="1"
             android:paddingRight="25dp"
+            android:paddingLeft="10dp"
             android:layout_alignParentRight="true"
             android:layout_below="@id/tx_eventdate"
             android:text="Away Team"
@@ -132,6 +157,8 @@
             android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="18sp" />
+
+
 
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_no_bet_balance"

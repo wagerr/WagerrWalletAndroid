@@ -31,6 +31,7 @@ import com.platform.tools.KVStoreManager;
 import com.wagerrwallet.R;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.core.BRCoreTransaction;
+import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.activities.settings.BetSettings;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.customviews.BRText;
@@ -54,7 +55,9 @@ import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Date;
 
 /**
@@ -134,6 +137,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private ImageButton faq;
     private BRText mPotentialReward;
 
+    private ImageButton betSmartHomeButton;
+    private ImageButton betSmartAwayButton;
 
     // layout management
     private boolean bHasMoneyLine = true;
@@ -219,6 +224,43 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
         mMoneyLineContainer = rootView.findViewById(R.id.odds_container);
         mMoneyLineLayout =  rootView.findViewById(R.id.odds_layout);
+
+        betSmartHomeButton = rootView.findViewById(R.id.betsmart_button_home);
+        betSmartAwayButton = rootView.findViewById(R.id.betsmart_button_away);
+
+        betSmartHomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strTeam = "", strSport = "";
+                try {
+                    strTeam = URLEncoder.encode(mTransaction.getTxHomeTeam(), "UTF-8");
+                    strSport = URLEncoder.encode(mTransaction.getTxSport(), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport)));
+                startActivity(browserIntent);
+                getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+            }
+        });
+
+        betSmartAwayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strTeam = "", strSport = "";
+                try {
+                    strTeam = URLEncoder.encode(mTransaction.getTxAwayTeam(), "UTF-8");
+                    strSport = URLEncoder.encode(mTransaction.getTxSport(), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport)));
+                startActivity(browserIntent);
+                getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+            }
+        });
 
         final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
 

@@ -45,6 +45,7 @@ import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.platform.APIClient;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -248,11 +249,21 @@ public class LoginActivity extends BRActivity {
             Log.d("MyApp", "Version Name : "+version + "\n Version Code : "+versionCode);
             if (versionCode < tag)   {
                 //BRDialog.showSimpleDialog(app, "New version available", "A new version of Wagerr Bet app is available");
+                JSONArray assetsArr = jsonObject.getJSONArray("assets");
+                String strDownload = "";
+
+                if (assetsArr.length() > 0) {
+                    JSONObject asset = (JSONObject) assetsArr.get(0);
+                    strDownload = asset.getString("browser_download_url");
+                }
+
+                final String strUrl = (!strDownload.isEmpty()) ? strDownload : String.format("https://github.com/wagerr/WagerrWalletAndroid/releases/tag/%d", tag);    // default
+
                 BRDialog.showCustomDialog(app, "New version available", "A new version of Wagerr Pro app is available", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
                     @Override
                     public void onClick(BRDialogView brDialogView) {
                         brDialogView.dismiss();
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://github.com/wagerr/WagerrWalletAndroid/releases/tag/%d", tag)));
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(strUrl));
                         app.startActivity(browserIntent);
                         app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
                     }
