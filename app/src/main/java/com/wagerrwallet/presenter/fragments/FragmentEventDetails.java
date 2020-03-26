@@ -242,6 +242,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                     e.printStackTrace();
                     return;
                 }
+                Toast.makeText(getActivity(), "launching web view", Toast.LENGTH_LONG).show();
                 CreateWebFragment( getActivity(), String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport));
             }
         });
@@ -257,6 +258,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                     e.printStackTrace();
                     return;
                 }
+                Toast.makeText(getActivity(), "launching web view", Toast.LENGTH_LONG).show();
                 CreateWebFragment( getActivity(), String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport));
             }
         });

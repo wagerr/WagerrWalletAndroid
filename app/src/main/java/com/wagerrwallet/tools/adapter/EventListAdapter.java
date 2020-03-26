@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,12 +17,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.platform.tools.KVStoreManager;
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.presenter.fragments.FragmentWebView;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
@@ -197,6 +200,44 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         convertView.transactionHeader.setText(item.getTxEventHeader());
         convertView.transactionEventDate.setText( item.getTxEventDate() );
 
+        convertView.betSmartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText((Activity)mContext, "launching web view from activity", Toast.LENGTH_LONG).show();
+                CreateWebFragment( (Activity)mContext, String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID() ));
+            }
+        });
+
+    }
+
+    public void CreateWebFragment(Activity app, String theUrl)   {
+        FragmentWebView fragmentWebView = (FragmentWebView) app.getFragmentManager().findFragmentByTag(FragmentWebView.class.getName());
+
+        if(fragmentWebView != null && fragmentWebView.isAdded()){
+            Log.e(TAG, "showWebView: Already showing");
+            return;
+        }
+
+        fragmentWebView = new FragmentWebView();
+        Bundle args = new Bundle();
+        args.putString("url", theUrl);
+        fragmentWebView.setArguments(args);
+
+        fragmentWebView.show( app.getFragmentManager(), FragmentWebView.class.getName());
+        app.getFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .commit();
+
+        /*
+        FragmentWebView fragmentWebView = new FragmentWebView();
+        Bundle args = new Bundle();
+        args.putString("url", String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID()));
+        fragmentWebView.setArguments(args);
+        app.getFragmentManager().beginTransaction()
+                .setCustomAnimations(0, 0, 0, R.animator.plain_300)
+                .add(android.R.id.content, fragmentWebView, FragmentWebView.class.getName())
+                .addToBackStack(FragmentWebView.class.getName()).commit();
+        */
     }
 
     private void showTransactionProgress(EventHolder holder, int progress) {

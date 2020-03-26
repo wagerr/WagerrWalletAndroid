@@ -6,6 +6,8 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -87,6 +90,13 @@ public class FragmentWebView extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_web_view, container, false);
+
+        // Set transparent background and no title
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        }
+
         webView = (WebView) rootView.findViewById(R.id.web_view);
         webView.setBackgroundColor(0);
 //        webView.setWebChromeClient(new BRWebChromeClient());
@@ -139,7 +149,7 @@ public class FragmentWebView extends DialogFragment {
             DisplayMetrics metrics = getResources().getDisplayMetrics();
             int width = metrics.widthPixels;
             int height = metrics.heightPixels;
-            dialog.getWindow().setLayout((7 * width)/8, (7 * height)/8);
+            dialog.getWindow().setLayout((9 * width)/10, (13 * height)/14);
         }
     }
 

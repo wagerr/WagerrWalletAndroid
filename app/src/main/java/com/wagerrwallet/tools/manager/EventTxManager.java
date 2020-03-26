@@ -8,12 +8,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.WorkerThread;
+import android.support.constraint.solver.widgets.Rectangle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.platform.HTTPServer;
@@ -100,15 +103,25 @@ public class EventTxManager {
                         }, null, null, 0);
                     }
 
-                    int itemHeight = view.getHeight();
-                    float ny = y + ((RecyclerView)view.getParent()).computeVerticalScrollOffset();
-                    int bsButtonMargin = 22;
-                    int bsButtonSize = 42;
-                    Boolean isBetSmartClick = ( x > bsButtonMargin && x < bsButtonMargin+bsButtonSize && ny%itemHeight > bsButtonMargin && ny%itemHeight < bsButtonMargin+bsButtonSize );
+                    int[] screenPos = new int[2];
+                    ImageButton btn = (ImageButton) ((RelativeLayout) view).getChildAt(1);
+                    RecyclerView parent = ((RecyclerView)view.getParent());
+                    btn.getLocationOnScreen(screenPos);
+                    Rectangle buttonRect = new Rectangle();
+                    buttonRect.x = screenPos[0];
+                    buttonRect.y = screenPos[1];
+                    buttonRect.width = btn.getWidth();
+                    buttonRect.height = btn.getHeight();
+                    parent.getLocationOnScreen(screenPos);
+                    float scrollY = parent.computeVerticalScrollOffset();
+                    int nx = (int) (x + screenPos[0]);
+                    int ny = (int) (y + screenPos[1]);
+
+                    Boolean isBetSmartClick = buttonRect.contains( nx, ny );
 
                     BaseWalletManager wallet = WalletsMaster.getInstance(app).getCurrentWallet(app);
                     Boolean isSyncing =  wallet.getPeerManager().getSyncProgress(BRSharedPrefs.getStartHeight(app, "WGR" ))<1;
-                    //isSyncing = false;  // +++ temp for testing
+                    isSyncing = false;  // +++ temp for testing
                     if (isSyncing)    {
                         BRDialog.showCustomDialog(app, "Error", "Wallet is still syncing", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
                             @Override
@@ -118,24 +131,9 @@ public class EventTxManager {
                         }, null, null, 0);
                     }
                     else {
-                        Toast.makeText(app, "tapped: (" + itemHeight + "), x=" + x + ", y=" + y , Toast.LENGTH_LONG).show();
+                        Toast.makeText(app, "tapped: by=" + buttonRect.y + ", ny=" + ny , Toast.LENGTH_LONG).show();
                         if (isBetSmartClick)    {
-                            FragmentWebView fragmentWebView = new FragmentWebView();
-                            Bundle args = new Bundle();
-                            args.putString("url", String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID()));
-                            fragmentWebView.setArguments(args);
-                            app.getFragmentManager().beginTransaction()
-                                    .setCustomAnimations(0, 0, 0, R.animator.plain_300)
-                                    .add(android.R.id.content, fragmentWebView, FragmentWebView.class.getName())
-                                    .addToBackStack(FragmentWebView.class.getName()).commit();
-
-                            /*
-                            Intent intent = new Intent(app, WebViewActivity.class);
-                            intent.putExtra("url", String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID()));
-                            app.startActivity(intent);
-                            app.overridePendingTransition(R.anim.enter_from_bottom, R.anim.fade_down);
-                            */
-
+                            adapter.CreateWebFragment( app, String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID()));
                         }
                         else    {
                             BRAnimator.showEventDetails(app, item, position);

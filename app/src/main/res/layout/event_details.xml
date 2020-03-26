@@ -19,6 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:id="@+id/header_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
         <ImageButton
             android:id="@+id/close_button"
             android:layout_width="28dp"
@@ -85,6 +91,7 @@
             android:layout_below="@id/tx_home"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="1dp"
+            android:padding="2dp"
             android:backgroundTint="@color/white"
             android:focusableInTouchMode="true"
             android:src="@drawable/betsmart_widget" />
@@ -124,6 +131,7 @@
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="4dp"
+            android:padding="2dp"
             android:backgroundTint="@color/white"
             android:focusableInTouchMode="true"
             android:layout_below="@id/tx_away"
@@ -177,11 +185,13 @@
             android:visibility="gone"
             app:customTFont="CircularPro-Book.otf" />
 
+        </RelativeLayout>
+
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/betsmart_button_home"
+            android:layout_below="@id/header_container"
             android:fillViewport="true">
 
     <LinearLayout
