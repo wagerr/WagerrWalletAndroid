@@ -9,6 +9,11 @@
                                     android:minWidth="300dp"
                                     app:cardCornerRadius="4dp">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/outer_frame"
+        android:layout_height="wrap_content">
+
     <RelativeLayout
         android:id="@+id/details_parent"
         android:layout_width="match_parent"
@@ -73,16 +78,15 @@
             app:customTFont="CircularPro-Book.otf" />
 
 
-
         <ImageButton
             android:id="@+id/betsmart_button_home"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:layout_below="@id/tx_home"
             android:layout_marginLeft="12dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="1dp"
             android:backgroundTint="@color/white"
             android:focusableInTouchMode="true"
-            android:layout_below="@id/tx_eventdate"
             android:src="@drawable/betsmart_widget" />
 
         <com.wagerrwallet.presenter.customviews.BRText
@@ -95,7 +99,6 @@
             android:maxLength="20"
             android:maxLines="1"
             android:layout_below="@id/tx_eventdate"
-            android:layout_toRightOf="@id/betsmart_button_home"
             android:text="Home Team"
             android:textColor="@color/light_gray"
             android:textSize="16sp" />
@@ -118,11 +121,12 @@
             android:id="@+id/betsmart_button_away"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_toLeftOf="@id/tx_away_label"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
             android:layout_marginTop="4dp"
             android:backgroundTint="@color/white"
             android:focusableInTouchMode="true"
-            android:layout_below="@id/tx_eventdate"
+            android:layout_below="@id/tx_away"
             android:src="@drawable/betsmart_widget" />
 
         <com.wagerrwallet.presenter.customviews.BRText
@@ -177,7 +181,7 @@
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/tx_home"
+            android:layout_below="@id/betsmart_button_home"
             android:fillViewport="true">
 
     <LinearLayout
@@ -763,6 +767,6 @@
 
         </ScrollView>
     </RelativeLayout>
-
+    </FrameLayout>
 
 </android.support.v7.widget.CardView>

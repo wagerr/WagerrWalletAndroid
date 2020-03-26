@@ -1,5 +1,6 @@
 package com.wagerrwallet.presenter.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -33,6 +35,7 @@ import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.activities.settings.BetSettings;
+import com.wagerrwallet.presenter.activities.settings.WebViewActivity;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BetEntity;
@@ -239,9 +242,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                     e.printStackTrace();
                     return;
                 }
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport)));
-                startActivity(browserIntent);
-                getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+                CreateWebFragment( getActivity(), String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport));
             }
         });
 
@@ -256,9 +257,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                     e.printStackTrace();
                     return;
                 }
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport)));
-                startActivity(browserIntent);
-                getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
+                CreateWebFragment( getActivity(), String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport));
             }
         });
 
@@ -461,6 +460,35 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         return rootView;
     }
 
+    protected void CreateWebFragment(Activity app, String theUrl)   {
+        FragmentWebView fragmentWebView = (FragmentWebView) app.getFragmentManager().findFragmentByTag(FragmentWebView.class.getName());
+
+        if(fragmentWebView != null && fragmentWebView.isAdded()){
+            Log.e(TAG, "showEventDetails: Already showing");
+
+       //     return;
+        }
+
+
+        fragmentWebView = new FragmentWebView();
+        Bundle args = new Bundle();
+        args.putString("url", theUrl);
+        fragmentWebView.setArguments(args);
+
+        fragmentWebView.show( app.getFragmentManager(), FragmentWebView.class.getName());
+        app.getFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .commit();
+
+        /*app.getFragmentManager().beginTransaction()
+                .replace( ((ViewGroup)getView().getParent()).getId(), fragmentWebView, FragmentWebView.class.getName())
+                //.add(fragmentWebView, FragmentWebView.class.getName())
+                .addToBackStack(null)
+                .commit();
+*/
+        //app.getFragmentManager().beginTransaction().show(fragmentWebView).commit();
+        //app.getFragmentManager().beginTransaction().hide(this).commit();
+    }
     protected void updateSeekBar( int amount, int posX ) {
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         BigDecimal cryptoAmount = new BigDecimal((long)amount*UNIT_MULTIPLIER);
