@@ -121,7 +121,7 @@ public class EventTxManager {
 
                     BaseWalletManager wallet = WalletsMaster.getInstance(app).getCurrentWallet(app);
                     Boolean isSyncing =  wallet.getPeerManager().getSyncProgress(BRSharedPrefs.getStartHeight(app, "WGR" ))<1;
-                    isSyncing = false;  // +++ temp for testing
+                    //isSyncing = false;  // +++ temp for testing
                     if (isSyncing)    {
                         BRDialog.showCustomDialog(app, "Error", "Wallet is still syncing", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
                             @Override
