@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -101,16 +102,21 @@ public class FragmentWebView extends DialogFragment {
         webView.setBackgroundColor(0);
 //        webView.setWebChromeClient(new BRWebChromeClient());
         webView.setWebViewClient(new WebViewClient() {
-
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 String trimmedUrl = rTrim(url, '/');
                 Uri toUri = Uri.parse(trimmedUrl);
-
             }
-
-
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url != null && !url.startsWith("https://www.betsmart.app") && (url.startsWith("http://") || url.startsWith("https://"))) {
+                    view.getContext().startActivity(
+                            new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         });
 
         topToolbar = rootView.findViewById(R.id.toolbar);
