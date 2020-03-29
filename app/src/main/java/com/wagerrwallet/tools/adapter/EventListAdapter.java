@@ -107,6 +107,15 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
+    public EventTxUiHolder findByEventID( long eventID ) {
+        for(EventTxUiHolder item : itemFeed)    {
+            if (item.getEventID() == eventID)   {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public void updateData() {
         if (updatingData) return;
         BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {

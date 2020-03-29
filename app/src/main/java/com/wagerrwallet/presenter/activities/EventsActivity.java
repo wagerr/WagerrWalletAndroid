@@ -41,17 +41,21 @@ import android.widget.ViewFlipper;
 
 import com.platform.HTTPServer;
 import com.wagerrwallet.R;
+import com.wagerrwallet.core.BRCoreAddress;
 import com.wagerrwallet.core.BRCorePeer;
 import com.wagerrwallet.presenter.activities.settings.BetSettings;
 import com.wagerrwallet.presenter.activities.settings.SettingsActivity;
 import com.wagerrwallet.presenter.activities.settings.WebViewActivity;
 import com.wagerrwallet.presenter.activities.util.BRActivity;
 import com.wagerrwallet.presenter.customviews.BRButton;
+import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.customviews.BREventSearchBar;
 import com.wagerrwallet.presenter.customviews.BRNotificationBar;
 import com.wagerrwallet.presenter.customviews.BRSearchBar;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
+import com.wagerrwallet.presenter.entities.CryptoRequest;
+import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
@@ -133,8 +137,11 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_events);
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Uri data = intent.getData();
 
         mCurrencyTitle = findViewById(R.id.currency_label);
         mCurrencyPriceUsd = findViewById(R.id.currency_usd_price);
@@ -420,10 +427,50 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
 
     private void handleUrlClickIfNeeded(Intent intent) {
         Uri data = intent.getData();
-        if (data != null && !data.toString().isEmpty()) {
-            //handle external click with crypto scheme
-            CryptoUriParser.processRequest(this, data.toString(), WalletsMaster.getInstance(this).getCurrentWallet(this));
+
+        BaseWalletManager wallet = WalletsMaster.getInstance(app).getCurrentWallet(app);
+        Boolean isSyncing =  wallet.getPeerManager().getSyncProgress(BRSharedPrefs.getStartHeight(app, "WGR" ))<1;
+        if (isSyncing)    {
+            BRDialog.showCustomDialog(app, "Error", "Wallet is still syncing", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                @Override
+                public void onClick(BRDialogView brDialogView) {
+                    brDialogView.dismiss();
+                }
+            }, null, null, 0);
         }
+        else    {
+            if (data != null && !data.toString().isEmpty()) {
+                long eventID = parseRequest( data.toString() );
+                EventTxUiHolder item = EventTxManager.getInstance().adapter.findByEventID( eventID );
+
+                if ( item == null )   {
+                    BRDialog.showCustomDialog(app, "Error", "Event is no longer valid", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                        @Override
+                        public void onClick(BRDialogView brDialogView) {
+                            brDialogView.dismiss();
+                        }
+                    }, null, null, 0);
+                }
+                else    {
+                    BRAnimator.showEventDetails(app, item, 0);
+                }
+                //handle external click with crypto scheme
+                //CryptoUriParser.processRequest(this, data.toString(), WalletsMaster.getInstance(this).getCurrentWallet(this));
+            }
+        }
+    }
+
+    public static long parseRequest( String str) {
+        if (str == null || str.isEmpty()) return 0;
+
+        String tmp = str.trim().replaceAll("\n", "").replaceAll(" ", "%20");
+
+        Uri u = Uri.parse(tmp);
+        String scheme = u.getScheme();
+        String[] keyValue = u.getQuery().split("=", 2);
+        long ret = Long.parseLong( keyValue[1] );
+
+        return ret;
     }
 
     private void updateUi() {
