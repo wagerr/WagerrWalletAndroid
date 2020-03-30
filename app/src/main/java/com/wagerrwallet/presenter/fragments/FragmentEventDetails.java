@@ -734,7 +734,12 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             mTxHomeTeam.setText( (item.getTxHomeTeam()!=null)?item.getTxHomeTeam():"Home N/A" );
             mTxAwayTeam.setText( (item.getTxAwayTeam()!=null)?item.getTxAwayTeam():"Away N/A" );
             mTxHomeOdds.setText( (item.getHomeOdds()>0)?item.getTxHomeOdds():"N/A" );
-            mTxDrawOdds.setText( (item.getDrawOdds()>0)?item.getTxDrawOdds():"N/A" );
+
+            String strDraw = (item.getDrawOdds()>0)?item.getTxDrawOdds():"N/A";
+            mTxDrawOdds.setText( strDraw );
+            if ( "N/A".equals(strDraw)) {
+                mTxDrawOdds.setVisibility(View.INVISIBLE);
+            }
             mTxAwayOdds.setText( (item.getAwayOdds()>0)?item.getTxAwayOdds():"N/A" );
             rlLastContainer = mMoneyLineContainer;      // default...
 

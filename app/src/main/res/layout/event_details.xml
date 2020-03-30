@@ -86,14 +86,15 @@
 
         <ImageButton
             android:id="@+id/betsmart_button_home"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_below="@id/tx_home"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="1dp"
-            android:padding="2dp"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
             android:backgroundTint="@color/white"
-            android:focusableInTouchMode="true"
+            android:focusableInTouchMode="false"
             android:src="@drawable/betsmart_widget" />
 
         <com.wagerrwallet.presenter.customviews.BRText
@@ -126,14 +127,15 @@
 
         <ImageButton
             android:id="@+id/betsmart_button_away"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginRight="20dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="26dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="4dp"
-            android:padding="2dp"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
             android:backgroundTint="@color/white"
-            android:focusableInTouchMode="true"
+            android:focusableInTouchMode="false"
             android:layout_below="@id/tx_away"
             android:src="@drawable/betsmart_widget" />
 
@@ -207,7 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:orientation="vertical"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             >
 
             <RelativeLayout

@@ -188,7 +188,13 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         convertView.transactionHomeTeam.setText( (item.getTxHomeTeam()!=null)?item.getTxHomeTeam():"Home Team N/A" );
         convertView.transactionAwayTeam.setText( (item.getTxAwayTeam()!=null)?item.getTxAwayTeam():"Away Team N/A" );
         convertView.transactionHomeOdds.setText( (item.getTxHomeOdds()!=null)?item.getTxHomeOdds():"N/A" );
-        convertView.transactionDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"N/A" );
+
+        String strDraw = (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"N/A";
+        convertView.transactionDrawOdds.setText( strDraw );
+        if ( strDraw.equals("N/A")) {
+            convertView.transactionDrawOdds.setVisibility(View.GONE);
+            convertView.separator1.setVisibility(View.GONE);
+        }
         convertView.transactionAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"N/A" );
 
         String homeScore = item.getTxHomeScore();
@@ -347,7 +353,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public BRText transactionDrawOdds;
         public Button transactionFailed;
         public ProgressBar transactionProgress;
-
+        public BRText separator1;
 
         public EventHolder(View view) {
             super(view);
@@ -365,7 +371,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             transactionDrawOdds = view.findViewById(R.id.tx_draw_odds);
             transactionFailed = view.findViewById(R.id.tx_failed_button);
             transactionProgress = view.findViewById(R.id.tx_progress);
-
+            separator1 = view.findViewById(R.id.tx_odds_separator1);
         }
     }
 
