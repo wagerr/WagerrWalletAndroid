@@ -131,7 +131,7 @@ public class EventTxManager {
                         }, null, null, 0);
                     }
                     else {
-                        Toast.makeText(app, "tapped: by=" + buttonRect.y + ", ny=" + ny , Toast.LENGTH_LONG).show();
+                        //Toast.makeText(app, "tapped: by=" + buttonRect.y + ", ny=" + ny , Toast.LENGTH_LONG).show();
                         if (isBetSmartClick)    {
                             adapter.CreateWebFragment( app, String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID()));
                         }

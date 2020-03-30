@@ -802,7 +802,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                     mTransactionId.setTextColor(getContext().getColor(R.color.light_gray));
                     String id = mTransaction.getTxHash();
                     BRClipboardManager.putClipboard(getContext(), id);
-                    Toast.makeText(getContext(), getString(R.string.Receive_copied), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), getString(R.string.Receive_copied), Toast.LENGTH_LONG).show();
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
