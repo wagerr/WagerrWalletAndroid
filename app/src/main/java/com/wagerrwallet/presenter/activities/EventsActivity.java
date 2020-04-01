@@ -8,7 +8,10 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -19,6 +22,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.design.widget.FloatingActionButton;
 import android.support.transition.TransitionManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -52,6 +56,7 @@ import com.wagerrwallet.presenter.customviews.BRNotificationBar;
 import com.wagerrwallet.presenter.customviews.BRSearchBar;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
+import com.wagerrwallet.presenter.entities.ParlayBetEntity;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
@@ -113,6 +118,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
     private ImageButton mSettingsIcon;
     private ImageButton mSwap;
     private ConstraintLayout toolBarConstraintLayout;
+    private FloatingActionButton mParlayButton;
 
     private Spinner mSpinnerSport;
     private Spinner mSpinnerTournament;
@@ -156,6 +162,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         mProgressBar = findViewById(R.id.sync_progress);
         mNotificationBar = findViewById(R.id.notification_bar);
         mLabelEmpty = findViewById(R.id.label_empty);
+        mParlayButton = findViewById(R.id.parlay_floating);
 
         if (Utils.isEmulatorOrDebug(this)) {
             if (logger != null) logger.interrupt();
@@ -213,7 +220,19 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             }
         });
 
-/*
+        BaseWalletManager wm = WalletsMaster.getInstance(app).getCurrentWallet(app);
+        ParlayBetEntity pbe = ((WalletWagerrManager)wm).getParlay()
+        String numLegs = Integer.toString(pbe.getLegCount());
+        mParlayButton.setImageBitmap(textAsBitmap(numLegs, 40, Color.WHITE));
+
+        mParlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BRAnimator.showParlayFragment(EventsActivity.this, pbe);
+
+            }
+        });
+        /*
         mSendButton.setHasShadow(false);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,6 +315,22 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             BRDialog.showSimpleDialog(this, getString(R.string.Dialog_screenAlteringTitle), getString(R.string.Dialog_screenAlteringMessage));
         }
 
+    }
+
+    //method to convert your text to image
+    public static Bitmap textAsBitmap(String text, float textSize, int textColor) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
+        paint.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paint.ascent(); // ascent() is negative
+        int width = (int) (paint.measureText(text) + 0.0f); // round
+        int height = (int) (baseline + paint.descent() + 0.0f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(image);
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
     }
 
     public boolean isSearchActive() {

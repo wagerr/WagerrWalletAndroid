@@ -33,6 +33,7 @@ import com.wagerrwallet.presenter.activities.intro.IntroActivity;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.presenter.entities.ParlayBetEntity;
 import com.wagerrwallet.presenter.entities.SwapUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.fragments.FragmentEventDetails;
@@ -377,6 +378,22 @@ public class BRAnimator {
         txDetails.setTransaction(item);
         txDetails.show(app.getFragmentManager(), "txDetails");
 
+    }
+
+    public static void showParlayFragment(Activity app, ParlayBetEntity pbe ){
+/*
+        FragmentEventDetails txDetails = (FragmentEventDetails) app.getFragmentManager().findFragmentByTag(FragmentEventDetails.class.getName());
+
+        if(txDetails != null && txDetails.isAdded()){
+            Log.e(TAG, "showEventDetails: Already showing");
+
+            return;
+        }
+
+        txDetails = new FragmentEventDetails();
+        txDetails.setTransaction(item);
+        txDetails.show(app.getFragmentManager(), "txDetails");
+*/
     }
 
     public static void showSwapDetails(Activity app, SwapUiHolder item, int position){

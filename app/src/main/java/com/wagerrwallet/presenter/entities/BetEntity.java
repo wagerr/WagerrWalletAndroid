@@ -35,6 +35,7 @@ public class BetEntity {
     public enum BetTxType {
         PEERLESS(0x03),
         CHAIN_LOTTO(0x07),
+        PARLAY(0x0c),
         UNKNOWN(-1);
 
         private int type;

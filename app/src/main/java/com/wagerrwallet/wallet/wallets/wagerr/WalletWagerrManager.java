@@ -34,6 +34,7 @@ import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.presenter.entities.ParlayBetEntity;
 import com.wagerrwallet.presenter.entities.PeerEntity;
 import com.wagerrwallet.presenter.entities.SwapUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
@@ -146,6 +147,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     private boolean isInitiatingWallet;
 
+    private ParlayBetEntity parlay = new ParlayBetEntity();
+
     private List<OnBalanceChangedListener> balanceListeners = new ArrayList<>();
     private List<OnTxStatusUpdatedListener> txStatusUpdatedListeners = new ArrayList<>();
     private List<SyncListener> syncListeners = new ArrayList<>();
@@ -176,6 +179,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             }
             return instance;
         }
+    }
+
+    public ParlayBetEntity getParlay()  {
+        return parlay;
     }
 
     public synchronized static void setCoinRate(float pCoinRate) {
