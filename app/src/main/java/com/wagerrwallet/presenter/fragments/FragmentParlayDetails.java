@@ -1,5 +1,6 @@
 package com.wagerrwallet.presenter.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -102,9 +103,14 @@ public class FragmentParlayDetails extends DialogFragment  {
         @Override
         public void run() {
             try {
-                Context app = WagerrApp.getBreadContext();
-                mTransaction = BetEventTxDataStore.getInstance(app).getTransactionByEventId(app, "wgr", mTransaction.getEventID());
-                updateUi();
+                if (mTransaction==null) {
+                    final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+                    mTransaction = ((WalletWagerrManager)walletManager).getParlay();
+                }
+
+                if (didLegsExpire()) {
+                    updateUi();
+                }
             } finally {
                 // 100% guarantee that this always happens, even if
                 // your update method throws an exception
@@ -112,6 +118,22 @@ public class FragmentParlayDetails extends DialogFragment  {
             }
         }
     };
+
+    protected boolean didLegsExpire()  {
+        boolean redraw = false;
+        for(int i = 0; i < mTransaction.getLegCount(); i++) {
+            ParlayLegEntity leg = mTransaction.get(i);
+            if (!leg.isValid()) {
+                mTransaction.removeAt(i);
+                redraw = true;
+            }
+            else    {
+                BetEventEntity betEvent = BetEventTxDataStore.getInstance(getActivity()).getTransactionByEventId(getActivity(), "wgr", leg.getEvent().getEventID());
+                leg.updateEvent( (EventTxUiHolder)betEvent );
+            }
+        }
+        return redraw;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,6 +152,11 @@ public class FragmentParlayDetails extends DialogFragment  {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.parlay_details, container, false);
+        final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+
+        if (mTransaction==null) {
+            mTransaction = ((WalletWagerrManager) walletManager).getParlay();
+        }
 
         faq = (ImageButton) rootView.findViewById(R.id.faq_button);
 
@@ -259,7 +286,16 @@ public class FragmentParlayDetails extends DialogFragment  {
             mRemoveLeg[5] = rootView.findViewById(R.id.leg_remove_5);
         }
 
-        final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+        for(int i = 0; i < mTransaction.getLegCount(); i++) {
+            final int n = i;
+            mRemoveLeg[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTransaction.removeAt(n);
+                    updateUi();
+                }
+            });
+        }
 
         mTxAmount = rootView.findViewById(R.id.tx_amount);
         mTxCurrency = rootView.findViewById(R.id.tx_currency);
@@ -445,34 +481,47 @@ public class FragmentParlayDetails extends DialogFragment  {
         }
     }
 
+
     protected void AcceptBet()  {
         mTxAmount.clearFocus();
         int min = getContext().getResources().getInteger(R.integer.min_bet_amount);
         BetEntity.BetTxType betType = BetEntity.BetTxType.PARLAY;
         long amount = (seekBar.getProgress() + min) * UNIT_MULTIPLIER;
         //amount = 1000000;   // 0.01 WGR for testing
-        Date date = new Date();
-        long timeStampLimit = (date.getTime()/1000) + WalletWagerrManager.BET_CUTTOFF_SECONDS;
+        long arrEventID[] = new long[5];
+        int arrOutcome[] = new int[5];
+
+        if (didLegsExpire())    {
+            BRDialog.showCustomDialog(getContext(), "Error", "One or more event legs are closed for betting, list will refresh.", getContext().getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                @Override
+                public void onClick(BRDialogView brDialogView) {
+                    brDialogView.dismiss();
+                }
+            }, null, null, 0);
+            // refresh and cancel
+            updateUi();
+            return;
+        }
 
         for(int i = 0; i < mTransaction.getLegCount(); i++) {
             ParlayLegEntity leg = mTransaction.get(i);
-            if (leg.getEvent().getEventTimestamp() < timeStampLimit) {
-                BRDialog.showCustomDialog(getContext(), "Error", "Event is closed for betting", getContext().getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
-                    @Override
-                    public void onClick(BRDialogView brDialogView) {
-                        brDialogView.dismiss();
-                    }
-                }, null, null, 0);
-            } else {
-                final BaseWalletManager wallet = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
-                BRCoreTransaction tx = wallet.getWallet().createParlayBetTransaction(amount, betType.getNumber(), (int) leg.getEvent().getEventID(), getSelectedOutcome());
-
-                CryptoRequest item = new CryptoRequest(tx, null, false, "", "", new BigDecimal(amount));
-                SendManager.sendTransaction(getActivity(), item, wallet);
-                //BRAnimator.showFragmentEvent = mTransaction;
-                dismiss();  // close fragment
-            }
+            arrEventID[i] = leg.getEvent().getEventID();
+            arrOutcome[i] = leg.getOutcome().getNumber();
         }
+
+        final BaseWalletManager wallet = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+        BRCoreTransaction tx = wallet.getWallet().createParlayBetTransaction(amount, betType.getNumber(), mTransaction.getLegCount(),
+                (int) arrEventID[0], (int) arrOutcome[0],
+                (int) arrEventID[1], (int) arrOutcome[1],
+                (int) arrEventID[2], (int) arrOutcome[2],
+                (int) arrEventID[3], (int) arrOutcome[3],
+                (int) arrEventID[4], (int) arrOutcome[4]
+                );
+
+        CryptoRequest item = new CryptoRequest(tx, null, false, "", "", new BigDecimal(amount));
+        SendManager.sendTransaction(getActivity(), item, wallet);
+        //BRAnimator.showFragmentEvent = mTransaction;
+        dismiss();  // close fragment
     }
 
     protected void CancelBet()  {
@@ -484,24 +533,25 @@ public class FragmentParlayDetails extends DialogFragment  {
         super.onAttach(context);
     }
 
-    public void setTransaction(EventTxUiHolder item) {
-        this.mTransaction = item;
-    }
-
-    public EventTxUiHolder getTransaction() {
-        return this.mTransaction;
-    }
-
     public void updateUi() {
 
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         // Set mTransction fields
         if (mTransaction != null) {
+            for(int i = 0; i < mTransaction.getLegCount(); i++) {
+                ParlayLegEntity leg = mTransaction.get(i);
+                mLegLayout[i].setVisibility(View.VISIBLE);
+                mTxHomeTeam[i].setText( leg.getEvent().getTxHomeTeam() );
+                mTxAwayTeam[i].setText( leg.getEvent().getTxAwayTeam() );
+                mTxOutcome[i].setText( leg.getOutcome().toString() );
+                mTxOdds[i].setText( leg.getEvent().getOddTx( leg.getOdd() ) );
+                mTxOdds[i].setTextColor( leg.getOddColor( getContext() ) );
+            }
 
-            boolean sent = true; // mTransaction.getSent() > 0;
-            String amountWhenSent;
-            String amountNow;
-            String exchangeRateFormatted;
+            // hide rest
+            for(int i = mTransaction.getLegCount(); i < ParlayBetEntity.MAX_LEGS; i++) {
+                mLegLayout[i].setVisibility(View.GONE);
+            }
         }
     }
 

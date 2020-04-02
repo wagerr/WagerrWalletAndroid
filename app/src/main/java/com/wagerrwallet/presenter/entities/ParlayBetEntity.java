@@ -47,10 +47,21 @@ public class ParlayBetEntity {
     }
 
     public boolean add( ParlayLegEntity leg )  throws IndexOutOfBoundsException  {
+        // validate max legs
         if (legs.size() == MAX_LEGS)    {
             throw new IndexOutOfBoundsException();
         }
+        // validate rule only one leg per event
+        for ( ParlayLegEntity currentLeg : legs )  {
+            if (currentLeg.getEvent().getEventID() == leg.getEvent().getEventID())  {
+                return false;       // don't add, return failure
+            }
+        }
         return legs.add(leg);
+    }
+
+    public void removeAt( int index )    {
+        legs.remove(index);
     }
 
     public int getLegCount()    {

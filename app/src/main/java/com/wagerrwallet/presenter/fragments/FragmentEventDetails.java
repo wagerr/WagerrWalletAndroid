@@ -39,6 +39,8 @@ import com.wagerrwallet.presenter.entities.BetEventEntity;
 import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.presenter.entities.ParlayBetEntity;
+import com.wagerrwallet.presenter.entities.ParlayLegEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
@@ -130,6 +132,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private RelativeLayout mTotalsContainer;
     private ImageButton mAcceptBet;
     private ImageButton mCancelBet;
+    private ImageButton mAddLeg;
     private View mCurrentSelectedBetOption = null;
     private ImageButton faq;
     private BRText mPotentialReward;
@@ -305,13 +308,12 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (mCurrentSelectedBetOption==null)    return;
-                String oddTx = ((BRText)mCurrentSelectedBetOption).getText().toString();
                 float odds = 0;
                 int value = getContext().getResources().getInteger(R.integer.min_bet_amount);
                 int minvalue = value;
                 Float fValue = 0.0f;
                 try {
-                    odds = Float.parseFloat( oddTx );
+                    odds = getSelectedOdd();
                     fValue = Float.parseFloat(mTxAmount.getText().toString());
                     value = Math.max(minvalue, fValue.intValue());
                 } catch (NumberFormatException e) {
@@ -398,6 +400,24 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 CancelBet();
             }
         });
+        mAddLeg = rootView.findViewById(R.id.bet_add_leg);
+        mAddLeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+                ParlayBetEntity parlayBet = ((WalletWagerrManager)walletManager).getParlay();
+                ParlayLegEntity parlayLeg = new ParlayLegEntity( mTransaction, getSelectedOutcomeObj(), getSelectedOdd());
+                if ( !parlayBet.add(parlayLeg) )     {
+                    BRDialog.showCustomDialog(getContext(), "Error", "Can't add more than one leg per event.", getContext().getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                        @Override
+                        public void onClick(BRDialogView brDialogView) {
+                            brDialogView.dismiss();
+                        }
+                    }, null, null, 0);
+                }
+            }
+        });
+
         mPotentialReward = rootView.findViewById(R.id.tx_potential);
 
         mShowHide.setOnClickListener(new View.OnClickListener() {
@@ -509,7 +529,19 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mCurrentSelectedBetOption = null;
     }
 
-    protected int getSelectedOutcome() {
+    protected float getSelectedOdd() {
+        Float fValue = 0.0f;
+        if (mCurrentSelectedBetOption != null) {
+            String oddTx = ((BRText) mCurrentSelectedBetOption).getText().toString();
+            try {
+                fValue = Float.parseFloat(oddTx);
+            } catch (NumberFormatException e) {
+            }
+        }
+        return fValue;
+    }
+
+    protected BetEntity.BetOutcome getSelectedOutcomeObj() {
         BetEntity.BetOutcome outcome = BetEntity.BetOutcome.UNKNOWN;
         if (mCurrentSelectedBetOption!=null) {
             switch (mCurrentSelectedBetOption.getId()) {
@@ -542,7 +574,11 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                     break;
             }
         }
-        return outcome.getNumber();
+        return outcome;
+    }
+
+    protected int getSelectedOutcome() {
+        return getSelectedOutcomeObj().getNumber();
     }
 
     @Override

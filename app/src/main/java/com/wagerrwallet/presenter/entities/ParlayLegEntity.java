@@ -1,7 +1,13 @@
 package com.wagerrwallet.presenter.entities;
 
 
+import android.content.Context;
+
+import com.wagerrwallet.R;
 import com.wagerrwallet.tools.util.BRDateUtil;
+import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
+
+import java.util.Date;
 
 /**
  * BreadWallet
@@ -56,7 +62,79 @@ public class ParlayLegEntity {
     public BetEntity.BetOutcome getOutcome( )   {
         return outcome;
     }
+
+    public int getOddColor( Context context)    {
+        int home = context.getResources().getColor( R.color.red, null);
+        int draw = context.getResources().getColor( R.color.gray, null);
+        int away = context.getResources().getColor( R.color.black, null);
+
+        switch (outcome)    {
+            case MONEY_LINE_HOME_WIN:
+            case SPREADS_HOME:
+            case TOTAL_OVER:
+                return home;
+
+            case MONEY_LINE_AWAY_WIN:
+            case SPREADS_AWAY:
+            case TOTAL_UNDER:
+                return away;
+
+            case MONEY_LINE_DRAW:
+                return draw;
+
+            default:
+                return home;
+        }
+    }
+
+    public void updateEvent( EventTxUiHolder event )   {
+        this.event = event;
+        updateOdd();
+    }
+
+    public void updateOdd() {
+        switch (outcome)    {
+            case MONEY_LINE_HOME_WIN:
+                odd = event.homeOdds;
+                break;
+
+            case SPREADS_HOME:
+                odd = event.spreadHomeOdds;
+                break;
+
+            case TOTAL_OVER:
+                odd = event.overOdds;
+                break;
+
+            case MONEY_LINE_AWAY_WIN:
+                odd = event.awayOdds;
+                break;
+
+            case SPREADS_AWAY:
+                odd = event.spreadAwayOdds;
+                break;
+
+            case TOTAL_UNDER:
+                odd = event.underOdds;
+                break;
+
+            case MONEY_LINE_DRAW:
+                odd = event.drawOdds;
+                break;
+
+            default:
+                odd = 0;
+        }
+    }
+
     public float getOdd()   {
         return odd;
     }
+
+    public boolean isValid( ) {
+        Date date = new Date();
+        long timeStampLimit = (date.getTime()/1000) + WalletWagerrManager.BET_CUTTOFF_SECONDS;
+        return (getEvent().getEventTimestamp() >= timeStampLimit);
+    }
+
 }

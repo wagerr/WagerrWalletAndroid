@@ -39,6 +39,7 @@ import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.fragments.FragmentEventDetails;
 import com.wagerrwallet.presenter.fragments.FragmentGreetings;
 import com.wagerrwallet.presenter.fragments.FragmentMenu;
+import com.wagerrwallet.presenter.fragments.FragmentParlayDetails;
 import com.wagerrwallet.presenter.fragments.FragmentSendSwap;
 import com.wagerrwallet.presenter.fragments.FragmentSignal;
 import com.wagerrwallet.presenter.fragments.FragmentReceive;
@@ -380,20 +381,17 @@ public class BRAnimator {
 
     }
 
-    public static void showParlayFragment(Activity app, ParlayBetEntity pbe ){
-/*
-        FragmentEventDetails txDetails = (FragmentEventDetails) app.getFragmentManager().findFragmentByTag(FragmentEventDetails.class.getName());
+    public static void showParlayFragment(Activity app ){
+
+        FragmentParlayDetails txDetails = (FragmentParlayDetails) app.getFragmentManager().findFragmentByTag(FragmentParlayDetails.class.getName());
 
         if(txDetails != null && txDetails.isAdded()){
-            Log.e(TAG, "showEventDetails: Already showing");
-
+            Log.e(TAG, "showParlayFragment: Already showing");
             return;
         }
 
-        txDetails = new FragmentEventDetails();
-        txDetails.setTransaction(item);
-        txDetails.show(app.getFragmentManager(), "txDetails");
-*/
+        txDetails = new FragmentParlayDetails();
+        txDetails.show(app.getFragmentManager(), FragmentParlayDetails.class.getName());
     }
 
     public static void showSwapDetails(Activity app, SwapUiHolder item, int position){

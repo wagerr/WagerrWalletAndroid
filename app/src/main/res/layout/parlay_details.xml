@@ -19,14 +19,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageButton            android:id="@+id/close_button"
+        <ImageButton
+            android:id="@+id/close_button"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginTop="15dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
             android:padding="50dp"
-            android:above="@+id/tx_eventheader"
             android:background="@drawable/ic_close_light_grey"/>
 
         <ImageButton
@@ -36,7 +36,6 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="15dp"
-            android:above="@+id/tx_eventheader"
             android:background="@drawable/faq_question_black"
             android:padding="50dp" />
 
@@ -711,7 +710,37 @@
                 android:background="@drawable/redcross_circled" />
 
         </LinearLayout>
-    </RelativeLayout>
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_odd_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/tx_currency"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_alignParentRight="true"
+                android:ellipsize="end"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:text="2.321"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_odd_total_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_alignTop="@+id/tx_currency"
+                android:layout_marginRight="10dp"
+                android:layout_toStartOf="@id/tx_odd_total"
+                android:paddingBottom="2dp"
+                android:text="Total odd:"
+                android:textColor="@color/dark_gray"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

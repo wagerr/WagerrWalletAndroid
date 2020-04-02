@@ -221,14 +221,14 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         });
 
         BaseWalletManager wm = WalletsMaster.getInstance(app).getCurrentWallet(app);
-        ParlayBetEntity pbe = ((WalletWagerrManager)wm).getParlay()
+        ParlayBetEntity pbe = ((WalletWagerrManager)wm).getParlay();
         String numLegs = Integer.toString(pbe.getLegCount());
         mParlayButton.setImageBitmap(textAsBitmap(numLegs, 40, Color.WHITE));
 
         mParlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BRAnimator.showParlayFragment(EventsActivity.this, pbe);
+                BRAnimator.showParlayFragment(EventsActivity.this);
 
             }
         });
