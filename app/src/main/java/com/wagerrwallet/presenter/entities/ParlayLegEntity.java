@@ -9,6 +9,8 @@ import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
 import java.util.Date;
 
+import static com.wagerrwallet.presenter.entities.BetEventEntity.ODDS_MULTIPLIER;
+
 /**
  * BreadWallet
  * <p>
@@ -129,6 +131,10 @@ public class ParlayLegEntity {
 
     public float getOdd()   {
         return odd;
+    }
+
+    public String getOddTx()   {
+        return event.getOddTx( event.getOdds(getOdd()/ODDS_MULTIPLIER) );
     }
 
     public boolean isValid( ) {

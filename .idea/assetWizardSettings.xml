@@ -47,8 +47,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\fjortiz\Downloads\plus_parlay.png" />
-                                      <entry key="outputName" value="plus_parlay" />
+                                      <entry key="imageAsset" value="C:\Users\fjortiz\Downloads\minus_parlay.png" />
+                                      <entry key="outputName" value="minus_parlay" />
                                       <entry key="theme" value="HOLO_DARK" />
                                       <entry key="themeColor" value="ffffff" />
                                     </map>

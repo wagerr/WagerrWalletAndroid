@@ -212,6 +212,7 @@ public class FragmentTxDetails extends DialogFragment {
 
             String txSent = "", txToLabel = "", txToAddressLabel = "", txToAddressLabel2="", txToAddressLabel3="";
             long eventID = 0;
+            mToFromAddress.setSingleLine(true);
             if (mTransaction.getBetEntity()==null)  {
                 if (mTransaction.isCoinbase() && mTransaction.getBlockHeight() != Integer.MAX_VALUE) {       //  payout reward
                     BetResultTxDataStore brds = BetResultTxDataStore.getInstance(getContext());
@@ -265,19 +266,33 @@ public class FragmentTxDetails extends DialogFragment {
                 }
             }
             else {
-                EventTxUiHolder ev = BetEventTxDataStore.getInstance(getContext()).getTransactionByEventId(getContext(), "wgr", mTransaction.getBetEntity().getEventID());
-                if (ev!=null) {
-                    BetEntity.BetOutcome outcome = mTransaction.getBetEntity().getOutcome();
-                    String sTotals = ( outcome == BetEntity.BetOutcome.TOTAL_UNDER || outcome == BetEntity.BetOutcome.TOTAL_OVER)?ev.getTxTotalPoints():"";
-                    txToLabel = "";
-                    eventID = ev.getEventID();
+                eventID = mTransaction.getBetEntity().getEventID();
+                if (eventID==0) {
+                    txSent = String.format("BET: PARLAY (%d legs)", mTransaction.getBetEntity().parlayLegs);
+                    txToAddressLabel = "";
+                    BetEntity be = mTransaction.getBetEntity();
+                    for (int i=0; i < be.parlayLegs; i++)    {
+                        txToAddressLabel += String.format("Event #%d - %s\n", be.parlayBetEntity.eventID[i], be.parlayBetEntity.outcome[i].toString());
+                    }
+                    mToFromAddress.setSingleLine(false);
+                    txToAddressLabel2 = "";
+                    txToAddressLabel3 = "";
+                }
+                else {
+                    EventTxUiHolder ev = BetEventTxDataStore.getInstance(getContext()).getTransactionByEventId(getContext(), "wgr", mTransaction.getBetEntity().getEventID());
+                    if (ev != null) {
+                        BetEntity.BetOutcome outcome = mTransaction.getBetEntity().getOutcome();
+                        String sTotals = (outcome == BetEntity.BetOutcome.TOTAL_UNDER || outcome == BetEntity.BetOutcome.TOTAL_OVER) ? ev.getTxTotalPoints() : "";
+                        txToLabel = "";
+                        eventID = ev.getEventID();
 
-                    String txResult = (ev.getHomeScore()<0)?"Pending":String.format("%s - %s", ev.getTxHomeScore(), ev.getTxAwayScore());
-                    String txWin =
-                    txSent = String.format("BET: %s%s", outcome.toString(), sTotals);
-                    txToAddressLabel = String.format("%s : %s vs %s", ev.getTxEventShortDate(), ev.getTxHomeTeam(), ev.getTxAwayTeam());
-                    txToAddressLabel2 = String.format("Result: %s ", (ev.getHomeScore()<0)?"Pending":txResult);
-                    txToAddressLabel3 = String.format("Event #%s", String.valueOf(ev.getEventID()));
+                        String txResult = (ev.getHomeScore() < 0) ? "Pending" : String.format("%s - %s", ev.getTxHomeScore(), ev.getTxAwayScore());
+                        String txWin =
+                                txSent = String.format("BET: %s%s", outcome.toString(), sTotals);
+                        txToAddressLabel = String.format("%s : %s vs %s", ev.getTxEventShortDate(), ev.getTxHomeTeam(), ev.getTxAwayTeam());
+                        txToAddressLabel2 = String.format("Result: %s ", (ev.getHomeScore() < 0) ? "Pending" : txResult);
+                        txToAddressLabel3 = String.format("Event #%s", String.valueOf(ev.getEventID()));
+                    }
                 }
             }
 

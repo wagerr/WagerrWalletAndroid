@@ -3,16 +3,23 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:id="@+id/parlay_details_card"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:layout_marginLeft="12dp"
                                     android:layout_marginRight="12dp"
                                     android:minWidth="300dp"
+                                    android:minHeight="500px"
                                     app:cardCornerRadius="4dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
 
     <RelativeLayout
         android:id="@+id/details_parent"
@@ -48,6 +55,11 @@
 
     </RelativeLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
         /* leg 1 */
         <RelativeLayout
             android:id="@+id/layout_leg_1"
@@ -56,8 +68,10 @@
 
             <com.wagerrwallet.presenter.customviews.BRText
                 android:id="@+id/tx_eventheader_1"
-                android:layout_width="398dp"
-                android:layout_height="37dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
                 android:text="Sport - Tournament - Event 1"
@@ -115,6 +129,8 @@
                 android:layout_below="@id/tx_eventdate_1"
                 android:layout_toLeftOf="@id/leg_remove_1"
                 android:layout_marginRight="12dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:ellipsize="end"
                 android:maxLength="10"
                 android:maxLines="1"
@@ -131,7 +147,7 @@
                 android:layout_toLeftOf="@id/tx_odd_1"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_1"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="12dp"
                 android:ellipsize="end"
                 android:maxLength="7"
@@ -148,7 +164,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="12dp"
                 android:layout_below="@id/tx_eventdate_1"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/redcross_circled" />
 
             <View
@@ -170,8 +186,10 @@
 
             <com.wagerrwallet.presenter.customviews.BRText
                 android:id="@+id/tx_eventheader_2"
-                android:layout_width="398dp"
-                android:layout_height="37dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
                 android:text="Sport - Tournament - Event 2"
@@ -229,6 +247,8 @@
                 android:layout_below="@id/tx_eventdate_2"
                 android:layout_toLeftOf="@id/leg_remove_2"
                 android:layout_marginRight="12dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:ellipsize="end"
                 android:maxLength="10"
                 android:maxLines="1"
@@ -245,7 +265,7 @@
                 android:layout_toLeftOf="@id/tx_odd_2"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_2"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="12dp"
                 android:ellipsize="end"
                 android:maxLength="7"
@@ -262,7 +282,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="12dp"
                 android:layout_below="@id/tx_eventdate_2"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/redcross_circled" />
 
             <View
@@ -282,8 +302,10 @@
 
             <com.wagerrwallet.presenter.customviews.BRText
                 android:id="@+id/tx_eventheader_3"
-                android:layout_width="398dp"
-                android:layout_height="37dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
                 android:text="Sport - Tournament - Event 3"
@@ -341,6 +363,8 @@
                 android:layout_below="@id/tx_eventdate_3"
                 android:layout_toLeftOf="@id/leg_remove_3"
                 android:layout_marginRight="12dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:ellipsize="end"
                 android:maxLength="10"
                 android:maxLines="1"
@@ -357,7 +381,7 @@
                 android:layout_toLeftOf="@id/tx_odd_3"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_3"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="12dp"
                 android:ellipsize="end"
                 android:maxLength="7"
@@ -374,7 +398,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="12dp"
                 android:layout_below="@id/tx_eventdate_3"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/redcross_circled" />
 
             <View
@@ -394,8 +418,10 @@
 
             <com.wagerrwallet.presenter.customviews.BRText
                 android:id="@+id/tx_eventheader_4"
-                android:layout_width="398dp"
-                android:layout_height="37dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
                 android:text="Sport - Tournament - Event 4"
@@ -453,6 +479,8 @@
                 android:layout_below="@id/tx_eventdate_4"
                 android:layout_toLeftOf="@id/leg_remove_4"
                 android:layout_marginRight="12dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:ellipsize="end"
                 android:maxLength="10"
                 android:maxLines="1"
@@ -469,7 +497,7 @@
                 android:layout_toLeftOf="@id/tx_odd_4"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_4"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="12dp"
                 android:ellipsize="end"
                 android:maxLength="7"
@@ -486,7 +514,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="12dp"
                 android:layout_below="@id/tx_eventdate_4"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/redcross_circled" />
 
             <View
@@ -507,8 +535,10 @@
 
             <com.wagerrwallet.presenter.customviews.BRText
                 android:id="@+id/tx_eventheader_5"
-                android:layout_width="398dp"
-                android:layout_height="37dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
                 android:text="Sport - Tournament - Event 5"
@@ -566,6 +596,8 @@
                 android:layout_below="@id/tx_eventdate_5"
                 android:layout_toLeftOf="@id/leg_remove_5"
                 android:layout_marginRight="12dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:ellipsize="end"
                 android:maxLength="10"
                 android:maxLines="1"
@@ -582,7 +614,7 @@
                 android:layout_toLeftOf="@id/tx_odd_5"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_5"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="12dp"
                 android:ellipsize="end"
                 android:maxLength="7"
@@ -599,7 +631,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="12dp"
                 android:layout_below="@id/tx_eventdate_5"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/redcross_circled" />
 
             <View
@@ -610,7 +642,7 @@
                 android:background="@color/light_gray" />
 
         </RelativeLayout>
-
+    </LinearLayout>
 
         <RelativeLayout
         android:id="@+id/bet_container"
@@ -686,6 +718,7 @@
             android:weightSum="10"
             android:gravity="center"
             android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
             android:layout_below="@id/bet_seekBar"
             >
 
@@ -717,7 +750,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/tx_currency"
                 android:layout_marginTop="0dp"
-                android:layout_marginRight="0dp"
+                android:layout_marginRight="10dp"
                 android:layout_alignParentRight="true"
                 android:ellipsize="end"
                 android:maxLength="10"
@@ -741,6 +774,27 @@
                 android:textSize="14sp" />
 
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bet_container_warning"
+            android:layout_width="304dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:visibility="gone">
+
+        <com.wagerrwallet.presenter.customviews.BRText
+            android:id="@+id/tx_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/Parlay.NeedMoreLegs"
+            android:textColor="@color/red"
+            android:textSize="20sp"
+            android:visibility="visible" />
+        </RelativeLayout>
+
     </LinearLayout>
+    </ScrollView>
 
 </android.support.v7.widget.CardView>

@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
@@ -57,6 +58,7 @@ import com.wagerrwallet.presenter.customviews.BRSearchBar;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.presenter.entities.ParlayBetEntity;
+import com.wagerrwallet.presenter.interfaces.WagerrParlayLegNotification;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
@@ -96,7 +98,7 @@ import static com.wagerrwallet.tools.animation.BRAnimator.t2Size;
  * (BTC, BCH, ETH)
  */
 
-public class EventsActivity extends BRActivity implements InternetManager.ConnectionReceiverListener, OnEventTxListModified, SyncManager.OnProgressUpdate {
+public class EventsActivity extends BRActivity implements InternetManager.ConnectionReceiverListener, OnEventTxListModified, SyncManager.OnProgressUpdate, WagerrParlayLegNotification {
     private static final String TAG = EventsActivity.class.getName();
     BRText mCurrencyTitle;
     BRText mCurrencyPriceUsd;
@@ -220,11 +222,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             }
         });
 
-        BaseWalletManager wm = WalletsMaster.getInstance(app).getCurrentWallet(app);
-        ParlayBetEntity pbe = ((WalletWagerrManager)wm).getParlay();
-        String numLegs = Integer.toString(pbe.getLegCount());
-        mParlayButton.setImageBitmap(textAsBitmap(numLegs, 40, Color.WHITE));
-
+        onLegChanged();
         mParlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -878,4 +876,18 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         }
     }
 
+    // WagerrParlayLegNotification implementation
+    public void onLegChanged()  {
+        BaseWalletManager wm = WalletsMaster.getInstance(EventsActivity.this).getCurrentWallet(EventsActivity.this);
+        ParlayBetEntity pbe = ((WalletWagerrManager)wm).getParlay();
+        int nLegCount = pbe.getLegCount();
+        if (nLegCount>0) {
+            String numLegs = Integer.toString(nLegCount);
+            mParlayButton.setImageBitmap(textAsBitmap(numLegs, 40, Color.WHITE));
+            mParlayButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            mParlayButton.setVisibility(View.INVISIBLE);
+        }
+    }
 }

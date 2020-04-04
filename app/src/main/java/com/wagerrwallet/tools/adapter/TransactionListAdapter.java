@@ -286,14 +286,20 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         } else {        // outgoing bet
             eventID = item.getBetEntity().getEventID();
-            EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
-            if (ev != null) {
-                txDescription = ev.getEventDescriptionForBet(item.getBetEntity().getOutcome());
-                txDate = ev.getEventDateForBet(item.getBetEntity().getOutcome());
-                item.setTeamSearchDescription(txDescription);
-            } else {
-                txDescription = String.format("Event #%d: info not avalable", eventID);
-                txDate = String.format("BET %s", item.getBetEntity().getOutcome().toString());
+            if (eventID==0) {
+                txDescription = String.format("PARLAY (%d)", item.getBetEntity().parlayLegs);
+                txDate = "BET";
+            }
+            else {
+                EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
+                if (ev != null) {
+                    txDescription = ev.getEventDescriptionForBet(item.getBetEntity().getOutcome());
+                    txDate = ev.getEventDateForBet(item.getBetEntity().getOutcome());
+                    item.setTeamSearchDescription(txDescription);
+                } else {
+                    txDescription = String.format("Event #%d: info not avalable", eventID);
+                    txDate = String.format("BET %s", item.getBetEntity().getOutcome().toString());
+                }
             }
             isNormalTx=false;
         }

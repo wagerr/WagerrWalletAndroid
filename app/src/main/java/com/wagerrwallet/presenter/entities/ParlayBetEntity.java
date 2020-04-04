@@ -41,6 +41,9 @@ public class ParlayBetEntity {
     private List<ParlayLegEntity> legs = new ArrayList<>();
     private String strAmount;
 
+    public int eventID[] = new int[MAX_LEGS];
+    public BetEntity.BetOutcome outcome[] = new BetEntity.BetOutcome[MAX_LEGS];
+
     public ParlayLegEntity get( int index )
     {
         return legs.get( index );
@@ -52,10 +55,8 @@ public class ParlayBetEntity {
             throw new IndexOutOfBoundsException();
         }
         // validate rule only one leg per event
-        for ( ParlayLegEntity currentLeg : legs )  {
-            if (currentLeg.getEvent().getEventID() == leg.getEvent().getEventID())  {
-                return false;       // don't add, return failure
-            }
+        if ( searchLegByEventID(leg.getEvent().getEventID()) > -1 )   {
+            return false;
         }
         return legs.add(leg);
     }
@@ -63,9 +64,53 @@ public class ParlayBetEntity {
     public void removeAt( int index )    {
         legs.remove(index);
     }
+    public void removeByEventID( int eventID)    {
+        int index = searchLegByEventID(eventID);
+        if ( index > -1 ) {
+            removeAt(index);
+        }
+    }
 
     public int getLegCount()    {
         return legs.size();
+    }
+
+    public void clearLegs() {
+        legs.clear();
+    }
+
+    public enum BetInParlayResult {
+        NOT_IN_LEG,
+        EVENT_IN_LEG,
+        OUTCOME_IN_LEG;
+    }
+
+    public BetInParlayResult checkBetInParlay( long eventID, BetEntity.BetOutcome outcome)    {
+        int index = searchLegByEventID(eventID);
+        if ( index > -1 ) {
+            if (legs.get(index).getOutcome() == outcome)    {
+                return BetInParlayResult.OUTCOME_IN_LEG;
+            }
+            else    {
+                return BetInParlayResult.EVENT_IN_LEG;
+            }
+        }
+        else {
+            return BetInParlayResult.NOT_IN_LEG;
+        }
+    }
+
+    public int searchLegByEventID( long eventID )   {
+        int nIndex = 0;
+        boolean found = false;
+        for ( ParlayLegEntity currentLeg : legs )  {
+            if (currentLeg.getEvent().getEventID() == eventID)  {
+                found = true;
+                break;
+            }
+            nIndex++;
+        }
+        return (found) ? nIndex : -1;
     }
 
     public String getAmount( )   {

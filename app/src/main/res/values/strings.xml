@@ -775,16 +775,22 @@
     <string name="About.footerBBP">Adapted to Wagerr by MIP</string>
     <string name="NodeSelector.CurrentHeight">Current Height</string>
     <string name="NodeSelector.LastBlockHash">Last block hash</string>
+    <string name="Alert.keystore.invalidated.wipe.android">We can\\\'t proceed because your screen lock settings have been changed (e.g. password was disabled, fingerprints were changed). For security purposes, Android has permanently locked your key store. Therefore, your Wagerr app data must be wiped.\\n\\nDon’t worry, your funds are still secure! Recover your wallet using your paper key.</string>
+
+    <!-- Strings related to Wagerr -->
     <string name="MenuButton.Events">Sports Betting</string>
     <string name="MenuButton.Swaps">InstaSwap</string>
     <string name="Events.Sport">Sport</string>
     <string name="Events.Tournament">Tournament</string>
     <string name="Events.Round">Round</string>
     <string name="Events.EmptyList">Please allow 10-20 minutes for sync to complete before sporting events appear</string>
-    <string name="Alert.keystore.invalidated.wipe.android">We can\\\'t proceed because your screen lock settings have been changed (e.g. password was disabled, fingerprints were changed). For security purposes, Android has permanently locked your key store. Therefore, your Wagerr app data must be wiped.\\n\\nDon’t worry, your funds are still secure! Recover your wallet using your paper key.</string>
     <string name="title_activity_bet_settings">Bet Settings</string>
+    <string name="Parlay.Add">Add leg</string>
+    <string name="Parlay.Remove">Remove leg</string>
+    <string name="Parlay.ErrorLeg">Can\'t add more than one leg per event.</string>
+    <string name="Parlay.NeedMoreLegs">Parlay bet needs 2 or more legs</string>
+    <string name="Parlay.MaxLegs">Max. number of legs is %s</string>
 
-    <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>

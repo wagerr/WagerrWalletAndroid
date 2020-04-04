@@ -325,7 +325,6 @@
         android:layout_marginBottom="30dp"
         android:clickable="true"
         android:src="@drawable/animated_check"
-        app:borderWidth="4dp" />
-
+        app:backgroundTint="@color/wallet_orange" />
 
 </RelativeLayout>

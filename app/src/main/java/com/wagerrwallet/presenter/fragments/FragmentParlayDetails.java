@@ -37,6 +37,7 @@ import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.ParlayBetEntity;
 import com.wagerrwallet.presenter.entities.ParlayLegEntity;
+import com.wagerrwallet.presenter.interfaces.WagerrParlayLegNotification;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
@@ -81,22 +82,26 @@ public class FragmentParlayDetails extends DialogFragment  {
     private ImageButton mRemoveLeg[] = new ImageButton[5];
 
     private SeekBar seekBar;
-    private BRText mTxAmount;
+    private EditText mTxAmount;
     private BRText mTxCurrency;
 
     private ImageButton faq;
     private ImageButton mCloseButton;
-    private RelativeLayout mDetailsContainer;
+    private RelativeLayout mBetContainer;
+    private RelativeLayout mBetWarningContainer;
 
     private ImageButton mAcceptBet;
     private ImageButton mCancelBet;
 
     private BRText mPotentialReward;
+    private BRText mTotalOdd;
 
     private boolean bBarSliding = false;
 
     private int mInterval = 3000;
     private Handler mHandler;
+
+    private WagerrParlayLegNotification mListener;
 
     // refresh to update odds
     Runnable mStatusChecker = new Runnable() {
@@ -131,6 +136,9 @@ public class FragmentParlayDetails extends DialogFragment  {
                 BetEventEntity betEvent = BetEventTxDataStore.getInstance(getActivity()).getTransactionByEventId(getActivity(), "wgr", leg.getEvent().getEventID());
                 leg.updateEvent( (EventTxUiHolder)betEvent );
             }
+        }
+        if (redraw) {
+            mListener.onLegChanged();
         }
         return redraw;
     }
@@ -168,11 +176,42 @@ public class FragmentParlayDetails extends DialogFragment  {
             }
         });
 
+        mCloseButton = rootView.findViewById( R.id.close_button);
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+
+        mBetContainer = rootView.findViewById(R.id.bet_container);
+        mBetWarningContainer = rootView.findViewById(R.id.bet_container_warning);
+        mAcceptBet = rootView.findViewById(R.id.bet_send);
+        mAcceptBet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AcceptBet();
+            }
+        });
+        mCancelBet= rootView.findViewById(R.id.bet_cancel);
+        mCancelBet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CancelBet();
+            }
+        });
+        mPotentialReward = rootView.findViewById(R.id.tx_potential);
+        mTotalOdd = rootView.findViewById(R.id.tx_odd_total);
+
+        mLegLayout[0] = rootView.findViewById(R.id.layout_leg_1);
+        mLegLayout[1] = rootView.findViewById(R.id.layout_leg_2);
+        mLegLayout[2] = rootView.findViewById(R.id.layout_leg_3);
+        mLegLayout[3] = rootView.findViewById(R.id.layout_leg_4);
+        mLegLayout[4] = rootView.findViewById(R.id.layout_leg_5);
+
         int nLegs = mTransaction.getLegCount();
         // leg 1
-
         if (nLegs>0) {
-            mLegLayout[0] = rootView.findViewById(R.id.layout_leg_1);
             mLegLayout[0].setVisibility(View.VISIBLE);
             mTxEventHeader[0] = rootView.findViewById(R.id.tx_eventheader_1);
             mTxEventDate[0] = rootView.findViewById(R.id.tx_eventdate_1);
@@ -195,7 +234,6 @@ public class FragmentParlayDetails extends DialogFragment  {
         }
 
         if (nLegs>1) {
-            mLegLayout[1] = rootView.findViewById(R.id.layout_leg_2);
             mLegLayout[1].setVisibility(View.VISIBLE);
             mTxEventHeader[1] = rootView.findViewById(R.id.tx_eventheader_2);
             mTxEventDate[1] = rootView.findViewById(R.id.tx_eventdate_2);
@@ -218,7 +256,6 @@ public class FragmentParlayDetails extends DialogFragment  {
         }
 
         if (nLegs>2) {
-            mLegLayout[2] = rootView.findViewById(R.id.layout_leg_3);
             mLegLayout[2].setVisibility(View.VISIBLE);
             mTxEventHeader[2] = rootView.findViewById(R.id.tx_eventheader_3);
             mTxEventDate[2] = rootView.findViewById(R.id.tx_eventdate_3);
@@ -241,7 +278,6 @@ public class FragmentParlayDetails extends DialogFragment  {
         }
 
         if (nLegs>3) {
-            mLegLayout[3] = rootView.findViewById(R.id.layout_leg_4);
             mLegLayout[3].setVisibility(View.VISIBLE);
             mTxEventHeader[3] = rootView.findViewById(R.id.tx_eventheader_4);
             mTxEventDate[3] = rootView.findViewById(R.id.tx_eventdate_4);
@@ -264,7 +300,6 @@ public class FragmentParlayDetails extends DialogFragment  {
         }
 
         if (nLegs>4) {
-            mLegLayout[4] = rootView.findViewById(R.id.layout_leg_5);
             mLegLayout[4].setVisibility(View.VISIBLE);
             mTxEventHeader[4] = rootView.findViewById(R.id.tx_eventheader_5);
             mTxEventDate[4] = rootView.findViewById(R.id.tx_eventdate_5);
@@ -279,11 +314,11 @@ public class FragmentParlayDetails extends DialogFragment  {
                 }
             });
              */
-            mTxHomeTeam[5] = rootView.findViewById(R.id.tx_home_5);
-            mTxAwayTeam[5] = rootView.findViewById(R.id.tx_away_5);
-            mTxOutcome[5] = rootView.findViewById(R.id.tx_outcome_5);
-            mTxOdds[5] = rootView.findViewById(R.id.tx_odd_5);
-            mRemoveLeg[5] = rootView.findViewById(R.id.leg_remove_5);
+            mTxHomeTeam[4] = rootView.findViewById(R.id.tx_home_5);
+            mTxAwayTeam[4] = rootView.findViewById(R.id.tx_away_5);
+            mTxOutcome[4] = rootView.findViewById(R.id.tx_outcome_5);
+            mTxOdds[4] = rootView.findViewById(R.id.tx_odd_5);
+            mRemoveLeg[4] = rootView.findViewById(R.id.leg_remove_5);
         }
 
         for(int i = 0; i < mTransaction.getLegCount(); i++) {
@@ -292,6 +327,7 @@ public class FragmentParlayDetails extends DialogFragment  {
                 @Override
                 public void onClick(View v) {
                     mTransaction.removeAt(n);
+                    mListener.onLegChanged();
                     updateUi();
                 }
             });
@@ -401,22 +437,6 @@ public class FragmentParlayDetails extends DialogFragment  {
             }
         });
 
-        mAcceptBet = rootView.findViewById(R.id.bet_send);
-        mAcceptBet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AcceptBet();
-            }
-        });
-        mCancelBet= rootView.findViewById(R.id.bet_cancel);
-        mCancelBet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CancelBet();
-            }
-        });
-        mPotentialReward = rootView.findViewById(R.id.tx_potential);
-
         updateUi();
         return rootView;
     }
@@ -445,12 +465,7 @@ public class FragmentParlayDetails extends DialogFragment  {
         float odds = 1;
         for(int i = 0; i < mTransaction.getLegCount(); i++) {
             ParlayLegEntity leg = mTransaction.get(i);
-            if (americanSetting)    {
-                odds *= AmericanToDecimal( leg.getOdd() );
-            }
-            else {
-                odds *= leg.getOdd();
-            }
+            odds *= leg.getOdd() / BetEventEntity.ODDS_MULTIPLIER;
         }
         return odds;
     }
@@ -521,6 +536,8 @@ public class FragmentParlayDetails extends DialogFragment  {
         CryptoRequest item = new CryptoRequest(tx, null, false, "", "", new BigDecimal(amount));
         SendManager.sendTransaction(getActivity(), item, wallet);
         //BRAnimator.showFragmentEvent = mTransaction;
+        mTransaction.clearLegs();
+        mListener.onLegChanged();
         dismiss();  // close fragment
     }
 
@@ -531,6 +548,13 @@ public class FragmentParlayDetails extends DialogFragment  {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        try {
+            this.mListener = (WagerrParlayLegNotification) context;
+        }
+        catch (final ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement WagerrParlayLegNotification");
+        }
     }
 
     public void updateUi() {
@@ -538,20 +562,27 @@ public class FragmentParlayDetails extends DialogFragment  {
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         // Set mTransction fields
         if (mTransaction != null) {
-            for(int i = 0; i < mTransaction.getLegCount(); i++) {
+            int nLegCount = mTransaction.getLegCount();
+            for(int i = 0; i < nLegCount; i++) {
                 ParlayLegEntity leg = mTransaction.get(i);
+                mTxEventHeader[i].setText( leg.getEvent().getTxEventHeader() );
+                mTxEventDate[i].setText( leg.getEvent().getTxEventDate());
                 mLegLayout[i].setVisibility(View.VISIBLE);
                 mTxHomeTeam[i].setText( leg.getEvent().getTxHomeTeam() );
                 mTxAwayTeam[i].setText( leg.getEvent().getTxAwayTeam() );
                 mTxOutcome[i].setText( leg.getOutcome().toString() );
-                mTxOdds[i].setText( leg.getEvent().getOddTx( leg.getOdd() ) );
-                mTxOdds[i].setTextColor( leg.getOddColor( getContext() ) );
+                mTxOdds[i].setText( leg.getOddTx() );
+                mTxOdds[i].setBackgroundColor( leg.getOddColor( getContext() ) );
             }
 
             // hide rest
             for(int i = mTransaction.getLegCount(); i < ParlayBetEntity.MAX_LEGS; i++) {
                 mLegLayout[i].setVisibility(View.GONE);
             }
+
+            mBetContainer.setVisibility( (nLegCount>1) ? View.VISIBLE : View.GONE);
+            mBetWarningContainer.setVisibility( (nLegCount>1) ? View.GONE : View.VISIBLE );
+            mTotalOdd.setText(  mTransaction.get(0).getEvent().getOddTx(getCombinedOdd()) );
         }
     }
 

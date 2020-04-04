@@ -356,7 +356,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="0dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/tx_amount"
@@ -458,7 +458,7 @@
                         android:layout_marginBottom="2dp"
                         android:layout_toRightOf="@id/bet_send"
                         android:layout_weight="1"
-                        android:background="@drawable/plus_parlay" />
+                        android:background="@drawable/minus_parlay" />
 
                     <com.wagerrwallet.presenter.customviews.BRText
                         android:id="@+id/tx_add_leg"
@@ -470,7 +470,7 @@
                         android:maxLength="20"
                         android:maxLines="1"
                         android:paddingRight="25dp"
-                        android:text="Add leg"
+                        android:text="@string/Parlay.Add"
                         android:textAlignment="textEnd"
                         android:textColor="@color/light_gray"
                         android:textSize="16sp" />

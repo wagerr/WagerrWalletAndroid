@@ -117,7 +117,8 @@ public class BetEntity {
     protected long eventID;
     protected BetOutcome outcome;
     protected long amount;
-
+    public int parlayLegs;
+    public ParlayBetEntity parlayBetEntity;
 
     // constructor for DB
     public BetEntity(String txHash, BetTxType type, long version,
@@ -134,6 +135,7 @@ public class BetEntity {
 
         this.outcome = outcome;
         this.amount = amount;
+        this.parlayLegs = 0;
     }
 
     protected BetEntity() {
