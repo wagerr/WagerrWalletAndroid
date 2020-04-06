@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.wagerrwallet.BuildConfig;
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.settings.SecurityCenterActivity;
 import com.wagerrwallet.presenter.activities.settings.SettingsActivity;
@@ -123,6 +124,7 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
             }
         }));
 
+        mEvents.setBackground( getResources().getDrawable( (BuildConfig.BITCOIN_TESTNET) ? R.drawable.event_menu_shape_testnet : R.drawable.event_menu_shape, null) );
         mEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +134,7 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
             }
         });
 
+        mSwaps.setBackground( getResources().getDrawable( (BuildConfig.BITCOIN_TESTNET) ? R.drawable.event_menu_shape_testnet : R.drawable.event_menu_shape, null) );
         mSwaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

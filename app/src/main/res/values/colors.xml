@@ -30,6 +30,9 @@
     <item name="logo_gradient_start" type="color">#df001c</item>
     <item name="logo_gradient_end" type="color">#424242</item>
 
+    <item name="logo_gradient_start_testnet" type="color">#00C265</item>
+    <item name="logo_gradient_end_testnet" type="color">#0A703E</item>
+
     <item name="finger_gradient_start" type="color">#df001c</item>
     <item name="finger_gradient_end" type="color">#424242</item>
 

@@ -779,7 +779,7 @@
 
     <!-- Strings related to Wagerr -->
     <string name="MenuButton.Events">Sports Betting</string>
-    <string name="MenuButton.Swaps">InstaSwap</string>
+    <string name="MenuButton.Swaps">InstaSwap.io</string>
     <string name="Events.Sport">Sport</string>
     <string name="Events.Tournament">Tournament</string>
     <string name="Events.Round">Round</string>

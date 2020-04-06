@@ -89,12 +89,15 @@ public class ParlayLegEntity {
         }
     }
 
-    public void updateEvent( EventTxUiHolder event )   {
+    public boolean updateEvent( EventTxUiHolder event )   {
         this.event = event;
-        updateOdd();
+        return updateOdd();
     }
 
-    public void updateOdd() {
+    // return true if odd value changed
+    public boolean updateOdd() {
+        float currentOdd = odd;
+
         switch (outcome)    {
             case MONEY_LINE_HOME_WIN:
                 odd = event.homeOdds;
@@ -127,6 +130,7 @@ public class ParlayLegEntity {
             default:
                 odd = 0;
         }
+        return ( currentOdd != odd );
     }
 
     public float getOdd()   {

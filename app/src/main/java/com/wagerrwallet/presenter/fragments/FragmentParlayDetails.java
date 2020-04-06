@@ -113,7 +113,7 @@ public class FragmentParlayDetails extends DialogFragment  {
                     mTransaction = ((WalletWagerrManager)walletManager).getParlay();
                 }
 
-                if (didLegsExpire()) {
+                if (didLegsExpire( true )) {
                     updateUi();
                 }
             } finally {
@@ -124,7 +124,7 @@ public class FragmentParlayDetails extends DialogFragment  {
         }
     };
 
-    protected boolean didLegsExpire()  {
+    protected boolean didLegsExpire( boolean bOrChange )  {
         boolean redraw = false;
         for(int i = 0; i < mTransaction.getLegCount(); i++) {
             ParlayLegEntity leg = mTransaction.get(i);
@@ -134,7 +134,9 @@ public class FragmentParlayDetails extends DialogFragment  {
             }
             else    {
                 BetEventEntity betEvent = BetEventTxDataStore.getInstance(getActivity()).getTransactionByEventId(getActivity(), "wgr", leg.getEvent().getEventID());
-                leg.updateEvent( (EventTxUiHolder)betEvent );
+                if ( leg.updateEvent( (EventTxUiHolder)betEvent ) && bOrChange )    {
+                    redraw = true;
+                }
             }
         }
         if (redraw) {
@@ -461,12 +463,15 @@ public class FragmentParlayDetails extends DialogFragment  {
 
     // combined odd is Product(individual leg odd) (in numeric format)
     protected float getCombinedOdd()   {
-        boolean americanSetting = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_AMERICAN, false);
         float odds = 1;
         for(int i = 0; i < mTransaction.getLegCount(); i++) {
             ParlayLegEntity leg = mTransaction.get(i);
             odds *= leg.getOdd() / BetEventEntity.ODDS_MULTIPLIER;
         }
+
+        boolean settingOdds = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false);
+        odds = (settingOdds) ? odds : (float)((odds-1)*0.94)+1;
+
         return odds;
     }
 
@@ -506,7 +511,7 @@ public class FragmentParlayDetails extends DialogFragment  {
         long arrEventID[] = new long[5];
         int arrOutcome[] = new int[5];
 
-        if (didLegsExpire())    {
+        if (didLegsExpire( false ))    {
             BRDialog.showCustomDialog(getContext(), "Error", "One or more event legs are closed for betting, list will refresh.", getContext().getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
                 @Override
                 public void onClick(BRDialogView brDialogView) {
