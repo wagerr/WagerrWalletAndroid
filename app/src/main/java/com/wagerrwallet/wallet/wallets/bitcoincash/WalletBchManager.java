@@ -177,7 +177,7 @@ public class WalletBchManager extends BRCoreWalletManager implements BaseWalletM
 
 //            BRPeerManager.getInstance().updateFixedPeer(ctx);//todo reimplement the fixed peer
 //        balanceListeners = new ArrayList<>();
-            uiConfig = new WalletUiConfiguration("#478559", true, true, false);
+            uiConfig = new WalletUiConfiguration("#478559", null,true, true, false);
 
         } finally {
             isInitiatingWallet = false;

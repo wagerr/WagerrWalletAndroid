@@ -88,10 +88,10 @@ public class WalletListAdapter extends RecyclerView.Adapter<WalletListAdapter.Wa
         holder.mSyncingLabel.setText(item.mLabelText);
         holder.mWalletBalanceCurrency.setVisibility(item.mShowBalance ? View.VISIBLE : View.INVISIBLE);
 
-        Drawable drawable = mContext.getResources().getDrawable(R.drawable.crypto_card_shape, null);
-        ((GradientDrawable) drawable).setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
+        //Drawable drawable = mContext.getResources().getDrawable(R.drawable.crypto_card_shape, null);
+        //((GradientDrawable) drawable).setColor(Color.parseColor(wallet.getUiConfiguration().colorHex));
 
-        holder.mParent.setBackground(drawable);
+        holder.mParent.setBackground(wallet.getUiConfiguration().colorGradient);
 
     }
 

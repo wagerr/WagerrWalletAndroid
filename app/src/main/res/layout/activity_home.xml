@@ -105,7 +105,7 @@
                     android:drawablePadding="8dp"
                     android:focusable="false"
                     android:paddingBottom="4dp"
-                    android:text="WGT/BTC"
+                    android:text="WGR/BTC"
                     android:layout_alignParentEnd="true"
                     android:layout_alignBottom="@id/swap_label"
                     android:textSize="15sp"

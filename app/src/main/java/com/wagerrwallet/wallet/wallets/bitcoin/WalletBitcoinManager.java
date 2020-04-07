@@ -178,7 +178,7 @@ public class WalletBitcoinManager extends BRCoreWalletManager implements BaseWal
             WalletsMaster.getInstance(app).updateFixedPeer(app, this);
 //        balanceListeners = new ArrayList<>();
 
-            uiConfig = new WalletUiConfiguration("#f29500", true, true, true);
+            uiConfig = new WalletUiConfiguration("#f29500", null,true, true, true);
 
         } finally {
             isInitiatingWallet = false;
