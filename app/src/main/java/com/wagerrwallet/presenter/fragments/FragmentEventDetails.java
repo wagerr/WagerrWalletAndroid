@@ -1,5 +1,6 @@
 package com.wagerrwallet.presenter.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -31,7 +33,9 @@ import com.platform.tools.KVStoreManager;
 import com.wagerrwallet.R;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.core.BRCoreTransaction;
+import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.activities.settings.BetSettings;
+import com.wagerrwallet.presenter.activities.settings.WebViewActivity;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BetEntity;
@@ -57,7 +61,9 @@ import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Date;
 
 /**
@@ -139,6 +145,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private ImageButton faq;
     private BRText mPotentialReward;
 
+    private ImageButton betSmartHomeButton;
+    private ImageButton betSmartAwayButton;
 
     // layout management
     private boolean bHasMoneyLine = true;
@@ -226,6 +234,41 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
         mMoneyLineContainer = rootView.findViewById(R.id.odds_container);
         mMoneyLineLayout =  rootView.findViewById(R.id.odds_layout);
+
+        betSmartHomeButton = rootView.findViewById(R.id.betsmart_button_home);
+        betSmartAwayButton = rootView.findViewById(R.id.betsmart_button_away);
+
+        betSmartHomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strTeam = "", strSport = "";
+                try {
+                    strTeam = URLEncoder.encode(mTransaction.getTxHomeTeam(), "UTF-8");
+                    strSport = URLEncoder.encode(mTransaction.getTxSport(), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                Toast.makeText(getActivity(), "launching web view", Toast.LENGTH_LONG).show();
+                CreateWebFragment( getActivity(), String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport));
+            }
+        });
+
+        betSmartAwayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strTeam = "", strSport = "";
+                try {
+                    strTeam = URLEncoder.encode(mTransaction.getTxAwayTeam(), "UTF-8");
+                    strSport = URLEncoder.encode(mTransaction.getTxSport(), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                Toast.makeText(getActivity(), "launching web view", Toast.LENGTH_LONG).show();
+                CreateWebFragment( getActivity(), String.format("https://betsmart.app/teaser-team/?name=%s&sport=%s&mode=light&source=wagerr", strTeam, strSport));
+            }
+        });
 
         final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
 
@@ -472,6 +515,35 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         return rootView;
     }
 
+    protected void CreateWebFragment(Activity app, String theUrl)   {
+        FragmentWebView fragmentWebView = (FragmentWebView) app.getFragmentManager().findFragmentByTag(FragmentWebView.class.getName());
+
+        if(fragmentWebView != null && fragmentWebView.isAdded()){
+            Log.e(TAG, "showEventDetails: Already showing");
+
+       //     return;
+        }
+
+
+        fragmentWebView = new FragmentWebView();
+        Bundle args = new Bundle();
+        args.putString("url", theUrl);
+        fragmentWebView.setArguments(args);
+
+        fragmentWebView.show( app.getFragmentManager(), FragmentWebView.class.getName());
+        app.getFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .commit();
+
+        /*app.getFragmentManager().beginTransaction()
+                .replace( ((ViewGroup)getView().getParent()).getId(), fragmentWebView, FragmentWebView.class.getName())
+                //.add(fragmentWebView, FragmentWebView.class.getName())
+                .addToBackStack(null)
+                .commit();
+*/
+        //app.getFragmentManager().beginTransaction().show(fragmentWebView).commit();
+        //app.getFragmentManager().beginTransaction().hide(this).commit();
+    }
     protected void updateSeekBar( int amount, int posX ) {
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         BigDecimal cryptoAmount = new BigDecimal((long)amount*UNIT_MULTIPLIER);
@@ -811,7 +883,12 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             mTxHomeTeam.setText( (item.getTxHomeTeam()!=null)?item.getTxHomeTeam():"Home N/A" );
             mTxAwayTeam.setText( (item.getTxAwayTeam()!=null)?item.getTxAwayTeam():"Away N/A" );
             mTxHomeOdds.setText( (item.getHomeOdds()>0)?item.getTxHomeOdds():"N/A" );
-            mTxDrawOdds.setText( (item.getDrawOdds()>0)?item.getTxDrawOdds():"N/A" );
+
+            String strDraw = (item.getDrawOdds()>0)?item.getTxDrawOdds():"N/A";
+            mTxDrawOdds.setText( strDraw );
+            if ( "N/A".equals(strDraw)) {
+                mTxDrawOdds.setVisibility(View.INVISIBLE);
+            }
             mTxAwayOdds.setText( (item.getAwayOdds()>0)?item.getTxAwayOdds():"N/A" );
             rlLastContainer = mMoneyLineContainer;      // default...
 
@@ -874,7 +951,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                     mTransactionId.setTextColor(getContext().getColor(R.color.light_gray));
                     String id = mTransaction.getTxHash();
                     BRClipboardManager.putClipboard(getContext(), id);
-                    Toast.makeText(getContext(), getString(R.string.Receive_copied), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), getString(R.string.Receive_copied), Toast.LENGTH_LONG).show();
 
                     new Handler().postDelayed(new Runnable() {
                         @Override

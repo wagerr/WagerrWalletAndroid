@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wagerrwallet.BuildConfig;
 import com.wagerrwallet.R;
@@ -63,6 +64,9 @@ import com.wagerrwallet.tools.util.Utils;
 import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.wallets.util.CryptoUriParser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -121,6 +125,7 @@ public class FragmentSendSwap extends Fragment {
     private TextView mTOSLabel;
     private TextView mTOSLink;
     private Switch mTOSAccept;
+    private BigDecimal currentMinAmount = new BigDecimal(0);
 
     private static String savedMemo;
     private static String savedIso;
@@ -168,6 +173,14 @@ public class FragmentSendSwap extends Fragment {
             Log.e(TAG, "getSwapUiHolders: ERROR, retrieved address:" + address);
         }
         walletReceive.setText( "Receive at: " + address.stringify() );
+
+        walletReceive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BRClipboardManager.putClipboard(getContext(), address.stringify());
+                Toast.makeText(getContext(), getString(R.string.Receive_copied), Toast.LENGTH_LONG).show();
+            }
+        });
 
         signalLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +239,7 @@ public class FragmentSendSwap extends Fragment {
 
         //inserted amount
         BigDecimal rawAmount = new BigDecimal(Utils.isNullOrEmpty(amountStr) ? "0" : amountStr);
-        return mTOSAccept.isChecked() && rawAmount.compareTo(new BigDecimal("0")) > 0 ;
+        return mTOSAccept.isChecked() && rawAmount.compareTo(new BigDecimal("0")) > 0 && rawAmount.compareTo( currentMinAmount) > 0 ;
     }
 
     private String getBitcoinRegexp()   {
@@ -604,8 +617,27 @@ public class FragmentSendSwap extends Fragment {
         public void handleMessage(Message msg) {
             switch (msg.arg1) {
                 case 1:     // Ticker Callback
-                    String getAmount = (String) msg.obj;
-                    amountReceive.setText("Amount to receive: " + getAmount + " WGR");
+                    JSONObject response = (JSONObject) msg.obj;
+                    String getAmount = "Unknown";
+                    double minAmount = 100000;
+                    try {
+                        getAmount = response.getString("getAmount");
+                        minAmount = response.getDouble("min");
+                        currentMinAmount = new BigDecimal( minAmount );
+                    }
+                    catch (JSONException e)   {
+                    }
+                    String strMessageMin = "";
+                    String stringAmount = amountBuilder.toString();
+                    BigDecimal inputAmount = new BigDecimal(Utils.isNullOrEmpty(stringAmount) || stringAmount.equalsIgnoreCase(".") ? "0" : stringAmount);
+                    if (inputAmount.compareTo( currentMinAmount) == -1 ) {
+                        strMessageMin = String.format("( min %06f BTC) ", minAmount);
+                        amountReceive.setTextColor( getContext().getColor(R.color.red ));
+                    }
+                    else {
+                        amountReceive.setTextColor( getContext().getColor(R.color.light_gray ));
+                    }
+                    amountReceive.setText("You receive: " + getAmount + " WGR " + strMessageMin);
                     break;
                 case 2:     // DoSwap Callback
                     String error = (String) msg.obj;
@@ -663,13 +695,18 @@ public class FragmentSendSwap extends Fragment {
             BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
                 @Override
                 public void run() {
-                    String getAmount = BRApiManager.InstaSwapTickers(app, "WGR", "BTC", stringAmount);
-                    Message msg = Message.obtain(); // Creates an new Message instance
-                    msg.arg1 = 1;   // Ticker callback
-                    msg.obj = getAmount;
-                    handler.sendMessage(msg);
+                    JSONObject response = BRApiManager.InstaSwapTickers(app, "WGR", "BTC", stringAmount);
+                    if (response!=null) {
+                        Message msg = Message.obtain(); // Creates an new Message instance
+                        msg.arg1 = 1;   // Ticker callback
+                        msg.obj = response;
+                        handler.sendMessage(msg);
+                    }
                 }
             });
+        }
+        else    {   // reset the received amount
+            amountReceive.setText("");
         }
     }
 

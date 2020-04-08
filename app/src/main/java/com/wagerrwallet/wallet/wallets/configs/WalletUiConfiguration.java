@@ -1,5 +1,7 @@
 package com.wagerrwallet.wallet.wallets.configs;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * BreadWallet
  * <p/>
@@ -26,12 +28,14 @@ package com.wagerrwallet.wallet.wallets.configs;
  */
 public class WalletUiConfiguration {
     public String colorHex;
+    public Drawable colorGradient;
     public boolean sendVisible;
     public boolean receiveVisible;
     public boolean buyVisible;
 
-    public WalletUiConfiguration(String colorHex, boolean sendVisible, boolean receiveVisible, boolean buyVisible) {
+    public WalletUiConfiguration(String colorHex, Drawable colorGradient, boolean sendVisible, boolean receiveVisible, boolean buyVisible) {
         this.colorHex = colorHex;
+        this.colorGradient = colorGradient;
         this.sendVisible = sendVisible;
         this.receiveVisible = receiveVisible;
         this.buyVisible = buyVisible;

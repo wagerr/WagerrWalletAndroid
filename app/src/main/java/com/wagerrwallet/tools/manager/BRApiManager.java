@@ -250,18 +250,17 @@ public class BRApiManager {
         return price1;
     }
 
-    public static String InstaSwapTickers(Activity app, String getCoin, String giveCoin, String sendAmount) {
+    public static JSONObject InstaSwapTickers(Activity app, String getCoin, String giveCoin, String sendAmount) {
         String url1 = instaswapURL + "InstaswapTickers&getCoin="+getCoin+"&giveCoin="+giveCoin+"&sendAmount="+sendAmount;
         String jsonString1 = urlGET(app, url1);
-
-        String getAmount = "Unknown";
+        JSONObject objectTicker = null;
 
         JSONArray jsonArray1 = null;
         if (jsonString1 == null) {
             jsonString1 = urlGET(app, url1);        // retry
             if (jsonString1 == null) {
                 Log.e(TAG, "InstaSwapTickers: instaswap URL failed, response is null");
-                return getAmount;
+                return null;
             }
         }
 
@@ -269,13 +268,12 @@ public class BRApiManager {
             JSONObject object = new JSONObject(jsonString1);
             String strInfo = object.getString("apiInfo");
             if (strInfo.equals("OK")) {
-                JSONObject objectTicker = object.getJSONObject("response");
-                getAmount = objectTicker.getString("getAmount");
+                objectTicker = object.getJSONObject("response");
             }
         } catch (JSONException ignored) {
         }
 
-        return getAmount;
+        return objectTicker;
     }
 
     public static List<SwapUiHolder> InstaSwapReport(Activity app, String wallet) {

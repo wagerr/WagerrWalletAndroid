@@ -136,6 +136,7 @@ public class WebViewActivity extends BRActivity {
         topToolbar = findViewById(R.id.toolbar);
         bottomToolbar = findViewById(R.id.toolbar_bottom);
         mCloseButton = findViewById(R.id.close);
+
         mReloadButton = findViewById(R.id.reload);
         mForwardButton = findViewById(R.id.webview_forward_arrow);
         mBackButton = findViewById(R.id.webview_back_arrow);
@@ -227,6 +228,7 @@ public class WebViewActivity extends BRActivity {
 
             String url = json.getString("url");
             Log.d(TAG, "Loading -> " + url);
+
             if (url != null && url.contains("checkout")) {
                 attachKeyboardListeners();
 

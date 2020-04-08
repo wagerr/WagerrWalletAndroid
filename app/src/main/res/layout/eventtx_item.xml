@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="100dp"
+    android:descendantFocusability="blocksDescendants"
     android:background="@color/white">
 
     <com.wagerrwallet.presenter.customviews.BRText
         android:id="@+id/tx_eventheader"
-        android:layout_width="398dp"
+        android:layout_width="wrap_content"
         android:layout_height="37dp"
 
         android:layout_marginLeft="12dp"
@@ -15,7 +16,20 @@
         android:text="Sport - Tournament - Event "
         android:textColor="@color/total_assets_usd_color"
         android:textSize="15sp"
+        android:layout_toRightOf="@id/betsmart_button"
         app:customTFont="CircularPro-Book.otf" />
+
+    <ImageButton
+        android:id="@+id/betsmart_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/white"
+        android:focusableInTouchMode="true"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/betsmart_widget" />
 
     <com.wagerrwallet.presenter.customviews.BRText
         android:id="@+id/tx_eventdate"
@@ -34,8 +48,9 @@
         android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/tx_eventheader"
-        android:layout_alignLeft="@id/tx_eventheader"
+        android:layout_alignLeft="@id/betsmart_button"
         android:layout_marginTop="2dp"
+        android:layout_marginLeft="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:paddingBottom="4dp"
@@ -65,8 +80,8 @@
         android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/tx_home"
-        android:layout_alignLeft="@id/tx_eventheader"
-        android:layout_marginLeft="0dp"
+        android:layout_alignLeft="@id/betsmart_button"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="-4dp"
         android:ellipsize="end"
         android:singleLine="true"
@@ -204,5 +219,6 @@
         android:layout_height="1px"
         android:layout_alignParentBottom="true"
         android:background="@color/light_gray" />
+
 
 </RelativeLayout>

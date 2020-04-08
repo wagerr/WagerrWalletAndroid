@@ -1,22 +1,35 @@
 package com.wagerrwallet.tools.manager;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.WorkerThread;
+import android.support.constraint.solver.widgets.Rectangle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.platform.HTTPServer;
 import com.wagerrwallet.R;
 import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.activities.WalletActivity;
+import com.wagerrwallet.presenter.activities.settings.WebViewActivity;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.presenter.fragments.FragmentRequestAmount;
+import com.wagerrwallet.presenter.fragments.FragmentSend;
+import com.wagerrwallet.presenter.fragments.FragmentWebView;
 import com.wagerrwallet.tools.adapter.EventListAdapter;
 import com.wagerrwallet.tools.adapter.TransactionListAdapter;
 import com.wagerrwallet.tools.animation.BRAnimator;
@@ -90,8 +103,25 @@ public class EventTxManager {
                         }, null, null, 0);
                     }
 
+                    int[] screenPos = new int[2];
+                    ImageButton btn = (ImageButton) ((RelativeLayout) view).getChildAt(1);
+                    RecyclerView parent = ((RecyclerView)view.getParent());
+                    btn.getLocationOnScreen(screenPos);
+                    Rectangle buttonRect = new Rectangle();
+                    buttonRect.x = screenPos[0];
+                    buttonRect.y = screenPos[1];
+                    buttonRect.width = btn.getWidth();
+                    buttonRect.height = btn.getHeight();
+                    parent.getLocationOnScreen(screenPos);
+                    float scrollY = parent.computeVerticalScrollOffset();
+                    int nx = (int) (x + screenPos[0]);
+                    int ny = (int) (y + screenPos[1]);
+
+                    Boolean isBetSmartClick = buttonRect.contains( nx, ny );
+
                     BaseWalletManager wallet = WalletsMaster.getInstance(app).getCurrentWallet(app);
                     Boolean isSyncing =  wallet.getPeerManager().getSyncProgress(BRSharedPrefs.getStartHeight(app, "WGR" ))<1;
+                    //isSyncing = false;  // +++ temp for testing
                     if (isSyncing)    {
                         BRDialog.showCustomDialog(app, "Error", "Wallet is still syncing", app.getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
                             @Override
@@ -101,7 +131,13 @@ public class EventTxManager {
                         }, null, null, 0);
                     }
                     else {
-                        BRAnimator.showEventDetails(app, item, position);
+                        //Toast.makeText(app, "tapped: by=" + buttonRect.y + ", ny=" + ny , Toast.LENGTH_LONG).show();
+                        if (isBetSmartClick)    {
+                            adapter.CreateWebFragment( app, String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID()));
+                        }
+                        else    {
+                            BRAnimator.showEventDetails(app, item, position);
+                        }
                     }
                 }
                 catch (ArrayIndexOutOfBoundsException e)    {

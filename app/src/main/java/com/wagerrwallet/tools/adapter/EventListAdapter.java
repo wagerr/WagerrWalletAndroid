@@ -2,6 +2,9 @@ package com.wagerrwallet.tools.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,15 +12,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.platform.tools.KVStoreManager;
 import com.wagerrwallet.R;
+import com.wagerrwallet.presenter.activities.EventsActivity;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.presenter.fragments.FragmentWebView;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
@@ -181,7 +188,13 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         convertView.transactionHomeTeam.setText( (item.getTxHomeTeam()!=null)?item.getTxHomeTeam():"Home Team N/A" );
         convertView.transactionAwayTeam.setText( (item.getTxAwayTeam()!=null)?item.getTxAwayTeam():"Away Team N/A" );
         convertView.transactionHomeOdds.setText( (item.getTxHomeOdds()!=null)?item.getTxHomeOdds():"N/A" );
-        convertView.transactionDrawOdds.setText( (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"N/A" );
+
+        String strDraw = (item.getTxDrawOdds()!=null)?item.getTxDrawOdds():"N/A";
+        convertView.transactionDrawOdds.setText( strDraw );
+        if ( strDraw.equals("N/A")) {
+            convertView.transactionDrawOdds.setVisibility(View.GONE);
+            convertView.separator1.setVisibility(View.GONE);
+        }
         convertView.transactionAwayOdds.setText( (item.getTxAwayOdds()!=null)?item.getTxAwayOdds():"N/A" );
 
         String homeScore = item.getTxHomeScore();
@@ -192,6 +205,45 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         convertView.transactionHeader.setText(item.getTxEventHeader());
         convertView.transactionEventDate.setText( item.getTxEventDate() );
+
+        convertView.betSmartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText((Activity)mContext, "launching web view from activity", Toast.LENGTH_LONG).show();
+                CreateWebFragment( (Activity)mContext, String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID() ));
+            }
+        });
+
+    }
+
+    public void CreateWebFragment(Activity app, String theUrl)   {
+        FragmentWebView fragmentWebView = (FragmentWebView) app.getFragmentManager().findFragmentByTag(FragmentWebView.class.getName());
+
+        if(fragmentWebView != null && fragmentWebView.isAdded()){
+            Log.e(TAG, "showWebView: Already showing");
+            return;
+        }
+
+        fragmentWebView = new FragmentWebView();
+        Bundle args = new Bundle();
+        args.putString("url", theUrl);
+        fragmentWebView.setArguments(args);
+
+        fragmentWebView.show( app.getFragmentManager(), FragmentWebView.class.getName());
+        app.getFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .commit();
+
+        /*
+        FragmentWebView fragmentWebView = new FragmentWebView();
+        Bundle args = new Bundle();
+        args.putString("url", String.format("https://betsmart.app/teaser-event?id=%d&mode=light&source=wagerr", item.getEventID()));
+        fragmentWebView.setArguments(args);
+        app.getFragmentManager().beginTransaction()
+                .setCustomAnimations(0, 0, 0, R.animator.plain_300)
+                .add(android.R.id.content, fragmentWebView, FragmentWebView.class.getName())
+                .addToBackStack(FragmentWebView.class.getName()).commit();
+        */
     }
 
     private void showTransactionProgress(EventHolder holder, int progress) {
@@ -289,6 +341,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public TextView total_under_odds;
         public ImageView arrowIcon;
 
+        public ImageButton betSmartButton;
         public BRText transactionHeader;        // sport - tournament - round
         public BRText transactionEventDate;
         public BRText transactionHomeTeam;
@@ -300,11 +353,12 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public BRText transactionDrawOdds;
         public Button transactionFailed;
         public ProgressBar transactionProgress;
-
+        public BRText separator1;
 
         public EventHolder(View view) {
             super(view);
 
+            betSmartButton = view.findViewById(R.id.betsmart_button);
             transactionHeader = view.findViewById(R.id.tx_eventheader);
             transactionHeader.setLineSpacing(0, 1.0f);
             transactionEventDate = view.findViewById(R.id.tx_eventdate);
@@ -317,7 +371,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             transactionDrawOdds = view.findViewById(R.id.tx_draw_odds);
             transactionFailed = view.findViewById(R.id.tx_failed_button);
             transactionProgress = view.findViewById(R.id.tx_progress);
-
+            separator1 = view.findViewById(R.id.tx_odds_separator1);
         }
     }
 

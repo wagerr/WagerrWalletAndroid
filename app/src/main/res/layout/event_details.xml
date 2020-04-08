@@ -9,10 +9,21 @@
                                     android:minWidth="300dp"
                                     app:cardCornerRadius="4dp">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/outer_frame"
+        android:layout_height="wrap_content">
+
     <RelativeLayout
         android:id="@+id/details_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/header_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <ImageButton
             android:id="@+id/close_button"
@@ -72,17 +83,30 @@
             android:textSize="18sp"
             app:customTFont="CircularPro-Book.otf" />
 
+
+        <ImageButton
+            android:id="@+id/betsmart_button_home"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/tx_home"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="1dp"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            android:focusableInTouchMode="false"
+            android:src="@drawable/betsmart_widget" />
+
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_home_label"
             android:layout_width="165dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="12dp"
             android:ellipsize="end"
             android:maxLength="20"
             android:maxLines="1"
             android:layout_below="@id/tx_eventdate"
-
             android:text="Home Team"
             android:textColor="@color/light_gray"
             android:textSize="16sp" />
@@ -101,15 +125,30 @@
             android:textColor="@color/red"
             android:textSize="18sp" />
 
+        <ImageButton
+            android:id="@+id/betsmart_button_away"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="26dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="4dp"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/white"
+            android:focusableInTouchMode="false"
+            android:layout_below="@id/tx_away"
+            android:src="@drawable/betsmart_widget" />
+
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_away_label"
-            android:layout_width="155dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLength="20"
             android:maxLines="1"
             android:paddingRight="25dp"
+            android:paddingLeft="10dp"
             android:layout_alignParentRight="true"
             android:layout_below="@id/tx_eventdate"
             android:text="Away Team"
@@ -133,6 +172,8 @@
             android:textColor="@color/black"
             android:textSize="18sp" />
 
+
+
         <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_no_bet_balance"
             android:layout_width="wrap_content"
@@ -146,11 +187,13 @@
             android:visibility="gone"
             app:customTFont="CircularPro-Book.otf" />
 
-        <ScrollView
+        </RelativeLayout>
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/tx_home"
+            android:layout_below="@id/header_container"
             android:fillViewport="true">
 
     <LinearLayout
@@ -166,7 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:orientation="vertical"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             >
 
             <RelativeLayout
@@ -764,6 +807,6 @@
 
         </ScrollView>
     </RelativeLayout>
-
+    </FrameLayout>
 
 </android.support.v7.widget.CardView>
