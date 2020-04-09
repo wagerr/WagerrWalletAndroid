@@ -225,7 +225,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 //        balanceListeners = new ArrayList<>();
 
             Drawable colorGradient = BuildConfig.BITCOIN_TESTNET ? ((Activity)app).getDrawable(R.drawable.event_menu_shape_testnet) : ((Activity)app).getDrawable(R.drawable.event_menu_shape);
-            uiConfig = new WalletUiConfiguration("#c20c23" , colorGradient ,true, true, false);
+            uiConfig = new WalletUiConfiguration(BuildConfig.BITCOIN_TESTNET ? "#00C265": "#c20c23" , colorGradient ,true, true, false);
         } finally {
             isInitiatingWallet = false;
         }
