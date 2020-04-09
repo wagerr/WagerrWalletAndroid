@@ -112,17 +112,6 @@
                     android:textColor="@color/white"
                     app:customTFont="CircularPro-Book.otf" />
 
-
-                <ImageButton
-                    android:id="@+id/betting_arrow_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/ic_chevron_right"
-                    android:clickable="false"
-                    android:focusable="false" />
             </RelativeLayout>
 
 
