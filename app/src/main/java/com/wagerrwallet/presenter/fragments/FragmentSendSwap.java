@@ -236,6 +236,9 @@ public class FragmentSendSwap extends Fragment {
 
     private Boolean CanSend()  {
         String amountStr = amountBuilder.toString();
+        if (amountStr.startsWith("."))  {
+            amountStr = "0" + amountStr;
+        }
 
         //inserted amount
         BigDecimal rawAmount = new BigDecimal(Utils.isNullOrEmpty(amountStr) ? "0" : amountStr);
