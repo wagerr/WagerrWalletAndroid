@@ -70,6 +70,8 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.platform.HTTPServer.URL_SUPPORT;
 import static com.wagerrwallet.wallet.wallets.util.CryptoUriParser.parseRequest;
@@ -127,6 +129,8 @@ public class FragmentSendSwap extends Fragment {
     private Switch mTOSAccept;
     private BigDecimal currentMinAmount = new BigDecimal(0);
 
+    protected List<String> mListDepositCoins = new ArrayList<>();
+
     private static String savedMemo;
     private static String savedIso;
     private static String savedAmount;
@@ -159,6 +163,14 @@ public class FragmentSendSwap extends Fragment {
         close = (ImageButton) rootView.findViewById(R.id.close_button);
         BaseWalletManager wm = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         selectedIso = "BTC";    // fixed by now    // = BRSharedPrefs.isCryptoPreferred(getActivity()) ? wm.getIso(getActivity()) : BRSharedPrefs.getPreferredFiatIso(getContext());
+        mListDepositCoins.add(selectedIso);
+
+        BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
+            @Override
+            public void run() {
+                mListDepositCoins = BRApiManager.InstaSwapAllowedPairs(getActivity());
+            }
+        });
 
         amountBuilder = new StringBuilder(0);
         setListeners();
@@ -335,21 +347,16 @@ public class FragmentSendSwap extends Fragment {
                 }
             }
         });
-/*
+
         isoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedIso.equalsIgnoreCase(BRSharedPrefs.getPreferredFiatIso(getContext()))) {
-                    Activity app = getActivity();
-                    selectedIso = WalletsMaster.getInstance(app).getCurrentWallet(app).getIso(app);
-                } else {
-                    selectedIso = BRSharedPrefs.getPreferredFiatIso(getContext());
-                }
+                int idx = mListDepositCoins.indexOf(selectedIso);
+                if (idx < 0 || idx+1 == mListDepositCoins.size()) idx = -1;
+                selectedIso = mListDepositCoins.get(idx+1);
                 updateText();
-
             }
         });
-        */
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -394,19 +401,27 @@ public class FragmentSendSwap extends Fragment {
                         if (Utils.isNullOrEmpty(address.stringify())) {
                             Log.e(TAG, "getSwapUiHolders: ERROR, retrieved address:" + address);
                         }
-                        SwapResponse response = BRApiManager.InstaSwapDoSwap(app, "WGR", "BTC", amountStr, address.stringify(), rawAddress);
+                        SwapResponse response = BRApiManager.InstaSwapDoSwap(app, "WGR", selectedIso, amountStr, address.stringify(), rawAddress);
                         String error = null;
                         if (response == null)   {
                             error = app.getString(R.string.Instaswap_Error);
                         }
                         else {
-                            BRClipboardManager.putClipboard(getContext(), response.getDepositWallet());
+                            if (response.getURLfiat().equals("")) {     // crypto to crypto
+                                BRClipboardManager.putClipboard(getContext(), response.getDepositWallet());
+                                Message msg = Message.obtain(); // Creates an new Message instance
+                                msg.arg1 = 2;   // DoSwap callback
+                                msg.obj = error;
+                                handler.sendMessage(msg);
+                            }
+                            else    {       // fiat to crypto
+                                Message msg = Message.obtain(); // Creates an new Message instance
+                                msg.arg1 = 3;   // DoSwap callback (fiat)
+                                msg.obj = response.getURLfiat();
+                                handler.sendMessage(msg);
+                            }
                         }
 
-                        Message msg = Message.obtain(); // Creates an new Message instance
-                        msg.arg1 = 2;   // DoSwap callback
-                        msg.obj = error;
-                        handler.sendMessage(msg);
                     }
                 });
             }
@@ -618,11 +633,23 @@ public class FragmentSendSwap extends Fragment {
     // Define the Handler that receives messages from the thread and update the progress
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
+            SwapActivity app = (SwapActivity)getActivity();
             switch (msg.arg1) {
                 case 1:     // Ticker Callback
                     JSONObject response = (JSONObject) msg.obj;
                     String getAmount = "Unknown";
                     double minAmount = 100000;
+
+                    try {
+                        getAmount = response.getString("error");
+                        amountReceive.setTextColor( getContext().getColor(R.color.red ));
+                        amountReceive.setText(getAmount);
+                        amountReceive.setTextSize(12);
+                        return;
+                    }
+                    catch (JSONException e)   {
+                    }
+
                     try {
                         getAmount = response.getString("getAmount");
                         minAmount = response.getDouble("min");
@@ -641,10 +668,10 @@ public class FragmentSendSwap extends Fragment {
                         amountReceive.setTextColor( getContext().getColor(R.color.light_gray ));
                     }
                     amountReceive.setText("You receive: " + getAmount + " WGR " + strMessageMin);
+                    amountReceive.setTextSize(16);
                     break;
                 case 2:     // DoSwap Callback
                     String error = (String) msg.obj;
-                    SwapActivity app = (SwapActivity)getActivity();
                     if (app instanceof Activity)
                         BRAnimator.showBreadSignal((Activity) app, Utils.isNullOrEmpty(error) ? app.getString(R.string.Instaswap_sendSuccess) : app.getString(R.string.Alert_error),
                                 Utils.isNullOrEmpty(error) ? app.getString(R.string.Instaswap_sendSuccessSubheader) : "Error: " + error, Utils.isNullOrEmpty(error) ? R.drawable.ic_check_mark_white : R.drawable.ic_error_outline_black_24dp, new BROnSignalCompletion() {
@@ -661,6 +688,26 @@ public class FragmentSendSwap extends Fragment {
                                         }
                                     }
                                 });
+                    break;
+
+                case 3:     // DoSwap fiat to crypto callback
+                    FragmentWebView fragmentWebView = (FragmentWebView) app.getFragmentManager().findFragmentByTag(FragmentWebView.class.getName());
+
+                    if(fragmentWebView != null && fragmentWebView.isAdded()){
+                        Log.e(TAG, "showWebView: Already showing");
+                        return;
+                    }
+
+                    String theUrl = (String) msg.obj;
+                    fragmentWebView = new FragmentWebView();
+                    Bundle args = new Bundle();
+                    args.putString("url", theUrl);
+                    fragmentWebView.setArguments(args);
+
+                    fragmentWebView.show( app.getFragmentManager(), FragmentWebView.class.getName());
+                    app.getFragmentManager().beginTransaction()
+                            .addToBackStack(null)
+                            .commit();
                     break;
             }
 
@@ -679,9 +726,9 @@ public class FragmentSendSwap extends Fragment {
             selectedIso = wallet.getIso(app);
         //String iso = selectedIso;
         curBalance = wallet.getCachedBalance(app);
-        if (!amountLabelOn)
-            isoText.setText(CurrencyUtils.getSymbolByIso(app, selectedIso));
-        isoButton.setText( "BTC" );
+
+        isoButton.setText(selectedIso);
+        isoText.setText(CurrencyUtils.getSymbolByIso(app, selectedIso));
 
         //is the chosen ISO a crypto (could be also a fiat currency)
         boolean isIsoCrypto = WalletsMaster.getInstance(getActivity()).isIsoCrypto(getActivity(), selectedIso);
@@ -695,22 +742,29 @@ public class FragmentSendSwap extends Fragment {
 
         // update received amount
         if (inputAmount.compareTo(new BigDecimal(0)) == 1 ) {
-            BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject response = BRApiManager.InstaSwapTickers(app, "WGR", "BTC", stringAmount);
-                    if (response!=null) {
-                        Message msg = Message.obtain(); // Creates an new Message instance
-                        msg.arg1 = 1;   // Ticker callback
-                        msg.obj = response;
-                        handler.sendMessage(msg);
-                    }
-                }
-            });
+            getTickerAsync();
         }
         else    {   // reset the received amount
             amountReceive.setText("");
         }
+    }
+
+    private void getTickerAsync() {
+        Activity app = getActivity();
+        if (app == null) return;
+        String stringAmount = amountBuilder.toString();
+        BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject response = BRApiManager.InstaSwapTickers(app, "WGR", selectedIso, stringAmount);
+                if (response!=null) {
+                    Message msg = Message.obtain(); // Creates an new Message instance
+                    msg.arg1 = 1;   // Ticker callback
+                    msg.obj = response;
+                    handler.sendMessage(msg);
+                }
+            }
+        });
     }
 
     private void setAmount() {

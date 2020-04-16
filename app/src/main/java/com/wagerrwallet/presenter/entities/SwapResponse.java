@@ -35,11 +35,17 @@ public class SwapResponse {
     protected String transactionId;
     protected String depositWallet;
     protected String receivingAmount;
+    protected String URLfiat;
 
     public SwapResponse(String transactionId, String depositWallet, String receivingAmount) {
         this.transactionId = transactionId;
         this.depositWallet = depositWallet;
         this.receivingAmount = receivingAmount;
+        this.URLfiat = "";
+    }
+
+    public SwapResponse(String URLfiat) {
+        this.URLfiat = URLfiat;
     }
 
     public SwapResponse()   {}
@@ -54,5 +60,9 @@ public class SwapResponse {
 
     public String getReceivingAmount() {
         return receivingAmount;
+    }
+
+    public String getURLfiat() {
+        return URLfiat;
     }
 }

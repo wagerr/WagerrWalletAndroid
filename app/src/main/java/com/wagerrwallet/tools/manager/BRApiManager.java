@@ -268,12 +268,56 @@ public class BRApiManager {
             JSONObject object = new JSONObject(jsonString1);
             String strInfo = object.getString("apiInfo");
             if (strInfo.equals("OK")) {
-                objectTicker = object.getJSONObject("response");
+                Object obj = object.get("response");
+                if(obj instanceof String){
+                    objectTicker = new JSONObject( "{ \"error\" : \""+obj+"\"}");
+                }
+                else {
+                    objectTicker = object.getJSONObject("response");
+                }
             }
         } catch (JSONException ignored) {
         }
 
         return objectTicker;
+    }
+
+    public static List<String> InstaSwapAllowedPairs(Activity app) {
+        String url1 = instaswapURL + "InstaswapReportAllowedPairs";
+        String jsonString1 = urlGET(app, url1);
+        List<String> ret = new ArrayList<>();
+
+        JSONArray arrayResponse = null;
+        if (jsonString1 == null) {
+            jsonString1 = urlGET(app, url1);        // retry
+            if (jsonString1 == null) {
+                Log.e(TAG, "InstaSwapAllowedPairs: instaswap URL failed, response is null");
+                return null;
+            }
+        }
+
+        try {
+            JSONObject object = new JSONObject(jsonString1);
+            String strInfo = object.getString("apiInfo");
+            if (strInfo.equals("OK")) {
+                arrayResponse = object.getJSONArray("response");
+                if (arrayResponse != null) {
+                    int length = arrayResponse.length();
+                    for (int i = 0; i < length; i++) {
+                        JSONObject objectResponse = (JSONObject) arrayResponse.get(i);
+                        String deposit = objectResponse.getString("depositCoin");
+                        String receive = objectResponse.getString("receiveCoin");
+
+                        if ( receive.equals(WalletWagerrManager.ISO))   {
+                            ret.add(deposit);
+                        }
+                    }
+                }
+            }
+        } catch (JSONException ignored) {
+        }
+
+        return ret;
     }
 
     public static List<SwapUiHolder> InstaSwapReport(Activity app, String wallet) {
@@ -342,10 +386,18 @@ public class BRApiManager {
             JSONObject object = new JSONObject(jsonString1);
             String strInfo = object.getString("apiInfo");
             if (strInfo.equals("OK")) {
-                JSONObject objectResponse = object.getJSONObject("response");
-                swapResponse = new SwapResponse( objectResponse.getString("TransactionId"),
-                        objectResponse.getString("depositWallet"),
-                        objectResponse.getString("receivingAmount"));
+                JSONObject objectResponse;
+                Object obj = object.get("response");
+                if(obj instanceof String){      // for FIAT swap
+                    swapResponse = new SwapResponse( obj.toString() );
+                }
+                else {
+                    objectResponse = object.getJSONObject("response");
+                    swapResponse = new SwapResponse( objectResponse.getString("TransactionId"),
+                            objectResponse.getString("depositWallet"),
+                            objectResponse.getString("receivingAmount"));
+                }
+
             }
         } catch (JSONException ignored) {
         }
