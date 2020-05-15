@@ -243,6 +243,7 @@
             />
 
         <LinearLayout
+            android:id="@+id/refund_address_layout"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal"

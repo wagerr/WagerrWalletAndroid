@@ -108,6 +108,7 @@ public class FragmentSendSwap extends Fragment {
     public LinearLayout signalLayout;
     private BRKeyboard keyboard;
     private EditText addressEdit;
+    public LinearLayout refunddAddressLayout;
     private Button paste;
     private Button send;
     private TextView walletReceive;
@@ -148,6 +149,7 @@ public class FragmentSendSwap extends Fragment {
         keyboard.setBRKeyboardColor(R.color.white);
         isoText = (TextView) rootView.findViewById(R.id.iso_text);
         addressEdit = (EditText) rootView.findViewById(R.id.address_edit);
+        refunddAddressLayout = (LinearLayout)rootView.findViewById(R.id.refund_address_layout);
         paste = (Button) rootView.findViewById(R.id.paste_button);
         send = (Button) rootView.findViewById(R.id.send_button);
         amountReceive = (TextView) rootView.findViewById(R.id.amount_receive);
@@ -251,10 +253,17 @@ public class FragmentSendSwap extends Fragment {
         if (amountStr.startsWith("."))  {
             amountStr = "0" + amountStr;
         }
+        // refund address
+        String rawAddress = addressEdit.getText().toString();
+        boolean isRefundAddressOK = (isISOCrypto(selectedIso)) ? rawAddress.matches(getBitcoinRegexp()) : true;
 
         //inserted amount
         BigDecimal rawAmount = new BigDecimal(Utils.isNullOrEmpty(amountStr) ? "0" : amountStr);
-        return mTOSAccept.isChecked() && rawAmount.compareTo(new BigDecimal("0")) > 0 && rawAmount.compareTo( currentMinAmount) > 0 ;
+        return mTOSAccept.isChecked() && isRefundAddressOK && rawAmount.compareTo(new BigDecimal("0")) > 0 && rawAmount.compareTo( currentMinAmount) > 0 ;
+    }
+
+    private Boolean isISOCrypto( String ISO )   {
+        return ISO.equals("BTC");
     }
 
     private String getBitcoinRegexp()   {
@@ -645,6 +654,8 @@ public class FragmentSendSwap extends Fragment {
                         amountReceive.setTextColor( getContext().getColor(R.color.red ));
                         amountReceive.setText(getAmount);
                         amountReceive.setTextSize(12);
+                        currentMinAmount = new BigDecimal( 100000 ); // as API gves an unparseable error string for fiat queries, just set to a high value to disable send button
+                        ToggleSendButton( CanSend() );
                         return;
                     }
                     catch (JSONException e)   {
@@ -669,6 +680,7 @@ public class FragmentSendSwap extends Fragment {
                     }
                     amountReceive.setText("You receive: " + getAmount + " WGR " + strMessageMin);
                     amountReceive.setTextSize(16);
+                    ToggleSendButton( CanSend() );
                     break;
                 case 2:     // DoSwap Callback
                     String error = (String) msg.obj;
@@ -731,7 +743,8 @@ public class FragmentSendSwap extends Fragment {
         isoText.setText(CurrencyUtils.getSymbolByIso(app, selectedIso));
 
         //is the chosen ISO a crypto (could be also a fiat currency)
-        boolean isIsoCrypto = WalletsMaster.getInstance(getActivity()).isIsoCrypto(getActivity(), selectedIso);
+        boolean isIsoCrypto = isISOCrypto(selectedIso);
+        refunddAddressLayout.setVisibility( (isIsoCrypto) ? View.VISIBLE : View.GONE );
 
         BigDecimal inputAmount = new BigDecimal(Utils.isNullOrEmpty(stringAmount) || stringAmount.equalsIgnoreCase(".") ? "0" : stringAmount);
 

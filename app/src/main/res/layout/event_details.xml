@@ -244,7 +244,7 @@
                 android:maxLength="10"
                 android:maxLines="1"
                 android:paddingBottom="6dp"
-                android:text="2"
+                android:text="hOdds"
                 android:textColor="@color/white"
                 android:textAlignment="center"
                 android:background="@color/red"
