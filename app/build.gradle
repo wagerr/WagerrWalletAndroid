@@ -7,8 +7,8 @@ android {
         applicationId = 'com.wagerrwallet'
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 274
-        versionName "274"
+        versionCode 275
+        versionName "275"
         multiDexEnabled true
 
         // Similar to other properties in the defaultConfig block,

@@ -387,7 +387,7 @@ public class FragmentSendSwap extends Fragment {
                 //inserted amount
                 BigDecimal rawAmount = new BigDecimal(Utils.isNullOrEmpty(amountStr) ? "0" : amountStr);
                 //is the chosen ISO a crypto (could be a fiat currency)
-                boolean isIsoCrypto = master.isIsoCrypto(getActivity(), selectedIso);
+                boolean isIsoCrypto = isISOCrypto( selectedIso );
 
                 BigDecimal cryptoAmount = isIsoCrypto ? wallet.getSmallestCryptoForCrypto(getActivity(), rawAmount) : wallet.getSmallestCryptoForFiat(getActivity(), rawAmount);
                 CryptoRequest req = CryptoUriParser.parseRequest(getActivity(), rawAddress);
@@ -396,7 +396,7 @@ public class FragmentSendSwap extends Fragment {
                     return;
                 }
 
-                if (!rawAddress.matches(getBitcoinRegexp())) {
+                if (isIsoCrypto && !rawAddress.matches(getBitcoinRegexp())) {
                     sayInvalidAddress();
                     return;
                 }

@@ -351,7 +351,7 @@ public class BRApiManager {
                                 objectResponse.getString("receivingAmount"),
                                 objectResponse.getString("refundWallet"),
                                 objectResponse.getString("receiveWallet"),
-                                objectResponse.getString("depositWallet"),
+                                objectResponse.has("depositWallet") ? objectResponse.getString("depositWallet") : "",
                                 SwapUiHolder.TransactionState.fromValue(objectResponse.getString("transactionState")),
                                 objectResponse.getString("timestamp"));
 
