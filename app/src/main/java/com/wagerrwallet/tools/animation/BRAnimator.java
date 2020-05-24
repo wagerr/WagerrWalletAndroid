@@ -9,6 +9,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -48,6 +49,7 @@ import com.wagerrwallet.presenter.fragments.FragmentSend;
 import com.wagerrwallet.presenter.fragments.FragmentSwapDetails;
 import com.wagerrwallet.presenter.fragments.FragmentTxDetails;
 import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
+import com.wagerrwallet.presenter.interfaces.WagerrParlayLegNotification;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRConstants;
 
@@ -381,7 +383,7 @@ public class BRAnimator {
 
     }
 
-    public static void showParlayFragment(Activity app ){
+    public static void showParlayFragment(Activity app, Fragment fragment ){
 
         FragmentParlayDetails txDetails = (FragmentParlayDetails) app.getFragmentManager().findFragmentByTag(FragmentParlayDetails.class.getName());
 
@@ -391,6 +393,7 @@ public class BRAnimator {
         }
 
         txDetails = new FragmentParlayDetails();
+        txDetails.mListener = (fragment!=null) ? (WagerrParlayLegNotification) fragment : null;
         txDetails.show(app.getFragmentManager(), FragmentParlayDetails.class.getName());
     }
 

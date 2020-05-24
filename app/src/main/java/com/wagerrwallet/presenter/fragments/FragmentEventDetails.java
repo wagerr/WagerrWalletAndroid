@@ -3,12 +3,15 @@ package com.wagerrwallet.presenter.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -50,6 +53,7 @@ import com.wagerrwallet.presenter.interfaces.WagerrParlayLegNotification;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
+import com.wagerrwallet.tools.manager.BRParlayButtonManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.SendManager;
 import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
@@ -72,7 +76,7 @@ import java.util.Date;
  * Reusable dialog fragment that display details about a particular transaction
  */
 
-public class FragmentEventDetails extends DialogFragment implements View.OnClickListener {
+public class FragmentEventDetails extends DialogFragment implements View.OnClickListener, WagerrParlayLegNotification {
 
     private static final String EXTRA_TX_ITEM = "event_item";
     private static final String TAG = "FragmentEventDetails";
@@ -162,6 +166,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private int mInterval = 3000;
     private Handler mHandler;
     private boolean updatingNode;
+
+    private FloatingActionButton mParlayButton;
 
     private WagerrParlayLegNotification mListener;
 
@@ -481,12 +487,12 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                             }
                         }, null, null, 0);
                     } else {
-                        mListener.onLegChanged();
+                        onLegChanged();
                     }
                 }
                 else    {       // remove
                     parlayBet.removeAt( nLegIndex );
-                    mListener.onLegChanged();
+                    onLegChanged();
                 }
                 if (mCurrentSelectedBetOption!=null) {
                     updateLegButton( mCurrentSelectedBetOption.getId() );
@@ -510,6 +516,15 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 }
             }
         });
+
+        mParlayButton = rootView.findViewById(R.id.parlay_floating);
+        mParlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BRAnimator.showParlayFragment(getActivity(),  FragmentEventDetails.this);
+            }
+        });
+        onLegChanged();
 
         updateUi();
         return rootView;
@@ -1035,4 +1050,12 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     void stopRepeatingTask() {
         mHandler.removeCallbacks(mStatusChecker);
     }
+
+    // WagerrParlayLegNotification implementation
+    public void onLegChanged() {
+        BaseWalletManager wm = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+        BRParlayButtonManager.onLegChanged(mParlayButton, wm);
+        mListener.onLegChanged();
+    }
+
 }

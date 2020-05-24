@@ -101,7 +101,7 @@ public class FragmentParlayDetails extends DialogFragment  {
     private int mInterval = 3000;
     private Handler mHandler;
 
-    private WagerrParlayLegNotification mListener;
+    public WagerrParlayLegNotification mListener;
 
     // refresh to update odds
     Runnable mStatusChecker = new Runnable() {
@@ -555,7 +555,9 @@ public class FragmentParlayDetails extends DialogFragment  {
         super.onAttach(context);
 
         try {
-            this.mListener = (WagerrParlayLegNotification) context;
+            if (mListener == null) {
+                this.mListener = (WagerrParlayLegNotification) context;
+            }
         }
         catch (final ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement WagerrParlayLegNotification");

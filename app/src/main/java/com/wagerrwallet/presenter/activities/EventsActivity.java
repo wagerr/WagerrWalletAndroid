@@ -61,6 +61,7 @@ import com.wagerrwallet.presenter.entities.ParlayBetEntity;
 import com.wagerrwallet.presenter.interfaces.WagerrParlayLegNotification;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
+import com.wagerrwallet.tools.manager.BRParlayButtonManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.FontManager;
 import com.wagerrwallet.tools.manager.InternetManager;
@@ -226,7 +227,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         mParlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BRAnimator.showParlayFragment(EventsActivity.this);
+                BRAnimator.showParlayFragment(EventsActivity.this, null);
 
             }
         });
@@ -313,22 +314,6 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             BRDialog.showSimpleDialog(this, getString(R.string.Dialog_screenAlteringTitle), getString(R.string.Dialog_screenAlteringMessage));
         }
 
-    }
-
-    //method to convert your text to image
-    public static Bitmap textAsBitmap(String text, float textSize, int textColor) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setTextSize(textSize);
-        paint.setColor(textColor);
-        paint.setTextAlign(Paint.Align.LEFT);
-        float baseline = -paint.ascent(); // ascent() is negative
-        int width = (int) (paint.measureText(text) + 0.0f); // round
-        int height = (int) (baseline + paint.descent() + 0.0f);
-        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(image);
-        canvas.drawText(text, 0, baseline, paint);
-        return image;
     }
 
     public boolean isSearchActive() {
@@ -876,18 +861,8 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         }
     }
 
-    // WagerrParlayLegNotification implementation
-    public void onLegChanged()  {
+    public void onLegChanged() {
         BaseWalletManager wm = WalletsMaster.getInstance(EventsActivity.this).getCurrentWallet(EventsActivity.this);
-        ParlayBetEntity pbe = ((WalletWagerrManager)wm).getParlay();
-        int nLegCount = pbe.getLegCount();
-        if (nLegCount>0) {
-            String numLegs = Integer.toString(nLegCount);
-            mParlayButton.setImageBitmap(textAsBitmap(numLegs, 40, Color.WHITE));
-            mParlayButton.setVisibility(View.VISIBLE);
-        }
-        else {
-            mParlayButton.setVisibility(View.INVISIBLE);
-        }
+        BRParlayButtonManager.onLegChanged( mParlayButton, wm );
     }
 }
