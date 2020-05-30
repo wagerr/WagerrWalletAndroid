@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.wagerrwallet.R;
+import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.core.BRCoreTransaction;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
@@ -305,7 +306,7 @@ public class FragmentTxDetails extends DialogFragment {
             mToFromAddress3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://explorer.wagerr.com/#/bet/event/%d", evID)));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format( WagerrApp.HOST_EXPLORER +"/#/bet/event/%d", evID)));
                     startActivity(browserIntent);
                     getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
                 }
@@ -372,7 +373,7 @@ public class FragmentTxDetails extends DialogFragment {
             mLinkOpenInExplorer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://explorer.wagerr.com/#/tx/%s", mTransaction.getTxHashHexReversed())));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(WagerrApp.HOST_EXPLORER +"/#/tx/%s", mTransaction.getTxHashHexReversed())));
                     startActivity(browserIntent);
                     getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
                 }

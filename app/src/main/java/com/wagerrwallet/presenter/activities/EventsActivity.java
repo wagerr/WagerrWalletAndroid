@@ -865,4 +865,10 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         BaseWalletManager wm = WalletsMaster.getInstance(EventsActivity.this).getCurrentWallet(EventsActivity.this);
         BRParlayButtonManager.onLegChanged( mParlayButton, wm );
     }
+
+    public void onSendParlayBet() {
+        //  no action required
+        return;
+    }
+
 }

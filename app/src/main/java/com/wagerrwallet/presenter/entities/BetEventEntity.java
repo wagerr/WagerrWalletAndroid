@@ -251,6 +251,11 @@ public class BetEventEntity {
 
     }
 
+    public String getSpreadFormat() {
+        // spreads v2
+        return (getSpreadPoints()>0)?"+%s/-%s":"-%s/+%s";
+    }
+
     public long getHomeOdds() {
         return homeOdds;
     }
@@ -280,7 +285,7 @@ public class BetEventEntity {
     }
 
     public String getTxSpreadPoints() {
-        return String.valueOf((float)spreadPoints/SPREAD_MULTIPLIER);
+        return String.valueOf((float)Math.abs(spreadPoints)/SPREAD_MULTIPLIER);
     }
 
     public String getTxSpreadHomeOdds() {

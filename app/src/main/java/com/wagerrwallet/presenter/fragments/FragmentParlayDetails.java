@@ -543,6 +543,7 @@ public class FragmentParlayDetails extends DialogFragment  {
         //BRAnimator.showFragmentEvent = mTransaction;
         mTransaction.clearLegs();
         mListener.onLegChanged();
+        mListener.onSendParlayBet();
         dismiss();  // close fragment
     }
 
@@ -570,6 +571,12 @@ public class FragmentParlayDetails extends DialogFragment  {
         // Set mTransction fields
         if (mTransaction != null) {
             int nLegCount = mTransaction.getLegCount();
+
+            if (nLegCount==0)   {
+                dismiss();
+                return;
+            }
+
             for(int i = 0; i < nLegCount; i++) {
                 ParlayLegEntity leg = mTransaction.get(i);
                 mTxEventHeader[i].setText( leg.getEvent().getTxEventHeader() );

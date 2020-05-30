@@ -223,7 +223,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTxEventId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://explorer.wagerr.com/#/bet/event/%d", evID)));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format( WagerrApp.HOST_EXPLORER + "/#/bet/event/%d", evID)));
                 startActivity(browserIntent);
                 getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
             }
@@ -909,7 +909,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
             bHasSpreads = (item.getSpreadPoints()>0);
             if (bHasSpreads) {
-                String txSpreadFormat = (item.getHomeOdds()>item.getAwayOdds())?"+%s/-%s":"-%s/+%s";
+                String txSpreadFormat = item.getSpreadFormat();
                 String txSpreadPoints = String.format(txSpreadFormat, item.getTxSpreadPoints(), item.getTxSpreadPoints() );
                 mTxSpreadPoints.setText(txSpreadPoints);
                 mTxSpreadHomeOdds.setText((item.getSpreadHomeOdds() > 0) ? item.getTxSpreadHomeOdds() : "N/A");
@@ -1055,7 +1055,14 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     public void onLegChanged() {
         BaseWalletManager wm = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
         BRParlayButtonManager.onLegChanged(mParlayButton, wm);
+        if (mCurrentSelectedBetOption!=null) {
+            updateLegButton( mCurrentSelectedBetOption.getId() );
+        }
         mListener.onLegChanged();
     }
 
+    public void onSendParlayBet() {
+        // bet slip overlaps when parlay bet is sent
+        dismiss();
+    }
 }

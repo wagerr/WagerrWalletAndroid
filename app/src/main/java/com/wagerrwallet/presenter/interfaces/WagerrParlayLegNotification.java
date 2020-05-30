@@ -26,4 +26,5 @@ package com.wagerrwallet.presenter.interfaces;
  */
 public interface WagerrParlayLegNotification {
     void onLegChanged();
+    void onSendParlayBet();
 }
