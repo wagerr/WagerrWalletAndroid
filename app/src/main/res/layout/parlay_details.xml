@@ -668,11 +668,11 @@
             android:id="@+id/tx_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_toRightOf="@id/tx_amount"
-            android:text="WGR"
+            android:text="WGR ($15.36)"
             android:textColor="@color/total_assets_usd_color"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:visibility="visible" />
 
         <SeekBar
@@ -748,15 +748,15 @@
                 android:id="@+id/tx_odd_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/tx_currency"
+                android:layout_alignBottom="@+id/tx_currency"
                 android:layout_marginTop="0dp"
                 android:layout_marginRight="10dp"
                 android:layout_alignParentRight="true"
                 android:ellipsize="end"
                 android:maxLength="10"
                 android:maxLines="1"
-                android:paddingBottom="2dp"
-                android:text="2.321"
+                android:paddingBottom="0dp"
+                android:text="132.321"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -765,10 +765,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_alignTop="@+id/tx_currency"
+                android:layout_alignBottom="@+id/tx_currency"
                 android:layout_marginRight="10dp"
                 android:layout_toStartOf="@id/tx_odd_total"
-                android:paddingBottom="2dp"
+                android:paddingBottom="0dp"
                 android:text="Total odd:"
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp" />
