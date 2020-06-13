@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
+import com.platform.entities.TxExplorerInfo;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.activities.util.ActivityUTILS;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
@@ -250,6 +251,48 @@ public class BRApiManager {
         return price1;
     }
 
+    // Explorer API
+    public static List<TxExplorerInfo> fetchExplorerTxInfo(Activity app, String txHash) {
+        String url1 = WagerrApp.HOST_EXPLORER +  "/api/tx/" + txHash;
+        String jsonString1 = urlGET(app, url1);
+        List<TxExplorerInfo> ret = new ArrayList<>();
+
+        JSONArray jsonArray1 = null;
+        if (jsonString1 == null) {
+            jsonString1 = urlGET(app, url1);        // retry
+            if (jsonString1 == null) {
+                Log.e(TAG, "fetchExplorerTxInfo: explorer failed, response is null");
+                return null;
+            }
+        }
+
+        try {
+            JSONObject object = new JSONObject(jsonString1);
+            JSONArray arrVOut = object.getJSONArray("vout");
+            for (int i = 0; i < arrVOut.length(); i++) {
+                JSONObject vout = arrVOut.getJSONObject(i);
+                String address = vout.getString("address");
+                if ( address.startsWith("OP_RETURN"))   {
+                    if ( vout.has("betdata") )  {
+                        // TODO parlay bet data
+                    }
+                    else    {   // single bet
+                        TxExplorerInfo txInfo = new TxExplorerInfo();
+                        txInfo.PopulateFromJsonObject( vout );
+                        ret.add(txInfo);
+                    }
+                }
+            }
+        } catch (JSONException ignored) {
+        }
+
+        return ret;
+    }
+
+
+    // END Explorer API
+
+    // Instaswap API
     public static JSONObject InstaSwapTickers(Activity app, String getCoin, String giveCoin, String sendAmount) {
         String url1 = instaswapURL + "InstaswapTickers&getCoin="+getCoin+"&giveCoin="+giveCoin+"&sendAmount="+sendAmount;
         String jsonString1 = urlGET(app, url1);
@@ -352,6 +395,7 @@ public class BRApiManager {
 
         return swapResponse;
     }
+    // END Instaswap API
 
     public static void updateFeePerKb(Context app) {
         WalletsMaster wm = WalletsMaster.getInstance(app);

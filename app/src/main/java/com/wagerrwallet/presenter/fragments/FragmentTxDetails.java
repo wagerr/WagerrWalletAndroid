@@ -1,5 +1,6 @@
 package com.wagerrwallet.presenter.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +18,11 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.platform.entities.TxExplorerInfo;
 import com.wagerrwallet.R;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.core.BRCoreTransaction;
+import com.wagerrwallet.presenter.activities.SwapActivity;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BRTransactionEntity;
 import com.wagerrwallet.presenter.entities.BetEntity;
@@ -26,11 +30,16 @@ import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
+import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.crypto.WagerrOpCodeManager;
+import com.wagerrwallet.tools.manager.BRApiManager;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
+import com.wagerrwallet.tools.manager.SwapManager;
 import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
 import com.wagerrwallet.tools.sqlite.BetResultTxDataStore;
+import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.tools.util.BRDateUtil;
 import com.wagerrwallet.tools.util.CurrencyUtils;
@@ -40,7 +49,12 @@ import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.platform.entities.TxMetaData;
 import com.platform.tools.KVStoreManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by byfieldj on 2/26/18.
@@ -63,6 +77,7 @@ public class FragmentTxDetails extends DialogFragment {
     private BRText mToFromAddress;
     private BRText mToFromAddress2;
     private BRText mToFromAddress3;
+    private BRText mBetDataFromAPI;
     private BRText mMemoText;
     private BRText mLinkOpenInExplorer;
 
@@ -111,6 +126,8 @@ public class FragmentTxDetails extends DialogFragment {
         mToFromAddress = rootView.findViewById(R.id.tx_to_from_address);
         mToFromAddress2 = rootView.findViewById(R.id.tx_to_from_address2);
         mToFromAddress3 = rootView.findViewById(R.id.tx_to_from_address3);
+        mBetDataFromAPI = rootView.findViewById(R.id.tx_bet_data_from_api);
+
         //mMemoText = rootView.findViewById(R.id.memo);
         mLinkOpenInExplorer = rootView.findViewById(R.id.link_open_in_explorer);
         mStartingBalance = rootView.findViewById(R.id.tx_starting_balance);
@@ -144,9 +161,40 @@ public class FragmentTxDetails extends DialogFragment {
             }
         });
 
+        BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<TxExplorerInfo> response = BRApiManager.fetchExplorerTxInfo (getActivity(), mTransaction.getTxHashHexReversed() );
+                if (response!=null) {
+                    Message msg = Message.obtain(); // Creates an new Message instance
+                    msg.arg1 = 1;   // explorer API
+                    msg.obj = response;
+                    handler.sendMessage(msg);
+                }
+            }
+        });
         updateUi();
         return rootView;
     }
+
+    // Define the Handler that receives messages from the thread and update the progress
+    final Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.arg1) {
+                case 1:     // Explorer API callback
+                    List<TxExplorerInfo> response = (ArrayList) msg.obj;
+                    TxExplorerInfo o = response.get(0);
+                    String strTxInfo = String.format("Price: %.2f", o.price);
+                    if ( o.spread>0 )   strTxInfo+= String.format("  Spread: %.2f", o.spread);
+                    if ( o.total>0 )    strTxInfo+= String.format("  Total: %.2f", o.total);
+                    mBetDataFromAPI.setText(strTxInfo);
+                    break;
+                case 2:     // future other calls
+                    break;
+            }
+
+        }
+    };
 
     @Override
     public void onAttach(Context context) {
@@ -211,7 +259,7 @@ public class FragmentTxDetails extends DialogFragment {
             mStartingBalance.setText(CurrencyUtils.getFormattedAmount(getActivity(), iso, startingBalance == null ? null : startingBalance.abs()));
             mEndingBalance.setText(CurrencyUtils.getFormattedAmount(getActivity(), iso, endingBalance == null ? null : endingBalance.abs()));
 
-            String txSent = "", txToLabel = "", txToAddressLabel = "", txToAddressLabel2="", txToAddressLabel3="";
+            String txSent = "", txToLabel = "", txToAddressLabel = "", txToAddressLabel2="", txToAddressLabel3="", txBetDataFromAPI="";
             long eventID = 0;
             mToFromAddress.setSingleLine(true);
             if (mTransaction.getBetEntity()==null)  {
@@ -302,6 +350,7 @@ public class FragmentTxDetails extends DialogFragment {
             mToFromAddress.setText(txToAddressLabel);
             mToFromAddress2.setText(txToAddressLabel2);
             mToFromAddress3.setText(txToAddressLabel3);
+            mBetDataFromAPI.setText(txBetDataFromAPI);
             final long evID = eventID;
             mToFromAddress3.setOnClickListener(new View.OnClickListener() {
                 @Override
