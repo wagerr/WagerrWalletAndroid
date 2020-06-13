@@ -165,7 +165,7 @@ public class FragmentTxDetails extends DialogFragment {
             @Override
             public void run() {
                 List<TxExplorerInfo> response = BRApiManager.fetchExplorerTxInfo (getActivity(), mTransaction.getTxHashHexReversed() );
-                if (response!=null) {
+                if (response!=null && response.size()>0) {
                     Message msg = Message.obtain(); // Creates an new Message instance
                     msg.arg1 = 1;   // explorer API
                     msg.obj = response;
