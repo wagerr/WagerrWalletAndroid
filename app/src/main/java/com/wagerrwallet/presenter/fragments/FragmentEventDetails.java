@@ -210,7 +210,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mTxEventId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://explorer.wagerr.com/#/bet/event/%d", evID)));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format( WagerrApp.HOST_EXPLORER + "/#/bet/event/%d", evID)));
                 startActivity(browserIntent);
                 getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
             }
