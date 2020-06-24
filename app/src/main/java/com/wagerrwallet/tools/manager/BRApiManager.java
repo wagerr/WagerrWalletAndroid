@@ -273,14 +273,9 @@ public class BRApiManager {
                 JSONObject vout = arrVOut.getJSONObject(i);
                 String address = vout.getString("address");
                 if ( address.startsWith("OP_RETURN"))   {
-                    if ( vout.has("betdata") )  {
-                        // TODO parlay bet data
-                    }
-                    else    {   // single bet
-                        TxExplorerInfo txInfo = new TxExplorerInfo();
-                        txInfo.PopulateFromJsonObject( vout );
-                        ret.add(txInfo);
-                    }
+                    TxExplorerInfo txInfo = new TxExplorerInfo();
+                    txInfo.PopulateFromJsonObject( vout );
+                    ret.add(txInfo);
                 }
             }
         } catch (JSONException ignored) {

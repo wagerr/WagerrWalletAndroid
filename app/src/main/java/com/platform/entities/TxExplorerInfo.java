@@ -1,7 +1,11 @@
 package com.platform.entities;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * BreadWallet
@@ -29,6 +33,15 @@ import org.json.JSONObject;
  */
 public class TxExplorerInfo {
 
+    public class TxExplorerLegInfo  {
+        public double price;
+        public double spread;
+        public double total;
+        public String market;
+        public String homeTeam;
+        public String awayTeam;
+    }
+
     public String address;
     public double value;
     public double price;
@@ -38,20 +51,41 @@ public class TxExplorerInfo {
     public String eventId;
     public double betValue;
     public double betValueUSD;
+    public int isParlay;
+    public List<TxExplorerLegInfo> legs = new ArrayList<>();
 
     public void PopulateFromJsonObject(JSONObject o)    {
         try {
             address = o.getString("address");
             value = o.getDouble("value");
-            price = o.getDouble("price");
+            if (o.has("price"))    price = o.getDouble("price");
             if (o.has("Spread"))    spread = o.getDouble("Spread");
             if (o.has("Total"))     total = o.getDouble("Total");
             market = o.getString("market");
             betValue = o.getDouble("betValue");
             betValueUSD = o.getDouble("betValueUSD");
+            isParlay = o.getInt("isParlay");
+
+            if ( isParlay == 1 )    {
+                JSONArray legsArray = o.getJSONArray("legs");
+                for (int i = 0; i < legsArray.length(); i++) {
+                    if ( i == 5 )   break;      // too many legs, unsupported
+                    JSONObject jsonLeg = legsArray.getJSONObject(i);
+                    TxExplorerLegInfo leg = new TxExplorerLegInfo();
+                    leg.price = price = jsonLeg.getDouble("price");
+                    if (jsonLeg.has("Spread"))    leg.spread = jsonLeg.getDouble("Spread");
+                    if (jsonLeg.has("Total"))     leg.total = jsonLeg.getDouble("Total");
+                    if (jsonLeg.has("homeTeam"))    leg.homeTeam = jsonLeg.getString("homeTeam");
+                    if (jsonLeg.has("awayTeam"))     leg.awayTeam= jsonLeg.getString("awayTeam");
+                    legs.add(leg);
+                }
+            }
         }
         catch (JSONException e) {
 
         }
     }
+
+
 }
+

@@ -184,10 +184,26 @@ public class FragmentTxDetails extends DialogFragment {
                 case 1:     // Explorer API callback
                     List<TxExplorerInfo> response = (ArrayList) msg.obj;
                     TxExplorerInfo o = response.get(0);
-                    String strTxInfo = String.format("Price: %.2f", o.price);
-                    if ( o.spread>0 )   strTxInfo+= String.format("  Spread: %.2f", o.spread);
-                    if ( o.total>0 )    strTxInfo+= String.format("  Total: %.2f", o.total);
-                    mBetDataFromAPI.setText(strTxInfo);
+                    String strTxInfo = "";
+
+                    if ( o.isParlay == 1)   {
+                        for (TxExplorerInfo.TxExplorerLegInfo leg : o.legs ) {
+                            strTxInfo += String.format("%s - %s ( Price: %.2f", leg.homeTeam, leg.awayTeam, leg.price);
+
+                            if (leg.spread > 0) strTxInfo += String.format(",  Spread: %.2f ", leg.spread);
+                            if (leg.total > 0) strTxInfo += String.format(",  Total: %.2f ", leg.total);
+                            strTxInfo += " ) \n";
+                        }
+                        mToFromAddress.setSingleLine(false);
+                        mToFromAddress.setText(strTxInfo);
+                    }
+                    else {
+                        strTxInfo = String.format("Price: %.2f", o.price);
+
+                        if (o.spread > 0) strTxInfo += String.format("  Spread: %.2f", o.spread);
+                        if (o.total > 0) strTxInfo += String.format("  Total: %.2f", o.total);
+                        mBetDataFromAPI.setText(strTxInfo);
+                    }
                     break;
                 case 2:     // future other calls
                     break;
