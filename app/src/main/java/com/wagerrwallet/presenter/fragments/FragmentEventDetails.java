@@ -907,7 +907,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             mTxAwayOdds.setText( (item.getAwayOdds()>0)?item.getTxAwayOdds():"N/A" );
             rlLastContainer = mMoneyLineContainer;      // default...
 
-            bHasSpreads = (item.getSpreadPoints()>0);
+            bHasSpreads = (item.getSpreadPoints()!=0);
             if (bHasSpreads) {
                 String txSpreadFormat = item.getSpreadFormat();
                 String txSpreadPoints = String.format(txSpreadFormat, item.getTxSpreadPoints(), item.getTxSpreadPoints() );
