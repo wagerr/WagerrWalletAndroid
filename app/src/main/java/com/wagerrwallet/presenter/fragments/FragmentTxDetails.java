@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.platform.entities.TxExplorerInfo;
+import com.platform.entities.TxExplorerPayoutInfo;
 import com.wagerrwallet.R;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.core.BRCoreTransaction;
@@ -48,6 +49,7 @@ import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.platform.entities.TxMetaData;
 import com.platform.tools.KVStoreManager;
+import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -173,6 +175,30 @@ public class FragmentTxDetails extends DialogFragment {
                 }
             }
         });
+
+        if (mTransaction.isCoinbase())  {
+            BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
+                @Override
+                public void run() {
+                    BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+                    BRCoreTransaction tx = walletManager.getWallet().transactionForHash( mTransaction.getTxHash() );
+                    ArrayList<Integer> listOutputs = WagerrOpCodeManager.getPayoutOutputsFromCoreTx( tx, (WalletWagerrManager) walletManager );
+                    List<TxExplorerPayoutInfo> payoutInfo  = new ArrayList<>();
+
+                    for (Integer n : listOutputs )  {
+                        TxExplorerPayoutInfo response = BRApiManager.fetchExplorerPayoutTxInfo (getActivity(), mTransaction.getTxHashHexReversed(), (int) n );
+                        if ( response!=null ) {
+                            payoutInfo.add(response);
+                        }
+                    }
+                    Message msg = Message.obtain(); // Creates an new Message instance
+                    msg.arg1 = 2;   // payout explorer API
+                    msg.obj = payoutInfo;
+                    handler.sendMessage(msg);
+                }
+            });
+
+        }
         updateUi();
         return rootView;
     }
@@ -205,7 +231,19 @@ public class FragmentTxDetails extends DialogFragment {
                         mBetDataFromAPI.setText(strTxInfo);
                     }
                     break;
-                case 2:     // future other calls
+                case 2:     // payout API
+                    List<TxExplorerPayoutInfo> responsePayout = (ArrayList) msg.obj;
+                    String strTxPayoutInfo = "";
+
+                    for (TxExplorerPayoutInfo payoutInfo : responsePayout ) {
+                        strTxPayoutInfo += String.format("Payout %.4f \n", payoutInfo.payout);
+                        for (TxExplorerPayoutInfo.TxExplorerPayoutLeg leg : payoutInfo.legs)    {
+                            strTxPayoutInfo += leg.getDescription() + " \n";
+                        }
+                        strTxPayoutInfo += " \n";
+                        mToFromAddress.setSingleLine(false);
+                        mToFromAddress.setText(strTxPayoutInfo);
+                    }
                     break;
             }
 
@@ -280,6 +318,7 @@ public class FragmentTxDetails extends DialogFragment {
             mToFromAddress.setSingleLine(true);
             if (mTransaction.getBetEntity()==null)  {
                 if (mTransaction.isCoinbase() && mTransaction.getBlockHeight() != Integer.MAX_VALUE) {       //  payout reward
+                    /*
                     BetResultTxDataStore brds = BetResultTxDataStore.getInstance(getContext());
                     BetResultEntity br = brds.getByBlockHeight(getContext(), walletManager.getIso(getContext()), mTransaction.getBlockHeight() - 1);
                     if (br != null) {
@@ -295,9 +334,11 @@ public class FragmentTxDetails extends DialogFragment {
                         }
                         txSent = String.format("PAYOUT Event #%d", eventID);
                     } else {
-                        txToAddressLabel = String.format("Result not avalable at height %d", mTransaction.getBlockHeight() - 1);
+                        //txToAddressLabel = String.format("Result not avalable at height %d", mTransaction.getBlockHeight() - 1);
                         txSent = "PAYOUT";
                     }
+                    */
+                    txSent = "PAYOUT";
                 }
                 else {      // normal tx
                     txSent = sent ? "Sent" : "Received";

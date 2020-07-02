@@ -28,6 +28,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -110,6 +111,20 @@ public class WagerrOpCodeManager {
             }
         }
         return ret;
+    }
+
+    public static ArrayList<Integer> getPayoutOutputsFromCoreTx(BRCoreTransaction tx, WalletWagerrManager walletManager ) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int vOut = 0;
+
+        for ( BRCoreTransactionOutput output : tx.getOutputs()) {
+            BRCoreAddress address = new BRCoreAddress (output.getAddress());
+            if ( walletManager.getWallet().containsAddress( address ) ) {
+                list.add( vOut );
+            }
+            vOut++;
+        }
+        return list;
     }
 
     public static boolean DecodeBetTransaction(Context app,  BRCoreTransaction tx) {

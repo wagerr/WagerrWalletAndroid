@@ -7,6 +7,7 @@ import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
 import com.platform.entities.TxExplorerInfo;
+import com.platform.entities.TxExplorerPayoutInfo;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.activities.util.ActivityUTILS;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
@@ -278,6 +279,29 @@ public class BRApiManager {
                     ret.add(txInfo);
                 }
             }
+        } catch (JSONException ignored) {
+        }
+
+        return ret;
+    }
+
+    public static TxExplorerPayoutInfo fetchExplorerPayoutTxInfo(Activity app, String txHash, int vOut) {
+        String url1 = WagerrApp.HOST_EXPLORER +  "/api/bet/infobypayout?payoutTx=" + txHash + "&nOut=" + vOut;
+        String jsonString1 = urlGET(app, url1);
+        TxExplorerPayoutInfo ret = new TxExplorerPayoutInfo();
+
+        JSONArray jsonArray1 = null;
+        if (jsonString1 == null) {
+            jsonString1 = urlGET(app, url1);        // retry
+            if (jsonString1 == null) {
+                Log.e(TAG, "fetchExplorerPayoutTxInfo: explorer failed, response is null");
+                return null;
+            }
+        }
+
+        try {
+            JSONObject object = new JSONObject(jsonString1);
+            ret.PopulateFromJsonObject( object );
         } catch (JSONException ignored) {
         }
 

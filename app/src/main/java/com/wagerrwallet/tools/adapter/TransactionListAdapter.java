@@ -257,6 +257,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 String strMatureInfo = String.format("<b>%d/%d</b>", (nCurrentHeight - item.getBlockHeight()), PAYOUT_MATURITY);
                 int amountColor = (!immature) ? R.color.transaction_amount_payout_color : R.color.transaction_amount_inmature_color;
                 convertView.transactionAmount.setTextColor(mContext.getResources().getColor(amountColor, null));
+                // new payout based on API info
+                /*
                 BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
                 BetResultEntity br = brds.getByBlockHeight(mContext, wallet.getIso(mContext), item.getBlockHeight() - 1);
                 if (br != null) {
@@ -271,9 +273,11 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                     txDate = String.format("PAYOUT Event #%d", eventID);
                 } else {
-                    txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
+                    //txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
                     txDate = "PAYOUT";
                 }
+                */
+                txDate = "PAYOUT";
                 isNormalTx = false;
                 if (immature)   txDate += " " + strMatureInfo;
             }

@@ -197,6 +197,10 @@ public class BetEventEntity {
     }
 
     public String getOddTx( float odd)  {
+        return BetEventEntity.getOddText( odd );
+    }
+
+    public static String getOddText( float odd)  {
         boolean settingAmerican = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_AMERICAN, false);
         DecimalFormat df;
         String ret;
@@ -285,7 +289,11 @@ public class BetEventEntity {
     }
 
     public String getTxSpreadPoints() {
-        return String.valueOf((float)Math.abs(spreadPoints)/SPREAD_MULTIPLIER);
+        return BetEventEntity.getTextSpreadPoints( spreadPoints );
+    }
+
+    public static String getTextSpreadPoints( float spreadP ) {
+        return String.valueOf((float)Math.abs(spreadP)/SPREAD_MULTIPLIER);
     }
 
     public String getTxSpreadHomeOdds() {
@@ -311,7 +319,11 @@ public class BetEventEntity {
     }
 
     public String getTxTotalPoints() {
-        return String.valueOf((float)totalPoints/TOTAL_MULTIPLIER);
+        return BetEventEntity.getTextTotalPoints( totalPoints );
+    }
+
+    public static String getTextTotalPoints( float total ) {
+        return String.valueOf((float)total/TOTAL_MULTIPLIER);
     }
 
     public String getTxOverOdds() {
