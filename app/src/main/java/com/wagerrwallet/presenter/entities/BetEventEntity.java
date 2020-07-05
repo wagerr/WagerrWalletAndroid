@@ -235,7 +235,7 @@ public class BetEventEntity {
         else                return getOddTx(getOdds((float)drawOdds/ODDS_MULTIPLIER));
     }
 
-    public float getOdds( float odds )  {
+    public static float getOddsStatic( float odds ) {
         boolean settingOdds = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false);
         boolean settingAmerican = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_AMERICAN, false);
 
@@ -245,7 +245,11 @@ public class BetEventEntity {
         return ret;
     }
 
-    public float DecimalToAmerican(float odd)   {
+    public float getOdds( float odds )  {
+        return BetEventEntity.getOddsStatic( odds );
+    }
+
+    public static float DecimalToAmerican(float odd)   {
         if (odd>2)  {
             return (odd-1)*100;
         }

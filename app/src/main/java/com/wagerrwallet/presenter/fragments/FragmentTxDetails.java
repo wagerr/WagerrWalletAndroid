@@ -214,21 +214,37 @@ public class FragmentTxDetails extends DialogFragment {
 
                     if ( o.isParlay == 1)   {
                         for (TxExplorerInfo.TxExplorerLegInfo leg : o.legs ) {
-                            strTxInfo += String.format("%s - %s ( Price: %.2f", leg.homeTeam, leg.awayTeam, leg.price);
-
-                            if (leg.spread > 0) strTxInfo += String.format(",  Spread: %.2f ", leg.spread);
-                            if (leg.total > 0) strTxInfo += String.format(",  Total: %.2f ", leg.total);
-                            strTxInfo += " ) \n";
+                            strTxInfo += String.format("%s - %s ( Bet: %s, Price: %s", leg.homeTeam, leg.awayTeam, leg.market, leg.getPriceTx());
+                            if (leg.homeScore>=0 && leg.awayScore>=0)   {
+                                strTxInfo += String.format(", Score: %s - %s ", leg.getHomeScoreTx(), leg.getAwayScoreTx());
+                            }
+                            else    {
+                                strTxInfo += ", Score: Pending ";
+                            }
+                            if (leg.spread > 0)     strTxInfo += String.format(",  Spread: %.2f ", leg.spread);
+                            if (leg.total > 0)      strTxInfo += String.format(",  Total: %.2f ", leg.total);
+                            if (leg.outcome > 0)    strTxInfo += String.format(",  Outcome: %s ", leg.getOutcome().toString());
+                            strTxInfo += " ) \n\n";
                         }
+                        strTxInfo += String.format("Parlay Price: %s \n\n", o.getParlayPrice());
                         mToFromAddress.setSingleLine(false);
                         mToFromAddress.setText(strTxInfo);
                     }
                     else {
-                        strTxInfo = String.format("Price: %.2f", o.price);
+                        strTxInfo = String.format("%s - %s", o.homeTeam, o.awayTeam);
+                        strTxInfo += String.format("\nPrice: %s", o.getPriceTx());
+                        if (o.homeScore>=0 && o.awayScore>=0)   {
+                            strTxInfo += String.format(", Score: %s - %s ", o.getHomeScoreTx(), o.getAwayScoreTx());
+                        }
+                        else    {
+                            strTxInfo += ", Score: Pending ";
+                        }
+                        if (o.spread > 0) strTxInfo += String.format(", Spread: %.2f", o.spread);
+                        if (o.total > 0) strTxInfo += String.format(", Total: %.2f", o.total);
+                        if (!o.betResultType.equals(""))
+                            strTxInfo += String.format(", Result: %s", o.betResultType);
 
-                        if (o.spread > 0) strTxInfo += String.format("  Spread: %.2f", o.spread);
-                        if (o.total > 0) strTxInfo += String.format("  Total: %.2f", o.total);
-                        mBetDataFromAPI.setText(strTxInfo);
+                        mToFromAddress.setText(strTxInfo);
                     }
                     break;
                 case 2:     // payout API
@@ -236,9 +252,13 @@ public class FragmentTxDetails extends DialogFragment {
                     String strTxPayoutInfo = "";
 
                     for (TxExplorerPayoutInfo payoutInfo : responsePayout ) {
+                        if (payoutInfo.legs==null)  break;
                         strTxPayoutInfo += String.format("Payout %.4f \n", payoutInfo.payout);
                         for (TxExplorerPayoutInfo.TxExplorerPayoutLeg leg : payoutInfo.legs)    {
                             strTxPayoutInfo += leg.getDescription() + " \n";
+                        }
+                        if (payoutInfo.legs.size()>1)   {
+                            strTxPayoutInfo += String.format("Parlay Price: %s \n", payoutInfo.getParlayPrice());
                         }
                         strTxPayoutInfo += " \n";
                         mToFromAddress.setSingleLine(false);
@@ -395,9 +415,9 @@ public class FragmentTxDetails extends DialogFragment {
                         String txResult = (ev.getHomeScore() < 0) ? "Pending" : String.format("%s - %s", ev.getTxHomeScore(), ev.getTxAwayScore());
                         String txWin =
                                 txSent = String.format("BET: %s%s", outcome.toString(), sTotals);
-                        txToAddressLabel = String.format("%s : %s vs %s", ev.getTxEventShortDate(), ev.getTxHomeTeam(), ev.getTxAwayTeam());
-                        txToAddressLabel2 = String.format("Result: %s ", (ev.getHomeScore() < 0) ? "Pending" : txResult);
-                        txToAddressLabel3 = String.format("Event #%s", String.valueOf(ev.getEventID()));
+                        //txToAddressLabel = String.format("%s : %s vs %s", ev.getTxEventShortDate(), ev.getTxHomeTeam(), ev.getTxAwayTeam());
+                        //txToAddressLabel2 = String.format("Result: %s ", (ev.getHomeScore() < 0) ? "Pending" : txResult);
+                        //txToAddressLabel3 = String.format("Event #%s", String.valueOf(ev.getEventID()));
                     }
                 }
             }

@@ -1,5 +1,8 @@
 package com.platform.entities;
 
+import com.wagerrwallet.presenter.entities.BetEntity;
+import com.wagerrwallet.presenter.entities.BetEventEntity;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +43,24 @@ public class TxExplorerInfo {
         public String market;
         public String homeTeam;
         public String awayTeam;
+        public int homeScore;
+        public int awayScore;
+        public String betResult;
+        public int outcome = -1;
+
+        public String getPriceTx()  {
+            return BetEventEntity.getOddText(BetEventEntity.getOddsStatic((float)price));
+        }
+
+        public BetEntity.BetOutcome getOutcome()    {
+            return BetEntity.BetOutcome.fromValue(outcome);
+        }
+        public String getHomeScoreTx()  {
+            return String.format("%d", homeScore / BetEventEntity.RESULT_MULTIPLIER);
+        }
+        public String getAwayScoreTx()  {
+            return String.format("%d", awayScore / BetEventEntity.RESULT_MULTIPLIER);
+        }
     }
 
     public String address;
@@ -51,7 +72,12 @@ public class TxExplorerInfo {
     public String eventId;
     public double betValue;
     public double betValueUSD;
+    public String betResultType = "";
     public int isParlay;
+    public String homeTeam;
+    public String awayTeam;
+    public int homeScore = -1;
+    public int awayScore = -1;
     public List<TxExplorerLegInfo> legs = new ArrayList<>();
 
     public void PopulateFromJsonObject(JSONObject o)    {
@@ -65,6 +91,10 @@ public class TxExplorerInfo {
             betValue = o.getDouble("betValue");
             betValueUSD = o.getDouble("betValueUSD");
             isParlay = o.getInt("isParlay");
+            if (o.has("homeScore"))     homeScore = o.getInt("homeScore");
+            if (o.has("awayScore"))     awayScore = o.getInt("awayScore");
+            if (o.has("homeTeam"))     homeTeam = o.getString("homeTeam");
+            if (o.has("awayTeam"))     awayTeam = o.getString("awayTeam");
 
             if ( isParlay == 1 )    {
                 JSONArray legsArray = o.getJSONArray("legs");
@@ -77,6 +107,11 @@ public class TxExplorerInfo {
                     if (jsonLeg.has("Total"))     leg.total = jsonLeg.getDouble("Total");
                     if (jsonLeg.has("homeTeam"))    leg.homeTeam = jsonLeg.getString("homeTeam");
                     if (jsonLeg.has("awayTeam"))     leg.awayTeam= jsonLeg.getString("awayTeam");
+                    leg.market = o.getString("market");
+                    if (o.has("homeScore"))     leg.homeScore = o.getInt("homeScore");
+                    if (o.has("awayScore"))     leg.awayScore = o.getInt("awayScore");
+                    if (o.has("betResult"))     leg.betResult = o.getString("betResult");
+                    if (o.has("outcome"))       leg.outcome = o.getInt("outcome");
                     legs.add(leg);
                 }
             }
@@ -86,6 +121,24 @@ public class TxExplorerInfo {
         }
     }
 
+    public String getPriceTx()  {
+        return BetEventEntity.getOddText(BetEventEntity.getOddsStatic((float)price));
+    }
+    public String getHomeScoreTx()  {
+        return String.format("%d", homeScore / BetEventEntity.RESULT_MULTIPLIER);
+    }
+    public String getAwayScoreTx()  {
+        return String.format("%d", awayScore / BetEventEntity.RESULT_MULTIPLIER);
+    }
 
+    public String getParlayPrice()  {
+        String ret = "";
+        float price = 1;
+        if (legs.size()==0) return ret;
+        for (TxExplorerLegInfo leg : legs)  {
+            price *= leg.price;
+        }
+        return BetEventEntity.getOddText( price );
+    }
 }
 

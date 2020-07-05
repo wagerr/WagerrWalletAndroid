@@ -42,34 +42,69 @@ public class TxExplorerPayoutInfo {
         public String legResultType;
         public TxExplorerPayoutLockedEvent lockedEvent;
 
+        public String getPriceTx( float price )     {
+            return BetEventEntity.getOddText(BetEventEntity.getOddsStatic(price));
+        }
+
         public String getDescription()  {
             BetEntity.BetOutcome betOutcome = BetEntity.BetOutcome.fromValue( outcome );
             String ret = String.format("#%d - %s, %s - %s", event_id, (betOutcome.toString()), lockedEvent.home, lockedEvent.away );
 
             switch (betOutcome) {
                 case MONEY_LINE_HOME_WIN:
-                    ret += String.format(" (Price: %s)", BetEventEntity.getOddText( (float)lockedEvent.homeOdds/BetEventEntity.ODDS_MULTIPLIER ));
+                    ret += String.format(" (Price: %s)", getPriceTx( (float)lockedEvent.homeOdds/BetEventEntity.ODDS_MULTIPLIER ));
                     break;
                 case MONEY_LINE_AWAY_WIN:
-                    ret += String.format(" (Price: %s)", BetEventEntity.getOddText( (float)lockedEvent.awayOdds/BetEventEntity.ODDS_MULTIPLIER ));
+                    ret += String.format(" (Price: %s)", getPriceTx( (float)lockedEvent.awayOdds/BetEventEntity.ODDS_MULTIPLIER ));
                     break;
                 case MONEY_LINE_DRAW:
-                    ret += String.format(" (Price: %s)", BetEventEntity.getOddText( (float)lockedEvent.drawOdds/BetEventEntity.ODDS_MULTIPLIER ));
+                    ret += String.format(" (Price: %s)", getPriceTx( (float)lockedEvent.drawOdds/BetEventEntity.ODDS_MULTIPLIER ));
                     break;
                 case SPREADS_HOME:
-                    ret += String.format(" (Price: %s, Spread: %s )", BetEventEntity.getOddText( (float)lockedEvent.spreadHomeOdds/BetEventEntity.ODDS_MULTIPLIER ), BetEventEntity.getTextSpreadPoints( lockedEvent.spreadPoints ) );
+                    ret += String.format(" (Price: %s, Spread: %s )", getPriceTx( (float)lockedEvent.spreadHomeOdds/BetEventEntity.ODDS_MULTIPLIER ), BetEventEntity.getTextSpreadPoints( lockedEvent.spreadPoints ) );
                     break;
                 case SPREADS_AWAY:
-                    ret += String.format(" (Price: %s, Spread: %s )", BetEventEntity.getOddText( (float)lockedEvent.spreadAwayOdds/BetEventEntity.ODDS_MULTIPLIER ), BetEventEntity.getTextSpreadPoints( lockedEvent.spreadPoints ) );
+                    ret += String.format(" (Price: %s, Spread: %s )", getPriceTx( (float)lockedEvent.spreadAwayOdds/BetEventEntity.ODDS_MULTIPLIER ), BetEventEntity.getTextSpreadPoints( lockedEvent.spreadPoints ) );
                     break;
                 case TOTAL_OVER:
-                    ret += String.format(" (Price: %s, Total: %s )", BetEventEntity.getOddText( (float)lockedEvent.totalOverOdds/BetEventEntity.ODDS_MULTIPLIER ), BetEventEntity.getTextTotalPoints( lockedEvent.totalPoints ) );
+                    ret += String.format(" (Price: %s, Total: %s )", getPriceTx( (float)lockedEvent.totalOverOdds/BetEventEntity.ODDS_MULTIPLIER ), BetEventEntity.getTextTotalPoints( lockedEvent.totalPoints ) );
                     break;
                 case TOTAL_UNDER:
-                    ret += String.format(" (Price: %s, Total: %s )", BetEventEntity.getOddText( (float)lockedEvent.totalUnderOdds/BetEventEntity.ODDS_MULTIPLIER ), BetEventEntity.getTextTotalPoints( lockedEvent.totalPoints ) );
+                    ret += String.format(" (Price: %s, Total: %s )", getPriceTx( (float)lockedEvent.totalUnderOdds/BetEventEntity.ODDS_MULTIPLIER ), BetEventEntity.getTextTotalPoints( lockedEvent.totalPoints ) );
                     break;
                 case UNKNOWN:
                 ret += " Unknown";
+            }
+            return ret;
+        }
+        public long getLegPrice()   {
+            BetEntity.BetOutcome betOutcome = BetEntity.BetOutcome.fromValue( outcome );
+            long ret = 0;
+
+            switch (betOutcome) {
+                case MONEY_LINE_HOME_WIN:
+                    ret = lockedEvent.homeOdds;
+                    break;
+                case MONEY_LINE_AWAY_WIN:
+                    ret = lockedEvent.awayOdds;
+                    break;
+                case MONEY_LINE_DRAW:
+                    ret = lockedEvent.drawOdds;
+                    break;
+                case SPREADS_HOME:
+                    ret = lockedEvent.spreadHomeOdds;
+                    break;
+                case SPREADS_AWAY:
+                    ret = lockedEvent.spreadAwayOdds;
+                    break;
+                case TOTAL_OVER:
+                    ret = lockedEvent.totalOverOdds;
+                    break;
+                case TOTAL_UNDER:
+                    ret = lockedEvent.totalUnderOdds;
+                    break;
+                case UNKNOWN:
+                    ret = 0;
             }
             return ret;
         }
@@ -157,6 +192,14 @@ public class TxExplorerPayoutInfo {
         }
     }
 
-
+    public String getParlayPrice()  {
+        String ret = "";
+        float price = 1;
+        if (legs.size()==0) return ret;
+        for (TxExplorerPayoutLeg leg : legs)  {
+            price *= (float)leg.getLegPrice() / (float)BetEventEntity.ODDS_MULTIPLIER;
+        }
+        return BetEventEntity.getOddText( BetEventEntity.getOddsStatic( price) );
+    }
 }
 
