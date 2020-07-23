@@ -223,10 +223,10 @@ public class FragmentTxDetails extends DialogFragment {
                             }
                             if (leg.spread > 0)     strTxInfo += String.format(",  Spread: %.2f ", leg.spread);
                             if (leg.total > 0)      strTxInfo += String.format(",  Total: %.2f ", leg.total);
-                            if (leg.outcome > 0)    strTxInfo += String.format(",  Outcome: %s ", leg.getOutcome().toString());
+                            if (leg.outcome > 0)    strTxInfo += String.format(",  Outcome: %s ", leg.betResult);
                             strTxInfo += " ) \n\n";
                         }
-                        strTxInfo += String.format("Parlay Price: %s \n\n", o.getParlayPrice());
+                        strTxInfo += String.format("Parlay Price: %s, Outcome: %s \n\n", o.getParlayPrice(), o.betResultType );
                         mToFromAddress.setSingleLine(false);
                         mToFromAddress.setText(strTxInfo);
                     }

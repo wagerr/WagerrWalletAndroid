@@ -38,9 +38,9 @@ import java.text.DecimalFormat;
 public class BetEventEntity {
     public static final String TAG = BetEventEntity.class.getName();
     public static final long ODDS_MULTIPLIER = 10000;
-    public static final long SPREAD_MULTIPLIER = 10;
-    public static final long TOTAL_MULTIPLIER = 10;
-    public static final long RESULT_MULTIPLIER = 10;
+    public static final long SPREAD_MULTIPLIER = 100;
+    public static final long TOTAL_MULTIPLIER = 100;
+    public static final long RESULT_MULTIPLIER = 100;
 
 
     public enum BetTxType {
