@@ -254,7 +254,7 @@ public class BRApiManager {
 
     // Explorer API
     public static List<TxExplorerInfo> fetchExplorerTxInfo(Activity app, String txHash) {
-        String url1 = WagerrApp.HOST_EXPLORER +  "/api/tx/" + txHash;
+        String url1 = WagerrApp.HOST_EXPLORER +  "/api/tx/" +  txHash;
         String jsonString1 = urlGET(app, url1);
         List<TxExplorerInfo> ret = new ArrayList<>();
 

@@ -221,7 +221,7 @@ public class FragmentTxDetails extends DialogFragment {
                             else    {
                                 strTxInfo += ", Score: Pending ";
                             }
-                            if (leg.spread > 0)     strTxInfo += String.format(",  Spread: %.2f ", leg.spread);
+                            if (leg.spread != 0)     strTxInfo += String.format(",  Spread: %.2f ", leg.spread);
                             if (leg.total > 0)      strTxInfo += String.format(",  Total: %.2f ", leg.total);
                             if (leg.outcome > 0)    strTxInfo += String.format(",  Outcome: %s ", leg.betResult);
                             strTxInfo += " ) \n\n";
@@ -239,7 +239,7 @@ public class FragmentTxDetails extends DialogFragment {
                         else    {
                             strTxInfo += ", Score: Pending ";
                         }
-                        if (o.spread > 0) strTxInfo += String.format(", Spread: %.2f", o.spread);
+                        if (o.spread != 0) strTxInfo += String.format(", Spread: %.2f", o.spread);
                         if (o.total > 0) strTxInfo += String.format(", Total: %.2f", o.total);
                         if (!o.betResultType.equals(""))
                             strTxInfo += String.format(", Result: %s", o.betResultType);

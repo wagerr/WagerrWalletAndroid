@@ -95,6 +95,7 @@ public class TxExplorerInfo {
             if (o.has("awayScore"))     awayScore = o.getInt("awayScore");
             if (o.has("homeTeam"))     homeTeam = o.getString("homeTeam");
             if (o.has("awayTeam"))     awayTeam = o.getString("awayTeam");
+            if (o.has("betResultType"))     betResultType = o.getString("betResultType");
 
             if ( isParlay == 1 )    {
                 JSONArray legsArray = o.getJSONArray("legs");
