@@ -66,7 +66,7 @@ public class TxExplorerInfo {
     public String address;
     public double value;
     public double price;
-    public double spread;
+    public String spread;
     public double total;
     public String market;
     public String eventId;
@@ -85,7 +85,7 @@ public class TxExplorerInfo {
             address = o.getString("address");
             value = o.getDouble("value");
             if (o.has("price"))    price = o.getDouble("price");
-            if (o.has("Spread"))    spread = o.getDouble("Spread");
+            if (o.has("Spread"))    spread = o.getString("Spread");
             if (o.has("Total"))     total = o.getDouble("Total");
             market = o.getString("market");
             betValue = o.getDouble("betValue");

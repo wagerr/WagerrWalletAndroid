@@ -48,8 +48,8 @@ public class TxExplorerPayoutInfo {
 
         public String getDescription()  {
             BetEntity.BetOutcome betOutcome = BetEntity.BetOutcome.fromValue( outcome );
-            String ret = String.format("#%d - %s, %s - %s", event_id, (betOutcome.toString()), lockedEvent.home, lockedEvent.away );
-            String sign = (lockedEvent.spreadPoints>0) ? "+": "-";
+            String ret = String.format("#%d - %s, %s - %s\n", event_id, (betOutcome.toString()), lockedEvent.home, lockedEvent.away );
+            String sign;
 
             switch (betOutcome) {
                 case MONEY_LINE_HOME_WIN:
@@ -62,9 +62,11 @@ public class TxExplorerPayoutInfo {
                     ret += String.format(" (Price: %s)", getPriceTx( (float)lockedEvent.drawOdds/BetEventEntity.ODDS_MULTIPLIER ));
                     break;
                 case SPREADS_HOME:
+                    sign = (lockedEvent.spreadPoints>0) ? "+": "-";
                     ret += String.format(" (Price: %s, Spread: %s%s )", getPriceTx( (float)lockedEvent.spreadHomeOdds/BetEventEntity.ODDS_MULTIPLIER ), sign, BetEventEntity.getTextSpreadPoints( lockedEvent.spreadPoints ) );
                     break;
                 case SPREADS_AWAY:
+                    sign = (lockedEvent.spreadPoints>0) ? "-": "+";
                     ret += String.format(" (Price: %s, Spread: %s%s )", getPriceTx( (float)lockedEvent.spreadAwayOdds/BetEventEntity.ODDS_MULTIPLIER ), sign, BetEventEntity.getTextSpreadPoints( lockedEvent.spreadPoints ) );
                     break;
                 case TOTAL_OVER:
