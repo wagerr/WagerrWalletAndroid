@@ -171,23 +171,20 @@ public class BRAnimator {
 
     }
 
-    public static void showSendSwapFragment(Activity app, final CryptoRequest request) {
+    public static void showSendSwapFragment(Activity app, final String currency) {
         if (app == null) {
             Log.e(TAG, "showSendFragment: app is null");
             return;
         }
         FragmentSendSwap fragmentSend = (FragmentSendSwap) app.getFragmentManager().findFragmentByTag(FragmentSendSwap.class.getName());
         if (fragmentSend != null && fragmentSend.isAdded()) {
-            //fragmentSend.setCryptoObject(request);
             return;
         }
         final int slideAnimation = SLIDE_ANIMATION_DURATION;
         try {
             SLIDE_ANIMATION_DURATION = 300;
             fragmentSend = new FragmentSendSwap();
-            if (request != null && !request.address.isEmpty()) {
-                //fragmentSend.setCryptoObject(request);
-            }
+            fragmentSend.currency = currency;
             app.getFragmentManager().beginTransaction()
                     .setCustomAnimations(0, 0, 0, R.animator.plain_300)
                     .add(android.R.id.content, fragmentSend, FragmentSend.class.getName())

@@ -90,6 +90,7 @@ public class SwapActivity extends BRActivity implements InternetManager.Connecti
     private ImageButton mSearchIcon;
     private ImageButton mSwap;
     private ConstraintLayout toolBarConstraintLayout;
+    private String showCurrency;
 
     private BRNotificationBar mNotificationBar;
 
@@ -108,6 +109,9 @@ public class SwapActivity extends BRActivity implements InternetManager.Connecti
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_swap);
+
+        showCurrency = "";
+        showCurrency = getIntent().getStringExtra("currency");
 
         mCurrencyTitle = findViewById(R.id.currency_label);
         mCurrencyPriceUsd = findViewById(R.id.currency_usd_price);
@@ -148,8 +152,7 @@ public class SwapActivity extends BRActivity implements InternetManager.Connecti
         mBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BRAnimator.showSendSwapFragment(SwapActivity.this, null);
-
+                BRAnimator.showSendSwapFragment(SwapActivity.this, showCurrency);
             }
         });
 
@@ -201,12 +204,19 @@ public class SwapActivity extends BRActivity implements InternetManager.Connecti
 
         // Check if the "Twilight" screen altering app is currently running
         if (checkIfScreenAlteringAppIsRunning("com.urbandroid.lux")) {
-
             BRDialog.showSimpleDialog(this, getString(R.string.Dialog_screenAlteringTitle), getString(R.string.Dialog_screenAlteringMessage));
-
-
         }
-        
+
+        if ( showCurrency!=null && !showCurrency.equals("") )   {
+            int interval = 1500; // 1,5 Second
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable(){
+                public void run() {
+                    mBuyButton.performClick();
+                }
+            };
+            handler.postDelayed(runnable, interval);
+        }
     }
 
     public boolean isSearchActive() {

@@ -135,6 +135,7 @@ public class FragmentSendSwap extends Fragment {
     private static String savedMemo;
     private static String savedIso;
     private static String savedAmount;
+    public String currency = "";
 
     private boolean ignoreCleanup;
 
@@ -164,8 +165,9 @@ public class FragmentSendSwap extends Fragment {
 
         close = (ImageButton) rootView.findViewById(R.id.close_button);
         BaseWalletManager wm = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
-        selectedIso = "BTC";    // fixed by now    // = BRSharedPrefs.isCryptoPreferred(getActivity()) ? wm.getIso(getActivity()) : BRSharedPrefs.getPreferredFiatIso(getContext());
+        selectedIso = currency;    // fixed by now    // = BRSharedPrefs.isCryptoPreferred(getActivity()) ? wm.getIso(getActivity()) : BRSharedPrefs.getPreferredFiatIso(getContext());
         mListDepositCoins.add(selectedIso);
+        isoButton.setText(selectedIso);
 
         BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
             @Override

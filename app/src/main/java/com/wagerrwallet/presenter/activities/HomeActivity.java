@@ -61,6 +61,9 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
 
     private BRText mPromptTitle;
     private BRText mPromptDescription;
+    private BRText mLabelBTC;
+    private BRText mLabelEUR;
+    private BRText mLabelUSD;
     private BRButton mPromptContinue;
     private BRButton mPromptDismiss;
     private CardView mPromptCard;
@@ -99,6 +102,37 @@ public class HomeActivity extends BRActivity implements InternetManager.Connecti
         mPromptDescription = findViewById(R.id.prompt_description);
         mPromptContinue = findViewById(R.id.continue_button);
         mPromptDismiss = findViewById(R.id.dismiss_button);
+
+        mLabelBTC = findViewById(R.id.swap_labelbtc);
+        mLabelBTC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, SwapActivity.class);
+                intent.putExtra("currency", "BTC");
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+            }
+        });
+        mLabelEUR = findViewById(R.id.swap_labeleur);
+        mLabelEUR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, SwapActivity.class);
+                intent.putExtra("currency", "EUR");
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+            }
+        });
+        mLabelUSD = findViewById(R.id.swap_labelusd);
+        mLabelUSD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, SwapActivity.class);
+                intent.putExtra("currency", "USD");
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+            }
+        });
 
         mAdapter = new WalletListAdapter(this, walletList);
 

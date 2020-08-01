@@ -34,7 +34,6 @@
                 android:layout_marginRight="16dp"
                 android:background="@drawable/event_menu_shape">
 
-
                 <com.wagerrwallet.presenter.customviews.BRText
                     android:id="@+id/betting_label"
                     android:layout_width="wrap_content"
@@ -75,7 +74,6 @@
                 android:layout_marginRight="16dp"
                 android:background="@drawable/event_menu_shape">
 
-
                 <com.wagerrwallet.presenter.customviews.BRText
                     android:id="@+id/swap_label"
                     android:layout_width="wrap_content"
@@ -95,25 +93,85 @@
                     app:customTFont="CircularPro-Book.otf" />
 
                 <com.wagerrwallet.presenter.customviews.BRText
-                    android:id="@+id/swap_label2"
+                    android:id="@+id/swap_labelwgr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="16dp"
                     android:clickable="false"
                     android:drawablePadding="8dp"
                     android:focusable="false"
                     android:paddingBottom="4dp"
-                    android:text="WGR/BTC"
+                    android:text="> WGR"
                     android:layout_alignParentEnd="true"
                     android:layout_alignBottom="@id/swap_label"
                     android:textSize="15sp"
                     android:textColor="@color/white"
                     app:customTFont="CircularPro-Book.otf" />
 
-            </RelativeLayout>
 
+                <com.wagerrwallet.presenter.customviews.BRText
+                    android:id="@+id/swap_labelbtc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="true"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/tx_rounded_rect"
+                    android:focusable="false"
+                    android:paddingBottom="4dp"
+                    android:text="BTC"
+                    android:layout_toRightOf="@id/swap_label"
+                    android:layout_alignBottom="@id/swap_label"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    app:customTFont="CircularPro-Book.otf" />
+
+
+                <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/swap_labeleur"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:drawablePadding="8dp"
+                    android:background="@drawable/tx_rounded_rect"
+                android:focusable="false"
+                android:paddingBottom="4dp"
+                    android:layout_toRightOf="@id/swap_labelbtc"
+                android:text="EUR"
+
+                android:layout_alignBottom="@id/swap_label"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                app:customTFont="CircularPro-Book.otf" />
+
+                <com.wagerrwallet.presenter.customviews.BRText
+                    android:id="@+id/swap_labelusd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="true"
+                    android:drawablePadding="8dp"
+                    android:focusable="false"
+                    android:background="@drawable/tx_rounded_rect"
+                    android:paddingBottom="4dp"
+                    android:text="USD"
+                    android:layout_toRightOf="@id/swap_labeleur"
+                    android:layout_alignBottom="@id/swap_label"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    app:customTFont="CircularPro-Book.otf" />
+
+            </RelativeLayout>
 
             <ImageView
                 android:layout_width="185dp"
