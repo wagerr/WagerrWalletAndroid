@@ -169,6 +169,10 @@ public class FragmentSendSwap extends Fragment {
         mListDepositCoins.add(selectedIso);
         isoButton.setText(selectedIso);
 
+        //is the chosen ISO a crypto (could be also a fiat currency)
+        boolean isIsoCrypto = isISOCrypto(selectedIso);
+        refunddAddressLayout.setVisibility( (isIsoCrypto) ? View.VISIBLE : View.GONE );
+
         BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
             @Override
             public void run() {

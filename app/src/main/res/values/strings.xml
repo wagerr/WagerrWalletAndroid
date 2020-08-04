@@ -763,7 +763,7 @@
     <string name="Portfolio">Portfolio</string>
     <string name="Wallets">Wallets</string>
     <string name="Admin">Admin</string>
-    <string name="BuySwap">Buy</string>
+    <string name="BuySwap">Buy WGR</string>
 
     <!-- One-time BCH dialog -->
     <string name="Dialog.welcomeBchTitle">Wagerr now supports Bitcoin Cash!</string>
