@@ -272,6 +272,26 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         }
     }
 
+    public void deleteDuplicateMappings(Context app) {
+        Cursor cursor = null;
+        try {
+            database = openDatabase();
+            Log.e(TAG, "mapping transaction deleted" );
+            String QUERY = "delete from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where " + BRSQLiteHelper.BMTX_COLUMN_ID + " in (select " + BRSQLiteHelper.BMTX_COLUMN_ID + " "
+                    + "from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where "+ BRSQLiteHelper.BMTX_MAPPINGID +" in "
+                    + "(select "+ BRSQLiteHelper.BMTX_MAPPINGID +" from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where " + BRSQLiteHelper.BMTX_NAMESPACEID +"=3 "
+                    + "group by " + BRSQLiteHelper.BMTX_NAMESPACEID + ", " + BRSQLiteHelper.BMTX_MAPPINGID + " "
+                    + "having count(*)>1) "
+                    + "and " + BRSQLiteHelper.BMTX_COLUMN_ID + " not in (select max(" + BRSQLiteHelper.BMTX_COLUMN_ID + ") from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where "+ BRSQLiteHelper.BMTX_NAMESPACEID +"=3 "
+                    + "group by " + BRSQLiteHelper.BMTX_NAMESPACEID + ", " + BRSQLiteHelper.BMTX_MAPPINGID + " "
+                    + "having count(*)>1) )";
+
+            database.rawQuery(QUERY, null);
+        } finally {
+            closeDatabase();
+        }
+    }
+
     public class BetMappingDupItem {
         public long NamespaceID;
         public long MappingID;
