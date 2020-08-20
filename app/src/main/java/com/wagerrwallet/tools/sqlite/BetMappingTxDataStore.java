@@ -42,6 +42,7 @@ import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.wallet.wallets.util.CryptoUriParser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BetMappingTxDataStore implements BRDataSourceInterface {
@@ -189,16 +190,21 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
                     + " AND " + BRSQLiteHelper.BMTX_MAPPINGID + " IN "
                     + "( SELECT DISTINCT "+ BRSQLiteHelper.BETX_SPORT + " FROM " + BRSQLiteHelper.BETX_TABLE_NAME;
 
-
             QUERY += " WHERE " + BRSQLiteHelper.BETX_EVENT_TIMESTAMP+"> " + String.valueOf(eventTimestamp)
                     + "  ) ";
             QUERY += " ORDER BY " + BRSQLiteHelper.BMTX_STRING;
 
             cursor = database.rawQuery(QUERY, null);
             cursor.moveToFirst();
+            HashMap<String, String> map = new HashMap<String, String>();
             while (!cursor.isAfterLast()) {
-                BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
-                transactions.add(transactionEntity);
+                String hash = cursor.getString(0);
+                String mappingId = String.valueOf(cursor.getLong(4));
+                if ( !map.containsKey(mappingId) ) {     // avoid duplicate mapping (same id) with different hash
+                    BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                    transactions.add(transactionEntity);
+                    map.put(mappingId, hash);
+                }
                 cursor.moveToNext();
             }
         } catch (Exception ex) {
