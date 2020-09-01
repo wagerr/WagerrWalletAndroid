@@ -312,7 +312,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
         bm.deleteTxByHash(app,"wgr", "e4e3a4f782569fa3bf0135297942c8a1c791ec869ca036bf530ab95633d17815");
 
         // duplicate mappings
-        bm.deleteDuplicateMappings(app);
+        //bm.deleteDuplicateMappings(app, BetMappingEntity.MappingNamespaceType.SPORT.getNumber());
+        //bm.deleteDuplicateMappings(app, BetMappingEntity.MappingNamespaceType.TOURNAMENT.getNumber());
     }
 
     @Override

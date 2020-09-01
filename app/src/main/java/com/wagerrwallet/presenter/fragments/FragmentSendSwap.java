@@ -165,7 +165,7 @@ public class FragmentSendSwap extends Fragment {
 
         close = (ImageButton) rootView.findViewById(R.id.close_button);
         BaseWalletManager wm = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
-        selectedIso = currency;    // fixed by now    // = BRSharedPrefs.isCryptoPreferred(getActivity()) ? wm.getIso(getActivity()) : BRSharedPrefs.getPreferredFiatIso(getContext());
+        selectedIso = (currency!=null) ? currency : "BTC";    // fixed by now    // = BRSharedPrefs.isCryptoPreferred(getActivity()) ? wm.getIso(getActivity()) : BRSharedPrefs.getPreferredFiatIso(getContext());
         mListDepositCoins.add(selectedIso);
         isoButton.setText(selectedIso);
 

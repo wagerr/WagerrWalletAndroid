@@ -242,9 +242,15 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
 
             cursor = database.rawQuery(QUERY, null);
             cursor.moveToFirst();
+            HashMap<String, String> map = new HashMap<String, String>();
             while (!cursor.isAfterLast()) {
-                BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
-                transactions.add(transactionEntity);
+                String hash = cursor.getString(0);
+                String mappingId = String.valueOf(cursor.getLong(4));
+                if ( !map.containsKey(mappingId) ) {     // avoid duplicate mapping (same id) with different hash
+                    BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                    transactions.add(transactionEntity);
+                    map.put(mappingId, hash);
+                }
                 cursor.moveToNext();
             }
         } catch (Exception ex) {
@@ -278,17 +284,17 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         }
     }
 
-    public void deleteDuplicateMappings(Context app) {
+    public void deleteDuplicateMappings(Context app, int mappingID) {
         Cursor cursor = null;
         try {
             database = openDatabase();
             Log.e(TAG, "mapping transaction deleted" );
             String QUERY = "delete from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where " + BRSQLiteHelper.BMTX_COLUMN_ID + " in (select " + BRSQLiteHelper.BMTX_COLUMN_ID + " "
                     + "from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where "+ BRSQLiteHelper.BMTX_MAPPINGID +" in "
-                    + "(select "+ BRSQLiteHelper.BMTX_MAPPINGID +" from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where " + BRSQLiteHelper.BMTX_NAMESPACEID +"=3 "
+                    + "(select "+ BRSQLiteHelper.BMTX_MAPPINGID +" from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where " + BRSQLiteHelper.BMTX_NAMESPACEID +"="+mappingID+" "
                     + "group by " + BRSQLiteHelper.BMTX_NAMESPACEID + ", " + BRSQLiteHelper.BMTX_MAPPINGID + " "
                     + "having count(*)>1) "
-                    + "and " + BRSQLiteHelper.BMTX_COLUMN_ID + " not in (select max(" + BRSQLiteHelper.BMTX_COLUMN_ID + ") from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where "+ BRSQLiteHelper.BMTX_NAMESPACEID +"=3 "
+                    + "and " + BRSQLiteHelper.BMTX_COLUMN_ID + " not in (select max(" + BRSQLiteHelper.BMTX_COLUMN_ID + ") from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where "+ BRSQLiteHelper.BMTX_NAMESPACEID +"= "+mappingID+" "
                     + "group by " + BRSQLiteHelper.BMTX_NAMESPACEID + ", " + BRSQLiteHelper.BMTX_MAPPINGID + " "
                     + "having count(*)>1) )";
 
