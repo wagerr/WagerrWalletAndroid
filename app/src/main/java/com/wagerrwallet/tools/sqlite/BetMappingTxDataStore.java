@@ -288,7 +288,7 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         Cursor cursor = null;
         try {
             database = openDatabase();
-            Log.e(TAG, "mapping transaction deleted" );
+            Log.e(TAG, "mapping transaction deletion " );
             String QUERY = "delete from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where " + BRSQLiteHelper.BMTX_COLUMN_ID + " in (select " + BRSQLiteHelper.BMTX_COLUMN_ID + " "
                     + "from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where "+ BRSQLiteHelper.BMTX_MAPPINGID +" in "
                     + "(select "+ BRSQLiteHelper.BMTX_MAPPINGID +" from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where " + BRSQLiteHelper.BMTX_NAMESPACEID +"="+mappingID+" "
@@ -298,7 +298,7 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
                     + "group by " + BRSQLiteHelper.BMTX_NAMESPACEID + ", " + BRSQLiteHelper.BMTX_MAPPINGID + " "
                     + "having count(*)>1) )";
 
-            database.rawQuery(QUERY, null);
+            database.rawQuery(QUERY, null).moveToFirst();
         } finally {
             closeDatabase();
         }
