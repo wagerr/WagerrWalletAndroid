@@ -239,8 +239,8 @@ public class FragmentTxDetails extends DialogFragment {
                         else    {
                             strTxInfo += ", Score: Pending ";
                         }
-                        if ( !o.spread.equals("") ) strTxInfo += String.format(", Spread: %s", o.spread);
-                        if (o.total > 0) strTxInfo += String.format(", Total: %.2f", o.total);
+                        if ( o.spread!=null && !o.spread.equals("") ) strTxInfo += String.format(", Spread: %s", o.spread);
+                        if ( o.total > 0) strTxInfo += String.format(", Total: %.2f", o.total);
                         if (!o.betResultType.equals(""))
                             strTxInfo += String.format(", Result: %s", o.betResultType);
 
