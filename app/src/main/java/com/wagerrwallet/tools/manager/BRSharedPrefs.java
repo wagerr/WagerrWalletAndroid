@@ -499,4 +499,17 @@ public class BRSharedPrefs {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getBoolean("bchDialogShown", false);
     }
+
+    public static int getDefaultBetAmount(Context context) {
+        SharedPreferences settingsToGet = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return settingsToGet.getInt("defaultBet", 0);
+    }
+
+    public static void putDefaultBetAmount(Context context, int defValue) {
+        if (context == null) return;
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("defaultBet", defValue);
+        editor.apply();
+    }
 }
