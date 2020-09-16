@@ -343,7 +343,10 @@ public class FragmentParlayDetails extends DialogFragment  {
                 getContext().getResources().getInteger(R.integer.max_bet_amount_parlay));
         seekBar.setMax(max-min);
 
-        updateSeekBar(getContext().getResources().getInteger(R.integer.min_bet_amount), 0);
+        int defVal = Math.min( BRSharedPrefs.getDefaultBetAmount(getContext()), max );
+        mTxAmount.setText("" + defVal);
+        updateSeekBar(defVal, 0);
+        seekBar.setProgress( defVal - min);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
