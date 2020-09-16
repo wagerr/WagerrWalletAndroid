@@ -284,7 +284,10 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 getContext().getResources().getInteger(R.integer.max_bet_amount));
         seekBar.setMax(max-min);
 
-        updateSeekBar(getContext().getResources().getInteger(R.integer.min_bet_amount), 0);
+        int defVal = Math.min( BRSharedPrefs.getDefaultBetAmount(getContext()), max );
+        mTxAmount.setText("" + defVal);
+        updateSeekBar(defVal, 0);
+        seekBar.setProgress( defVal - min);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

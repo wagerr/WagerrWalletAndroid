@@ -42,6 +42,7 @@ import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.wallet.wallets.util.CryptoUriParser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BetMappingTxDataStore implements BRDataSourceInterface {
@@ -83,27 +84,46 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         try {
             database = openDatabase();
             BetMappingEntity transactionEntity1 = getTxByHash(app,iso, transactionEntity.getTxHash());
+
             if (transactionEntity1==null) {
-                ContentValues values = new ContentValues();
-                values.put(BRSQLiteHelper.BMTX_COLUMN_ID, transactionEntity.getTxHash());
-                values.put(BRSQLiteHelper.BMTX_TYPE, transactionEntity.getType().getNumber());
-                values.put(BRSQLiteHelper.BMTX_VERSION, transactionEntity.getVersion());
-                values.put(BRSQLiteHelper.BMTX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
-                values.put(BRSQLiteHelper.BMTX_ISO, iso.toUpperCase());
-                values.put(BRSQLiteHelper.BMTX_TIMESTAMP, transactionEntity.getTimestamp());
-                values.put(BRSQLiteHelper.BMTX_NAMESPACEID, transactionEntity.getNamespaceID().getNumber());
-                values.put(BRSQLiteHelper.BMTX_MAPPINGID, transactionEntity.getMappingID());
-                values.put(BRSQLiteHelper.BMTX_STRING, transactionEntity.getDescription());
-                values.put(BRSQLiteHelper.BMTX_TIMESTAMP, transactionEntity.getTimestamp());
+                transactionEntity1 = getMappingById(app, iso, transactionEntity.getNamespaceID(), transactionEntity.getMappingID());
+                if (transactionEntity1==null) {     // not dupe, insert
+                    ContentValues values = new ContentValues();
+                    values.put(BRSQLiteHelper.BMTX_COLUMN_ID, transactionEntity.getTxHash());
+                    values.put(BRSQLiteHelper.BMTX_TYPE, transactionEntity.getType().getNumber());
+                    values.put(BRSQLiteHelper.BMTX_VERSION, transactionEntity.getVersion());
+                    values.put(BRSQLiteHelper.BMTX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
+                    values.put(BRSQLiteHelper.BMTX_ISO, iso.toUpperCase());
+                    values.put(BRSQLiteHelper.BMTX_NAMESPACEID, transactionEntity.getNamespaceID().getNumber());
+                    values.put(BRSQLiteHelper.BMTX_MAPPINGID, transactionEntity.getMappingID());
+                    values.put(BRSQLiteHelper.BMTX_STRING, transactionEntity.getDescription());
+                    values.put(BRSQLiteHelper.BMTX_TIMESTAMP, transactionEntity.getTimestamp());
 
-                database.beginTransaction();
-                database.insert(BRSQLiteHelper.BMTX_TABLE_NAME, null, values);
-                cursor = database.query(BRSQLiteHelper.BMTX_TABLE_NAME,
-                        allColumns, null, null, null, null, null);
-                cursor.moveToFirst();
-                transactionEntity1 = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                    database.beginTransaction();
+                    database.insert(BRSQLiteHelper.BMTX_TABLE_NAME, null, values);
+                    database.setTransactionSuccessful();
+                    /* don´t use the return actually, let´s make it faster
+                    cursor = database.query(BRSQLiteHelper.BMTX_TABLE_NAME,
+                            allColumns, null, null, null, null, null);
+                    cursor.moveToFirst();
+                    transactionEntity1 = cursorToTransaction(app, iso.toUpperCase(), cursor);
 
-                database.setTransactionSuccessful();
+                     */
+                }
+                else {   // duplicate, update only
+                    if (transactionEntity.getBlockheight() > transactionEntity1.getBlockheight()) {
+                        ContentValues values = new ContentValues();
+                        values.put(BRSQLiteHelper.BMTX_COLUMN_ID, transactionEntity.getTxHash());
+                        values.put(BRSQLiteHelper.BMTX_BLOCK_HEIGHT, transactionEntity.getBlockheight());
+                        values.put(BRSQLiteHelper.BMTX_STRING, transactionEntity.getDescription());
+                        values.put(BRSQLiteHelper.BMTX_TIMESTAMP, transactionEntity.getTimestamp());
+
+                        database.beginTransaction();
+                        database.update(BRSQLiteHelper.BMTX_TABLE_NAME, values, BRSQLiteHelper.BMTX_NAMESPACEID + "=? AND " + BRSQLiteHelper.BMTX_MAPPINGID + "=?",
+                                new String[]{String.valueOf(transactionEntity.getNamespaceID().getNumber()), String.valueOf(transactionEntity.getMappingID())});
+                        database.setTransactionSuccessful();
+                    }
+                }
             }
             return transactionEntity1;
         } catch (Exception ex) {
@@ -116,8 +136,6 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             if (cursor != null) cursor.close();
         }
         return null;
-
-
     }
 
     public BetMappingEntity getTxByHash(Context app, String iso, String hash) {
@@ -134,6 +152,26 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             }
             else if (cursor.getCount()>1) {     // should not happen, delete all and insert new
                 deleteTxByHash(app, iso, hash);
+            }
+            cursor.close();
+        } finally {
+            closeDatabase();
+            if (cursor != null) cursor.close();
+        }
+        return mappingEntity;
+    }
+
+    public BetMappingEntity getMappingById(Context app, String iso, BetMappingEntity.MappingNamespaceType namespace, long mappingId) {
+        Cursor cursor = null;
+        BetMappingEntity mappingEntity = null;
+        try {
+            database = openDatabase();
+            cursor = database.query(BRSQLiteHelper.BMTX_TABLE_NAME, allColumns,
+                    BRSQLiteHelper.BMTX_NAMESPACEID + "=? AND " + BRSQLiteHelper.BMTX_MAPPINGID + "=? AND " + BRSQLiteHelper.TX_ISO + "=?",
+                    new String[]{ String.valueOf( namespace.getNumber() ), String.valueOf( mappingId ), iso.toUpperCase()},null,null,null);
+            if (cursor.getCount()==1)   {
+                cursor.moveToFirst();
+                mappingEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
             }
             cursor.close();
         } finally {
@@ -196,9 +234,15 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
 
             cursor = database.rawQuery(QUERY, null);
             cursor.moveToFirst();
+            HashMap<String, String> map = new HashMap<String, String>();
             while (!cursor.isAfterLast()) {
-                BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
-                transactions.add(transactionEntity);
+                String hash = cursor.getString(0);
+                String mappingId = String.valueOf(cursor.getLong(4));
+                if ( !map.containsKey(mappingId) ) {     // avoid duplicate mapping (same id) with different hash
+                    BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                    transactions.add(transactionEntity);
+                    map.put(mappingId, hash);
+                }
                 cursor.moveToNext();
             }
         } catch (Exception ex) {
@@ -236,9 +280,15 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
 
             cursor = database.rawQuery(QUERY, null);
             cursor.moveToFirst();
+            HashMap<String, String> map = new HashMap<String, String>();
             while (!cursor.isAfterLast()) {
-                BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
-                transactions.add(transactionEntity);
+                String hash = cursor.getString(0);
+                String mappingId = String.valueOf(cursor.getLong(4));
+                if ( !map.containsKey(mappingId) ) {     // avoid duplicate mapping (same id) with different hash
+                    BetMappingEntity transactionEntity = cursorToTransaction(app, iso.toUpperCase(), cursor);
+                    transactions.add(transactionEntity);
+                    map.put(mappingId, hash);
+                }
                 cursor.moveToNext();
             }
         } catch (Exception ex) {
@@ -267,6 +317,26 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             Log.e(TAG, "mapping transaction deleted with id: " + hash);
             database.delete(BRSQLiteHelper.BMTX_TABLE_NAME,
                     "_id=? AND " + BRSQLiteHelper.TX_ISO + "=?", new String[]{hash, iso.toUpperCase()});
+        } finally {
+            closeDatabase();
+        }
+    }
+
+    public void deleteDuplicateMappings(Context app, int mappingID) {
+        Cursor cursor = null;
+        try {
+            database = openDatabase();
+            Log.e(TAG, "mapping transaction deletion " );
+            String QUERY = "delete from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where " + BRSQLiteHelper.BMTX_COLUMN_ID + " in (select " + BRSQLiteHelper.BMTX_COLUMN_ID + " "
+                    + "from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where "+ BRSQLiteHelper.BMTX_MAPPINGID +" in "
+                    + "(select "+ BRSQLiteHelper.BMTX_MAPPINGID +" from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where " + BRSQLiteHelper.BMTX_NAMESPACEID +"="+mappingID+" "
+                    + "group by " + BRSQLiteHelper.BMTX_NAMESPACEID + ", " + BRSQLiteHelper.BMTX_MAPPINGID + " "
+                    + "having count(*)>1) "
+                    + "and " + BRSQLiteHelper.BMTX_COLUMN_ID + " not in (select max(" + BRSQLiteHelper.BMTX_COLUMN_ID + ") from "+BRSQLiteHelper.BMTX_TABLE_NAME+" where "+ BRSQLiteHelper.BMTX_NAMESPACEID +"= "+mappingID+" "
+                    + "group by " + BRSQLiteHelper.BMTX_NAMESPACEID + ", " + BRSQLiteHelper.BMTX_MAPPINGID + " "
+                    + "having count(*)>1) )";
+
+            database.rawQuery(QUERY, null).moveToFirst();
         } finally {
             closeDatabase();
         }
