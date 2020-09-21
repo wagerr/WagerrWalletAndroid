@@ -109,6 +109,26 @@ public class EventTxUiHolder extends BetEventEntity {
         return ret;
     }
 
+    public String getPointsForOutcome( BetEntity.BetOutcome outcome )   {
+        String ret = "";
+        switch (outcome)     {
+            case MONEY_LINE_HOME_WIN:
+            case MONEY_LINE_AWAY_WIN:
+                ret = "";
+                break;
+            case SPREADS_HOME:
+            case SPREADS_AWAY:
+                ret = getTxSpreadPoints();
+                break;
+            case MONEY_LINE_DRAW:
+            case TOTAL_OVER:
+            case TOTAL_UNDER:
+                ret = getTxTotalPoints();
+                break;
+        }
+        return ret;
+    }
+
     protected String TrimIfLonger(String inp, int max)     {
         String ret=inp;
         if (inp.length()>max)   {

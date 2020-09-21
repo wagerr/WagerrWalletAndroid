@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wagerrwallet.BuildConfig;
 import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCoreAddress;
 import com.wagerrwallet.presenter.customviews.BRText;
@@ -66,7 +67,7 @@ import java.util.List;
 public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = TransactionListAdapter.class.getName();
 
-    public static int PAYOUT_MATURITY = 101;
+    public static int PAYOUT_MATURITY = (BuildConfig.BITCOIN_TESTNET) ? 60 : 101;
     private final Context mContext;
     private final int txResId;
     private final int promptResId;

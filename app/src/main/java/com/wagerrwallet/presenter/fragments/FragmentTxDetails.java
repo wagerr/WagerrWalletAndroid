@@ -5,11 +5,14 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -214,38 +217,75 @@ public class FragmentTxDetails extends DialogFragment {
 
                     if ( o.isParlay == 1)   {
                         for (TxExplorerInfo.TxExplorerLegInfo leg : o.legs ) {
-                            strTxInfo += String.format("%s - %s ( Bet: %s, Price: %s", leg.homeTeam, leg.awayTeam, leg.market, leg.getPriceTx());
+                            strTxInfo += String.format("%s - %s ( Bet: %s", leg.homeTeam, leg.awayTeam, leg.market);
+                            if (leg.spread != 0)     strTxInfo += String.format(",  Spread: %.2f ", leg.spread);
+                            if (leg.total > 0)      strTxInfo += String.format(",  Total: %.2f ", leg.total);
+                            strTxInfo += String.format(", Price: %s", leg.getPriceTx());
                             if (leg.homeScore>=0 || leg.awayScore>=0)   {
                                 strTxInfo += String.format(", Score: %s - %s ", leg.getHomeScoreTx(), leg.getAwayScoreTx());
                             }
                             else    {
                                 strTxInfo += ", Score: Pending ";
                             }
-                            if (leg.spread != 0)     strTxInfo += String.format(",  Spread: %.2f ", leg.spread);
-                            if (leg.total > 0)      strTxInfo += String.format(",  Total: %.2f ", leg.total);
-                            if (leg.outcome > 0)    strTxInfo += String.format(",  Outcome: %s ", leg.betResult);
-                            strTxInfo += " ) \n\n";
+                            if (leg.outcome > 0)   {
+                                strTxInfo += String.format(", %s Outcome: %s ", leg.getResultIcon(), leg.betResult);
+                            }
+                            else    {
+                                strTxInfo += String.format(", Outcome: pending %s", leg.getResultIcon());
+                            }
+                            strTxInfo += " ) <br><br>";
                         }
-                        strTxInfo += String.format("Parlay Price: %s, Outcome: %s \n\n", o.getParlayPrice(), o.betResultType );
+                        strTxInfo += String.format("Parlay Price: %s, Outcome: %s %s<br><br>", o.getParlayPrice(), o.betResultType, o.getResultIcon() );
                         mToFromAddress.setSingleLine(false);
-                        mToFromAddress.setText(strTxInfo);
+                        //mToFromAddress.setText(strTxInfo);
+                        mToFromAddress.setText(Html.fromHtml(strTxInfo, new Html.ImageGetter() {
+                            @Override
+                            public Drawable getDrawable(String source) {
+                                int resId = 0;
+                                switch (source) {
+                                    case "win":     resId = R.drawable.win; break;
+                                    case "lose":    resId = R.drawable.loss; break;
+                                    case "pending": resId = R.drawable.pending; break;
+                                    default: return null;
+                                }
+                                Resources res = getContext().getResources();
+                                Drawable drawable = res.getDrawable(resId);
+                                drawable.setBounds(0, 0, 32, 32);
+                                return drawable;
+                            }
+                        }, null));
                     }
                     else {
                         strTxInfo = String.format("%s - %s", o.homeTeam, o.awayTeam);
-                        strTxInfo += String.format("\nPrice: %s", o.getPriceTx());
+                        if ( o.spread!=null && !o.spread.equals("") ) strTxInfo += String.format(", Spread: %s", o.spread);
+                        if ( o.total > 0) strTxInfo += String.format(", Total: %.2f", o.total);
+                        strTxInfo += String.format("<br>Price: %s", o.getPriceTx());
                         if (o.homeScore>=0 || o.awayScore>=0)   {
                             strTxInfo += String.format(", Score: %s - %s ", o.getHomeScoreTx(), o.getAwayScoreTx());
                         }
                         else    {
                             strTxInfo += ", Score: Pending ";
                         }
-                        if ( o.spread!=null && !o.spread.equals("") ) strTxInfo += String.format(", Spread: %s", o.spread);
-                        if ( o.total > 0) strTxInfo += String.format(", Total: %.2f", o.total);
-                        if (!o.betResultType.equals(""))
-                            strTxInfo += String.format(", Result: %s", o.betResultType);
+                        strTxInfo += String.format(", Result: %s %s ", (o.betResultType.equals("")) ? "pending" : o.betResultType, o.getResultIcon() );
 
                         mToFromAddress.setSingleLine(false);
-                        mToFromAddress.setText(strTxInfo);
+                        //mToFromAddress.setText(strTxInfo);
+                        mToFromAddress.setText(Html.fromHtml(strTxInfo, new Html.ImageGetter() {
+                            @Override
+                            public Drawable getDrawable(String source) {
+                                int resId = 0;
+                                switch (source) {
+                                    case "win":     resId = R.drawable.win; break;
+                                    case "lose":    resId = R.drawable.loss; break;
+                                    case "pending": resId = R.drawable.pending; break;
+                                    default: return null;
+                                }
+                                Resources res = getContext().getResources();
+                                Drawable drawable = res.getDrawable(resId);
+                                drawable.setBounds(0, 0, 32, 32 /*drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight()*/);
+                                return drawable;
+                            }
+                        }, null));
                     }
                     break;
                 case 2:     // payout API

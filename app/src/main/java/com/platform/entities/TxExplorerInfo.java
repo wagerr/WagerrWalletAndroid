@@ -52,6 +52,10 @@ public class TxExplorerInfo {
             return BetEventEntity.getOddText(BetEventEntity.getOddsStatic((float)price));
         }
 
+        public String getResultIcon()   {
+            return String.format("<img src=\"%s\">", (outcome > 0) ? betResult : "pending");
+        }
+
         public BetEntity.BetOutcome getOutcome()    {
             return BetEntity.BetOutcome.fromValue(outcome);
         }
@@ -120,6 +124,10 @@ public class TxExplorerInfo {
         catch (JSONException e) {
 
         }
+    }
+
+    public String getResultIcon()   {
+        return String.format("<img src=\"%s\">", (betResultType.equals("")) ? "pending" : betResultType);
     }
 
     public String getPriceTx()  {

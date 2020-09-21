@@ -86,7 +86,7 @@
                 android:layout_alignTop="@id/tx_home_1"
                 android:layout_marginRight="12dp"
                 android:layout_alignParentRight="true"
-                android:text="Event date"
+                android:text="Sep 16 06:00 PM"
                 android:textColor="@color/total_assets_usd_color"
                 android:textSize="12sp"
                 app:customTFont="CircularPro-Book.otf" />
@@ -147,15 +147,31 @@
                 android:layout_toLeftOf="@id/tx_odd_1"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_1"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginTop="-6dp"
+                android:layout_marginRight="18dp"
                 android:ellipsize="end"
-                android:maxLength="7"
+                android:maxLength="12"
                 android:maxLines="1"
                 android:paddingBottom="2dp"
-                android:text="outcome"
+                android:text="Totals under"
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp" />
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_outcome_1b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tx_outcome_1"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="16dp"
+                android:layout_alignLeft="@id/tx_outcome_1"
+                android:ellipsize="end"
+                android:maxLength="12"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:text="( 2.00 )"
+                android:textColor="@color/dark_gray"
+                android:textSize="12sp" />
 
             <ImageButton
                 android:id="@+id/leg_remove_1"
@@ -265,15 +281,31 @@
                 android:layout_toLeftOf="@id/tx_odd_2"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_2"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginTop="-6dp"
+                android:layout_marginRight="18dp"
                 android:ellipsize="end"
-                android:maxLength="7"
+                android:maxLength="12"
                 android:maxLines="1"
                 android:paddingBottom="2dp"
                 android:text="outcome"
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp" />
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_outcome_2b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tx_outcome_2"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="16dp"
+                android:layout_alignLeft="@id/tx_outcome_2"
+                android:ellipsize="end"
+                android:maxLength="12"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:text="( 2.00 )"
+                android:textColor="@color/dark_gray"
+                android:textSize="12sp" />
 
             <ImageButton
                 android:id="@+id/leg_remove_2"
@@ -381,15 +413,31 @@
                 android:layout_toLeftOf="@id/tx_odd_3"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_3"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginTop="-6dp"
+                android:layout_marginRight="18dp"
                 android:ellipsize="end"
-                android:maxLength="7"
+                android:maxLength="12"
                 android:maxLines="1"
                 android:paddingBottom="2dp"
                 android:text="outcome"
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp" />
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_outcome_3b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tx_outcome_3"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="16dp"
+                android:layout_alignLeft="@id/tx_outcome_3"
+                android:ellipsize="end"
+                android:maxLength="12"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:text="( 2.00 )"
+                android:textColor="@color/dark_gray"
+                android:textSize="12sp" />
 
             <ImageButton
                 android:id="@+id/leg_remove_3"
@@ -497,15 +545,31 @@
                 android:layout_toLeftOf="@id/tx_odd_4"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_4"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginTop="-6dp"
+                android:layout_marginRight="18dp"
                 android:ellipsize="end"
-                android:maxLength="7"
+                android:maxLength="12"
                 android:maxLines="1"
                 android:paddingBottom="2dp"
                 android:text="outcome"
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp" />
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_outcome_4b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tx_outcome_4"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="16dp"
+                android:layout_alignLeft="@id/tx_outcome_4"
+                android:ellipsize="end"
+                android:maxLength="12"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:text="( 2.00 )"
+                android:textColor="@color/dark_gray"
+                android:textSize="12sp" />
 
             <ImageButton
                 android:id="@+id/leg_remove_4"
@@ -614,15 +678,31 @@
                 android:layout_toLeftOf="@id/tx_odd_5"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tx_eventdate_5"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginTop="-6dp"
+                android:layout_marginRight="18dp"
                 android:ellipsize="end"
-                android:maxLength="7"
+                android:maxLength="12"
                 android:maxLines="1"
                 android:paddingBottom="2dp"
                 android:text="outcome"
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp" />
+
+            <com.wagerrwallet.presenter.customviews.BRText
+                android:id="@+id/tx_outcome_5b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tx_outcome_5"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="16dp"
+                android:layout_alignLeft="@id/tx_outcome_5"
+                android:ellipsize="end"
+                android:maxLength="12"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:text="( 2.00 )"
+                android:textColor="@color/dark_gray"
+                android:textSize="12sp" />
 
             <ImageButton
                 android:id="@+id/leg_remove_5"

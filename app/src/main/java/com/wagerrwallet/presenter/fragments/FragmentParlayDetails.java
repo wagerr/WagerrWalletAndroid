@@ -79,6 +79,7 @@ public class FragmentParlayDetails extends DialogFragment  {
 
     private BRText mTxOdds[] = new BRText[5];
     private BRText mTxOutcome[] = new BRText[5];
+    private BRText mTxOutcomePoints[] = new BRText[5];
     private ImageButton mRemoveLeg[] = new ImageButton[5];
 
     private SeekBar seekBar;
@@ -231,6 +232,7 @@ public class FragmentParlayDetails extends DialogFragment  {
             mTxHomeTeam[0] = rootView.findViewById(R.id.tx_home_1);
             mTxAwayTeam[0] = rootView.findViewById(R.id.tx_away_1);
             mTxOutcome[0] = rootView.findViewById(R.id.tx_outcome_1);
+            mTxOutcomePoints[0] = rootView.findViewById(R.id.tx_outcome_1b);
             mTxOdds[0] = rootView.findViewById(R.id.tx_odd_1);
             mRemoveLeg[0] = rootView.findViewById(R.id.leg_remove_1);
         }
@@ -253,6 +255,7 @@ public class FragmentParlayDetails extends DialogFragment  {
             mTxHomeTeam[1] = rootView.findViewById(R.id.tx_home_2);
             mTxAwayTeam[1] = rootView.findViewById(R.id.tx_away_2);
             mTxOutcome[1] = rootView.findViewById(R.id.tx_outcome_2);
+            mTxOutcomePoints[1] = rootView.findViewById(R.id.tx_outcome_2b);
             mTxOdds[1] = rootView.findViewById(R.id.tx_odd_2);
             mRemoveLeg[1] = rootView.findViewById(R.id.leg_remove_2);
         }
@@ -275,6 +278,7 @@ public class FragmentParlayDetails extends DialogFragment  {
             mTxHomeTeam[2] = rootView.findViewById(R.id.tx_home_3);
             mTxAwayTeam[2] = rootView.findViewById(R.id.tx_away_3);
             mTxOutcome[2] = rootView.findViewById(R.id.tx_outcome_3);
+            mTxOutcomePoints[2] = rootView.findViewById(R.id.tx_outcome_3b);
             mTxOdds[2] = rootView.findViewById(R.id.tx_odd_3);
             mRemoveLeg[2] = rootView.findViewById(R.id.leg_remove_3);
         }
@@ -297,6 +301,7 @@ public class FragmentParlayDetails extends DialogFragment  {
             mTxHomeTeam[3] = rootView.findViewById(R.id.tx_home_4);
             mTxAwayTeam[3] = rootView.findViewById(R.id.tx_away_4);
             mTxOutcome[3] = rootView.findViewById(R.id.tx_outcome_4);
+            mTxOutcomePoints[3] = rootView.findViewById(R.id.tx_outcome_4b);
             mTxOdds[3] = rootView.findViewById(R.id.tx_odd_4);
             mRemoveLeg[3] = rootView.findViewById(R.id.leg_remove_4);
         }
@@ -319,6 +324,7 @@ public class FragmentParlayDetails extends DialogFragment  {
             mTxHomeTeam[4] = rootView.findViewById(R.id.tx_home_5);
             mTxAwayTeam[4] = rootView.findViewById(R.id.tx_away_5);
             mTxOutcome[4] = rootView.findViewById(R.id.tx_outcome_5);
+            mTxOutcomePoints[4] = rootView.findViewById(R.id.tx_outcome_5b);
             mTxOdds[4] = rootView.findViewById(R.id.tx_odd_5);
             mRemoveLeg[4] = rootView.findViewById(R.id.leg_remove_5);
         }
@@ -588,6 +594,15 @@ public class FragmentParlayDetails extends DialogFragment  {
                 mTxHomeTeam[i].setText( leg.getEvent().getTxHomeTeam() );
                 mTxAwayTeam[i].setText( leg.getEvent().getTxAwayTeam() );
                 mTxOutcome[i].setText( leg.getOutcome().toString() );
+                if ( leg.getOutcome().hasPoints())  {
+                    mTxOutcomePoints[i].setText( leg.getEvent().getPointsForOutcome(leg.getOutcome()));
+                }
+                else    {
+                    mTxOutcomePoints[i].setVisibility(View.GONE);
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)mTxOutcome[i].getLayoutParams();
+                    params.setMargins(0,8,18,0);
+                    mTxOutcome[i].setLayoutParams(params);
+                }
                 mTxOdds[i].setText( leg.getOddTx() );
                 mTxOdds[i].setBackgroundColor( leg.getOddColor( getContext() ) );
             }
