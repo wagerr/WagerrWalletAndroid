@@ -259,9 +259,13 @@ public class BetEventEntity {
 
     }
 
+    public boolean hasSpreadPoints() {
+        return !(getHomeOdds()==0 && getAwayOdds()==0 && getSpreadPoints()==0);
+    }
+
     public String getSpreadFormat() {
         // spreads v2
-        return (getSpreadPoints()>0)?"+%s/-%s":"-%s/+%s";
+        return (hasSpreadPoints())?"+%s/-%s":"-%s/+%s";
     }
 
     public long getHomeOdds() {
