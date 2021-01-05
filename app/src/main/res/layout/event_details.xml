@@ -12,9 +12,9 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:id="@+id/outer_frame"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-    <RelativeLayout
+        <RelativeLayout
         android:id="@+id/details_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -41,18 +41,32 @@
             android:layout_width="@dimen/faq_dimen"
             android:layout_height="@dimen/faq_dimen"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="80dp"
             android:layout_marginBottom="-35dp"
             android:background="@drawable/faq_question_black"
             android:padding="50dp"
             android:layout_above="@+id/tx_eventheader" />
 
-        <com.wagerrwallet.presenter.customviews.BRText
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/parlay_floating"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="-50dp"
+                android:layout_above="@id/tx_eventheader"
+                android:clickable="true"
+                android:scaleType="center"
+                android:src="@drawable/animated_check"
+                android:visibility="visible"
+                app:backgroundTint="@color/wallet_orange" />
+
+            <com.wagerrwallet.presenter.customviews.BRText
             android:id="@+id/tx_eventheader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="60dp"
             android:text="Sport - Tournament - Round "
             android:textColor="@color/total_assets_usd_color"
             android:textSize="18sp"
@@ -178,12 +192,14 @@
             android:id="@+id/tx_no_bet_balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="12dp"
+            android:layout_toLeftOf="@id/faq_button"
+            android:layout_toRightOf="@id/close_button"
+            android:layout_marginRight="6dp"
+            android:layout_marginLeft="6dp"
             android:layout_marginTop="12dp"
-            android:text="Minimum bet is ..."
+            android:text="Minimum bet is 25 plus fees"
             android:textColor="@color/red"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:visibility="gone"
             app:customTFont="CircularPro-Book.otf" />
 
@@ -199,7 +215,7 @@
     <LinearLayout
         android:id="@+id/dynamic_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         >
 
@@ -329,7 +345,7 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:layout_marginRight="18dp"
+                    android:layout_marginRight="14dp"
                     android:layout_below="@id/tx_spreads_desc"
                     android:ellipsize="end"
                     android:maxLength="10"
@@ -346,7 +362,7 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/tx_spreads_home_odds"
-                    android:layout_marginRight="18dp"
+                    android:layout_marginRight="14dp"
                     android:layout_toRightOf="@id/tx_spreads_home_odds"
                     android:ellipsize="end"
                     android:maxLength="14"
@@ -489,6 +505,34 @@
                         android:layout_centerHorizontal="true"
                         android:layout_toRightOf="@id/bet_send"
                         android:background="@drawable/redcross_circled" />
+
+                    <ImageButton
+                        android:id="@+id/bet_add_leg"
+                        android:layout_width="36dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/bet_seekBar"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_toRightOf="@id/bet_send"
+                        android:layout_weight="1"
+                        android:background="@drawable/minus_parlay" />
+
+                    <com.wagerrwallet.presenter.customviews.BRText
+                        android:id="@+id/tx_add_leg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="6dp"
+                        android:ellipsize="end"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:paddingRight="25dp"
+                        android:text="@string/Parlay.Add"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/light_gray"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
             </RelativeLayout>
@@ -778,7 +822,9 @@
     </LinearLayout>
 
         </ScrollView>
-    </RelativeLayout>
+
+        </RelativeLayout>
+
     </FrameLayout>
 
 </android.support.v7.widget.CardView>

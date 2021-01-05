@@ -35,6 +35,7 @@ public class BetEntity {
     public enum BetTxType {
         PEERLESS(0x03),
         CHAIN_LOTTO(0x07),
+        PARLAY(0x0c),
         UNKNOWN(-1);
 
         private int type;
@@ -78,6 +79,24 @@ public class BetEntity {
             return UNKNOWN;
         }
 
+        public boolean hasPoints() {
+            boolean ret = false;
+            switch (this)  {
+                case MONEY_LINE_HOME_WIN:
+                case MONEY_LINE_AWAY_WIN:
+                case MONEY_LINE_DRAW:
+                    ret = false;
+                    break;
+                case SPREADS_HOME:
+                case SPREADS_AWAY:
+                case TOTAL_OVER:
+                case TOTAL_UNDER:
+                    ret = true;
+                    break;
+            }
+            return ret;
+        }
+
         public String toString()    {
             String ret="Unknown";
             switch (this)  {
@@ -91,16 +110,16 @@ public class BetEntity {
                     ret = "M.Line draw";
                     break;
                 case SPREADS_HOME:
-                    ret = "SPD. home";
+                    ret = "Spreads home";
                     break;
                 case SPREADS_AWAY:
-                    ret = "SPD. away";
+                    ret = "Spreads away";
                     break;
                 case TOTAL_OVER:
-                    ret = "Totals O";
+                    ret = "Totals over";
                     break;
                 case TOTAL_UNDER:
-                    ret = "Totals U";
+                    ret = "Totals under";
                     break;
             }
             return ret;
@@ -116,7 +135,8 @@ public class BetEntity {
     protected long eventID;
     protected BetOutcome outcome;
     protected long amount;
-
+    public int parlayLegs;
+    public ParlayBetEntity parlayBetEntity;
 
     // constructor for DB
     public BetEntity(String txHash, BetTxType type, long version,
@@ -133,6 +153,7 @@ public class BetEntity {
 
         this.outcome = outcome;
         this.amount = amount;
+        this.parlayLegs = 0;
     }
 
     protected BetEntity() {

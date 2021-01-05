@@ -315,5 +315,16 @@
         android:textSize="14dp"
         app:customTFont="CircularPro-Book.otf" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/parlay_floating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:clickable="true"
+        android:src="@drawable/animated_check"
+        app:backgroundTint="@color/wallet_orange" />
 
 </RelativeLayout>

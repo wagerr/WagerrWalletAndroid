@@ -160,7 +160,7 @@ public class BetTxDataStore implements BRDataSourceInterface {
     public void deleteTxByHash(Context app, String iso, String hash) {
         try {
             database = openDatabase();
-            Log.e(TAG, "mapping transaction deleted with id: " + hash);
+            Log.e(TAG, "transaction deleted with id: " + hash);
             database.delete(BRSQLiteHelper.BTX_TABLE_NAME,
                     "_id=? AND " + BRSQLiteHelper.TX_ISO + "=?", new String[]{hash, iso.toUpperCase()});
         } finally {

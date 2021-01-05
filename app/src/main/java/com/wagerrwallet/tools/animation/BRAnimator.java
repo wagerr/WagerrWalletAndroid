@@ -9,6 +9,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -33,11 +34,13 @@ import com.wagerrwallet.presenter.activities.intro.IntroActivity;
 import com.wagerrwallet.presenter.customviews.BRDialogView;
 import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.presenter.entities.ParlayBetEntity;
 import com.wagerrwallet.presenter.entities.SwapUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
 import com.wagerrwallet.presenter.fragments.FragmentEventDetails;
 import com.wagerrwallet.presenter.fragments.FragmentGreetings;
 import com.wagerrwallet.presenter.fragments.FragmentMenu;
+import com.wagerrwallet.presenter.fragments.FragmentParlayDetails;
 import com.wagerrwallet.presenter.fragments.FragmentSendSwap;
 import com.wagerrwallet.presenter.fragments.FragmentSignal;
 import com.wagerrwallet.presenter.fragments.FragmentReceive;
@@ -46,6 +49,7 @@ import com.wagerrwallet.presenter.fragments.FragmentSend;
 import com.wagerrwallet.presenter.fragments.FragmentSwapDetails;
 import com.wagerrwallet.presenter.fragments.FragmentTxDetails;
 import com.wagerrwallet.presenter.interfaces.BROnSignalCompletion;
+import com.wagerrwallet.presenter.interfaces.WagerrParlayLegNotification;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.BRConstants;
 
@@ -374,6 +378,20 @@ public class BRAnimator {
         txDetails.setTransaction(item);
         txDetails.show(app.getFragmentManager(), "txDetails");
 
+    }
+
+    public static void showParlayFragment(Activity app, Fragment fragment ){
+
+        FragmentParlayDetails txDetails = (FragmentParlayDetails) app.getFragmentManager().findFragmentByTag(FragmentParlayDetails.class.getName());
+
+        if(txDetails != null && txDetails.isAdded()){
+            Log.e(TAG, "showParlayFragment: Already showing");
+            return;
+        }
+
+        txDetails = new FragmentParlayDetails();
+        txDetails.mListener = (fragment!=null) ? (WagerrParlayLegNotification) fragment : null;
+        txDetails.show(app.getFragmentManager(), FragmentParlayDetails.class.getName());
     }
 
     public static void showSwapDetails(Activity app, SwapUiHolder item, int position){

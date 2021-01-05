@@ -136,8 +136,6 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             if (cursor != null) cursor.close();
         }
         return null;
-
-
     }
 
     public BetMappingEntity getTxByHash(Context app, String iso, String hash) {
@@ -182,7 +180,6 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
         }
         return mappingEntity;
     }
-
 
     public void deleteAllTransactions(Context app, String iso) {
         try {
@@ -229,6 +226,7 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
                     + " WHERE " + BRSQLiteHelper.BMTX_NAMESPACEID + "="+ BetMappingEntity.MappingNamespaceType.SPORT.getNumber()
                     + " AND " + BRSQLiteHelper.BMTX_MAPPINGID + " IN "
                     + "( SELECT DISTINCT "+ BRSQLiteHelper.BETX_SPORT + " FROM " + BRSQLiteHelper.BETX_TABLE_NAME;
+
 
             QUERY += " WHERE " + BRSQLiteHelper.BETX_EVENT_TIMESTAMP+"> " + String.valueOf(eventTimestamp)
                     + "  ) ";

@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wagerrwallet.BuildConfig;
 import com.wagerrwallet.R;
 import com.wagerrwallet.core.BRCoreAddress;
 import com.wagerrwallet.presenter.customviews.BRText;
@@ -66,7 +67,7 @@ import java.util.List;
 public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = TransactionListAdapter.class.getName();
 
-    public static int PAYOUT_MATURITY = 101;
+    public static int PAYOUT_MATURITY = (BuildConfig.BITCOIN_TESTNET) ? 60 : 101;
     private final Context mContext;
     private final int txResId;
     private final int promptResId;
@@ -257,6 +258,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 String strMatureInfo = String.format("<b>%d/%d</b>", (nCurrentHeight - item.getBlockHeight()), PAYOUT_MATURITY);
                 int amountColor = (!immature) ? R.color.transaction_amount_payout_color : R.color.transaction_amount_inmature_color;
                 convertView.transactionAmount.setTextColor(mContext.getResources().getColor(amountColor, null));
+                // new payout based on API info
+                /*
                 BetResultTxDataStore brds = BetResultTxDataStore.getInstance(mContext);
                 BetResultEntity br = brds.getByBlockHeight(mContext, wallet.getIso(mContext), item.getBlockHeight() - 1);
                 if (br != null) {
@@ -271,9 +274,11 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                     txDate = String.format("PAYOUT Event #%d", eventID);
                 } else {
-                    txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
+                    //txDescription = String.format("Result not avalable at height %d", item.getBlockHeight() - 1);
                     txDate = "PAYOUT";
                 }
+                */
+                txDate = "PAYOUT";
                 isNormalTx = false;
                 if (immature)   txDate += " " + strMatureInfo;
             }
@@ -286,14 +291,20 @@ public class TransactionListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         } else {        // outgoing bet
             eventID = item.getBetEntity().getEventID();
-            EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
-            if (ev != null) {
-                txDescription = ev.getEventDescriptionForBet(item.getBetEntity().getOutcome());
-                txDate = ev.getEventDateForBet(item.getBetEntity().getOutcome());
-                item.setTeamSearchDescription(txDescription);
-            } else {
-                txDescription = String.format("Event #%d: info not avalable", eventID);
-                txDate = String.format("BET %s", item.getBetEntity().getOutcome().toString());
+            if (eventID==0) {
+                txDescription = String.format("PARLAY (%d)", item.getBetEntity().parlayLegs);
+                txDate = "BET";
+            }
+            else {
+                EventTxUiHolder ev = BetEventTxDataStore.getInstance(mContext).getTransactionByEventId(mContext, "wgr", eventID);
+                if (ev != null) {
+                    txDescription = ev.getEventDescriptionForBet(item.getBetEntity().getOutcome());
+                    txDate = ev.getEventDateForBet(item.getBetEntity().getOutcome());
+                    item.setTeamSearchDescription(txDescription);
+                } else {
+                    txDescription = String.format("Event #%d: info not avalable", eventID);
+                    txDate = String.format("BET %s", item.getBetEntity().getOutcome().toString());
+                }
             }
             isNormalTx=false;
         }

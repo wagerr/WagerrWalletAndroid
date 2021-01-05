@@ -3,12 +3,15 @@ package com.wagerrwallet.presenter.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -43,10 +46,14 @@ import com.wagerrwallet.presenter.entities.BetEventEntity;
 import com.wagerrwallet.presenter.entities.CryptoRequest;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.presenter.entities.ParlayBetEntity;
+import com.wagerrwallet.presenter.entities.ParlayLegEntity;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
+import com.wagerrwallet.presenter.interfaces.WagerrParlayLegNotification;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
 import com.wagerrwallet.tools.manager.BRClipboardManager;
+import com.wagerrwallet.tools.manager.BRParlayButtonManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.SendManager;
 import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
@@ -69,7 +76,7 @@ import java.util.Date;
  * Reusable dialog fragment that display details about a particular transaction
  */
 
-public class FragmentEventDetails extends DialogFragment implements View.OnClickListener {
+public class FragmentEventDetails extends DialogFragment implements View.OnClickListener, WagerrParlayLegNotification {
 
     private static final String EXTRA_TX_ITEM = "event_item";
     private static final String TAG = "FragmentEventDetails";
@@ -136,6 +143,8 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private RelativeLayout mTotalsContainer;
     private ImageButton mAcceptBet;
     private ImageButton mCancelBet;
+    private ImageButton mAddLeg;
+    private BRText mTxAddLeg;
     private View mCurrentSelectedBetOption = null;
     private ImageButton faq;
     private BRText mPotentialReward;
@@ -157,6 +166,10 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     private int mInterval = 3000;
     private Handler mHandler;
     private boolean updatingNode;
+
+    private FloatingActionButton mParlayButton;
+
+    private WagerrParlayLegNotification mListener;
 
     // refresh to update odds
     Runnable mStatusChecker = new Runnable() {
@@ -351,13 +364,12 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (mCurrentSelectedBetOption==null)    return;
-                String oddTx = ((BRText)mCurrentSelectedBetOption).getText().toString();
                 float odds = 0;
                 int value = getContext().getResources().getInteger(R.integer.min_bet_amount);
                 int minvalue = value;
                 Float fValue = 0.0f;
                 try {
-                    odds = Float.parseFloat( oddTx );
+                    odds = getSelectedOdd();
                     fValue = Float.parseFloat(mTxAmount.getText().toString());
                     value = Math.max(minvalue, fValue.intValue());
                 } catch (NumberFormatException e) {
@@ -444,6 +456,53 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 CancelBet();
             }
         });
+        mTxAddLeg = rootView.findViewById(R.id.tx_add_leg);
+        mAddLeg = rootView.findViewById(R.id.bet_add_leg);
+        mAddLeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+                ParlayBetEntity parlayBet = ((WalletWagerrManager)walletManager).getParlay();
+                int nLegIndex = parlayBet.searchLegByEventID( mTransaction.getEventID() );
+
+                if ( nLegIndex == -1 ) {
+                    if ( parlayBet.getLegCount() == ParlayBetEntity.MAX_LEGS ) {
+                        BRDialog.showCustomDialog(getContext(), "Error", String.format(getResources().getString(R.string.Parlay_MaxLegs), ParlayBetEntity.MAX_LEGS), getContext().getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                            @Override
+                            public void onClick(BRDialogView brDialogView) {
+                                brDialogView.dismiss();
+                            }
+                        }, null, null, 0);
+                        return;
+                    }
+
+                    long odds = 0;
+                    if (mCurrentSelectedBetOption!=null) {
+                        odds = getOddsByViewID( mCurrentSelectedBetOption.getId() );
+                    }
+                    ParlayLegEntity parlayLeg = new ParlayLegEntity(mTransaction, getSelectedOutcomeObj(), odds );
+
+                    if (!parlayBet.add(parlayLeg)) {
+                        BRDialog.showCustomDialog(getContext(), "Error", getResources().getString(R.string.Parlay_ErrorLeg), getContext().getString(R.string.Button_ok), null, new BRDialogView.BROnClickListener() {
+                            @Override
+                            public void onClick(BRDialogView brDialogView) {
+                                brDialogView.dismiss();
+                            }
+                        }, null, null, 0);
+                    } else {
+                        onLegChanged();
+                    }
+                }
+                else    {       // remove
+                    parlayBet.removeAt( nLegIndex );
+                    onLegChanged();
+                }
+                if (mCurrentSelectedBetOption!=null) {
+                    updateLegButton( mCurrentSelectedBetOption.getId() );
+                }
+            }
+        });
+
         mPotentialReward = rootView.findViewById(R.id.tx_potential);
 
         mShowHide.setOnClickListener(new View.OnClickListener() {
@@ -460,6 +519,15 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 }
             }
         });
+
+        mParlayButton = rootView.findViewById(R.id.parlay_floating);
+        mParlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BRAnimator.showParlayFragment(getActivity(),  FragmentEventDetails.this);
+            }
+        });
+        onLegChanged();
 
         updateUi();
         return rootView;
@@ -584,40 +652,96 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         mCurrentSelectedBetOption = null;
     }
 
-    protected int getSelectedOutcome() {
-        BetEntity.BetOutcome outcome = BetEntity.BetOutcome.UNKNOWN;
-        if (mCurrentSelectedBetOption!=null) {
-            switch (mCurrentSelectedBetOption.getId()) {
-                case R.id.tx_home_odds:
-                    outcome = BetEntity.BetOutcome.MONEY_LINE_HOME_WIN;
-                    break;
-
-                case R.id.tx_draw_odds:
-                    outcome = BetEntity.BetOutcome.MONEY_LINE_DRAW;
-                    break;
-
-                case R.id.tx_away_odds:
-                    outcome = BetEntity.BetOutcome.MONEY_LINE_AWAY_WIN;
-                    break;
-
-                case R.id.tx_spreads_home_odds:
-                    outcome = BetEntity.BetOutcome.SPREADS_HOME;
-                    break;
-
-                case R.id.tx_spreads_away_odds:
-                    outcome = BetEntity.BetOutcome.SPREADS_AWAY;
-                    break;
-
-                case R.id.tx_over_odds:
-                    outcome = BetEntity.BetOutcome.TOTAL_OVER;
-                    break;
-
-                case R.id.tx_under_odds:
-                    outcome = BetEntity.BetOutcome.TOTAL_UNDER;
-                    break;
+    protected float getSelectedOdd() {
+        Float fValue = 0.0f;
+        if (mCurrentSelectedBetOption != null) {
+            String oddTx = ((BRText) mCurrentSelectedBetOption).getText().toString();
+            try {
+                fValue = Float.parseFloat(oddTx);
+            } catch (NumberFormatException e) {
             }
         }
-        return outcome.getNumber();
+        return fValue;
+    }
+
+    protected BetEntity.BetOutcome getOutcomeByViewID( int viewID) {
+        BetEntity.BetOutcome outcome = BetEntity.BetOutcome.UNKNOWN;
+        switch (viewID) {
+            case R.id.tx_home_odds:
+                outcome = BetEntity.BetOutcome.MONEY_LINE_HOME_WIN;
+                break;
+
+            case R.id.tx_draw_odds:
+                outcome = BetEntity.BetOutcome.MONEY_LINE_DRAW;
+                break;
+
+            case R.id.tx_away_odds:
+                outcome = BetEntity.BetOutcome.MONEY_LINE_AWAY_WIN;
+                break;
+
+            case R.id.tx_spreads_home_odds:
+                outcome = BetEntity.BetOutcome.SPREADS_HOME;
+                break;
+
+            case R.id.tx_spreads_away_odds:
+                outcome = BetEntity.BetOutcome.SPREADS_AWAY;
+                break;
+
+            case R.id.tx_over_odds:
+                outcome = BetEntity.BetOutcome.TOTAL_OVER;
+                break;
+
+            case R.id.tx_under_odds:
+                outcome = BetEntity.BetOutcome.TOTAL_UNDER;
+                    break;
+        }
+        return outcome;
+    }
+
+    protected long getOddsByViewID( int viewID) {
+        long odds = 0;
+        switch (viewID) {
+            case R.id.tx_home_odds:
+                odds = mTransaction.getHomeOdds();
+                break;
+
+            case R.id.tx_draw_odds:
+                odds = mTransaction.getDrawOdds();
+                break;
+
+            case R.id.tx_away_odds:
+                odds = mTransaction.getAwayOdds();
+                break;
+
+            case R.id.tx_spreads_home_odds:
+                odds = mTransaction.getSpreadHomeOdds();
+                break;
+
+            case R.id.tx_spreads_away_odds:
+                odds = mTransaction.getSpreadAwayOdds();
+                break;
+
+            case R.id.tx_over_odds:
+                odds = mTransaction.getOverOdds();
+                break;
+
+            case R.id.tx_under_odds:
+                odds = mTransaction.getUnderOdds();
+                break;
+        }
+        return odds;
+    }
+
+    protected BetEntity.BetOutcome getSelectedOutcomeObj() {
+        BetEntity.BetOutcome outcome = BetEntity.BetOutcome.UNKNOWN;
+        if (mCurrentSelectedBetOption!=null) {
+            outcome = getOutcomeByViewID( mCurrentSelectedBetOption.getId() );
+        }
+        return outcome;
+    }
+
+    protected int getSelectedOutcome() {
+        return getSelectedOutcomeObj().getNumber();
     }
 
     @Override
@@ -662,6 +786,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
                 break;
         }
         mMainLayout.addView(mDetailsLayout);
+        updateLegButton(v.getId());
 
         if (txPrev!=null)   {
             txPrev.setTextSize(NORMAL_SIZE);
@@ -679,9 +804,48 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         }
     }
 
+    //
+    // check if bet is in the leg list already for "remove" button
+    //
+    protected void updateLegButton( int selectedId )    {
+        final BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+        ParlayBetEntity parlayBet = ((WalletWagerrManager)walletManager).getParlay();
+        BetEntity.BetOutcome outcome = getOutcomeByViewID( selectedId );
+
+        ParlayBetEntity.BetInParlayResult result = parlayBet.checkBetInParlay( mTransaction.getEventID(), outcome);
+
+        switch (result) {
+            case NOT_IN_LEG:    // enable add to leg
+                mTxAddLeg.setVisibility(View.VISIBLE);
+                mTxAddLeg.setText( getResources().getString(R.string.Parlay_Add) );
+                mAddLeg.setVisibility(View.VISIBLE);
+                mAddLeg.setBackground( getResources().getDrawable( R.drawable.plus_parlay, null) );
+                break;
+
+            case EVENT_IN_LEG:
+                mTxAddLeg.setVisibility(View.GONE);
+                mAddLeg.setVisibility(View.GONE);
+                break;
+
+            case OUTCOME_IN_LEG:
+                mTxAddLeg.setVisibility(View.VISIBLE);
+                mTxAddLeg.setText( getResources().getString(R.string.Parlay_Remove) );
+                mAddLeg.setVisibility(View.VISIBLE);
+                mAddLeg.setBackground( getResources().getDrawable( R.drawable.minus_parlay, null) );
+                break;
+        }
+
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        try {
+            this.mListener = (WagerrParlayLegNotification) context;
+        }
+        catch (final ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement WagerrParlayLegNotification");
+        }
     }
 
     public void setTransaction(EventTxUiHolder item) {
@@ -746,9 +910,9 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             mTxAwayOdds.setText( (item.getAwayOdds()>0)?item.getTxAwayOdds():"N/A" );
             rlLastContainer = mMoneyLineContainer;      // default...
 
-            bHasSpreads = (item.getSpreadPoints()>0);
+            bHasSpreads = (item.getSpreadPoints()!=0);
             if (bHasSpreads) {
-                String txSpreadFormat = (item.getHomeOdds()>item.getAwayOdds())?"+%s/-%s":"-%s/+%s";
+                String txSpreadFormat = item.getSpreadFormat();
                 String txSpreadPoints = String.format(txSpreadFormat, item.getTxSpreadPoints(), item.getTxSpreadPoints() );
                 mTxSpreadPoints.setText(txSpreadPoints);
                 mTxSpreadHomeOdds.setText((item.getSpreadHomeOdds() > 0) ? item.getTxSpreadHomeOdds() : "N/A");
@@ -888,5 +1052,20 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
     }
     void stopRepeatingTask() {
         mHandler.removeCallbacks(mStatusChecker);
+    }
+
+    // WagerrParlayLegNotification implementation
+    public void onLegChanged() {
+        BaseWalletManager wm = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+        BRParlayButtonManager.onLegChanged(mParlayButton, wm);
+        if (mCurrentSelectedBetOption!=null) {
+            updateLegButton( mCurrentSelectedBetOption.getId() );
+        }
+        mListener.onLegChanged();
+    }
+
+    public void onSendParlayBet() {
+        // bet slip overlaps when parlay bet is sent
+        dismiss();
     }
 }

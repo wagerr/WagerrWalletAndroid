@@ -5,11 +5,14 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.platform.entities.TxExplorerInfo;
+import com.platform.entities.TxExplorerPayoutInfo;
 import com.wagerrwallet.R;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.core.BRCoreTransaction;
@@ -48,6 +52,7 @@ import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.platform.entities.TxMetaData;
 import com.platform.tools.KVStoreManager;
+import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -173,6 +178,30 @@ public class FragmentTxDetails extends DialogFragment {
                 }
             }
         });
+
+        if (mTransaction.isCoinbase())  {
+            BRExecutor.getInstance().forLightWeightBackgroundTasks().execute(new Runnable() {
+                @Override
+                public void run() {
+                    BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
+                    BRCoreTransaction tx = walletManager.getWallet().transactionForHash( mTransaction.getTxHash() );
+                    ArrayList<Integer> listOutputs = WagerrOpCodeManager.getPayoutOutputsFromCoreTx( tx, (WalletWagerrManager) walletManager );
+                    List<TxExplorerPayoutInfo> payoutInfo  = new ArrayList<>();
+
+                    for (Integer n : listOutputs )  {
+                        TxExplorerPayoutInfo response = BRApiManager.fetchExplorerPayoutTxInfo (getActivity(), mTransaction.getTxHashHexReversed(), (int) n );
+                        if ( response!=null ) {
+                            payoutInfo.add(response);
+                        }
+                    }
+                    Message msg = Message.obtain(); // Creates an new Message instance
+                    msg.arg1 = 2;   // payout explorer API
+                    msg.obj = payoutInfo;
+                    handler.sendMessage(msg);
+                }
+            });
+
+        }
         updateUi();
         return rootView;
     }
@@ -184,12 +213,98 @@ public class FragmentTxDetails extends DialogFragment {
                 case 1:     // Explorer API callback
                     List<TxExplorerInfo> response = (ArrayList) msg.obj;
                     TxExplorerInfo o = response.get(0);
-                    String strTxInfo = String.format("Price: %.2f", o.price);
-                    if ( o.spread>0 )   strTxInfo+= String.format("  Spread: %.2f", o.spread);
-                    if ( o.total>0 )    strTxInfo+= String.format("  Total: %.2f", o.total);
-                    mBetDataFromAPI.setText(strTxInfo);
+                    String strTxInfo = "";
+
+                    if ( o.isParlay == 1)   {
+                        for (TxExplorerInfo.TxExplorerLegInfo leg : o.legs ) {
+                            strTxInfo += String.format("%s - %s ( Bet: %s", leg.homeTeam, leg.awayTeam, leg.market);
+                            if (leg.spread != 0)     strTxInfo += String.format(",  Spread: %.2f ", leg.spread);
+                            if (leg.total > 0)      strTxInfo += String.format(",  Total: %.2f ", leg.total);
+                            strTxInfo += String.format(", Price: %s", leg.getPriceTx());
+                            if (leg.homeScore>=0 || leg.awayScore>=0)   {
+                                strTxInfo += String.format(", Score: %s - %s ", leg.getHomeScoreTx(), leg.getAwayScoreTx());
+                            }
+                            else    {
+                                strTxInfo += ", Score: Pending ";
+                            }
+                            if (leg.outcome > 0)   {
+                                strTxInfo += String.format(", %s Outcome: %s ", leg.getResultIcon(), leg.betResult);
+                            }
+                            else    {
+                                strTxInfo += String.format(", Outcome: pending %s", leg.getResultIcon());
+                            }
+                            strTxInfo += " ) <br><br>";
+                        }
+                        strTxInfo += String.format("Parlay Price: %s, Outcome: %s %s<br><br>", o.getParlayPrice(), o.betResultType, o.getResultIcon() );
+                        mToFromAddress.setSingleLine(false);
+                        //mToFromAddress.setText(strTxInfo);
+                        mToFromAddress.setText(Html.fromHtml(strTxInfo, new Html.ImageGetter() {
+                            @Override
+                            public Drawable getDrawable(String source) {
+                                int resId = 0;
+                                switch (source) {
+                                    case "win":     resId = R.drawable.win; break;
+                                    case "lose":    resId = R.drawable.loss; break;
+                                    case "pending": resId = R.drawable.pending; break;
+                                    default: return null;
+                                }
+                                Resources res = getContext().getResources();
+                                Drawable drawable = res.getDrawable(resId);
+                                drawable.setBounds(0, 0, 32, 32);
+                                return drawable;
+                            }
+                        }, null));
+                    }
+                    else {
+                        strTxInfo = String.format("%s - %s", o.homeTeam, o.awayTeam);
+                        if ( o.spread!=null && !o.spread.equals("") ) strTxInfo += String.format(", Spread: %s", o.spread);
+                        if ( o.total > 0) strTxInfo += String.format(", Total: %.2f", o.total);
+                        strTxInfo += String.format("<br>Price: %s", o.getPriceTx());
+                        if (o.homeScore>=0 || o.awayScore>=0)   {
+                            strTxInfo += String.format(", Score: %s - %s ", o.getHomeScoreTx(), o.getAwayScoreTx());
+                        }
+                        else    {
+                            strTxInfo += ", Score: Pending ";
+                        }
+                        strTxInfo += String.format(", Result: %s %s ", (o.betResultType.equals("")) ? "pending" : o.betResultType, o.getResultIcon() );
+
+                        mToFromAddress.setSingleLine(false);
+                        //mToFromAddress.setText(strTxInfo);
+                        mToFromAddress.setText(Html.fromHtml(strTxInfo, new Html.ImageGetter() {
+                            @Override
+                            public Drawable getDrawable(String source) {
+                                int resId = 0;
+                                switch (source) {
+                                    case "win":     resId = R.drawable.win; break;
+                                    case "lose":    resId = R.drawable.loss; break;
+                                    case "pending": resId = R.drawable.pending; break;
+                                    default: return null;
+                                }
+                                Resources res = getContext().getResources();
+                                Drawable drawable = res.getDrawable(resId);
+                                drawable.setBounds(0, 0, 32, 32 /*drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight()*/);
+                                return drawable;
+                            }
+                        }, null));
+                    }
                     break;
-                case 2:     // future other calls
+                case 2:     // payout API
+                    List<TxExplorerPayoutInfo> responsePayout = (ArrayList) msg.obj;
+                    String strTxPayoutInfo = "";
+
+                    for (TxExplorerPayoutInfo payoutInfo : responsePayout ) {
+                        if (payoutInfo.legs==null)  break;
+                        strTxPayoutInfo += String.format("Payout %.4f \n", payoutInfo.payout);
+                        for (TxExplorerPayoutInfo.TxExplorerPayoutLeg leg : payoutInfo.legs)    {
+                            strTxPayoutInfo += leg.getDescription() + " \n";
+                        }
+                        if (payoutInfo.legs.size()>1)   {
+                            strTxPayoutInfo += String.format("Parlay Price: %s \n", payoutInfo.getParlayPrice());
+                        }
+                        strTxPayoutInfo += " \n";
+                        mToFromAddress.setSingleLine(false);
+                        mToFromAddress.setText(strTxPayoutInfo);
+                    }
                     break;
             }
 
@@ -261,8 +376,10 @@ public class FragmentTxDetails extends DialogFragment {
 
             String txSent = "", txToLabel = "", txToAddressLabel = "", txToAddressLabel2="", txToAddressLabel3="", txBetDataFromAPI="";
             long eventID = 0;
+            mToFromAddress.setSingleLine(true);
             if (mTransaction.getBetEntity()==null)  {
                 if (mTransaction.isCoinbase() && mTransaction.getBlockHeight() != Integer.MAX_VALUE) {       //  payout reward
+                    /*
                     BetResultTxDataStore brds = BetResultTxDataStore.getInstance(getContext());
                     BetResultEntity br = brds.getByBlockHeight(getContext(), walletManager.getIso(getContext()), mTransaction.getBlockHeight() - 1);
                     if (br != null) {
@@ -278,9 +395,11 @@ public class FragmentTxDetails extends DialogFragment {
                         }
                         txSent = String.format("PAYOUT Event #%d", eventID);
                     } else {
-                        txToAddressLabel = String.format("Result not avalable at height %d", mTransaction.getBlockHeight() - 1);
+                        //txToAddressLabel = String.format("Result not avalable at height %d", mTransaction.getBlockHeight() - 1);
                         txSent = "PAYOUT";
                     }
+                    */
+                    txSent = "PAYOUT";
                 }
                 else {      // normal tx
                     txSent = sent ? "Sent" : "Received";
@@ -314,19 +433,33 @@ public class FragmentTxDetails extends DialogFragment {
                 }
             }
             else {
-                EventTxUiHolder ev = BetEventTxDataStore.getInstance(getContext()).getTransactionByEventId(getContext(), "wgr", mTransaction.getBetEntity().getEventID());
-                if (ev!=null) {
-                    BetEntity.BetOutcome outcome = mTransaction.getBetEntity().getOutcome();
-                    String sTotals = ( outcome == BetEntity.BetOutcome.TOTAL_UNDER || outcome == BetEntity.BetOutcome.TOTAL_OVER)?ev.getTxTotalPoints():"";
-                    txToLabel = "";
-                    eventID = ev.getEventID();
+                eventID = mTransaction.getBetEntity().getEventID();
+                if (eventID==0) {
+                    txSent = String.format("BET: PARLAY (%d legs)", mTransaction.getBetEntity().parlayLegs);
+                    txToAddressLabel = "";
+                    BetEntity be = mTransaction.getBetEntity();
+                    for (int i=0; i < be.parlayLegs; i++)    {
+                        txToAddressLabel += String.format("Event #%d - %s\n", be.parlayBetEntity.eventID[i], be.parlayBetEntity.outcome[i].toString());
+                    }
+                    mToFromAddress.setSingleLine(false);
+                    txToAddressLabel2 = "";
+                    txToAddressLabel3 = "";
+                }
+                else {
+                    EventTxUiHolder ev = BetEventTxDataStore.getInstance(getContext()).getTransactionByEventId(getContext(), "wgr", mTransaction.getBetEntity().getEventID());
+                    if (ev != null) {
+                        BetEntity.BetOutcome outcome = mTransaction.getBetEntity().getOutcome();
+                        String sTotals = (outcome == BetEntity.BetOutcome.TOTAL_UNDER || outcome == BetEntity.BetOutcome.TOTAL_OVER) ? ev.getTxTotalPoints() : "";
+                        txToLabel = "";
+                        eventID = ev.getEventID();
 
-                    String txResult = (ev.getHomeScore()<0)?"Pending":String.format("%s - %s", ev.getTxHomeScore(), ev.getTxAwayScore());
-                    String txWin =
-                    txSent = String.format("BET: %s%s", outcome.toString(), sTotals);
-                    txToAddressLabel = String.format("%s : %s vs %s", ev.getTxEventShortDate(), ev.getTxHomeTeam(), ev.getTxAwayTeam());
-                    txToAddressLabel2 = String.format("Result: %s ", (ev.getHomeScore()<0)?"Pending":txResult);
-                    txToAddressLabel3 = String.format("Event #%s", String.valueOf(ev.getEventID()));
+                        String txResult = (ev.getHomeScore() < 0) ? "Pending" : String.format("%s - %s", ev.getTxHomeScore(), ev.getTxAwayScore());
+                        String txWin =
+                                txSent = String.format("BET: %s%s", outcome.toString(), sTotals);
+                        //txToAddressLabel = String.format("%s : %s vs %s", ev.getTxEventShortDate(), ev.getTxHomeTeam(), ev.getTxAwayTeam());
+                        //txToAddressLabel2 = String.format("Result: %s ", (ev.getHomeScore() < 0) ? "Pending" : txResult);
+                        //txToAddressLabel3 = String.format("Event #%s", String.valueOf(ev.getEventID()));
+                    }
                 }
             }
 
@@ -340,7 +473,7 @@ public class FragmentTxDetails extends DialogFragment {
             mToFromAddress3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(WagerrApp.HOST_EXPLORER + "/#/bet/event/%d", evID)));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format( WagerrApp.HOST_EXPLORER +"/#/bet/event/%d", evID)));
                     startActivity(browserIntent);
                     getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
                 }
@@ -407,7 +540,7 @@ public class FragmentTxDetails extends DialogFragment {
             mLinkOpenInExplorer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(WagerrApp.HOST_EXPLORER + "/#/tx/%s", mTransaction.getTxHashHexReversed())));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(WagerrApp.HOST_EXPLORER +"/#/tx/%s", mTransaction.getTxHashHexReversed())));
                     startActivity(browserIntent);
                     getActivity().overridePendingTransition(R.anim.enter_from_bottom, R.anim.empty_300);
                 }

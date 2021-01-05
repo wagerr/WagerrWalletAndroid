@@ -12,6 +12,8 @@ import com.wagerrwallet.presenter.entities.BetEventEntity;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.CryptoRequest;
+import com.wagerrwallet.presenter.entities.ParlayBetEntity;
+import com.wagerrwallet.presenter.entities.ParlayLegEntity;
 import com.wagerrwallet.tools.exceptions.WagerrTransactionException;
 import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
 import com.wagerrwallet.tools.sqlite.BetMappingTxDataStore;
@@ -26,6 +28,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -95,6 +98,9 @@ public class WagerrOpCodeManager {
                         case BET_CHAIN_LOTTO:
                             ret = getChainGamesBetEntity(tx, script, betAmount);
                             break;
+                        case BET_PARLAY:
+                            ret = getParlayBetEntity(tx, script, betAmount);
+                            break;
                     }
                 }
             }
@@ -105,6 +111,20 @@ public class WagerrOpCodeManager {
             }
         }
         return ret;
+    }
+
+    public static ArrayList<Integer> getPayoutOutputsFromCoreTx(BRCoreTransaction tx, WalletWagerrManager walletManager ) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int vOut = 0;
+
+        for ( BRCoreTransactionOutput output : tx.getOutputs()) {
+            BRCoreAddress address = new BRCoreAddress (output.getAddress());
+            if ( walletManager.getWallet().containsAddress( address ) ) {
+                list.add( vOut );
+            }
+            vOut++;
+        }
+        return list;
     }
 
     public static boolean DecodeBetTransaction(Context app,  BRCoreTransaction tx) {
@@ -459,6 +479,41 @@ public class WagerrOpCodeManager {
         return betEntity;
     }
 
+    private static final int PARLAY_NLEGS_POS=5;
+    private static final int PARLAY_EVENTARRAY_POS=6;
+    protected static BetEntity getParlayBetEntity(BRCoreTransaction tx, byte[] script, long betAmount ) throws WagerrTransactionException
+    {
+        BetEntity betEntity = null;
+        String txHash = Utils.reverseHex(Utils.bytesToHex(tx.getHash()));
+        int testByte = script[SMOKE_TEST_POS] & 0xFF;
+        passSmokeTestByte( txHash, testByte);
+
+        int opLength = script[LENGHT_POS] & 0xFF;
+        int version = script[VERSION_POS] & 0xFF;   // ignore value so far
+
+        betEntity = new BetEntity( txHash , BetEntity.BetTxType.PARLAY, version, 0, BetEntity.BetOutcome.UNKNOWN, betAmount,
+                tx.getBlockHeight(), tx.getTimestamp(), WalletWagerrManager.ISO);
+
+        ByteOrder byteOrder = getByteOrder(tx.getBlockHeight());
+        PositionPointer pos = new PositionPointer(PARLAY_EVENTARRAY_POS);
+        int nLegs = script[PARLAY_NLEGS_POS] & 0xFF;
+        int eventID;
+        BetEntity.BetOutcome outcome;
+
+        betEntity.parlayLegs = nLegs;
+        betEntity.parlayBetEntity = new ParlayBetEntity();
+
+        for(int i=0; i<nLegs; i++)  {
+            eventID = getBufferInt( script, pos, byteOrder );
+            outcome = BetEntity.BetOutcome.fromValue(script[pos.getPos()] & 0xFF);
+            pos.Up(1);
+            betEntity.parlayBetEntity.eventID[i] = eventID;
+            betEntity.parlayBetEntity.outcome[i] = outcome;
+        }
+
+        return betEntity;
+    }
+
     private static final int CHAIN_GAMES_LOTTO_RESULT_LENGTH=5;
 
     protected static BetResultEntity getChainGamesLottoResult(BRCoreTransaction tx, byte[] script ) throws WagerrTransactionException
@@ -567,6 +622,7 @@ public class WagerrOpCodeManager {
         RESULT_CHAIN_LOTTO(0x08),
         EVENT_PEERLESS_SPREAD(0x09),
         EVENT_PEERLESS_TOTAL(0x0a),
+        BET_PARLAY(0x0c),
         UNKNOWN(-1);
 
         private int type;

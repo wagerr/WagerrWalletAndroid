@@ -35,6 +35,7 @@ import com.wagerrwallet.presenter.entities.BetResultEntity;
 import com.wagerrwallet.presenter.entities.BlockEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.EventTxUiHolder;
+import com.wagerrwallet.presenter.entities.ParlayBetEntity;
 import com.wagerrwallet.presenter.entities.PeerEntity;
 import com.wagerrwallet.presenter.entities.SwapUiHolder;
 import com.wagerrwallet.presenter.entities.TxUiHolder;
@@ -147,6 +148,8 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 
     private boolean isInitiatingWallet;
 
+    private ParlayBetEntity parlay = new ParlayBetEntity();
+
     private List<OnBalanceChangedListener> balanceListeners = new ArrayList<>();
     private List<OnTxStatusUpdatedListener> txStatusUpdatedListeners = new ArrayList<>();
     private List<SyncListener> syncListeners = new ArrayList<>();
@@ -177,6 +180,10 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
             }
             return instance;
         }
+    }
+
+    public ParlayBetEntity getParlay()  {
+        return parlay;
     }
 
     public synchronized static void setCoinRate(float pCoinRate) {
@@ -218,8 +225,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
 //        balanceListeners = new ArrayList<>();
 
             Drawable colorGradient = BuildConfig.BITCOIN_TESTNET ? ((Activity)app).getDrawable(R.drawable.event_menu_shape_testnet) : ((Activity)app).getDrawable(R.drawable.event_menu_shape);
-            uiConfig = new WalletUiConfiguration("#c20c23" , colorGradient ,true, true, false);
-
+            uiConfig = new WalletUiConfiguration(BuildConfig.BITCOIN_TESTNET ? "#00C265": "#c20c23" , colorGradient ,true, true, false);
         } finally {
             isInitiatingWallet = false;
         }
@@ -293,7 +299,7 @@ public class WalletWagerrManager extends BRCoreWalletManager implements BaseWall
                     tx.getOutputAddresses(), tx.getInputAddresses(),
                     getWallet().getBalanceAfterTransaction(tx), (int) tx.getSize(),
                     getWallet().getTransactionAmount(tx), getWallet().transactionIsValid(tx)
-                    , (tx.getInputAddresses().length==1 && tx.getOutputAddresses().length>=1 && tx.getOutputAddresses()[0].length()==0) );      // is coinbase or POS
+                    , (tx.getInputAddresses().length==1 && tx.getInputAddresses()[0].equals("") && tx.getOutputAddresses().length>=1 && tx.getOutputAddresses()[0].length()==0) );      // is coinbase or POS
 
             BetEntity be = WagerrOpCodeManager.getEventIdFromCoreTx(tx);
             txUiHolder.setBetEntity(be);

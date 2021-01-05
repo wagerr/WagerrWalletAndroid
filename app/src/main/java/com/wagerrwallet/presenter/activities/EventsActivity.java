@@ -8,7 +8,10 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -16,9 +19,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.design.widget.FloatingActionButton;
 import android.support.transition.TransitionManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -52,8 +57,11 @@ import com.wagerrwallet.presenter.customviews.BRNotificationBar;
 import com.wagerrwallet.presenter.customviews.BRSearchBar;
 import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.presenter.entities.BetMappingEntity;
+import com.wagerrwallet.presenter.entities.ParlayBetEntity;
+import com.wagerrwallet.presenter.interfaces.WagerrParlayLegNotification;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.animation.BRDialog;
+import com.wagerrwallet.tools.manager.BRParlayButtonManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.FontManager;
 import com.wagerrwallet.tools.manager.InternetManager;
@@ -91,7 +99,7 @@ import static com.wagerrwallet.tools.animation.BRAnimator.t2Size;
  * (BTC, BCH, ETH)
  */
 
-public class EventsActivity extends BRActivity implements InternetManager.ConnectionReceiverListener, OnEventTxListModified, SyncManager.OnProgressUpdate {
+public class EventsActivity extends BRActivity implements InternetManager.ConnectionReceiverListener, OnEventTxListModified, SyncManager.OnProgressUpdate, WagerrParlayLegNotification {
     private static final String TAG = EventsActivity.class.getName();
     BRText mCurrencyTitle;
     BRText mCurrencyPriceUsd;
@@ -113,6 +121,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
     private ImageButton mSettingsIcon;
     private ImageButton mSwap;
     private ConstraintLayout toolBarConstraintLayout;
+    private FloatingActionButton mParlayButton;
 
     private Spinner mSpinnerSport;
     private Spinner mSpinnerTournament;
@@ -156,6 +165,7 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
         mProgressBar = findViewById(R.id.sync_progress);
         mNotificationBar = findViewById(R.id.notification_bar);
         mLabelEmpty = findViewById(R.id.label_empty);
+        mParlayButton = findViewById(R.id.parlay_floating);
 
         if (Utils.isEmulatorOrDebug(this)) {
             if (logger != null) logger.interrupt();
@@ -213,7 +223,15 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             }
         });
 
-/*
+        onLegChanged();
+        mParlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BRAnimator.showParlayFragment(EventsActivity.this, null);
+
+            }
+        });
+        /*
         mSendButton.setHasShadow(false);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -841,6 +859,16 @@ public class EventsActivity extends BRActivity implements InternetManager.Connec
             }
 
         }
+    }
+
+    public void onLegChanged() {
+        BaseWalletManager wm = WalletsMaster.getInstance(EventsActivity.this).getCurrentWallet(EventsActivity.this);
+        BRParlayButtonManager.onLegChanged( mParlayButton, wm );
+    }
+
+    public void onSendParlayBet() {
+        //  no action required
+        return;
     }
 
 }

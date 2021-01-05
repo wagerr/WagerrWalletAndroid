@@ -8,4 +8,5 @@
     <integer name="standard_screen_height_neg">-1920</integer>
     <integer name="min_bet_amount">25</integer>
     <integer name="max_bet_amount">10000</integer>
+    <integer name="max_bet_amount_parlay">3000</integer>
 </resources>
