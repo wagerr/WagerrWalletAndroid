@@ -260,8 +260,11 @@ public class BetEventEntity {
     }
 
     public boolean hasSpreadPoints() {
-        return !(getSpreadHomeOdds()==0 && getSpreadHomeOdds()
-                ==0 && getSpreadPoints()==0);
+        return getSpreadPoints()>0;
+    }
+
+    public boolean hasSpreads() {
+        return !(getSpreadHomeOdds()==0 && getSpreadHomeOdds()==0 && getSpreadPoints()==0);
     }
 
     public String getSpreadFormat() {
