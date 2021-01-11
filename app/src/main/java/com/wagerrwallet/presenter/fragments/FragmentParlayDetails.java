@@ -478,8 +478,8 @@ public class FragmentParlayDetails extends DialogFragment  {
             odds *= leg.getOdd() / BetEventEntity.ODDS_MULTIPLIER;
         }
 
-        boolean settingOdds = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false);
-        odds = (settingOdds) ? odds : (float)((odds-1)*0.94)+1;
+        // always effective odds for parlay
+        odds = (float)((odds-1)*0.94)+1;
 
         return odds;
     }
@@ -488,9 +488,8 @@ public class FragmentParlayDetails extends DialogFragment  {
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
 
         try {
-            boolean oddsSetting = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false);
             float odds = getCombinedOdd();
-            long rewardAmount = stake + ((oddsSetting)?(long)((stake * (odds - 1)) * 0.94):(long)(stake * (odds-1)));
+            long rewardAmount = stake + (long)(stake * (odds-1));
             BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
             BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
             String rewardFiatAmountStr = CurrencyUtils.getFormattedAmount(getContext(), BRSharedPrefs.getPreferredFiatIso(getContext()), rewardFiatAmount);
