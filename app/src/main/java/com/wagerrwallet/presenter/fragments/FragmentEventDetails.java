@@ -912,7 +912,7 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
 
             if (item.hasSpreads()) {
                 String txSpreadFormat = item.getSpreadFormat();
-                String txSpreadPoints = String.format(txSpreadFormat, item.getTxSpreadPoints(), item.getTxSpreadPoints() );
+                String txSpreadPoints = (item.getSpreadPoints()==0)?"0":String.format(txSpreadFormat, item.getTxSpreadPoints(), item.getTxSpreadPoints() );
                 mTxSpreadPoints.setText(txSpreadPoints);
                 mTxSpreadHomeOdds.setText((item.getSpreadHomeOdds() > 0) ? item.getTxSpreadHomeOdds() : "N/A");
                 mTxSpreadAwayOdds.setText((item.getSpreadAwayOdds() > 0) ? item.getTxSpreadAwayOdds() : "N/A");
