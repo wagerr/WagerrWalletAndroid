@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 
+import com.wagerrwallet.R;
 import com.wagerrwallet.tools.util.BRConstants;
 
 import org.json.JSONArray;
@@ -502,7 +503,7 @@ public class BRSharedPrefs {
 
     public static int getDefaultBetAmount(Context context) {
         SharedPreferences settingsToGet = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return settingsToGet.getInt("defaultBet", 0);
+        return settingsToGet.getInt("defaultBet", context.getResources().getInteger(R.integer.min_bet_amount));
     }
 
     public static void putDefaultBetAmount(Context context, int defValue) {

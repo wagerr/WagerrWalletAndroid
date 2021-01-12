@@ -471,15 +471,19 @@ public class FragmentParlayDetails extends DialogFragment  {
     }
 
     // combined odd is Product(individual leg odd) (in numeric format)
-    protected float getCombinedOdd()   {
+    // bEffective = true ignores setting
+    protected float getCombinedOdd(boolean bEffective)   {
         float odds = 1;
+        boolean settingOdds = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false);
+        if (bEffective) {   // ignore setting
+            settingOdds = false;
+        }
         for(int i = 0; i < mTransaction.getLegCount(); i++) {
             ParlayLegEntity leg = mTransaction.get(i);
-            odds *= leg.getOdd() / BetEventEntity.ODDS_MULTIPLIER;
+            float chainOdds = leg.getOdd() / BetEventEntity.ODDS_MULTIPLIER;
+            float legodds = (settingOdds) ? chainOdds : (float)((chainOdds-1)*0.94)+1;
+            odds *= legodds;
         }
-
-        // always effective odds for parlay
-        odds = (float)((odds-1)*0.94)+1;
 
         return odds;
     }
@@ -488,7 +492,7 @@ public class FragmentParlayDetails extends DialogFragment  {
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
 
         try {
-            float odds = getCombinedOdd();
+            float odds = getCombinedOdd(true);
             long rewardAmount = stake + (long)(stake * (odds-1));
             BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
             BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
@@ -613,7 +617,7 @@ public class FragmentParlayDetails extends DialogFragment  {
 
             mBetContainer.setVisibility( (nLegCount>1) ? View.VISIBLE : View.GONE);
             mBetWarningContainer.setVisibility( (nLegCount>1) ? View.GONE : View.VISIBLE );
-            mTotalOdd.setText(  mTransaction.get(0).getEvent().getOddTx(getCombinedOdd()) );
+            mTotalOdd.setText(  mTransaction.get(0).getEvent().getOddTx(getCombinedOdd(false)) );
         }
     }
 
