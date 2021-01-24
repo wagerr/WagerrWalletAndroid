@@ -82,7 +82,7 @@ public class GeoLocationManager {
                         PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(app, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     RuntimeException ex = new RuntimeException("getOneTimeGeoLocation, can't happen");
                     Log.e(TAG, "run: getOneTimeGeoLocation, can't happen");
-                    BRReportsManager.reportBug(ex);
+                    //BRReportsManager.reportBug(ex);
                     return;
                 }
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
@@ -106,7 +106,7 @@ public class GeoLocationManager {
                 if (ActivityCompat.checkSelfPermission(app, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(app, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     RuntimeException ex = new RuntimeException("startGeoSocket, can't happen");
                     Log.e(TAG, "run: startGeoSocket, can't happen");
-                    BRReportsManager.reportBug(ex);
+                    //BRReportsManager.reportBug(ex);
                     return;
                 }
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, socketLocationListener);
@@ -126,7 +126,7 @@ public class GeoLocationManager {
                 if (ActivityCompat.checkSelfPermission(app, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(app, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Log.e(TAG, "stopGeoSocket, can't happen");
                     RuntimeException ex = new RuntimeException("stopGeoSocket, can't happen");
-                    BRReportsManager.reportBug(ex);
+                    //BRReportsManager.reportBug(ex);
                     throw ex;
                 }
                 locationManager.removeUpdates(socketLocationListener);

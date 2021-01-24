@@ -215,8 +215,8 @@ public class HTTPServer {
         middlewares.add(httpIndexMiddleware);
 
         // geo plugin provides access to onboard geo location functionality
-        Plugin geoLocationPlugin = new GeoLocationPlugin();
-        httpRouter.appendPlugin(geoLocationPlugin);
+        //Plugin geoLocationPlugin = new GeoLocationPlugin();
+        //httpRouter.appendPlugin(geoLocationPlugin);
 
         // camera plugin
         Plugin cameraPlugin = new CameraPlugin();
