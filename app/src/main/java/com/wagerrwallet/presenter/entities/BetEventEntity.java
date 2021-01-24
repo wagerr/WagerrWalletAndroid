@@ -4,6 +4,7 @@ package com.wagerrwallet.presenter.entities;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.activities.settings.BetSettings;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
+import com.wagerrwallet.tools.util.Utils;
 
 import java.text.DecimalFormat;
 
@@ -240,7 +241,7 @@ public class BetEventEntity {
         boolean settingAmerican = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_AMERICAN, false);
 
         float ret = (settingOdds) ? odds : (float)((odds-1)*0.94)+1;
-        ret = (settingAmerican) ? DecimalToAmerican(ret) : ret;
+        ret = (settingAmerican) ? DecimalToAmerican(ret) : (float)Utils.Truncate((double)ret, 2) ;
 
         return ret;
     }

@@ -364,17 +364,22 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (mCurrentSelectedBetOption==null)    return;
-                float odds = 0;
+                double odds = 0;
                 int value = getContext().getResources().getInteger(R.integer.min_bet_amount);
                 int minvalue = value;
                 Float fValue = 0.0f;
                 try {
-                    odds = getSelectedOdd();
+                    if (mCurrentSelectedBetOption!=null) {
+                        odds = (double)getOddsByViewID( mCurrentSelectedBetOption.getId() ) / BetEventEntity.ODDS_MULTIPLIER;
+                    }
+                    else    {
+                        odds = 0;
+                    }
                     fValue = Float.parseFloat(mTxAmount.getText().toString());
                     value = Math.max(minvalue, fValue.intValue());
                 } catch (NumberFormatException e) {
                 }
-                setRewardAmount(value, odds);
+                setRewardAmount(value, (float)odds);
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -571,11 +576,16 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         if (mCurrentSelectedBetOption!=null) {
             String oddTx = ((BRText)mCurrentSelectedBetOption).getText().toString();
             long stake;
-            Float odds;
+            double odds;
             try {
-                odds = Float.parseFloat( oddTx );
+                if (mCurrentSelectedBetOption!=null) {
+                    odds = (double)getOddsByViewID( mCurrentSelectedBetOption.getId() ) / BetEventEntity.ODDS_MULTIPLIER;
+                }
+                else    {
+                    odds = 0;
+                }
                 stake = amount;
-                setRewardAmount(stake, odds);
+                setRewardAmount(stake, (float)odds);
             }
             catch (NumberFormatException e) {
                 mPotentialReward.setText("---");
@@ -589,14 +599,9 @@ public class FragmentEventDetails extends DialogFragment implements View.OnClick
         BaseWalletManager walletManager = WalletsMaster.getInstance(getActivity()).getCurrentWallet(getActivity());
 
         try {
-            boolean oddsSetting = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_ODDS, false);
-            boolean americanSetting = BRSharedPrefs.getFeatureEnabled(WagerrApp.getBreadContext(), BetSettings.FEATURE_DISPLAY_AMERICAN, false);
-
-            if (americanSetting)    {
-                odds = AmericanToDecimal( odds );
-            }
-            long rewardAmount = stake + ((oddsSetting)?(long)((stake * (odds - 1)) * 0.94):(long)(stake * (odds-1)));
-            BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
+            float rewardAmount = stake + (float)((stake * (odds - 1)) * 0.94);
+            rewardAmount = (float)Utils.Truncate((double)rewardAmount, 2);
+            BigDecimal rewardCryptoAmount = new BigDecimal((float)(rewardAmount*UNIT_MULTIPLIER));
             BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
             String rewardFiatAmountStr = CurrencyUtils.getFormattedAmount(getContext(), BRSharedPrefs.getPreferredFiatIso(getContext()), rewardFiatAmount);
             mPotentialReward.setText("" + rewardAmount + "  WGR (" + rewardFiatAmountStr +")" );

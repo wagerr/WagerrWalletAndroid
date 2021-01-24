@@ -47,6 +47,7 @@ import com.wagerrwallet.tools.sqlite.BetEventTxDataStore;
 import com.wagerrwallet.tools.util.BRConstants;
 import com.wagerrwallet.tools.util.BRDateUtil;
 import com.wagerrwallet.tools.util.CurrencyUtils;
+import com.wagerrwallet.tools.util.Utils;
 import com.wagerrwallet.wallet.WalletsMaster;
 import com.wagerrwallet.wallet.abstracts.BaseWalletManager;
 import com.wagerrwallet.wallet.wallets.wagerr.WalletWagerrManager;
@@ -484,7 +485,6 @@ public class FragmentParlayDetails extends DialogFragment  {
             float legodds = (settingOdds) ? chainOdds : (float)((chainOdds-1)*0.94)+1;
             odds *= legodds;
         }
-
         return odds;
     }
 
@@ -493,8 +493,9 @@ public class FragmentParlayDetails extends DialogFragment  {
 
         try {
             float odds = getCombinedOdd(true);
-            long rewardAmount = stake + (long)(stake * (odds-1));
-            BigDecimal rewardCryptoAmount = new BigDecimal((long)rewardAmount*UNIT_MULTIPLIER);
+            float rewardAmount = stake + (float)(stake * (odds-1));
+            rewardAmount = (float)Utils.Truncate((double)rewardAmount, 2);
+            BigDecimal rewardCryptoAmount = new BigDecimal((float)rewardAmount*UNIT_MULTIPLIER);
             BigDecimal rewardFiatAmount = walletManager.getFiatForSmallestCrypto(getActivity(), rewardCryptoAmount.abs(), null);
             String rewardFiatAmountStr = CurrencyUtils.getFormattedAmount(getContext(), BRSharedPrefs.getPreferredFiatIso(getContext()), rewardFiatAmount);
             mPotentialReward.setText("" + rewardAmount + "  WGR (" + rewardFiatAmountStr +")" );
@@ -617,7 +618,9 @@ public class FragmentParlayDetails extends DialogFragment  {
 
             mBetContainer.setVisibility( (nLegCount>1) ? View.VISIBLE : View.GONE);
             mBetWarningContainer.setVisibility( (nLegCount>1) ? View.GONE : View.VISIBLE );
-            mTotalOdd.setText(  mTransaction.get(0).getEvent().getOddTx(getCombinedOdd(false)) );
+            double combinedOdds = getCombinedOdd(false);
+            combinedOdds = (float)Utils.Truncate(combinedOdds, 2);
+            mTotalOdd.setText(  mTransaction.get(0).getEvent().getOddTx((float)combinedOdds) );
         }
     }
 

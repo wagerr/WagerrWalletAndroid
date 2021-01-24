@@ -246,4 +246,14 @@ public class Utils {
         }
         return true;
     }
+
+    public static double Truncate( double val, int decimals)  {
+        double mult = Math.pow(10, decimals);
+        double ret = Math.floor(val*mult)/mult;
+        double tolerance = 0.9999;
+        if ( mult*(val-ret) > tolerance )   {   // avoid the 9999 effect in truncation
+            ret = Math.round(mult*val) / mult;
+        }
+        return ret;
+    }
 }
