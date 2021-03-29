@@ -113,10 +113,10 @@ public class TxExplorerInfo {
                     if (jsonLeg.has("homeTeam"))    leg.homeTeam = jsonLeg.getString("homeTeam");
                     if (jsonLeg.has("awayTeam"))     leg.awayTeam= jsonLeg.getString("awayTeam");
                     leg.market = o.getString("market");
-                    if (o.has("homeScore"))     leg.homeScore = o.getInt("homeScore");
-                    if (o.has("awayScore"))     leg.awayScore = o.getInt("awayScore");
-                    if (o.has("betResult"))     leg.betResult = o.getString("betResult");
-                    if (o.has("outcome"))       leg.outcome = o.getInt("outcome");
+                    if (jsonLeg.has("homeScore"))     leg.homeScore = jsonLeg.getInt("homeScore");
+                    if (jsonLeg.has("awayScore"))     leg.awayScore = jsonLeg.getInt("awayScore");
+                    if (jsonLeg.has("betResult"))     leg.betResult = jsonLeg.getString("betResult");
+                    if (jsonLeg.has("outcome"))       leg.outcome = jsonLeg.getInt("outcome");
                     legs.add(leg);
                 }
             }
