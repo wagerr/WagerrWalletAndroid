@@ -222,7 +222,7 @@ public class BRApiManager {
      *          taken from last price
      */
     public static float fetchRatesCoin(Activity app, BaseWalletManager walletManager) {
-        String url1 = "https://api.crex24.com/CryptoExchangeService/BotPublic/ReturnTicker?request=[NamePairs=BTC_WGR]";
+        String url1 = "https://api.crex24.com/v2/public/tickers?instrument=WGR-BTC";
         String jsonString1 = urlGET(app, url1);
 
         float price1=100000;
@@ -237,9 +237,9 @@ public class BRApiManager {
         }
 
         try {
-            JSONObject object = new JSONObject(jsonString1);
-            JSONArray objectTicker = object.getJSONArray("Tickers");
-            price1 = (1 / (float)((JSONObject)objectTicker.get(0)).getDouble("Last"));
+            JSONArray arr = new JSONArray(jsonString1);
+            JSONObject objectTicker = arr.getJSONObject(0);
+            price1 = (1 / (float)(objectTicker.getDouble("last")) );
         } catch (JSONException ignored) {
         }
 
