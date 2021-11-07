@@ -25,6 +25,7 @@ import com.wagerrwallet.presenter.customviews.BRText;
 import com.wagerrwallet.tools.adapter.WalletListAdapter;
 import com.wagerrwallet.tools.animation.BRAnimator;
 import com.wagerrwallet.tools.listeners.RecyclerItemClickListener;
+import com.wagerrwallet.tools.manager.BRApiManager;
 import com.wagerrwallet.tools.manager.BREventManager;
 import com.wagerrwallet.tools.manager.BRSharedPrefs;
 import com.wagerrwallet.tools.manager.InternetManager;

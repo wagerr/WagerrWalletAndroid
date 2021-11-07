@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.wagerrwallet.R;
+import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.tools.util.BRConstants;
 
 import org.json.JSONArray;
@@ -200,6 +201,19 @@ public class BRSharedPrefs {
         SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putLong("secureTime", date);
+        editor.apply();
+    }
+
+    public static long getLastAPISyncTime(Context activity, BetMappingEntity.MappingNamespaceType mapping) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getLong("lastAPISyncTime_"+mapping.getNumber(), 0);
+    }
+
+    //secure time from the server
+    public static void putLastAPISyncTime(Context activity, BetMappingEntity.MappingNamespaceType mapping, long date) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong("lastAPISyncTime_"+mapping.getNumber(), date);
         editor.apply();
     }
 

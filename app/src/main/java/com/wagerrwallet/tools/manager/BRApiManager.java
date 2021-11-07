@@ -10,9 +10,11 @@ import com.platform.entities.TxExplorerInfo;
 import com.platform.entities.TxExplorerPayoutInfo;
 import com.wagerrwallet.WagerrApp;
 import com.wagerrwallet.presenter.activities.util.ActivityUTILS;
+import com.wagerrwallet.presenter.entities.BetMappingEntity;
 import com.wagerrwallet.presenter.entities.CurrencyEntity;
 import com.wagerrwallet.presenter.entities.SwapResponse;
 import com.wagerrwallet.presenter.entities.SwapUiHolder;
+import com.wagerrwallet.tools.sqlite.BetMappingTxDataStore;
 import com.wagerrwallet.tools.sqlite.CurrencyDataSource;
 import com.wagerrwallet.tools.threads.executor.BRExecutor;
 import com.wagerrwallet.tools.util.Utils;
@@ -31,6 +33,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -157,6 +160,14 @@ public class BRApiManager {
                                     Set<CurrencyEntity> tmp = getCurrencies((Activity) context, w);
                                     CurrencyDataSource.getInstance(context).putCurrencies(context, iso, tmp);
                                 }
+                                // sync mappings from API every 24h
+                                long currentTime = System.currentTimeMillis();
+                                long lastAPICall = BRSharedPrefs.getLastAPISyncTime(context, BetMappingEntity.MappingNamespaceType.TEAM_NAME);
+                                if (currentTime-lastAPICall > 24*3600*1000) {
+                                    SyncAPITeamNames((Activity) context);
+                                    BRSharedPrefs.putLastAPISyncTime(context, BetMappingEntity.MappingNamespaceType.TEAM_NAME, System.currentTimeMillis());
+                                }
+
                             }
                         });
                     }
@@ -454,6 +465,31 @@ public class BRApiManager {
     }
     // END Instaswap API
 
+    // Wagerr Data API
+    public static void SyncAPITeamNames(Activity app) {
+        String url1 = "https://sync-api.wagerr.com/mappings/teamnames";
+        Map<String, String> extraHeaders = new HashMap<>();
+        extraHeaders.put( "AccessAgent", "WgrMobile");
+        String jsonString1 = urlGET(app, url1, extraHeaders);
+
+        if (jsonString1 == null) {
+            jsonString1 = urlGET(app, url1, extraHeaders);
+            if (jsonString1 == null) {
+                Log.e(TAG, "SyncAPI: API failed, response is null");
+                return;
+            }
+        }
+
+        try {
+            JSONArray jsonArray1 = new JSONArray(jsonString1);
+            BetMappingTxDataStore bmtds = BetMappingTxDataStore.getInstance(app);
+            bmtds.putAPITransaction(app, "wgr", jsonArray1, BetMappingEntity.MappingNamespaceType.TEAM_NAME);
+        } catch (JSONException ignored) {
+        }
+
+        return;
+    }
+
     public static void updateFeePerKb(Context app) {
         WalletsMaster wm = WalletsMaster.getInstance(app);
         for (BaseWalletManager wallet : wm.getAllWallets()) {
@@ -461,7 +497,12 @@ public class BRApiManager {
         }
     }
 
-    public static String urlGET(Context app, String myURL) {
+    public static String urlGET(Context app, String myURL)  {
+        Map<String, String> extraHeaders = new HashMap<>();
+        return urlGET(app, myURL, extraHeaders);
+    }
+
+    public static String urlGET(Context app, String myURL, Map<String, String> extraHeaders) {
 //        System.out.println("Requested URL_EA:" + myURL);
         if (ActivityUTILS.isMainThread()) {
             Log.e(TAG, "urlGET: network on main thread");
@@ -478,6 +519,12 @@ public class BRApiManager {
         Iterator it = headers.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
+            builder.header((String) pair.getKey(), (String) pair.getValue());
+        }
+
+        Iterator it2 = extraHeaders.entrySet().iterator();
+        while (it2.hasNext()) {
+            Map.Entry pair = (Map.Entry) it2.next();
             builder.header((String) pair.getKey(), (String) pair.getValue());
         }
 
@@ -504,7 +551,6 @@ public class BRApiManager {
             e.printStackTrace();
         } finally {
             if (resp != null) resp.close();
-
         }
         return response;
     }
