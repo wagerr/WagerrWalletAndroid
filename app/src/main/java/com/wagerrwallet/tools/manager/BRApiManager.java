@@ -160,14 +160,14 @@ public class BRApiManager {
                                     Set<CurrencyEntity> tmp = getCurrencies((Activity) context, w);
                                     CurrencyDataSource.getInstance(context).putCurrencies(context, iso, tmp);
                                 }
-                                // sync mappings from API every 24h
+                                // sync mappings from API every 1h
                                 long currentTime = System.currentTimeMillis();
                                 long lastAPICall = BRSharedPrefs.getLastAPISyncTime(context, BetMappingEntity.MappingNamespaceType.TEAM_NAME);
-                                if (currentTime-lastAPICall > 24*3600*1000) {
-                                    SyncAPITeamNames((Activity) context);
-                                    BRSharedPrefs.putLastAPISyncTime(context, BetMappingEntity.MappingNamespaceType.TEAM_NAME, System.currentTimeMillis());
+                                if (currentTime-lastAPICall > 1*3600*1000) {
+                                    if (SyncAPITeamNames((Activity) context) ) {
+                                        BRSharedPrefs.putLastAPISyncTime(context, BetMappingEntity.MappingNamespaceType.TEAM_NAME, System.currentTimeMillis());
+                                    }
                                 }
-
                             }
                         });
                     }
@@ -466,7 +466,8 @@ public class BRApiManager {
     // END Instaswap API
 
     // Wagerr Data API
-    public static void SyncAPITeamNames(Activity app) {
+    public static boolean SyncAPITeamNames(Activity app) {
+        boolean ret = false;
         String url1 = "https://sync-api.wagerr.com/mappings/teamnames";
         Map<String, String> extraHeaders = new HashMap<>();
         extraHeaders.put( "AccessAgent", "WgrMobile");
@@ -476,18 +477,19 @@ public class BRApiManager {
             jsonString1 = urlGET(app, url1, extraHeaders);
             if (jsonString1 == null) {
                 Log.e(TAG, "SyncAPI: API failed, response is null");
-                return;
+                return ret;
             }
         }
 
         try {
             JSONArray jsonArray1 = new JSONArray(jsonString1);
             BetMappingTxDataStore bmtds = BetMappingTxDataStore.getInstance(app);
-            bmtds.putAPITransaction(app, "wgr", jsonArray1, BetMappingEntity.MappingNamespaceType.TEAM_NAME);
+            if (bmtds.putAPITransaction(app, "wgr", jsonArray1, BetMappingEntity.MappingNamespaceType.TEAM_NAME))
+                ret = true;
         } catch (JSONException ignored) {
         }
 
-        return;
+        return ret;
     }
 
     public static void updateFeePerKb(Context app) {

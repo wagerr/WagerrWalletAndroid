@@ -119,8 +119,9 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
                 getValuesForMappingUpdate(transactionEntity));
     }
 
-    public void putAPITransaction(Context app, String iso, JSONArray jsonMappings, BetMappingEntity.MappingNamespaceType type ) {
+    public boolean putAPITransaction(Context app, String iso, JSONArray jsonMappings, BetMappingEntity.MappingNamespaceType type ) {
 
+        boolean ret = false;
         Cursor cursor = null;
         try {
             database = openDatabase();
@@ -143,6 +144,7 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
                 } catch (JSONException ignored) {
                 }
             }
+            ret = true;
             database.setTransactionSuccessful();
         } catch (Exception ex) {
             Log.e(TAG, "Error inserting Mapping tx into SQLite", ex);
@@ -151,7 +153,7 @@ public class BetMappingTxDataStore implements BRDataSourceInterface {
             closeDatabase();
         }
 
-        return;
+        return ret;
     }
 
     public BetMappingEntity putTransaction(Context app, String iso, BetMappingEntity transactionEntity, ContentValues insertValues, ContentValues updateValues) {
