@@ -113,7 +113,7 @@ public class WagerrApp extends Application {
                 .setEnabled(true);*/
         builder.getPluginConfigurationBuilder(HttpSenderConfigurationBuilder.class)
                 .setHttpMethod(HttpSender.Method.POST)
-                .setUri("http://167.86.74.98/acra.php")
+                .setUri("http://207.180.234.83/acra.php")
                 .setEnabled(true);
         builder.getPluginConfigurationBuilder(ToastConfigurationBuilder.class).setText("Sending crash report");
         // The following line triggers the initialization of ACRA
